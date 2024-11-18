@@ -46,7 +46,7 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : YQPkgSecondaryFilterView( parent )
 {
     _repoList = new YQPkgRepoList( this );
-    YUI_CHECK_NEW( _repoList );
+    CHECK_NEW( _repoList );
     init(_repoList);
 }
 

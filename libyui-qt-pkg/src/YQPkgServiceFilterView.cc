@@ -33,7 +33,7 @@ YQPkgServiceFilterView::YQPkgServiceFilterView( QWidget * parent )
     : YQPkgSecondaryFilterView( parent )
 {
     _serviceList = new YQPkgServiceList( this );
-    YUI_CHECK_NEW( _serviceList );
+    CHECK_NEW( _serviceList );
     init(_serviceList);
 }
 

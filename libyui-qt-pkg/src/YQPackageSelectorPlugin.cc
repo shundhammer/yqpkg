@@ -82,7 +82,7 @@ YQPackageSelectorPlugin::createPackageSelector( YWidget * parent, long modeFlags
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
-    YUI_CHECK_NEW( packageSelector );
+    CHECK_NEW( packageSelector );
     
     return packageSelector;
 }
@@ -111,7 +111,7 @@ YQPackageSelectorPlugin::createPatternSelector( YWidget * parent, long modeFlags
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
-    YUI_CHECK_NEW( patternSelector );
+    CHECK_NEW( patternSelector );
     
     return patternSelector;
 }
@@ -140,7 +140,7 @@ YQPackageSelectorPlugin::createSimplePatchSelector( YWidget * parent, long modeF
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
-    YUI_CHECK_NEW( simplePatchSelector );
+    CHECK_NEW( simplePatchSelector );
     
     return simplePatchSelector;
 }

@@ -104,7 +104,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     : QTabWidget( parent )
     , priv( new YQPkgFilterTabPrivate( settingsName ) )
 {
-    YUI_CHECK_NEW( priv );
+    CHECK_NEW( priv );
 
     // Nasty hack: Find the base class's QStackedWidget in its widget tree so
     // we have a place to put our own widgets. Unfortunately, this is private
@@ -112,7 +112,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     // type. 
     
     priv->baseClassWidgetStack = findChild<QStackedWidget*>();
-    YUI_CHECK_PTR( priv->baseClassWidgetStack );
+    CHECK_PTR( priv->baseClassWidgetStack );
 
     // Nasty hack: Disconnect the base class from signals from its tab bar.
     // We will handle that signal on our own.
@@ -125,7 +125,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     //
     
     priv->outerSplitter = new QSplitter( Qt::Horizontal, this );
-    YUI_CHECK_NEW( priv->outerSplitter );
+    CHECK_NEW( priv->outerSplitter );
 
     priv->outerSplitter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
 						     QSizePolicy::Expanding ) );
@@ -139,12 +139,12 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     //
     
     QWidget * buttonBox = new QWidget( this );
-    YUI_CHECK_NEW( buttonBox );
+    CHECK_NEW( buttonBox );
     setCornerWidget( buttonBox, Qt::TopRightCorner );
     buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 
     QHBoxLayout * buttonBoxLayout = new QHBoxLayout( buttonBox );
-    YUI_CHECK_NEW( buttonBoxLayout );
+    CHECK_NEW( buttonBoxLayout );
     buttonBox->setLayout( buttonBoxLayout );
     buttonBoxLayout->setContentsMargins( 0, 0, 0, 0 );
 
@@ -155,17 +155,17 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     // existing one if it's open already
     
     priv->viewButton = new QPushButton( _( "&View" ), this );
-    YUI_CHECK_NEW( priv->viewButton );
+    CHECK_NEW( priv->viewButton );
     setCornerWidget( priv->viewButton, Qt::TopLeftCorner );
 #else
     priv->viewButton = new QPushButton( _( "&View" ), buttonBox );
-    YUI_CHECK_NEW( priv->viewButton );
+    CHECK_NEW( priv->viewButton );
     buttonBoxLayout->addWidget( priv->viewButton );
     
 #endif // VIEW_BUTTON_LEFT
 
     QMenu * menu = new QMenu( priv->viewButton );
-    YUI_CHECK_NEW( menu );
+    CHECK_NEW( menu );
     priv->viewButton->setMenu( menu );
 
     connect( menu, SIGNAL( triggered( QAction * ) ),
@@ -179,7 +179,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     //
 
     priv->leftPaneSplitter = new QSplitter( Qt::Vertical, priv->outerSplitter );
-    YUI_CHECK_NEW( priv->leftPaneSplitter );
+    CHECK_NEW( priv->leftPaneSplitter );
 
     
     //
@@ -187,10 +187,10 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     //
 
     priv->filtersWidgetStack = new QStackedWidget( priv->leftPaneSplitter );
-    YUI_CHECK_NEW( priv->filtersWidgetStack );
+    CHECK_NEW( priv->filtersWidgetStack );
     
     priv->diskUsageList = new YQPkgDiskUsageList( priv->leftPaneSplitter );
-    YUI_CHECK_NEW( priv->diskUsageList );
+    CHECK_NEW( priv->diskUsageList );
 
     {
 	QSplitter * sp = priv->leftPaneSplitter;
@@ -211,7 +211,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     //
 
     priv->rightPane = new QWidget( priv->outerSplitter );
-    YUI_CHECK_NEW( priv->rightPane );
+    CHECK_NEW( priv->rightPane );
 
     
     //
@@ -287,7 +287,7 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
     YQPkgFilterPage * page = new YQPkgFilterPage( pageLabel,
 						  pageContent,
 						  internalName );
-    YUI_CHECK_NEW( page );
+    CHECK_NEW( page );
     
     priv->pages.push_back( page );
     priv->filtersWidgetStack->addWidget( pageContent );
@@ -296,7 +296,7 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
     if ( priv->viewButton && priv->viewButton->menu() )
     {
 	QAction * action = new QAction( pageLabel, this );
-	YUI_CHECK_NEW( action );
+	CHECK_NEW( action );
 	action->setData( QVariant::fromValue( pageContent ) );
 	
 	priv->viewButton->menu()->addAction( action );
@@ -312,7 +312,7 @@ void
 YQPkgFilterTab::showPage( QWidget * pageContent )
 {
     YQPkgFilterPage * page = findPage( pageContent );
-    YUI_CHECK_PTR( page );
+    CHECK_PTR( page );
     
     showPage( page );
 }
@@ -322,7 +322,7 @@ void
 YQPkgFilterTab::showPage( const QString & internalName )
 {
     YQPkgFilterPage * page = findPage( internalName );
-    YUI_CHECK_PTR( page );
+    CHECK_PTR( page );
     
     showPage( page );
 }
@@ -352,7 +352,7 @@ YQPkgFilterTab::showPage( QAction * action )
 void
 YQPkgFilterTab::showPage( YQPkgFilterPage * page )
 {
-    YUI_CHECK_PTR( page );
+    CHECK_PTR( page );
     YQSignalBlocker sigBlocker( tabBar() );
 
     if ( page->tabIndex < 0 ) // No corresponding tab yet?
@@ -507,13 +507,13 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		// On-demand menu creation
 
 		priv->tabContextMenu = new QMenu( this );
-		YUI_CHECK_NEW( priv->tabContextMenu );
+		CHECK_NEW( priv->tabContextMenu );
 
 		// Translators: Change this to "right" for Arabic and Hebrew
 		priv->actionMovePageLeft  = new QAction( YUI::yApp()->reverseLayout() ?
 							 YQIconPool::arrowRight() : YQIconPool::arrowLeft(),
 							 _( "Move page &left"  ), this );
-		YUI_CHECK_NEW( priv->actionMovePageLeft );
+		CHECK_NEW( priv->actionMovePageLeft );
 
 		connect( priv->actionMovePageLeft, 	SIGNAL( triggered() ),
 			 this,				SLOT  ( contextMovePageLeft() ) );
@@ -523,14 +523,14 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		priv->actionMovePageRight = new QAction(  YUI::yApp()->reverseLayout() ?
 							  YQIconPool::arrowLeft() : YQIconPool::arrowRight(),
 							 _( "Move page &right" ), this );
-		YUI_CHECK_NEW( priv->actionMovePageRight );
+		CHECK_NEW( priv->actionMovePageRight );
 
 		connect( priv->actionMovePageRight, 	SIGNAL( triggered()   ),
 			 this,				SLOT  ( contextMovePageRight() ) );
 
 		
 		priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), this );
-		YUI_CHECK_NEW( priv->actionClosePage );
+		CHECK_NEW( priv->actionClosePage );
 		
 		connect( priv->actionClosePage, 	SIGNAL( triggered()   	),
 			 this,				SLOT  ( contextClosePage() ) );

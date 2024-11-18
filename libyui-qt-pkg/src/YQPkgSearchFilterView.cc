@@ -59,18 +59,18 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 {
     QWidget * content = new QWidget;
     QVBoxLayout * layout = new QVBoxLayout;
-    YUI_CHECK_NEW( layout );
+    CHECK_NEW( layout );
     content->setLayout( layout );
     _matchCount = 0;
 
     // Box for search button
     QHBoxLayout * hbox = new QHBoxLayout();
-    YUI_CHECK_NEW( hbox );
+    CHECK_NEW( hbox );
     layout->addLayout(hbox);
 
     // Input field ( combo box ) for search text
     _searchText = new QComboBox( content );
-    YUI_CHECK_NEW( _searchText );
+    CHECK_NEW( _searchText );
     _searchText->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 
     hbox->addWidget(_searchText);
@@ -78,7 +78,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), content );
-    YUI_CHECK_NEW( _searchButton );
+    CHECK_NEW( _searchButton );
     hbox->addWidget(_searchButton);
 
     connect( _searchButton, SIGNAL( clicked() ),
@@ -91,28 +91,28 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     //
 
     QGroupBox * gbox = new QGroupBox( _( "Search in" ), content );
-    YUI_CHECK_NEW( gbox );
+    CHECK_NEW( gbox );
     layout->addWidget( gbox );
     QVBoxLayout *vLayout = new QVBoxLayout;
     gbox->setLayout( vLayout );
 
-    _searchInName        = new QCheckBox( _( "Nam&e" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
+    _searchInName        = new QCheckBox( _( "Nam&e" 		), gbox ); CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
-    _searchInKeywords    = new QCheckBox( _( "&Keywords"	), gbox ); YUI_CHECK_NEW( _searchInKeywords    );
+    _searchInKeywords    = new QCheckBox( _( "&Keywords"	), gbox ); CHECK_NEW( _searchInKeywords    );
     vLayout->addWidget(_searchInKeywords);
-    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); YUI_CHECK_NEW( _searchInSummary     );
+    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_NEW( _searchInSummary     );
     vLayout->addWidget(_searchInSummary);
-    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); YUI_CHECK_NEW( _searchInDescription );
+    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_NEW( _searchInDescription );
     vLayout->addWidget(_searchInDescription);
 
     vLayout->addStretch();
 
-    _searchInProvides    = new QCheckBox( _( "RPM \"P&rovides\""), gbox ); YUI_CHECK_NEW( _searchInProvides    );
+    _searchInProvides    = new QCheckBox( _( "RPM \"P&rovides\""), gbox ); CHECK_NEW( _searchInProvides    );
     vLayout->addWidget(_searchInProvides);
-    _searchInRequires    = new QCheckBox( _( "RPM \"Re&quires\""), gbox ); YUI_CHECK_NEW( _searchInRequires    );
+    _searchInRequires    = new QCheckBox( _( "RPM \"Re&quires\""), gbox ); CHECK_NEW( _searchInRequires    );
     vLayout->addWidget(_searchInRequires);
 
-    _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); YUI_CHECK_NEW( _searchInFileList    );
+    _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); CHECK_NEW( _searchInFileList    );
     vLayout->addWidget(_searchInFileList);
 
 
@@ -128,11 +128,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     //
 
     QLabel * label = new QLabel( _( "Search &Mode:" ), content );
-    YUI_CHECK_NEW( label );
+    CHECK_NEW( label );
     layout->addWidget( label );
 
     _searchMode = new QComboBox( content );
-    YUI_CHECK_NEW( _searchMode );
+    CHECK_NEW( _searchMode );
     layout->addWidget( _searchMode );
 
     _searchMode->setEditable( false );
@@ -152,7 +152,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     layout->addStretch();
 
     _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), content );
-    YUI_CHECK_NEW( _caseSensitive );
+    CHECK_NEW( _caseSensitive );
     layout->addWidget(_caseSensitive);
 
     for ( int i=0; i < 6; i++ )

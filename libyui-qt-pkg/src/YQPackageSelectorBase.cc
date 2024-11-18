@@ -489,7 +489,7 @@ YQPkgSelWmCloseHandler::filter( YEvent * event )
 	yuiMilestone() << "Caught WM_CLOSE from package selector dialog" << std::endl;
 
 	YUI::app()->normalCursor();
-	YUI_CHECK_WIDGET( _pkgSel );
+	CHECK_PTR( _pkgSel );
 	
 	_inReject = true;	// reject() might send a CancelEvent, too
 	bool reallyReject = _pkgSel->reject();

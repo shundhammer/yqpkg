@@ -42,11 +42,11 @@ YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )
 void YQPkgSecondaryFilterView::init(QWidget * primary_widget)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    YUI_CHECK_NEW( layout );
+    CHECK_NEW( layout );
     layout->setContentsMargins(0,0,0,0);
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
-    YUI_CHECK_NEW( splitter );
+    CHECK_NEW( splitter );
 
     layout->addWidget( splitter );
     splitter->addWidget(primary_widget);
@@ -84,10 +84,10 @@ QWidget *
 YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * primary_widget )
 {
     QWidget *vbox = new QWidget( parent );
-    YUI_CHECK_NEW( vbox );
+    CHECK_NEW( vbox );
 
     QVBoxLayout *layout = new QVBoxLayout();
-    YUI_CHECK_NEW( layout );
+    CHECK_NEW( layout );
 
     vbox->setLayout( layout );
     layout->setContentsMargins( 0, 0, 0, 0 );
@@ -100,21 +100,21 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     // few cases where a combo box label is left to the combo box rather than
     // above it.
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ));
-    YUI_CHECK_NEW( _secondaryFilters );
+    CHECK_NEW( _secondaryFilters );
     layout->addWidget(_secondaryFilters);
 
     //
     // All Packages
     //
     _allPackages = new QWidget( this );
-    YUI_CHECK_NEW( _allPackages );
+    CHECK_NEW( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
 
     // Unmaintained packages: Packages that are not provided in any of
     // the configured repositories
     _unmaintainedPackages = new QWidget( this );
-    YUI_CHECK_NEW( _unmaintainedPackages );
+    CHECK_NEW( _unmaintainedPackages );
     _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
 
     //
@@ -122,7 +122,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     //
 
     _searchFilterView = new YQPkgSearchFilterView( this );
-    YUI_CHECK_NEW( _searchFilterView );
+    CHECK_NEW( _searchFilterView );
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
     connect( _searchFilterView,	SIGNAL( filterStart() ),
@@ -135,7 +135,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     // Status change view
     //
     _statusFilterView = new YQPkgStatusFilterView( parent );
-    YUI_CHECK_NEW( _statusFilterView );
+    CHECK_NEW( _statusFilterView );
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),
