@@ -486,7 +486,6 @@ YQPkgVersionsView::unselectAllMultiVersion()
 		case S_Install:
 		case S_AutoInstall:
 		    _selectable->setPickStatus( *it, S_NoInst );
-		    logInfo() << "Unselecting " << *it << endl;
 		    break;
 
 		default:

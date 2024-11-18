@@ -19,8 +19,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/YUIException.h>
 #include <yui/qt/QY2ComboTabWidget.h>
 #include <yui/qt/YQi18n.h>
@@ -32,6 +30,9 @@
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )

@@ -315,8 +315,13 @@ YQPkgDiskUsageListItem::checkRemainingDiskSpace()
     // free size in MiB
     boost::multiprecision::cpp_int free = freeSize().in_unit(FSize::Unit::M);
 
-    logDebug() << "Partition " << _partitionDu.dir << " free percent: " <<
-        percent << "%, " << " free: " << freeSize() << " (" << free << "MiB)" << endl;
+#if 0
+    logDebug() << "Partition " << _partitionDu.dir
+               << " free percent: " << percent << "%, "
+               << " bfree: " << freeSize()
+               << " (" << free << "MiB)"
+               << endl;
+#endif
 
     if ( percent > MIN_PERCENT_WARN )
     {

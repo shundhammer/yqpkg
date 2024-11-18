@@ -15,6 +15,12 @@ set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 
 # find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
+# Fix things that were introduce with Qt 5.15 for Qt 6.x compatibility,
+# but that completely disregard that this introduces incompatibilities
+# with older code
+add_compile_options( "-Wno-deprecated" )
+add_compile_options( "-Wno-deprecated-declarations" )
+
 
 #
 # libyui plugin specific

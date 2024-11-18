@@ -173,16 +173,20 @@ YQPkgPatchList::fillList()
                           // may be it is satisfied because is preselected
                           selectable->candidateObj().status().isToBeInstalled() )
                         displayPatch = true;
+#if 0
                     else
                         logDebug() << "Patch " << zyppPatch->ident()
                                    << " is already satisfied"
                                    << endl;
+#endif
 
                 }
+#if 0
                 else
                     logDebug() << "Patch " << zyppPatch->ident()
                                << " is not relevant to the system"
                                << endl;
+#endif
                 break;
             case RelevantAndInstalledPatches:	// patches we dont need
 
@@ -259,7 +263,9 @@ YQPkgPatchList::filter()
         if ( patch )
         {
             zypp::Patch::Contents contents(patch->contents());
+#if 0
             logInfo() << contents << endl;
+#endif
 
             for ( zypp::Patch::Contents::Selectable_iterator it = contents.selectableBegin();
                   it != contents.selectableEnd();

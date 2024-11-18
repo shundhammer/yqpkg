@@ -1517,7 +1517,7 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
 	logDebug() << "looking for repo " << url.path() << endl;
 	std::string alias(url.path().remove(0,1).toStdString());
 	zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
-	logDebug() << repo << endl;
+	logDebug() << repo.name() << endl;
 
 	if ( repo != zypp::Repository::noRepository )
 	{

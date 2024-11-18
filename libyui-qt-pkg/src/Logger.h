@@ -11,6 +11,7 @@
 #ifndef Logger_h
 #define Logger_h
 
+#include <string>
 #include <QString>
 #include <QStringList>
 #include <QFile>
@@ -311,11 +312,8 @@ class QSize;
 
 
 QTextStream & operator<<( QTextStream & str, bool val );
-QTextStream & operator<<( QTextStream & str, const QStringList &stringList );
-QTextStream & operator<<( QTextStream & str, const QSizeF  & size );
-QTextStream & operator<<( QTextStream & str, const QRectF  & rect );
-QTextStream & operator<<( QTextStream & str, const QPointF & point );
-QTextStream & operator<<( QTextStream & str, const QSize   & size );
+QTextStream & operator<<( QTextStream & str, const QStringList & stringList );
+QTextStream & operator<<( QTextStream & str, const std::string & text );
 
 
 /**
