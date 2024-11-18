@@ -32,9 +32,6 @@
 #include "YQIconPool.h"
 
 
-using std::endl;
-
-
 
 YQIconPool * YQIconPool::_iconPool = 0;
 

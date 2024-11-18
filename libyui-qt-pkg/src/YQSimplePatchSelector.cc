@@ -49,7 +49,6 @@
 
 
 using std::max;
-using std::endl;
 using std::string;
 
 #define SHOW_DISK_USAGE		0

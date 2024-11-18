@@ -47,7 +47,6 @@
 #include "Exception.h"
 
 
-using std::endl;
 using std::list;
 using std::string;
 

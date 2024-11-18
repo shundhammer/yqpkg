@@ -52,7 +52,6 @@
 
 
 using std::set;
-using std::endl;
 using std::string;
 
 YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,

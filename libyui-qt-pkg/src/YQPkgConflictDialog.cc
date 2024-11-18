@@ -63,7 +63,6 @@
 
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
 
-using std::endl;
 
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )

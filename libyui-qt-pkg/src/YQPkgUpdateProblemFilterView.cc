@@ -37,7 +37,6 @@
 
 
 using std::list;
-using std::endl;
 
 
 YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )

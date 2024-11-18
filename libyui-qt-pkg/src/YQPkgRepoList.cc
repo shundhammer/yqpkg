@@ -45,7 +45,6 @@
 
 using std::string;
 using std::list;
-using std::endl;
 using std::set;
 using std::vector;
 

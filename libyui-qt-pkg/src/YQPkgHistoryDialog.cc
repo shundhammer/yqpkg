@@ -57,7 +57,6 @@
 
 #define FILENAME	"/var/log/zypp/history"
 
-using std::endl;
 
 
 YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )

@@ -55,7 +55,6 @@
 
 
 using std::list;
-using std::endl;
 using std::string;
 using namespace zypp;
 

@@ -51,7 +51,6 @@ typedef zypp::Patch::Contents			ZyppPatchContents;
 typedef zypp::Patch::Contents::const_iterator	ZyppPatchContentsIterator;
 
 using std::set;
-using std::endl;
 
 #define ENABLE_TOTAL_DOWNLOAD_SIZE	0
 

@@ -27,8 +27,6 @@
 #include "YQPkgSelMapper.h"
 
 
-using std::endl;
-
 int			YQPkgSelMapper::_refCount = 0;
 YQPkgSelMapper::Cache	YQPkgSelMapper::_cache;
 

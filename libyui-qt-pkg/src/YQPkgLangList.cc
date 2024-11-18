@@ -39,7 +39,6 @@
 
 
 using std::set;
-using std::endl;
 
 
 YQPkgLangList::YQPkgLangList( QWidget * parent )

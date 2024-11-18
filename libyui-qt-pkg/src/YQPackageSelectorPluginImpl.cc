@@ -32,8 +32,6 @@
 #include "Exception.h"
 
 
-using std::endl;
-
 //	Create YQPackageSelectorStart which reads the layout
 //      term of the package selection dialog, creates the widget
 //	tree and creates the YQPackageSelector.

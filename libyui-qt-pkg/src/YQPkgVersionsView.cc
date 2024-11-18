@@ -48,8 +48,6 @@
 #include "Exception.h"
 
 
-using std::endl;
-
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
     : QScrollArea( parent )

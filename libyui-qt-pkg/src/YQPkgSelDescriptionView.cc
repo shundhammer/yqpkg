@@ -36,7 +36,6 @@
 #include "YQPkgSelDescriptionView.h"
 
 
-using std::endl;
 using std::list;
 using std::string;
 
