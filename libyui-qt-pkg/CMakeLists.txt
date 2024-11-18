@@ -1,4 +1,3 @@
-l
 # CMakeLists.txt for libyui-qt-pkg
 #
 # Usage:
@@ -41,11 +40,11 @@ option( WERROR            "Treat all compiler warnings as errors"     on  )
 
 if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
   if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
-    set( CIP $ENV{CMAKE_INSTALL_PREFIX} )
+    set( INSTALL_PREFIX $ENV{CMAKE_INSTALL_PREFIX} )
   else()
-    set( CIP /usr )
+    set( INSTALL_PREFIX /usr )
   endif()
-  set( CMAKE_INSTALL_PREFIX "${CIP}" CACHE PATH "Install path prefix" FORCE)
+  set( CMAKE_INSTALL_PREFIX "${INSTALL_PREFIX}" CACHE PATH "Install path prefix" FORCE)
 endif()
 
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
