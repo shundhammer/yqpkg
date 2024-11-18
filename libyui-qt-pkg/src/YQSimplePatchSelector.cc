@@ -29,7 +29,6 @@
 #include <yui/qt/utf8.h>
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQi18n.h>
-#include <yui/qt/YQWizard.h>
 #include <yui/qt/YQDialog.h>
 
 #include <QApplication>
@@ -66,7 +65,6 @@ YQSimplePatchSelector::YQSimplePatchSelector( YWidget *	parent, long modeFlags )
     _patchFilterView	= 0;
     _patchList		= 0;
     _diskUsageList	= 0;
-    _wizard		= findWizard();
 
     basicLayout();
     makeConnections();
@@ -79,22 +77,6 @@ YQSimplePatchSelector::YQSimplePatchSelector( YWidget *	parent, long modeFlags )
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 }
-
-
-
-YQWizard *
-YQSimplePatchSelector::findWizard() const
-{
-    YQWizard * wizard = 0;
-
-    YQDialog * dialog = dynamic_cast<YQDialog *> ( YDialog::currentDialog() );
-
-    if ( dialog )
-	wizard = dialog->findWizard();
-
-    return wizard;
-}
-
 
 
 void
@@ -153,30 +135,7 @@ YQSimplePatchSelector::basicLayout()
     // Buttons
     //
 
-    if ( _wizard )	// No button box - add "Details..." button here
-    {
-	//
-	// "Details" button
-	//
-
-	//addVSpacing( this, SPACING );
-        layout = new QHBoxLayout;
-        QWidget * hbox = new QWidget( this );
-	Q_CHECK_PTR( hbox );
-        hbox->setLayout(layout);
-	QPushButton * details_button = new QPushButton( _( "&Details..." ), hbox );
-        layout->addWidget(details_button);
-	Q_CHECK_PTR( details_button );
-
-	connect( details_button, SIGNAL( clicked() ),
-		 this,		 SLOT  ( detailedPackageSelection() ) );
-
-	//addHStretch( hbox );
-    }
-    else // ! _wizard
-    {
-	layoutButtons( this );
-    }
+    layoutButtons( this );
 }
 
 
@@ -234,18 +193,6 @@ YQSimplePatchSelector::makeConnections()
     }
 
     logInfo() << "Connection set up" << endl;
-
-    if ( _wizard )
-    {
-	connect( _wizard, 	SIGNAL( nextClicked()	),
-		 this,		SLOT  ( accept()        ) );
-
-	connect( _wizard, 	SIGNAL( backClicked()	),
-		 this,		SLOT  ( reject()	) );
-
-	connect( _wizard, 	SIGNAL( abortClicked()	),
-		 this,		SLOT  ( reject()	) );
-    }
 }
 
 

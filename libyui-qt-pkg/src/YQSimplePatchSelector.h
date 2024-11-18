@@ -34,7 +34,6 @@ class QPushButton;
 
 class YQPkgPatchFilterView;
 class YQPkgPatchList;
-class YQWizard;
 
 
 class YQSimplePatchSelector : public YQPackageSelectorBase
@@ -68,12 +67,6 @@ protected:
     void	layoutButtons	( QWidget * parent );
 
     /**
-     * Find the wizard in the current dialog, if there is any.
-     * Returns 0 if there is none.
-     **/
-    YQWizard *	findWizard() const;
-
-    /**
      * Establish Qt signal / slot connections.
      **/
     void makeConnections();
@@ -83,7 +76,6 @@ protected:
 
     YQPkgPatchFilterView *	_patchFilterView;
     YQPkgPatchList *		_patchList;
-    YQWizard *			_wizard;
 };
 
 
