@@ -147,13 +147,10 @@ test $verbose -eq 1 && dump_status
 # Build subprojects
 #
 
-# The libyui base lib is always built unconditionally
 build_subdir libyui
+build_subdir libyui-qt
+build_subdir libyui-qt-pkg
 
-if [ $with_qt -eq 1 ]; then
-    build_subdir libyui-qt
-    test $with_pkg -eq 1   && build_subdir libyui-qt-pkg
-fi
 
 # error summary
 if [ $error_count -gt 0 ]; then
