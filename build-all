@@ -1,0 +1,164 @@
+#!/bin/bash
+#
+# Script to build all (or most) libyui subprojects in the correct order.
+#
+# This script is intentionally kept in the project toplevel directory
+# so it is easy to discover.
+#
+# Author:  Stefan Hundhammer <shundhammer@suse.com>
+# License: GPL V2
+
+script_name=$(basename $0)
+keep_going=0
+error_count=0
+dry_run=0
+verbose=0
+
+
+# Show usage information and exit.
+function usage()
+{
+    cat <<EOF
+
+Usage:
+
+  $script_name [Options] [configure|build|install|clean|doc]
+
+Build all (or most) subprojects in the correct order.
+Without options, this builds the 'typical' set of subprojects.
+To see which ones that are, use
+
+  ./$script_name -n
+
+If invoked without any target argument, this script just executes 'make' in
+each subproject that already has a build/ subdirectory. For subprojects
+without such a build/ subdirectory, it behaves as if invoked with 'build'.
+
+Notice that for installing, you need to call this with root privileges, i.e.
+
+  sudo ./$script_name install
+
+To build with an installation prefix, set CMAKE_INSTALL_PREFIX in the
+environment:
+
+  export CMAKE_INSTALL_PREFIX=/usr/local
+  ./$script_name
+
+Options:
+
+  -n, --dry-run     Don't actually execute the commands, just show them
+  -k, --keep-going  Don't stop upon error
+  -v, --verbose     More messages
+  -h, --help        Show this usage message
+
+EOF
+    exit 2
+}
+
+
+# Process the command line and set some variables based on command line options.
+function process_command_line()
+{
+    # Using GNU getopt, not bash builtin getopts for long options support.
+    # Don't split the long options over multiple lines:
+    # No whitespace in the list allowed!
+    options=$(getopt -o kvhn \
+                     -l help,usage,dry-run,verbose \
+                     -n $script_name \
+                     -- $*)
+    # $? is the exit status of 'getopt'
+    test $? -eq 0 || usage
+
+    # Handle shell escaping (see man 1 getopt)
+    eval set -- "$options"
+
+    while true ; do
+	case "$1" in
+            -k | --keep-going )  keep_going=1    ; shift ;;
+            -v | --verbose    )  verbose=1       ; shift ;;
+            -h | --help       )  usage           ; shift ;;
+
+	    -n | --dry-run )
+                dry_run=1
+                echo ""
+		echo "*** Dry run - not executing any make commands ***"
+                echo ""
+                shift
+		;;
+            -- ) shift; break ;;
+            *) break ;;
+	esac
+    done
+
+    # Don't fall back to "build" here yet, this is done in build_subdir()
+    # for each subproject individually depending on an existing build/ subdir.
+    target=$1
+}
+
+
+# Build in one subdir / subproject
+function build_subdir()
+{
+    subdir=$1
+
+    if [ -z "$target" -a -f $subdir/build/Makefile ]; then
+        # Without a target explicitly specified on the command line, don't
+        # force removing everything that is already built in this subproject,
+        # just try "make" there if there already is a build/ subdirectory.
+        cmd="make -C $subdir/build -j$(nproc)"
+    else
+        tgt=${target:-build}
+        cmd="make -C $subdir -f Makefile.repo $tgt"
+    fi
+
+    echo "$cmd"
+
+    if [ $dry_run -eq 0 ]; then
+        # Execute the command
+        $cmd
+
+        if [ $? -ne 0 ]; then
+            echo "*** ERROR in $subdir"
+            let error_count++
+            test $keep_going -eq 1 || exit 1
+        fi
+    fi
+}
+
+
+# Dump status variables to stdout
+function dump_status()
+{
+    echo "keep_going:    $keep_going"
+    echo "Target: ${target:-(auto)}"
+    echo ""
+}
+
+
+#----------------------------------------------------------------------
+# main()
+#----------------------------------------------------------------------
+
+process_command_line $*
+test $verbose -eq 1 && dump_status
+
+
+#
+# Build subprojects
+#
+
+# The libyui base lib is always built unconditionally
+build_subdir libyui
+
+if [ $with_qt -eq 1 ]; then
+    build_subdir libyui-qt
+    test $with_pkg -eq 1   && build_subdir libyui-qt-pkg
+fi
+
+# error summary
+if [ $error_count -gt 0 ]; then
+    echo ""
+    echo "*** $script_name: Error count: $error_count ***"
+    echo ""
+    exit 1
+fi

@@ -1,0 +1,72 @@
+The RichText widget in the Qt UI currently supports the tags listed
+below. Note that not all of them will make sense for use within YaST.
+(Most notably all those which refer to files)
+
+     * <qt>...</qt> - A Qt rich text document. It understands the
+       following attributes
+          + title - the caption of the document. This attribute is easily
+            accessible with [25]QTextView::documentTitle()
+          + type - The type of the document. The default type is page .
+            It indicates that the document is displayed in a page of its
+            own. Another style is detail. It can be used to explain
+            certain expressions more detailed in a few sentences. The
+            QTextBrowser will then keep the current page and display the
+            new document in a small popup similar to QWhatsThis. Note
+            that links will not work in documents with <qt type="detail"
+            >...</qt>
+          + bgcolor - The background color, for example bgcolor="yellow"
+            or bgcolor="#0000FF"
+          + background - The background pixmap, for example
+            background="granit.xpm". The pixmap name will be resolved by
+            a [26]QMimeSourceFactory().
+          + text - The default text color, for example text="red"
+          + link - The link color, for example link="green"
+     * <a>...</a> - An anchor or link. The reference target is defined in
+       the href attribute of the tag as in \c<a
+       href="target.qml">...</a>. You can also specify an additional
+       anchor within the specified target document, for example <a
+       href="target.qml#123">...</a>. If a is meant to be an anchor, the
+       reference source is given in the name attribute.
+     * <font>...</font> - Customizes the font size and text color. The
+       tag understands two attributes:
+          + color - the text color, for example color="red" or
+            color="#FF0000".
+          + size - the logical size of the font. Logical sizes 1 to 7 are
+            supported. The value may either be absolute, for example
+            size=3, or relative. In the latter case, the sizes are simply
+            added.
+     * <em>...</em> - Emphasized. As default, this is the same as
+       <i>...</i> (Italic)
+     * <strong>...</strong> - Strong. As default, this is the same as
+       <bold>...</bold> (bold)
+     * <big>...</big> - A larger font size.
+     * <small>...</small> - A smaller font size.
+     * <code>...</code> - Indicates Code. As default, this is the same as
+       <tt>...</tt> (typewriter)
+     * <pre>...</pre> - For larger junks of code. Whitespaces in the
+       contents are preserved.
+     * <large>...</large> - Large font size.
+     * <b>...</b> - Bold font style.
+     * <h1>...</h1> - A top-level heading.
+     * <h2>...</h2> - A sub-level heading.
+     * <h3>...</h3> - A sub-sub-level heading.
+     * <p>...</p> - A paragraph.
+     * <center>...</center> - A centered paragraph.
+     * <blockquote>...</blockquote> - An indented paragraph, useful for
+       quotes.
+     * <multicol cols=n >...</multicol> - Multicol display with n columns
+     * <twocolumn>...</twocolumn> - Two-column display.
+     * <ul>...</ul> - An un-ordered list. You can also pass a type
+       argument to define the bullet style. The default is type=disc,
+       other types are circle and square.
+     * <ol>...</ol> - An ordered list. You can also pass a type argument
+       to define the enumeration label style. The default is type="1",
+       other types are "a" and "A".
+     * <li>...</li> - A list item.
+     * <img/> - An image. The image name for the mime source factory is
+       given in the source attribute, for example <img source="qt.xpm"/>
+       The image tag also understands the attributes width and height
+       that determine the size of the image. If the pixmap does not fit
+       to the specified size, it will be scaled automatically.
+     * <br/> - A line break
+     * <hr/> - A horizonal line

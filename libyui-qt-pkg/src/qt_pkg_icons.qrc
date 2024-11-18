@@ -1,0 +1,24 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file alias="arrow-down">icons/arrow-down.svg</file>
+		<file alias="arrow-left">icons/arrow-left.svg</file>
+		<file alias="arrow-right">icons/arrow-right.svg</file>
+		<file alias="package-remove-auto">icons/package-remove-auto.svg</file>
+		<file alias="package-upgrade-auto">icons/package-upgrade-auto.svg</file>
+		<file alias="package-install-auto">icons/package-install-auto.svg</file>
+		<file alias="package-downgrade">icons/package-downgrade.svg</file>
+		<file alias="package-install">icons/package-install.svg</file>
+		<file alias="package-installed-updated">icons/package-installed-updated.svg</file>
+		<file alias="package-available">icons/package-available.svg</file>
+		<file alias="emblem-warning">icons/emblem-warning.svg</file>
+		<file alias="package-installed-locked">icons/package-installed-locked.svg</file>
+		<file alias="package-remove">icons/package-remove.svg</file>
+		<file alias="package-supported">icons/package-supported.svg</file>
+		<file alias="package-available-locked">icons/package-available-locked.svg</file>
+		<file alias="tab-close">icons/tab-close.svg</file>
+		<file alias="list-add">icons/list-add.svg</file>
+		<file alias="list-remove">icons/list-remove.svg</file>
+		<file alias="package-upgrade">icons/package-upgrade.svg</file>
+	</qresource>
+</RCC>

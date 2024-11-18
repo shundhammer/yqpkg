@@ -1,0 +1,45 @@
+# Language specific fonts for yast2-qt
+#
+# Used upon UI::SetLanguage( lang )
+# Fallback strategy for a locale xy_AB.UTF8:
+#
+#     font[xy_AB.UTF8] = ???
+#     font[xy_AB] = ???
+#     font[xy] = ???
+#     font = ???
+#
+# If none of those is found, Sans Serif is used.
+#
+# Don't enumerate all languages just for the fun of it,
+# better specify a reasonable default with
+#
+#     font = ???
+
+font="Sans Serif"
+   font[zh]="Albany AMT,DejaVu Sans,FZSongTi,FZMingTiB,AR PL ShanHeiSun Uni,AR PL SungtiL GB,AR PL Mingti2L Big5,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_CN]="Albany AMT,DejaVu Sans,FZSongTi,FZMingTiB,AR PL ShanHeiSun Uni,AR PL SungtiL GB,AR PL Mingti2L Big5,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_SG]="Albany AMT,DejaVu Sans,FZSongTi,FZMingTiB,AR PL ShanHeiSun Uni,AR PL SungtiL GB,AR PL Mingti2L Big5,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_TW]="Albany AMT,DejaVu Sans,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_HK]="Albany AMT,DejaVu Sans,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Gnu Unifont,Efont Biwidth,Sans Serif"
+   font[ja]="Albany AMT,DejaVu Sans,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[ko]="Albany AMT,DejaVu Sans,UnDotum,Baekmuk Gulim,Baekmuk Dotum,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[he]="Albany AMT,DejaVu Sans,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[hi]="Albany AMT,DejaVu Sans,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[gu]="Albany AMT,DejaVu Sans,Lohit Gujarati,Lohit Hindi,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[km]="Albany AMT,DejaVu Sans,Khmer OS System,Lohit Hindi,Lohit Gujarati,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[pa]="Albany AMT,DejaVu Sans,Lohit Punjabi,Lohit Hindi,Lohit Gujarati,Khmer OS System,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[ta]="Albany AMT,DejaVu Sans,TSCu_Paranar,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[si]="Albany AMT,DejaVu Sans,LKLUG,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[bn]="Albany AMT,DejaVu Sans,Mukti Narrow,Lohit Bengali,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+   font[mr]="Albany AMT,DejaVu Sans,Lohit Hindi,Lohit Gujarati,Khmer OS System,Lohit Punjabi,TSCu_Paranar,LKLUG,Mukti Narrow,Lohit Bengali,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,FZMingTiB,FZSongTi,AR PL ShanHeiSun Uni,AR PL Mingti2L Big5,AR PL SungtiL GB,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+
+# For debugging
+
+font[xy_AB.UTF8]="xy_AB_UTF8, Sans Serif"
+font[xy_XY]="xy_XY, Sans Serif"
+font[xy]="xy, Sans Serif"
+
+font[times]="Times"
+font[sans]="Sans Serif"
+font[helv]="Helvetica"
+

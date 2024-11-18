@@ -1,0 +1,86 @@
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+
+# Avoid 6000 lines(!) of warnings for cmake-bundled(!) files
+# CMP0053: Simplify variable reference and escape sequence evaluation
+if( POLICY CMP0053 )
+  cmake_policy( SET CMP0053 OLD )
+endif()
+
+# Avoid several warnings in cmake-files from Qt5.
+# CMP0043: Ignore COMPILE_DEFINITIONS_<Config> properties
+if( POLICY CMP0043 )
+  cmake_policy( SET CMP0043 OLD )
+endif()
+
+# Avoid several warnings when building qt-graph.
+# CMP0028: Double colon in target name means ALIAS or IMPORTED target
+# This policy will be removed some time in CMake 3.10.  Stop warnings
+# from CMake 3.9 about this.
+if( POLICY CMP0028 )
+  cmake_policy( SET CMP0028 NEW )
+endif()
+
+INCLUDE( "${CMAKE_SOURCE_DIR}/PROJECTINFO.cmake" )
+
+SET( BUILDTOOLS_DIR "buildtools/" )
+
+IF( NOT YPREFIX )
+  SET( YPREFIX "/usr" )
+ENDIF( NOT YPREFIX )
+
+IF( PLUGINNAME AND EXTENSIONNAME )
+  MESSAGE( FATAL_ERROR "Please define PLUGINNAME or EXTENSIONNAME not both" )
+ENDIF( PLUGINNAME AND EXTENSIONNAME )
+
+IF( PLUGINNAME OR EXTENSIONNAME )
+  SET( BUILDTOOLS_DIR "${YPREFIX}/share/lib${BASELIB}/${BUILDTOOLS_DIR}" )
+ELSE( PLUGINNAME OR EXTENSIONNAME )
+  SET( BUILDTOOLS_DIR "${CMAKE_SOURCE_DIR}/${BUILDTOOLS_DIR}" )
+ENDIF( PLUGINNAME OR EXTENSIONNAME )
+
+SET( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules" "${BUILDTOOLS_DIR}" "${CMAKE_MODULE_PATH}" )
+
+INCLUDE( LibyuiCommon )
+
+#if you need to get a git versioned package you can use cmake -DGIT_VERSION=on
+SET( GIT_SHA1_VERSION "")
+
+IF( GIT_VERSION )
+  SET_GITVERSION()
+ENDIF( GIT_VERSION )
+
+INCLUDE( "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.cmake" )
+
+INITIALIZE()
+
+PROJECT( "${PROJECTNAME}" )
+
+ADD_DEFINITIONS(-DVERSION="${VERSION}")
+
+INCLUDE( "${CMAKE_CURRENT_SOURCE_DIR}/SOURCECONF.cmake" )
+
+SET_OPTIONS()
+SET_LIBDIR()
+
+IF( NOT DOCS_ONLY )
+  FIND_LIB_DEPENDENCIES()
+  FIND_LINKER_LIBS()
+  CHECK_PREFIX()
+ELSE( NOT DOCS_ONLY )
+  FIND_PACKAGE( Libyui REQUIRED )
+  SET_SONAME()
+ENDIF( NOT DOCS_ONLY )
+
+SET_ENVIRONMENT()
+SET_BUILD_FLAGS()
+SET_AUTODOCS()
+
+IF( NOT DOCS_ONLY )
+  SET_SUBDIRS()
+  GEN_EXPORTS()
+  GEN_FILES()
+  SET_INSTALL_TARGET()
+  PREP_OBS_TARBALL()
+ENDIF( NOT DOCS_ONLY )
+
+SUMMARY()

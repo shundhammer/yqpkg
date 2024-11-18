@@ -1,0 +1,64 @@
+#
+# Makefile.repo for libyui
+#
+
+# Local Variables:
+#    mode: Makefile
+# End:
+
+
+all: clean configure build-hint
+
+build-hint:
+	@echo ""
+	@echo "To build:"
+	@echo ""
+	@echo "  cd build"
+	@echo "  make"
+	@echo ""
+
+configure:
+	mkdir build; \
+	cd build; \
+	cmake ..
+
+build: clean configure
+	cd build; \
+	make -j $$(nproc)
+
+# This needs root privileges, of course
+install: configure
+	cd build; \
+	make -j $$(nproc) && make install
+
+clean:
+	rm -rf build
+
+package:
+	rake package
+
+doc:
+	test -d build || mkdir build
+	cd build; \
+	cmake -DBUILD_DOC=on .. ; \
+	make doc
+
+version-bump:
+	rake version:bump
+
+so-version-bump:
+	rake so_version:bump
+
+# Just some aliases
+bump-version: version-bump
+
+bump-so-version: so-version-bump
+
+
+# Enforce rebuilding some targets unconditionally, even if a file or directory
+# with that name exists; otherwise the timestamp of that file or directory
+# would be checked.
+#
+# We need this because we have a subdirectory doc/, a subdirectory package/
+# and possibly a subdirectory build/ here.
+.PHONY: doc package build

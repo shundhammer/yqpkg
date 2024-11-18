@@ -1,0 +1,20 @@
+###############################
+#####   Pkg-Config file for @PROJECTNAME@
+###############################
+
+prefix=@YPREFIX@
+exec_prefix=${prefix}
+
+datarootdir=${exec_prefix}/@DATAROOTDIR@
+datadir=${datarootdir}/lib@BASELIB@
+libdir=${exec_prefix}/@INSTALL_LIB_DIR@
+includedir=${exec_prefix}/@INSTALL_INCLUDE_DIR@
+plugindir=${exec_prefix}/@LIB_DIR_PLAIN@/@BASELIB@
+themedir=${datadir}/theme
+localedir=${datarootdir}/locale
+
+Name: @PROJECTNAME@
+Version: @VERSION@
+Description: @PROJECTNAME@ - @SUMMARY@
+Libs: -l@TARGETLIB@
+Cflags: -I${includedir}

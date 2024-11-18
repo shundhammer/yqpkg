@@ -1,0 +1,5 @@
+package/*.tar.*
+
+*~
+*.bak
+*.auto
