@@ -37,12 +37,6 @@ clean:
 package:
 	rake package
 
-doc:
-	test -d build || mkdir build
-	cd build; \
-	cmake -DBUILD_DOC=on .. ; \
-	make doc
-
 version-bump:
 	rake version:bump
 

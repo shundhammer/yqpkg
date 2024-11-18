@@ -37,12 +37,6 @@ clean:
 package:
 	rake package
 
-doc:
-	test -d build || mkdir build
-	cd build; \
-	cmake -DBUILD_DOC=on .. ; \
-	make doc
-
 version-bump:
 	rake version:bump
 
@@ -59,6 +53,6 @@ bump-so-version: so-version-bump
 # with that name exists; otherwise the timestamp of that file or directory
 # would be checked.
 #
-# We need this because we have a subdirectory doc/, a subdirectory package/
+# We need this because we have a subdirectory package/
 # and possibly a subdirectory build/ here.
-.PHONY: doc package build
+.PHONY: package build

@@ -1,3 +1,4 @@
+l
 # CMakeLists.txt for libyui-qt-pkg
 #
 # Usage:
@@ -20,10 +21,9 @@ project( libyui-qt-pkg )
 
 # Options usage:
 #
-#   cmake -DBUILD_DOC=on -DBUILD_EXAMPLES=off ..
+#   cmake -DBUILD_EXAMPLES=off ..
 
 option( BUILD_SRC         "Build in src/ subdirectory"                on )
-option( BUILD_DOC         "Build class documentation"                 off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
 
@@ -71,8 +71,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 if ( BUILD_SRC )
   add_subdirectory( src )
-endif()
-
-if ( BUILD_DOC )
-  add_subdirectory( doc )
 endif()
