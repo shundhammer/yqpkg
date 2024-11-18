@@ -18,7 +18,7 @@
 
 /*
   File:	      YQPkgObjList.h
-  Author:     Stefan Hundhammer <shundhammer.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 */
 
 

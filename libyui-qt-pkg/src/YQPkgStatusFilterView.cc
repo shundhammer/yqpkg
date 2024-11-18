@@ -18,7 +18,7 @@
 
 /*
   File:	      YQPkgStatusFilterView.cc
-  Author:     Stefan Hundhammer <shundhammer.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 
   Textdomain "qt-pkg"
 

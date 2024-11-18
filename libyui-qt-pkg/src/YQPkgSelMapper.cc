@@ -18,7 +18,7 @@
 
 /*
   File:	      YQPkgSelMapper.cc
-  Author:     Stefan Hundhammer <shundhammer.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 */
 
 

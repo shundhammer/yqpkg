@@ -20,7 +20,7 @@
   File:		YQPkgClassFilterView.cc
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
-		Stefan Hundhammer <shundhammer.de>
+		Stefan Hundhammer <shundhammer@suse.com>
 
   Textdomain "qt-pkg"
 

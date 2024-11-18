@@ -20,7 +20,7 @@
   File:		YQPkgClassFilterView.h
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
-		Stefan Hundhammer <shundhammer.de>
+		Stefan Hundhammer <shundhammer@suse.com>
 */
 
 

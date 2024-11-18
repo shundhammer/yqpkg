@@ -18,7 +18,7 @@
 
 /*
   File:	      YQPkgSelDescriptionView.cc
-  Author:     Stefan Hundhammer <shundhammer.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 */
 
 

@@ -18,7 +18,7 @@
 
 /*
   File:	      QY2LayoutUtils.cc
-  Author:     Stefan Hundhammer <shundhammer.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 
   These are pure Qt functions - they can be used independently of YaST2.
 */
