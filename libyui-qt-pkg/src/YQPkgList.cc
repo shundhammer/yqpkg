@@ -147,7 +147,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 
     if ( ! selectable )
     {
-	logError() << "NULL zypp::ui::Selectable!" << std::endl;
+	logError() << "NULL zypp::ui::Selectable!" << endl;
 	return;
     }
 
@@ -581,7 +581,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
     if ( file.error() != QFile::NoError )
     {
-	logError() << "Can't open file " << filename << std::endl;
+	logError() << "Can't open file " << filename << endl;
 
 	if ( interactive )
 	{
@@ -719,7 +719,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 		    selectable->setStatus( newStatus );
 
 		changedCount++;
-		// logInfo() << "Updating " << selectable->name() << std::endl;
+		// logInfo() << "Updating " << selectable->name() << endl;
 	    }
 	}
     }

@@ -93,13 +93,13 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 
     QY2Styler::styler()->registerWidget( this );
 
-    logInfo() << "PackageSelectorBase init done" << std::endl;
+    logInfo() << "PackageSelectorBase init done" << endl;
 }
 
 
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
-    logInfo() << "Destroying PackageSelector" << std::endl;
+    logInfo() << "Destroying PackageSelector" << endl;
 
     QY2Styler::styler()->unregisterWidget( this );
 
@@ -113,7 +113,7 @@ YQPackageSelectorBase::resolveDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
-	logError() << "No package conflict dialog existing" << std::endl;
+	logError() << "No package conflict dialog existing" << endl;
 	return QDialog::Accepted;
     }
 
@@ -135,7 +135,7 @@ YQPackageSelectorBase::verifySystem()
 {
     if ( ! _pkgConflictDialog )
     {
-	logError() << "No package conflict dialog existing" << std::endl;
+	logError() << "No package conflict dialog existing" << endl;
 	return QDialog::Accepted;
     }
 
@@ -216,13 +216,13 @@ YQPackageSelectorBase::reject()
     if ( changes )
     {
 	if ( zyppPool().diffState<zypp::Package>() )
-	    logInfo() << "diffState() reports changed packages" << std::endl;
+	    logInfo() << "diffState() reports changed packages" << endl;
 
 	if ( zyppPool().diffState<zypp::Pattern>() )
-	    logInfo() << "diffState() reports changed patterns" << std::endl;
+	    logInfo() << "diffState() reports changed patterns" << endl;
 
 	if ( zyppPool().diffState<zypp::Patch>() )
-	    logInfo() << "diffState() reports changed patches" << std::endl;
+	    logInfo() << "diffState() reports changed patches" << endl;
     }
 
     bool confirm = false;
@@ -245,14 +245,14 @@ YQPackageSelectorBase::reject()
 	zyppPool().restoreState<zypp::Pattern  >();
 	zyppPool().restoreState<zypp::Patch    >();
 
-	logInfo() << "Closing PackageSelector with \"Cancel\"" << std::endl;
+	logInfo() << "Closing PackageSelector with \"Cancel\"" << endl;
 	YQUI::ui()->sendEvent( new YCancelEvent() );
 
 	return true; 	// Really reject
     }
     else
     {
-	logInfo() << "Returning to package selector" << std::endl;
+	logInfo() << "Returning to package selector" << endl;
 
 	return false;	// User changed his mind - don't reject
     }
@@ -295,7 +295,7 @@ YQPackageSelectorBase::accept()
 
     if ( confirmUnsupported() )
     {
-        logInfo() << "Confirm unsupported packages enabled." << std::endl;
+        logInfo() << "Confirm unsupported packages enabled." << endl;
 	// Show which packages are unsupported
 	
 	QString msg =
@@ -319,35 +319,35 @@ YQPackageSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
-    logInfo() << "Closing PackageSelector with \"Accept\"" << std::endl;
+    logInfo() << "Closing PackageSelector with \"Accept\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "accept" ) );
 }
 
 void
 YQPackageSelectorBase::repoManager()
 {
-    logInfo() << "Closing PackageSelector with \"RepoManager\"" << std::endl;
+    logInfo() << "Closing PackageSelector with \"RepoManager\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "repo_mgr" ) );
 }
 
 void
 YQPackageSelectorBase::onlineUpdateConfiguration()
 {
-    logInfo() << "Closing PackageSelector with \"OnlineUpdateConfiguration\"" << std::endl;
+    logInfo() << "Closing PackageSelector with \"OnlineUpdateConfiguration\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "online_update_configuration" ) );
 }
 
 void
 YQPackageSelectorBase::onlineSearch()
 {
-    logInfo() << "Closing PackageSelector with \"OnlineSearch\"" << std::endl;
+    logInfo() << "Closing PackageSelector with \"OnlineSearch\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "online_search" ) );
 }
 
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
 {
-    logInfo() << "Showing all pending license agreements" << std::endl;
+    logInfo() << "Showing all pending license agreements" << endl;
 
     bool allConfirmed = true;
 
@@ -382,17 +382,17 @@ YQPackageSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, Zyp
 
 		    if ( ! licenseText.empty() )
 		    {
-			logInfo() << "Resolvable " << sel->name() << " has a license agreement" << std::endl;
+			logInfo() << "Resolvable " << sel->name() << " has a license agreement" << endl;
 
 			if( ! sel->hasLicenceConfirmed() )
 			{
-			    logDebug() << "Showing license agreement for resolvable " << sel->name() << std::endl;
+			    logDebug() << "Showing license agreement for resolvable " << sel->name() << endl;
 			    allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
 			}
 			else
 			{
 			    logInfo() << "Resolvable " << sel->name()
-					   << "'s  license is already confirmed" << std::endl;
+					   << "'s  license is already confirmed" << endl;
 			}
 		    }
 		}
@@ -487,7 +487,7 @@ YQPkgSelWmCloseHandler::filter( YEvent * event )
 	 && ! _inReject )		// prevent recursion
     {
 	// Handle WM_CLOSE like "Cancel"
-	logInfo() << "Caught WM_CLOSE from package selector dialog" << std::endl;
+	logInfo() << "Caught WM_CLOSE from package selector dialog" << endl;
 
 	YUI::app()->normalCursor();
 	CHECK_PTR( _pkgSel );
@@ -499,7 +499,7 @@ YQPkgSelWmCloseHandler::filter( YEvent * event )
 	if ( ! reallyReject )
 	{
 	    event = 0;		// Stop processing this event
-	    logInfo() << "User changed his mind - discarding CancelEvent" << std::endl;
+	    logInfo() << "User changed his mind - discarding CancelEvent" << endl;
 	}
     }
 

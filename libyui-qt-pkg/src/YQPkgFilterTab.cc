@@ -662,11 +662,11 @@ YQPkgFilterTab::loadSettings()
 
 	if ( page )
 	{
-	    logDebug() << "Restoring page \"" << toUTF8( id ) << "\"" << std::endl;
+	    logDebug() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
 	    showPage( page );
 	}
 	else
-	    logWarning() << "No page with ID \"" << toUTF8( id ) << "\"" << std::endl;
+	    logWarning() << "No page with ID \"" << toUTF8( id ) << "\"" << endl;
     }
     
     settings.endArray();
@@ -694,10 +694,10 @@ YQPkgFilterTab::saveSettings()
 	    settings.setArrayIndex(i);
 
 	    if ( page->id.isEmpty() )
-		logWarning() << "No ID for tab page \"" << page->label << "\"" << std::endl;
+		logWarning() << "No ID for tab page \"" << page->label << "\"" << endl;
 	    else
 	    {
-		logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << std::endl;
+		logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
 		settings.setValue( "Page_ID", page->id );
 	    }
 	}
