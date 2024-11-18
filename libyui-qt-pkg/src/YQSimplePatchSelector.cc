@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/YEvent.h>
 #include <yui/qt/utf8.h>
 #include <yui/qt/YQUI.h>
@@ -46,6 +44,9 @@
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::max;

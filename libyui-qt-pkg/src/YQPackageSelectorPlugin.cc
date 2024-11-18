@@ -25,15 +25,14 @@
 */
 
 
-#include "Logger.h"
-
-#include <yui/YUIException.h>
-
 #include "YQPackageSelector.h"
 #include "YQPatternSelector.h"
 #include "YQSimplePatchSelector.h"
 
 #include "YQPackageSelectorPlugin.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 #define PLUGIN_BASE_NAME "qt-pkg"

@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/YUI.h>
 #include <yui/YApplication.h>
 #include <yui/YUIException.h>
@@ -50,6 +48,9 @@
 #include "YQPkgFilterTab.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQIconPool.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::vector;

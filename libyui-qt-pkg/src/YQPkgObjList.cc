@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQUI.h>
 #include <yui/YDialog.h>
 #include <yui/qt/YQi18n.h>
@@ -44,6 +42,9 @@
 #include "YQPkgObjList.h"
 #include "YQPkgTextDialog.h"
 #include "YQIconPool.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::endl;

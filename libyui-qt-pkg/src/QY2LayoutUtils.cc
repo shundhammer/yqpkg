@@ -24,10 +24,14 @@
 */
 
 
-#include <qapplication.h>
-#include <qwidget.h>
+#include <QApplication>
+#include <QWidget>
 #include <QDesktopWidget>
+
 #include "QY2LayoutUtils.h"
+#include "Logger.h"
+#include "Exception.h"
+
 
 
 QWidget * addVStretch( QWidget * parent )

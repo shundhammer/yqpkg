@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/FSize.h>
 #include <yui/qt/YQi18n.h>
 
@@ -44,6 +42,9 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgDescriptionView.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 typedef zypp::Patch::Contents			ZyppPatchContents;

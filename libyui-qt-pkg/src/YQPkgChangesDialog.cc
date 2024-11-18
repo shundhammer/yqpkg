@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQi18n.h>
 
@@ -48,6 +46,9 @@
 #include "YQPkgList.h"
 #include "YQZypp.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::set;

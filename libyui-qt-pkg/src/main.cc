@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include "Logger.h"
+#include "Exception.h"
 #include "Version.h"
 
 

@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/utf8.h>
 
@@ -42,6 +40,9 @@
 
 #include "YQPkgTextDialog.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 #define SPACING			6	// between subwidgets

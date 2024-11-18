@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQApplication.h>
 #include <yui/qt/YQi18n.h>
@@ -46,6 +44,9 @@
 
 #include "YQPkgList.h"
 #include "YQIconPool.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::max;

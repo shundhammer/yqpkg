@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/utf8.h>
 
@@ -40,6 +38,9 @@
 
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::set;

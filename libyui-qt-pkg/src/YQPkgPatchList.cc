@@ -25,8 +25,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/utf8.h>
 
@@ -42,6 +40,9 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 #include "YQIconPool.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::list;

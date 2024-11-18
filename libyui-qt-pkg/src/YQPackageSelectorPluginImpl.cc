@@ -23,12 +23,13 @@
 */
 
 
-#include "Logger.h"
-
 #include "YQPackageSelector.h"
 #include "YQPatternSelector.h"
 #include "YQSimplePatchSelector.h"
 #include "YQPackageSelectorPluginImpl.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::endl;

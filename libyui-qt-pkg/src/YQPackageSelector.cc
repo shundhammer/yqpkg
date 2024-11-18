@@ -27,8 +27,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/YEvent.h>
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQApplication.h>
@@ -94,6 +92,9 @@
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 using std::max;

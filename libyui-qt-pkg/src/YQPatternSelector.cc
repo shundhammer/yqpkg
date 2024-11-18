@@ -27,8 +27,6 @@
 */
 
 
-#include "Logger.h"
-
 #include <yui/YEvent.h>
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQDialog.h>
@@ -48,6 +46,9 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgPatternList.h"
 #include "QY2LayoutUtils.h"
+
+#include "Logger.h"
+#include "Exception.h"
 
 
 #define ALWAYS_SOLVE_IMMEDIATELY 1
