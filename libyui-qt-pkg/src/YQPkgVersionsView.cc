@@ -297,7 +297,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	    if ( _selectable && *newCandidate != _selectable->candidateObj() )
 	    {
-		yuiMilestone() << "Candidate changed" << endl;
+		logInfo() << "Candidate changed" << endl;
 
 		// Change status of selectable
 
@@ -363,14 +363,14 @@ YQPkgVersionsView::handleMixedMultiVersion( YQPkgMultiVersion * newSelected )
 
     bool multiVersion = poolItem->multiversionInstall();
 
-    yuiMilestone() << "Selected: "
-		   << ( multiVersion ? "Multiversion " : "Non-Multiversion " )
-		   << newSelected->text()
-		   << endl;
+    logInfo() << "Selected: "
+              << ( multiVersion ? "Multiversion " : "Non-Multiversion " )
+              << newSelected->text()
+              << endl;
 
     if ( anyMultiVersionToInstall( !multiVersion ) )
     {
-	yuiMilestone() << "Multiversion and non-multiversion conflict!" << endl;
+	logInfo() << "Multiversion and non-multiversion conflict!" << endl;
 	bool forceContinue = mixedMultiVersionPopup( multiVersion );
 
 	if ( forceContinue )
@@ -429,7 +429,7 @@ YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
 					  msg,
 					  _( "C&ontinue" ),	// button #0
 					  _( "&Cancel" ) );	// button #1
-    yuiMilestone() << "User hit " << (buttonNo == 0 ? "[Continue]" : "[Cancel]" ) << endl;
+    logInfo() << "User hit " << (buttonNo == 0 ? "[Continue]" : "[Cancel]" ) << endl;
 
     return buttonNo == 0;
 }
@@ -452,8 +452,8 @@ YQPkgVersionsView::anyMultiVersionToInstall( bool multiversion ) const
 	    {
 		case S_Install:
 		case S_AutoInstall:
-		    yuiMilestone() << "Found " << ( multiversion ? "multiversion" : "non-multiversion" )
-				   << " to install" << endl;
+		    logInfo() << "Found " << ( multiversion ? "multiversion" : "non-multiversion" )
+                              << " to install" << endl;
 		    return true;
 
 		default:
@@ -464,8 +464,8 @@ YQPkgVersionsView::anyMultiVersionToInstall( bool multiversion ) const
 	++it;
     }
 
-    yuiMilestone() << "No " << ( multiversion ? "multiversion" : "non-multiversion" )
-		   << " to install" << endl;
+    logInfo() << "No " << ( multiversion ? "multiversion" : "non-multiversion" )
+              << " to install" << endl;
     return false;
 }
 
@@ -487,7 +487,7 @@ YQPkgVersionsView::unselectAllMultiVersion()
 		case S_Install:
 		case S_AutoInstall:
 		    _selectable->setPickStatus( *it, S_NoInst );
-		    yuiMilestone() << "Unselecting " << *it << endl;
+		    logInfo() << "Unselecting " << *it << endl;
 		    break;
 
 		default:
@@ -517,7 +517,7 @@ YQPkgVersionsView::isMixedMultiVersion( ZyppSel selectable )
     {
 	if ( it->multiversionInstall() != multiversion )
 	{
-	    yuiMilestone() << "Mixed multiversion" << endl;
+	    logInfo() << "Mixed multiversion" << endl;
 	    return true;
 	}
 
@@ -679,14 +679,14 @@ void YQPkgMultiVersion::cycleStatus()
     if ( ! handled )
 	setStatus( newStatus );
 
-    yuiMilestone() << "oldStatus: " << oldStatus << endl;
+    logInfo() << "oldStatus: " << oldStatus << endl;
     ZyppStatus actualStatus = _selectable->pickStatus( _zyppPoolItem );
 
     if ( actualStatus != newStatus )
-	yuiWarning() << "FAILED to set new status: " << newStatus
+	logWarning() << "FAILED to set new status: " << newStatus
 		     << "  actual Status: " << actualStatus << endl;
     else
-	yuiMilestone() << "newStatus:" << newStatus << endl;
+	logInfo() << "newStatus:" << newStatus << endl;
 
     if ( oldStatus != actualStatus )
     {
@@ -698,7 +698,7 @@ void YQPkgMultiVersion::cycleStatus()
 
 void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 {
-    yuiMilestone() << "Setting pick status to " << newStatus << endl;
+    logInfo() << "Setting pick status to " << newStatus << endl;
     _selectable->setPickStatus( _zyppPoolItem, newStatus );
 }
 

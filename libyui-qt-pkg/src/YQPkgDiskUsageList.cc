@@ -127,7 +127,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 	if ( item )
 	    item->updateDuData( partitionDu );
 	else
-	    yuiError() << "No entry for mount point " << partitionDu.dir << endl;
+	    logError() << "No entry for mount point " << partitionDu.dir << endl;
     }
 
     resizeColumnToContents( totalSizeCol() );
@@ -197,7 +197,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 	    if ( event->key() == Qt::Key_Q )
 	    {
 		_debug = ! _debug;
-		yuiMilestone() << "Debug mode: " << _debug << endl;
+		logInfo() << "Debug mode: " << _debug << endl;
 	    }
 
 	}
@@ -272,7 +272,7 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 	, _partitionDu( partitionDu )
 	, _pkgDiskUsageList( parent )
 {
-    yuiDebug() << "disk usage list entry for " << partitionDu.dir << endl;
+    logDebug() << "disk usage list entry for " << partitionDu.dir << endl;
 }
 
 
@@ -315,7 +315,7 @@ YQPkgDiskUsageListItem::checkRemainingDiskSpace()
     // free size in MiB
     boost::multiprecision::cpp_int free = freeSize().in_unit(FSize::Unit::M);
 
-    yuiDebug() << "Partition " << _partitionDu.dir << " free percent: " <<
+    logDebug() << "Partition " << _partitionDu.dir << " free percent: " <<
         percent << "%, " << " free: " << freeSize() << " (" << free << "MiB)" << endl;
 
     if ( percent > MIN_PERCENT_WARN )

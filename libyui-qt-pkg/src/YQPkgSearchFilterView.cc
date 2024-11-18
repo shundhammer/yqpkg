@@ -323,7 +323,7 @@ YQPkgSearchFilterView::filter()
     }
     catch ( const std::exception & exception )
     {
-	yuiWarning() << "CAUGHT zypp exception: " << exception.what() << std::endl;
+	logWarning() << "CAUGHT zypp exception: " << exception.what() << std::endl;
 
 	QMessageBox msgBox;
 
@@ -443,7 +443,7 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
 
 	if ( cap.isSimple() && check( cap.name().asString(), regexp ) )
 	{
-	    // yuiDebug() << "Match for " << (*it).asString() << std::endl;
+	    // logDebug() << "Match for " << (*it).asString() << std::endl;
 	    return true;
 	}
     }

@@ -53,7 +53,7 @@ using std::set;
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
 {
-    yuiDebug() << "Creating pattern list" << std::endl;
+    logDebug() << "Creating pattern list" << std::endl;
 
     _showInvisiblePatterns = false;
     _orderCol  = -1;
@@ -121,7 +121,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	selectSomething();
     }
 
-    yuiDebug() << "Creating pattern list done" << std::endl;
+    logDebug() << "Creating pattern list done" << std::endl;
 }
 
 
@@ -137,7 +137,7 @@ YQPkgPatternList::fillList()
     _categories.clear();
 
     clear();
-    yuiDebug() << "Filling pattern list" << std::endl;
+    logDebug() << "Filling pattern list" << std::endl;
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
 	  it != zyppPatternsEnd();
@@ -152,16 +152,16 @@ YQPkgPatternList::fillList()
 		addPatternItem( *it, zyppPattern );
 	    }
 	    else
-		yuiDebug() << "Pattern " << zyppPattern->name()
+		logDebug() << "Pattern " << zyppPattern->name()
 			   << " is not user-visible" << std::endl;
 	}
 	else
 	{
-	    yuiError() << "Found non-Pattern selectable" << std::endl;
+	    logError() << "Found non-Pattern selectable" << std::endl;
 	}
     }
 
-    yuiDebug() << "Pattern list filled" << std::endl;
+    logDebug() << "Pattern list filled" << std::endl;
     resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
 }
@@ -177,7 +177,7 @@ YQPkgPatternList::category( const QString & categoryName )
 
     if ( ! cat )
     {
-	yuiDebug() << "New pattern category \""<< categoryName << "\"" << std::endl;
+	logDebug() << "New pattern category \""<< categoryName << "\"" << std::endl;
 
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
 	Q_CHECK_PTR( cat );
@@ -245,7 +245,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	yuiError() << "NULL ZyppSelectable!" << std::endl;
+	logError() << "NULL ZyppSelectable!" << std::endl;
 	return;
     }
 

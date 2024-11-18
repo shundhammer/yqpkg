@@ -42,7 +42,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     : YQPkgObjList( parent )
     , _vendorCol( -42 )
 {
-    yuiDebug() << "Creating product list" << endl;
+    logDebug() << "Creating product list" << endl;
 
     QStringList headers;
     int numCol = 0;
@@ -66,7 +66,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     fillList();
     selectSomething();
 
-    yuiDebug() << "Creating product list done" << endl;
+    logDebug() << "Creating product list done" << endl;
 }
 
 
@@ -80,7 +80,7 @@ void
 YQPkgProductList::fillList()
 {
     clear();
-    yuiDebug() << "Filling product list" << endl;
+    logDebug() << "Filling product list" << endl;
 
     for ( ZyppPoolIterator it = zyppProductsBegin();
 	  it != zyppProductsEnd();
@@ -94,11 +94,11 @@ YQPkgProductList::fillList()
 	}
 	else
 	{
-	    yuiError() << "Found non-product selectable" << endl;
+	    logError() << "Found non-product selectable" << endl;
 	}
     }
 
-    yuiDebug() << "product list filled" << endl;
+    logDebug() << "product list filled" << endl;
     resizeColumnToContents(_statusCol);
 }
 
@@ -109,7 +109,7 @@ YQPkgProductList::addProductItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	yuiError() << "NULL ZyppSel!" << endl;
+	logError() << "NULL ZyppSel!" << endl;
 	return;
     }
 

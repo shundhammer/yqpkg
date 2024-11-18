@@ -63,7 +63,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    yuiDebug() << "Generating changelog..." << std::endl;
+    logDebug() << "Generating changelog..." << std::endl;
 
     QString html = htmlStart();
     html += htmlHeading( selectable, false );
@@ -77,7 +77,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
         int not_displayed = installed->changelog().size() - MAX_DISPLAYED_CHANGES;
         if (not_displayed > 0)
         {
-            yuiWarning() << "Changelog size limit reached, ignoring last "
+            logWarning() << "Changelog size limit reached, ignoring last "
                 << not_displayed << " items" << std::endl;
             html.append("<p class='note'>"
                 + notDisplayedChanges(not_displayed, installed->name() + "-" + installed->edition().asString())
@@ -90,16 +90,16 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
     }
     html += htmlEnd();
 
-    yuiDebug() << "Changelog HTML size: " << html.size() << std::endl;
+    logDebug() << "Changelog HTML size: " << html.size() << std::endl;
     setHtml( html );
-    yuiDebug() << "Changes displayed" << std::endl;
+    logDebug() << "Changes displayed" << std::endl;
 }
 
 
 
 QString YQPkgChangeLogView::changeLogTable( const zypp::Changelog & changeLog ) const
 {
-    yuiDebug() << "Changelog size: " << changeLog.size() << " entries" << std::endl;
+    logDebug() << "Changelog size: " << changeLog.size() << " entries" << std::endl;
     QString html;
 
     int index = 0;

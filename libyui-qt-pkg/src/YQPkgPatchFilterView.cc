@@ -190,7 +190,7 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
     _totalDownloadSize->setText( totalSize.asString().c_str() );
 #endif
 
-    yuiDebug() << "Calculated total download size in "
+    logDebug() << "Calculated total download size in "
 	       << calcTime.elapsed() << " millisec"
 	       << endl;
 }

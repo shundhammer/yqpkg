@@ -159,7 +159,7 @@ YQPkgChangesDialog::filter( Filters f )
 void
 YQPkgChangesDialog::slotFilterChanged( int index )
 {
-    yuiMilestone() << "filter index changed to: " << index << endl;
+    logInfo() << "filter index changed to: " << index << endl;
     QVariant v = _filter->itemData(index);
 
     if ( v.isValid() && v.canConvert<Filters>() )
@@ -169,7 +169,7 @@ YQPkgChangesDialog::slotFilterChanged( int index )
     }
     else
     {
-        yuiError() << "Can't find filter for index " << index << endl;
+        logError() << "Can't find filter for index " << index << endl;
     }
 
 }
@@ -183,7 +183,7 @@ YQPkgChangesDialog::setFilter( Filters f )
 void
 YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
 {
-    yuiMilestone() << "filter changed to: " << f << endl;
+    logInfo() << "filter changed to: " << f << endl;
 
     int index = -1;
     for ( int k = 0; k < _filter->count(); ++k )
@@ -209,7 +209,7 @@ YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
     }
     else
     {
-        yuiError() << "Can't find index for filter " << f << endl;
+        logError() << "Can't find index for filter " << f << endl;
     }
 }
 
@@ -276,12 +276,12 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
 
     }
 
-    yuiMilestone() << "Filter result summary: " << endl;
-    yuiMilestone() << "Discarded by extra filter: " << discard_extra << endl;
-    yuiMilestone() << "Discarded by ignored: " << discard_ignored << endl;
-    yuiMilestone() << "Discarded by regex: " << discard_regex << endl;
-    yuiMilestone() << "Discarded because not modified: " << discard_notmodified << endl;
-    yuiMilestone() << "Discarded by who modified: " << discard_whomodified << endl;
+    logInfo() << "Filter result summary: " << endl;
+    logInfo() << "Discarded by extra filter: " << discard_extra << endl;
+    logInfo() << "Discarded by ignored: " << discard_ignored << endl;
+    logInfo() << "Discarded by regex: " << discard_regex << endl;
+    logInfo() << "Discarded because not modified: " << discard_notmodified << endl;
+    logInfo() << "Discarded by who modified: " << discard_whomodified << endl;
     YQUI::ui()->normalCursor();
 }
 
@@ -322,7 +322,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 
     if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
     {
-        yuiMilestone() << "No items to show in changes dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in changes dialog, accepting it automatically" << endl;
 	return true;
     }
 
@@ -350,7 +350,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 
     if ( dialog.isEmpty() &&  o.testFlag(OptionAutoAcceptIfEmpty) )
     {
-        yuiMilestone() << "No items to show in dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in dialog, accepting it automatically" << endl;
 	return true;
     }
 
@@ -372,7 +372,7 @@ bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
     if (!pkg || !sel)
         return false;
 
-    yuiDebug() << "UNSUPPORTED PKG: " << pkg << endl;
+    logDebug() << "UNSUPPORTED PKG: " << pkg << endl;
     return pkg->maybeUnsupported() && sel->toInstall();
 }
 
@@ -393,7 +393,7 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *	parent,
 
     if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
     {
-        yuiMilestone() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
 	return true;
     }
 

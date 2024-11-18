@@ -57,13 +57,13 @@ YPackageSelector * YQPackageSelectorPluginImpl::createPackageSelector( YWidget *
     }
     catch (const std::exception & e)
     {
-        yuiError() << "Caught std::exception: " << e.what() << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught std::exception: " << e.what() << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-        yuiError() << "Caught unspecified exception." << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught unspecified exception." << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     CHECK_NEW( packageSelector );
@@ -85,13 +85,13 @@ YWidget *YQPackageSelectorPluginImpl::createPatternSelector( YWidget * parent, l
     }
     catch (const std::exception & e)
     {
-        yuiError() << "Caught std::exception: " << e.what() << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught std::exception: " << e.what() << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-        yuiError() << "Caught unspecified exception." << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught unspecified exception." << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     CHECK_NEW( patternSelector );
@@ -113,13 +113,13 @@ YWidget *YQPackageSelectorPluginImpl::createSimplePatchSelector( YWidget * paren
     }
     catch (const std::exception & e)
     {
-        yuiError() << "Caught std::exception: " << e.what() << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught std::exception: " << e.what() << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-        yuiError() << "Caught unspecified exception." << endl;
-        yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
+        logError() << "Caught unspecified exception." << endl;
+        logError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     CHECK_NEW( simplePatchSelector );

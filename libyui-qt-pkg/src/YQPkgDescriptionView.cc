@@ -205,12 +205,12 @@ YQPkgDescriptionView::showLink( const QUrl & url )
     if ( url.scheme() == "pkg" )
     {
 	QString pkgName = url.authority();
-	yuiMilestone() << "Hyperlinking to package \"" << pkgName << "\"" << endl;
+	logInfo() << "Hyperlinking to package \"" << pkgName << "\"" << endl;
 	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }
     else
     {
-	yuiError() << "Protocol not supported - can't follow hyperlink \""
+	logError() << "Protocol not supported - can't follow hyperlink \""
 		   << url.toString() << "\"" << endl;
     }
 }

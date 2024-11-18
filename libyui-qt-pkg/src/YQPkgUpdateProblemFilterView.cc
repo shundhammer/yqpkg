@@ -98,7 +98,7 @@ YQPkgUpdateProblemFilterView::filter()
 
 	    if ( sel )
 	    {
-		yuiMilestone() << "Problematic package: "
+		logInfo() << "Problematic package: "
 			       << pkg->name() << "-" << pkg->edition().asString()
 			       << endl;
 

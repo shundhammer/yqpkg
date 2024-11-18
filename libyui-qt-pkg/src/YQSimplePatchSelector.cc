@@ -232,7 +232,7 @@ YQSimplePatchSelector::makeConnections()
 		 _diskUsageList, SLOT  ( updateDiskUsage() ) );
     }
 
-    yuiMilestone() << "Connection set up" << endl;
+    logInfo() << "Connection set up" << endl;
 
     if ( _wizard )
     {
@@ -251,7 +251,7 @@ YQSimplePatchSelector::makeConnections()
 void
 YQSimplePatchSelector::detailedPackageSelection()
 {
-    yuiMilestone() << "\"Details..\" button clicked" << endl;
+    logInfo() << "\"Details..\" button clicked" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "details" ) );
 }
 
@@ -259,7 +259,7 @@ YQSimplePatchSelector::detailedPackageSelection()
 void
 YQSimplePatchSelector::debugTrace()
 {
-    yuiWarning() << "debugTrace" << endl;
+    logWarning() << "debugTrace" << endl;
 }
 
 

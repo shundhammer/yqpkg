@@ -178,7 +178,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( ! file.open(QIODevice::WriteOnly) )
     {
-	yuiError() << "Can't open file " << filename << std::endl;
+	logError() << "Can't open file " << filename << std::endl;
 
 	if ( interactive )
 	{
@@ -361,7 +361,7 @@ YQPkgConflict::userSelectedResolution()
             continue;
         zypp::ProblemSolution_Ptr solution = it.value();
 
-        yuiMilestone() << "User selected resolution \""<< solution->description()
+        logInfo() << "User selected resolution \""<< solution->description()
 		       <<"\"" << std::endl;
         return solution;
     }

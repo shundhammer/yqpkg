@@ -53,7 +53,7 @@ using std::vector;
 YQPkgServiceList::YQPkgServiceList( QWidget * parent )
     : QY2ListView( parent )
 {
-    yuiDebug() << "Creating service list" << endl;
+    logDebug() << "Creating service list" << endl;
 
     QStringList headers;
 
@@ -74,7 +74,7 @@ YQPkgServiceList::YQPkgServiceList( QWidget * parent )
     sortByColumn( nameCol(), Qt::AscendingOrder );
     selectSomething();
 
-    yuiDebug() << "Creating service list done" << endl;
+    logDebug() << "Creating service list done" << endl;
 }
 
 YQPkgServiceList::~YQPkgServiceList()
@@ -86,7 +86,7 @@ void
 YQPkgServiceList::fillList()
 {
     clear();
-    yuiDebug() << "Filling service list" << endl;
+    logDebug() << "Filling service list" << endl;
 
     std::set<std::string> added_services;
     zypp::RepoManager repo_manager;
@@ -107,7 +107,7 @@ YQPkgServiceList::fillList()
         }
     });
 
-    yuiDebug() << "Service list filled" << endl;
+    logDebug() << "Service list filled" << endl;
 }
 
 void
@@ -122,7 +122,7 @@ YQPkgServiceList::filter()
 {
     emit filterStart();
 
-    yuiMilestone() << "Collecting packages in selected services..." << endl;
+    logInfo() << "Collecting packages in selected services..." << endl;
     QElapsedTimer stopWatch;
     stopWatch.start();
 
@@ -140,13 +140,13 @@ YQPkgServiceList::filter()
 
         if ( serviceItem )
         {
-            yuiMilestone() << "Selected service: " << serviceItem->zyppService() << endl;
+            logInfo() << "Selected service: " << serviceItem->zyppService() << endl;
 
 	    zypp::PoolQuery query;
 	    std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
             if (serviceItem->zyppService() == repo.info().service())
             {
-                yuiMilestone() << "Adding repo filter: " << repo.info().alias() << endl;
+                logInfo() << "Adding repo filter: " << repo.info().alias() << endl;
                 query.addRepo( repo.info().alias() );
             }
         });
@@ -158,7 +158,7 @@ YQPkgServiceList::filter()
 	}
     }
 
-    yuiDebug() << "Packages sent to package list. Elapsed time: "
+    logDebug() << "Packages sent to package list. Elapsed time: "
 	       << stopWatch.elapsed() / 1000.0 << " sec"
 	       << endl;
 

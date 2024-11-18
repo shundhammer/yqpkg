@@ -78,7 +78,7 @@ YQPatternSelector::YQPatternSelector( YWidget *	parent, long modeFlags )
 
     if ( zyppPool().empty<zypp::Pattern  >() )
     {
-	yuiWarning() << "Neither patterns nor selections in ZyppPool" << endl;
+	logWarning() << "Neither patterns nor selections in ZyppPool" << endl;
     }
 
 
@@ -295,7 +295,7 @@ YQPatternSelector::makeConnections()
 
     }
 
-    yuiMilestone() << "Connection set up" << endl;
+    logInfo() << "Connection set up" << endl;
 
 
     if ( _wizard )
@@ -315,7 +315,7 @@ YQPatternSelector::makeConnections()
 void
 YQPatternSelector::detailedPackageSelection()
 {
-    yuiMilestone() << "\"Details..\" button clicked" << endl;
+    logInfo() << "\"Details..\" button clicked" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "details" ) );
 }
 
@@ -323,7 +323,7 @@ YQPatternSelector::detailedPackageSelection()
 void
 YQPatternSelector::debugTrace()
 {
-    yuiWarning() << "debugTrace" << endl;
+    logWarning() << "debugTrace" << endl;
 }
 
 

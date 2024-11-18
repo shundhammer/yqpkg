@@ -108,7 +108,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 	    iconName.replace( QRegExp( "^\\./" ), "" );
 
 	if ( pattern && iconName.isEmpty() )
-	    yuiWarning() << "No icon for pattern " << zyppObj->name() << endl;
+	    logWarning() << "No icon for pattern " << zyppObj->name() << endl;
     }
 
 

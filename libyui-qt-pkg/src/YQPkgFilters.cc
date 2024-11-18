@@ -45,12 +45,12 @@ YQPkgFilters::singleProductFilter(std::function<bool(const zypp::PoolItem& item)
 
     if (product_it == end)
     {
-        yuiMilestone() << "No product found " << std::endl;
+        logInfo() << "No product found " << std::endl;
         return product;
     }
 
     product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    yuiMilestone() << "Found product " << product->name() << std::endl;
+    logInfo() << "Found product " << product->name() << std::endl;
 
     // Check if there is another product
     product_it = std::find_if(++product_it, end, [&](const zypp::PoolItem& item) {
@@ -61,7 +61,7 @@ YQPkgFilters::singleProductFilter(std::function<bool(const zypp::PoolItem& item)
         return product;
 
     product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    yuiMilestone() << "Found another product " << product->name() << std::endl;
+    logInfo() << "Found another product " << product->name() << std::endl;
 
     // nullptr
     return ZyppProduct();

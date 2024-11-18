@@ -60,7 +60,7 @@ bool YQPkgServiceFilterView::any_service()
 		return !repo.info().service().empty();
 	});
 
-	yuiMilestone() << "Found a libzypp service: " << ret << std::endl;
+	logInfo() << "Found a libzypp service: " << ret << std::endl;
 	return ret;
 }
 

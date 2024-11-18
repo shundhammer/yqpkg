@@ -231,7 +231,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 {
     prepareSolving();
 
-    yuiDebug() << "Solving..." << endl;
+    logDebug() << "Solving..." << endl;
     QElapsedTimer solveTime;
     solveTime.start();
 
@@ -241,7 +241,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     _totalSolveTime += solveTime.elapsed() / 1000.0;
 
-    yuiDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
+    logDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
 	       << " s - average: "  << " s" << averageSolveTime()
 	       << endl;
 
@@ -254,13 +254,13 @@ YQPkgConflictDialog::verifySystem()
 {
     prepareSolving();
 
-    yuiDebug() << "Verifying system..." << endl;
+    logDebug() << "Verifying system..." << endl;
     QElapsedTimer solveTime;
     solveTime.start();
 
     bool success = zypp::getZYpp()->resolver()->verifySystem(); // considerNewHardware
 
-    yuiDebug() << "System verified in " << solveTime.elapsed() / 1000.0 << " s" << endl;
+    logDebug() << "System verified in " << solveTime.elapsed() / 1000.0 << " s" << endl;
 
     return processSolverResult( success );
 }
@@ -327,7 +327,7 @@ YQPkgConflictDialog::processSolverResult( bool success )
     }
     else		// There were solving problems.
     {
-	yuiDebug() << "Dependency conflict!" << endl;
+	logDebug() << "Dependency conflict!" << endl;
 	YQUI::ui()->busyCursor();
 
 	_conflictList->fill( zypp::getZYpp()->resolver()->problems() );
@@ -381,9 +381,9 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     if ( button_no == 1 )	// Cancel
 	return;
 
-    yuiMilestone() << "Generating solver test case START" << endl;
+    logInfo() << "Generating solver test case START" << endl;
     bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable( testCaseDir ) );
-    yuiMilestone() << "Generating solver test case END" << endl;
+    logInfo() << "Generating solver test case END" << endl;
 
     if ( success )
     {
