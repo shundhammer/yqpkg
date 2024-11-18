@@ -24,7 +24,7 @@
 
 
 #define YUILogComponent "qt-pkg"
-#include <yui/YUILog.h>
+#include "Logger.h"
 
 #include "YQPackageSelector.h"
 #include "YQPatternSelector.h"

@@ -23,7 +23,7 @@
 
 
 #define YUILogComponent "qt-ui"
-#include <yui/YUILog.h>
+#include "Logger.h"
 
 #include <yui/qt/utf8.h>
 
