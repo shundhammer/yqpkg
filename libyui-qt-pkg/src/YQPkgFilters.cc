@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#define YUILogComponent "qt-pkg"
 #include "Logger.h"
 
 #include <zypp/ResPool.h>

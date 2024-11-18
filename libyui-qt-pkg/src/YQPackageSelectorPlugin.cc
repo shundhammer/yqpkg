@@ -25,7 +25,6 @@
 */
 
 
-#define YUILogComponent "qt-ui"
 #include "Logger.h"
 
 #include <yui/YUIException.h>

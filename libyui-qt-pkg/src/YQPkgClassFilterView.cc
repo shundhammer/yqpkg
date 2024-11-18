@@ -27,7 +27,6 @@
 */
 
 
-#define YUILogComponent "qt-pkg"
 #include "Logger.h"
 
 #include <yui/qt/YQi18n.h>
