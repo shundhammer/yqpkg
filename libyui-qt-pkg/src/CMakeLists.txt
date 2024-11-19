@@ -74,7 +74,9 @@ set( SOURCES
   YQPkgVersionsView.cc
 
   YQIconPool.cc
+  QY2DiskUsageList.cc
   QY2LayoutUtils.cc
+  QY2ListView.cc
   )
 
 set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
