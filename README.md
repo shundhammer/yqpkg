@@ -43,7 +43,7 @@ src/
 After `sudo make install`:
 
 ```
-y2pkg
+yqpkg
 ```
 
 (it's now in `/usr/bin/yqpkg`)
