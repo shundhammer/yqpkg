@@ -9,6 +9,46 @@ without any YaST dependencies.
 GPL V2; see file LICENSE.
 
 
+## Building
+
+```
+make -f Makefile.repo
+cd build
+make
+```
+
+### Installing
+
+After building, add
+
+```
+sudo make install
+```
+
+### Cleaning up a Build
+
+```
+rm -rf build
+```
+
+### Starting the Built Executable
+
+From the build directory (without `sudo make install`):
+
+```
+cd build
+src/
+```
+
+After `sudo make install`:
+
+```
+y2pkg
+```
+
+(it's now in `/usr/bin/yqpkg`)
+
+
 ## TO DO
 
 _TO DO: More information_
