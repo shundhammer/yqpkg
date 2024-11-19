@@ -27,12 +27,12 @@ set( SOURCES
   main.cc
   Logger.cc
   Exception.cc
+  FSize.cc
 
   YQPackageSelector.cc
   YQPackageSelectorBase.cc
   YQPackageSelectorHelp.cc
   YQPatternSelector.cc
-  YQSimplePatchSelector.cc
 
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc

@@ -27,12 +27,6 @@
 */
 
 
-#include <yui/YEvent.h>
-#include "QY2CursorHelper.h"
-#include <yui/qt/YQDialog.h>
-#include <yui/qt/YQWizard.h>
-#include "YQi18n.h"
-#include "utf8.h"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -40,12 +34,16 @@
 #include <QSplitter>
 #include <QLayout>
 
-#include "YQPatternSelector.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgConflictDialog.h"
-#include "YQPkgSelDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgPatternList.h"
-#include "QY2LayoutUtils.h"
+#include "YQPkgSelDescriptionView.h"
+#include "YQi18n.h"
+#include "utf8.h"
+
+#include "YQPatternSelector.h"
 
 #include "Logger.h"
 #include "Exception.h"
@@ -60,12 +58,11 @@ using std::string;
 #define MARGIN			6
 
 
-YQPatternSelector::YQPatternSelector( YWidget *	parent, long modeFlags )
+YQPatternSelector::YQPatternSelector( QWidget *	parent, long modeFlags )
     : YQPackageSelectorBase( parent, modeFlags )
 {
-    _patternList		= 0;
-    _descriptionView		= 0;
-    _wizard			= findWizard();
+    _patternList	= 0;
+    _descriptionView    = 0;
 
     basicLayout();
     makeConnections();
@@ -85,22 +82,6 @@ YQPatternSelector::YQPatternSelector( YWidget *	parent, long modeFlags )
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 }
-
-
-
-YQWizard *
-YQPatternSelector::findWizard() const
-{
-    YQWizard * wizard = 0;
-
-    YQDialog * dialog = dynamic_cast<YQDialog *> ( YDialog::currentDialog() );
-
-    if ( dialog )
-	wizard = dialog->findWizard();
-
-    return wizard;
-}
-
 
 
 void
@@ -123,8 +104,7 @@ YQPatternSelector::basicLayout()
     outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
     outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
 
-    if ( ! _wizard )
-	layoutButtons( this );
+    layoutButtons( this );
 }
 
 
@@ -150,28 +130,6 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	Q_CHECK_PTR( _patternList );
         layout->addWidget(_patternList);
         //_patternList->header()->hide();
-    }
-
-    if ( _wizard )	// No button box - add "Details..." button here
-    {
-	//
-	// "Details" button
-	//
-
-	layout->addSpacing( SPACING );
-
-	QHBoxLayout * hbox = new QHBoxLayout();
-	Q_CHECK_PTR( hbox );
-        layout->addLayout(hbox);
-
-	QPushButton * details_button = new QPushButton( _( "&Details..." ), vbox );
-	Q_CHECK_PTR( details_button );
-        hbox->addWidget(details_button);
-
-	connect( details_button, SIGNAL( clicked() ),
-		 this,		 SLOT  ( detailedPackageSelection() ) );
-
-	hbox->addStretch();
     }
 
     return vbox;
@@ -296,19 +254,6 @@ YQPatternSelector::makeConnections()
     }
 
     logInfo() << "Connection set up" << endl;
-
-
-    if ( _wizard )
-    {
-	connect( _wizard, 	SIGNAL( nextClicked()	),
-		 this,		SLOT  ( accept()        ) );
-
-	connect( _wizard, 	SIGNAL( backClicked()	),
-		 this,		SLOT  ( reject()	) );
-
-	connect( _wizard, 	SIGNAL( abortClicked()	),
-		 this,		SLOT  ( reject()	) );
-    }
 }
 
 

@@ -27,19 +27,17 @@
 */
 
 
-#include "Logger.h"
 
+#include <QString>
+#include <QBuffer>
+
+#include "Logger.h"
 #include "QY2CursorHelper.h"
+#include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
-#include <qstring.h>
-#include <qbuffer.h>
-#include <qapplication.h>
-
 #include "YQPackageSelector.h"
-#include "YQPkgTextDialog.h"
-
 
 
 void

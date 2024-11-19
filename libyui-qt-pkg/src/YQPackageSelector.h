@@ -25,9 +25,8 @@
 #ifndef YQPackageSelector_h
 #define YQPackageSelector_h
 
+#include <QWidget>
 #include <QColor>
-#include <QLabel>
-#include <QMenu>
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgObjList.h"
@@ -71,7 +70,7 @@ class YQPackageSelector : public YQPackageSelectorBase
 
 public:
 
-    YQPackageSelector( YWidget * parent, long modeFlags = 0 );
+    YQPackageSelector( QWidget * parent, long modeFlags = 0 );
     ~YQPackageSelector();
 
 

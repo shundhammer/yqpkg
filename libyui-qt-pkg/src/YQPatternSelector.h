@@ -25,6 +25,7 @@
 #ifndef YQPatternSelector_h
 #define YQPatternSelector_h
 
+#include <QWidget>
 #include <QColor>
 
 #include "YQPackageSelectorBase.h"
@@ -34,7 +35,6 @@ class QPushButton;
 
 class YQPkgSelDescriptionView;
 class YQPkgPatternList;
-class YQWizard;
 
 
 class YQPatternSelector: public YQPackageSelectorBase
@@ -43,7 +43,7 @@ class YQPatternSelector: public YQPackageSelectorBase
 
 public:
 
-    YQPatternSelector( YWidget * parent, long modeFlags );
+    YQPatternSelector( QWidget * parent, long modeFlags );
 
 
 protected slots:
@@ -70,12 +70,6 @@ protected:
     void	layoutButtons	( QWidget * parent );
 
     /**
-     * Find the wizard in the current dialog, if there is any.
-     * Returns 0 if there is none.
-     **/
-    YQWizard *	findWizard() const;
-
-    /**
      * Establish Qt signal / slot connections.
      **/
     void makeConnections();
@@ -85,7 +79,6 @@ protected:
 
     YQPkgPatternList *		_patternList;
     YQPkgSelDescriptionView *	_descriptionView;
-    YQWizard *			_wizard;
 };
 
 
