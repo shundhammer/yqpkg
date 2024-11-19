@@ -29,7 +29,7 @@
 
 #include "Logger.h"
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include "YQi18n.h"
 #include <yui/qt/utf8.h>
 

@@ -26,7 +26,7 @@
 
 
 #include <yui/YEvent.h>
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/qt/YQApplication.h>
 #include <yui/qt/YQDialog.h>
 #include "YQi18n.h"
@@ -118,13 +118,13 @@ YQPackageSelectorBase::resolveDependencies()
     }
 
 
-    YQUI::ui()->busyCursor();
+    busyCursor();
     emit resolvingStarted();
 
     int result = _pkgConflictDialog->solveAndShowConflicts();
 
     emit resolvingFinished();
-    YQUI::ui()->normalCursor();
+    normalCursor();
 
     return result;
 }
@@ -140,9 +140,9 @@ YQPackageSelectorBase::verifySystem()
     }
 
 
-    YQUI::ui()->busyCursor();
+    busyCursor();
     int result = _pkgConflictDialog->verifySystem();
-    YQUI::ui()->normalCursor();
+    normalCursor();
 
     if ( result == QDialog::Accepted )
     {

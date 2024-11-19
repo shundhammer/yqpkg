@@ -28,7 +28,7 @@
 
 
 #include <yui/YEvent.h>
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/qt/YQDialog.h>
 #include <yui/qt/YQWizard.h>
 #include "YQi18n.h"

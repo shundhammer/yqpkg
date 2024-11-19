@@ -26,7 +26,7 @@
 
 
 #include "YQi18n.h"
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 
 #include <QApplication>
 #include <qdesktopwidget.h>

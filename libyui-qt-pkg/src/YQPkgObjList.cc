@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/YDialog.h>
 #include "YQi18n.h"
 #include <yui/qt/utf8.h>
@@ -309,7 +309,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
     if ( ! _editable )
 	return;
 
-    YQUI::ui()->busyCursor();
+    busyCursor();
     QTreeWidgetItemIterator it( this );
 
     while ( *it )
@@ -346,7 +346,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
     emit updateItemStates();
     emit updatePackages();
 
-    YQUI::ui()->normalCursor();
+    normalCursor();
     emit statusChanged();
 }
 

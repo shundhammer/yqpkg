@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include "YQi18n.h"
 #include <yui/qt/utf8.h>
 
@@ -123,7 +123,7 @@ void
 YQPkgDescriptionDialog::filter( const QString & qPkgName )
 {
     std::string pkgName( toUTF8( qPkgName ) );
-    YQUI::ui()->busyCursor();
+    busyCursor();
     _pkgList->clear();
 
 
@@ -150,7 +150,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 	_pkgDescription->clear();
 #endif
 
-    YQUI::ui()->normalCursor();
+    normalCursor();
 }
 
 

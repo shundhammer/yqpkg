@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include "YQi18n.h"
 
 #include <QApplication>
@@ -156,7 +156,7 @@ YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString & 	message,
 					thresholdPercent,
 					acceptButtonLabel,
 					rejectButtonLabel );
-    YQUI::ui()->normalCursor();
+    normalCursor();
     dialog.exec();
 
     return dialog.result() == QDialog::Accepted;

@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include "YQi18n.h"
 
 #include <zypp/ResStatus.h>
@@ -217,7 +217,7 @@ YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
 void
 YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
 {
-    YQUI::ui()->busyCursor();
+    busyCursor();
     _pkgList->clear();
 
     bool byAuto = f.testFlag(FilterAutomatic);
@@ -282,7 +282,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
     logInfo() << "Discarded by regex: " << discard_regex << endl;
     logInfo() << "Discarded because not modified: " << discard_notmodified << endl;
     logInfo() << "Discarded by who modified: " << discard_whomodified << endl;
-    YQUI::ui()->normalCursor();
+    normalCursor();
 }
 
 bool

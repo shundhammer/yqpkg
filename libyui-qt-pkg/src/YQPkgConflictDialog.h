@@ -106,6 +106,8 @@ public slots:
      **/
     int verifySystem();
 
+    
+#if FIXME_SOLVER_TEST_CASE
     /**
      * Mini-wizard to generate solver test case:
      *
@@ -117,6 +119,7 @@ public slots:
      *   - Save y2logs.tgz
      **/
     void askCreateSolverTestCase();
+#endif
 
     
 signals:

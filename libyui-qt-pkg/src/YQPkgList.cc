@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/qt/YQApplication.h>
 #include "YQi18n.h"
 #include <yui/qt/utf8.h>
@@ -59,8 +59,6 @@ using std::max;
 YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    _srpmStatusCol	= -42;
-
     resetOptimalColumnWidthValues();
 
     int numCol = 0;
@@ -93,7 +91,6 @@ YQPkgList::YQPkgList( QWidget * parent )
 	headers << versionHeaderText;	_versionCol	= numCol++;
     }
 
-    // headers <<  _( "Source" );	_srpmStatusCol	= numCol++;
     headers <<  _( "Size" 	);	_sizeCol	= numCol++;
 
     setHeaderLabels( headers );
@@ -108,9 +105,6 @@ YQPkgList::YQPkgList( QWidget * parent )
     header()->setSectionResizeMode( QHeaderView::Interactive );
 
     /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
-
-    createActions();
-    createSourceRpmContextMenu();
 
     connect ( header(), SIGNAL( sectionClicked (int) ),
 	      this,	SLOT( sortByColumn (int) ) );
@@ -178,115 +172,10 @@ YQPkgList::haveInstalledPkgs()
 }
 
 
-void
-YQPkgList::pkgObjClicked( int			button,
-			  QTreeWidgetItem *	listViewItem,
-			  int			col,
-			  const QPoint &	pos )
-{
-    if ( col == srpmStatusCol() )
-    {
-	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
-
-	if ( item )
-	{
-	    if ( button == Qt::LeftButton )
-	    {
-		if ( editable() && item->editable() )
-		    item->toggleSourceRpmStatus();
-		return;
-	    }
-	    else if ( button == Qt::RightButton )
-	    {
-		if ( editable() && item->editable() )
-		{
-		    updateActions( item );
-
-		    if ( _sourceRpmContextMenu )
-			_sourceRpmContextMenu->popup( pos );
-		}
-
-		return;
-	    }
-	}
-    }
-
-    YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
-}
-
-
 QSize
 YQPkgList::sizeHint() const
 {
     return QSize( 600, 350 );
-}
-
-
-void
-YQPkgList::createSourceRpmContextMenu()
-{
-    _sourceRpmContextMenu = new QMenu( this );
-
-    _sourceRpmContextMenu->addAction(actionInstallSourceRpm);
-    _sourceRpmContextMenu->addAction(actionDontInstallSourceRpm);
-
-    QMenu * submenu = new QMenu( _sourceRpmContextMenu );
-    Q_CHECK_PTR( submenu );
-    QAction *action = _sourceRpmContextMenu->addMenu( submenu );
-    action->setText(_( "&All in This List" ));
-
-    submenu->addAction(actionInstallListSourceRpms);
-    submenu->addAction(actionDontInstallListSourceRpms);
-}
-
-
-void
-YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
-				       bool selectNextItem )
-{
-#if FIXME
-    QTreeWidgetItem * listViewItem = selectedItem();
-
-    if ( ! listViewItem )
-	return;
-
-    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
-
-    if ( item )
-    {
-	item->setInstallSourceRpm( installSourceRpm );
-
-	if ( selectNextItem && item->nextSibling() )
-	{
-	    item->setSelected( false );			// doesn't emit signals
-	    setSelected( item->nextSibling(), true );	// emits signals
-	}
-    }
-#endif
-}
-
-
-void
-YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
-{
-    if ( ! _editable )
-	return;
-
-#if FIXME
-    QTreeWidgetItem * listViewItem = firstChild();
-
-    while ( listViewItem )
-    {
-	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
-
-	if ( item && item->editable() )
-	{
-	    item->setInstallSourceRpm( installSourceRpm );
-	}
-
-	listViewItem = listViewItem->nextSibling();
-    }
-#endif
 }
 
 
@@ -457,10 +346,6 @@ YQPkgList::createNotInstalledContextMenu()
     _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
 
     addAllInListSubMenu( _notInstalledContextMenu );
-
-    _notInstalledContextMenu->addSeparator();
-    _notInstalledContextMenu->addAction( _( "Export This List to &Text File..." ),
-					  this, SLOT( askExportList() ) );
 }
 
 
@@ -477,10 +362,6 @@ YQPkgList::createInstalledContextMenu()
     _installedContextMenu->addAction(actionSetCurrentProtected);
 
     addAllInListSubMenu( _installedContextMenu );
-
-    _installedContextMenu->addSeparator();
-    _installedContextMenu->addAction( _( "Export This List to &Text File..." ),
-				       this, SLOT( askExportList() ) );
 }
 
 
@@ -507,164 +388,10 @@ YQPkgList::addAllInListSubMenu( QMenu * menu )
 }
 
 
-void
-YQPkgList::createActions()
-{
-    actionInstallSourceRpm		= createAction( _( "&Install Source" ),
-							statusIcon( S_Install, true ),
-							statusIcon( S_Install, false ) );
-
-    actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
-							statusIcon( S_NoInst, true ),
-							statusIcon( S_NoInst, false ) );
-
-    actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
-							statusIcon( S_Install, true ),
-							statusIcon( S_Install, false ),
-							QString(),		// key
-							true );			// enabled
-
-    actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
-							statusIcon( S_NoInst, true ),
-							statusIcon( S_NoInst, false ),
-							QString(),		// key
-							true );			// enabled
-
-    connect( actionInstallSourceRpm,          &QAction::triggered,
-             this,                            static_cast<void (YQPkgList::*)()>(&YQPkgList::setInstallCurrentSourceRpm) );
-    connect( actionDontInstallSourceRpm,      &QAction::triggered,
-             this,                            &YQPkgList::setDontInstallCurrentSourceRpm );
-    connect( actionInstallListSourceRpms,     &QAction::triggered,
-             this,                            static_cast<void (YQPkgList::*)()>(&YQPkgList::setInstallListSourceRpms) );
-    connect( actionDontInstallListSourceRpms, &QAction::triggered,
-             this,                            &YQPkgList::setDontInstallListSourceRpms );
-}
-
-
-void
-YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
-{
-    YQPkgObjList::updateActions( pkgObjListItem );
-
-    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (pkgObjListItem);
-
-    if ( item )
-    {
-	actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
-	actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
-    }
-    else
-    {
-	actionInstallSourceRpm->setEnabled( false );
-	actionDontInstallSourceRpm->setEnabled( false );
-    }
-}
-
-
-void
-YQPkgList::askExportList() const
-{
-    QString filename = YQApplication::askForSaveFileName( "pkglist.txt",	// startsWith
-							  "*.txt",		// filter
-							  _( "Export Package List" ) );
-    if ( ! filename.isEmpty() )
-	exportList( filename, true );
-}
-
-
-void
-YQPkgList::exportList( const QString filename, bool interactive ) const
-{
-    // Open file
-
-    QFile file(filename);
-    file.open(QIODevice::WriteOnly);
-
-    if ( file.error() != QFile::NoError )
-    {
-	logError() << "Can't open file " << filename << endl;
-
-	if ( interactive )
-	{
-	    // Post error popup.
-
-	    QMessageBox::warning( 0,						// parent
-				  _( "Error" ),					// caption
-				  _( "Cannot open file %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
-	}
-	return;
-    }
-
-
-    //
-    // Write header
-    //
-
-    // Format the header line with QString::arg() because stdio fprintf() is
-    // not UTF-8 aware - it will count multi-byte characters wrong, so the
-    // formatting will be broken.
-
-    QString header = QString( "# %1 %2 | %3 | %4 | 5\n\n" )
-        .arg( _( "Status"                ), -18 )
-        .arg( _( "Package"               ), -30 )
-        .arg( _( "Summary"               ), -40 )
-	.arg( _( "Installed (Available)" ), -25 )
-	.arg( _( "Size"                  ),  10 );
-
-    file.write( header.toUtf8() );
-
-
-    // Write all items
-
-    QTreeWidgetItemIterator it((QTreeWidget*) this);
-
-    while (*it)
-    {
-        const QTreeWidgetItem* item(*it);
-        const YQPkgListItem *  pkg = dynamic_cast<const YQPkgListItem *> (item);
-
-        if ( pkg )
-        {
-            QString version = pkg->text( versionCol() );
-            if ( version.isEmpty() ) version = "---";
-
-            QString summary = pkg->text( summaryCol() );
-            if ( summary.isEmpty() ) summary = "---";
-            if ( summary.size() > 40 )
-            {
-                summary.truncate(40-3);
-                summary += "...";
-            }
-
-            QString status = "[" + statusText( pkg->status() ) + "]";
-
-            QString line = QString( "%1 %2 | %3 | %4 | %5\n" )
-                .arg( status,                 -20 )
-                .arg( pkg->text( nameCol() ), -30 )
-		.arg( summary,                -40 )
-                .arg( version,                -25 )
-		.arg( pkg->text( sizeCol() ),  10 );
-
-            file.write( line.toUtf8() );
-	}
-
-        ++it;
-    }
-
-    // Clean up
-
-    if ( file.isOpen() )
-        file.close();
-}
-
-
 int
 YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly )
 {
-    YQUI::ui()->busyCursor();
+    busyCursor();
     int changedCount = 0;
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
@@ -732,7 +459,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 	emit statusChanged();
     }
 
-    YQUI::ui()->normalCursor();
+    normalCursor();
 
     return changedCount;
 }
@@ -753,8 +480,6 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
     if ( ! _zyppPkg )
 	_zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
-    setSourceRpmIcon();
-
     setTextAlignment( sizeCol(), Qt::AlignRight );
 }
 
@@ -769,88 +494,6 @@ void
 YQPkgListItem::updateData()
 {
     YQPkgObjListItem::updateData();
-    setSourceRpmIcon();
-}
-
-
-bool
-YQPkgListItem::hasSourceRpm() const
-{
-    if ( ! selectable() )
-	return false;
-
-#ifdef FIXME
-    return selectable()->providesSources();
-#else
-    return false;
-#endif
-}
-
-
-bool
-YQPkgListItem::installSourceRpm() const
-{
-    if ( ! selectable() )
-	return false;
-
-#ifdef FIXME
-    if ( ! selectable()->providesSources() )
-	return false;
-
-    return selectable()->source_install();
-#else
-    return false;
-#endif
-}
-
-
-void
-YQPkgListItem::setSourceRpmIcon()
-{
-    if ( srpmStatusCol() < 0 )
-	return;
-
-    QPixmap icon;
-
-    if ( hasSourceRpm() )
-    {
-
-	if ( editable() && _pkgObjList->editable() )
-	{
-	    icon = installSourceRpm() ?
-		YQIconPool::pkgInstall() :
-		YQIconPool::pkgNoInst();
-	}
-	else
-	{
-	    icon = installSourceRpm() ?
-		YQIconPool::disabledPkgInstall() :
-		YQIconPool::disabledPkgNoInst();
-	}
-    }
-    setData( srpmStatusCol(), Qt::DecorationRole, icon );
-}
-
-
-void
-YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
-{
-    if ( hasSourceRpm() )
-    {
-#ifdef FIXME
-	if ( selectable() )
-	    selectable()->set_source_install( installSourceRpm );
-#endif
-    }
-
-    setSourceRpmIcon();
-}
-
-
-void
-YQPkgListItem::toggleSourceRpmStatus()
-{
-    setInstallSourceRpm( ! installSourceRpm() );
 }
 
 
@@ -863,21 +506,6 @@ YQPkgListItem::toolTip( int col )
     if ( col == statusCol() )
     {
 	text = YQPkgObjListItem::toolTip( col );
-    }
-    else if ( col == srpmStatusCol() )
-    {
-	text = name + "\n\n";
-
-	if ( hasSourceRpm() )
-	{
-	    text += installSourceRpm() ?
-		_( "Install Sources" ) :
-		_( "Do Not Install Sources" );
-	}
-	else
-	{
-	    text += _( "No Sources Available" );
-	}
     }
     else
     {
@@ -930,27 +558,3 @@ YQPkgListItem::toolTip( int col )
 
     return text;
 }
-
-
-
-bool YQPkgListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
-{
-    const YQPkgListItem * other = dynamic_cast<const YQPkgListItem *> (&otherListViewItem);
-
-    int col = treeWidget()->sortColumn();
-    if ( col == srpmStatusCol() )
-    {
-	if ( other )
-	{
-	    int thisPoints  = ( this->hasSourceRpm()  ? 1 : 0 ) + ( this->installSourceRpm()  ? 1 : 0 );
-	    int otherPoints = ( other->hasSourceRpm() ? 1 : 0 ) + ( other->installSourceRpm() ? 1 : 0 );
-
-	    // Intentionally inverting order: Pkgs with source RPMs are more interesting than without.
-	    return ( thisPoints < otherPoints );
-	}
-    }
-
-    // Fallback: Use parent class method
-    return YQPkgObjListItem::operator<( otherListViewItem );
-}
-

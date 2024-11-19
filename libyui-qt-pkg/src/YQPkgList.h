@@ -52,18 +52,6 @@ public:
     virtual ~YQPkgList();
 
 
-    // Column numbers
-
-    int srpmStatusCol() 	const	{ return _srpmStatusCol; 	}
-
-    /**
-     * Save the pkg list to a file.
-     *
-     * Posts error popups if 'interactive' is 'true' ( only log entries
-     * otherwise ).
-     **/
-    void exportList( const QString filename, bool interactive ) const;
-
     /**
      * Add a submenu "All in this list..." to 'menu'.
      * Returns the newly created submenu.
@@ -119,41 +107,17 @@ public slots:
 
 
     /**
-     * Dispatcher slot for mouse click: Take care of source RPM status.
-     * Let the parent class handle the normal status.
-     * Reimplemented from YQPkgObjList.
-     **/
-    virtual void pkgObjClicked( int		button,
-				QTreeWidgetItem *	item,
-				int		col,
-				const QPoint &	pos );
-
-    /**
-     * Update the internal actions: What actions are available for 'item'?
-     *
-     * Reimplemented from YQPkgObjList
-     **/
-    virtual void updateActions( YQPkgObjListItem * item );
-
-    /**
      * Reimplemented from QListView / QWidget:
      * Reserve a reasonable amount of space.
      **/
     virtual QSize sizeHint() const;
 
+#if 0
     /**
      * Ask for a file name and save the current pkg list to file.
      **/
     void askExportList() const;
-
-
-    // Direct access to some states for menu actions
-
-    void setInstallCurrentSourceRpm()	  { setInstallCurrentSourceRpm( true  ); }
-    void setDontInstallCurrentSourceRpm() { setInstallCurrentSourceRpm( false ); }
-
-    void setInstallListSourceRpms()	  { setInstallListSourceRpms( true  ); }
-    void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
+#endif
 
 
     // No separate currentItemChanged( ZyppPkg ) signal:
@@ -178,11 +142,6 @@ public slots:
 protected:
 
     /**
-     * Create ( additional ) actions for the context menus.
-     **/
-    void createActions();
-
-    /**
      * Create the context menu for items that are not installed.
      *
      * Reimplemented from YQPkgObjList.
@@ -195,22 +154,6 @@ protected:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void createInstalledContextMenu();
-
-    /**
-     * Create context menu for source RPMs.
-     **/
-    void createSourceRpmContextMenu();
-
-    /**
-     * Sets the currently selected item's source RPM status.
-     * Automatically selects the next item if 'selectNextItem' is 'true'.
-     **/
-    void setInstallCurrentSourceRpm( bool inst, bool selectNextItem = false );
-
-    /**
-     * Sets the source RPM status of all items in this list.
-     **/
-    void setInstallListSourceRpms( bool inst );
 
     /**
      * Resets the optimal column width values.
@@ -236,11 +179,12 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 
-    // *** Data members:
+    //
+    // Data members
+    //
 
-    int			_srpmStatusCol;
-    QMenu *		_sourceRpmContextMenu;
-    // Optimal (sized-to-content) column widths:
+    // Optimal (sized-to-content) column widths
+    
     int _optimalColWidth_statusIcon;
     int _optimalColWidth_name;
     int _optimalColWidth_summary;
@@ -248,13 +192,6 @@ protected:
     int _optimalColWidth_instVersion;
     int _optimalColWidth_size;
 
-
-public:
-
-    QAction *		actionInstallSourceRpm;
-    QAction *		actionDontInstallSourceRpm;
-    QAction *		actionInstallListSourceRpms;
-    QAction *		actionDontInstallListSourceRpms;
 };
 
 
@@ -287,32 +224,6 @@ public:
     ZyppPkg zyppPkg() const { return _zyppPkg; }
 
     /**
-     * Returns the source RPM package status:
-     * Should the source RPM be installed?
-     **/
-    bool installSourceRpm() const;
-
-    /**
-     * Set the source RPM status
-     **/
-    void setInstallSourceRpm( bool installSourceRpm );
-
-    /**
-     * Cycle the source package status to the next valid value.
-     **/
-    void toggleSourceRpmStatus();
-
-    /**
-     * Returns whether or not a source RPM is available for this package.
-     **/
-    bool hasSourceRpm() const;
-
-    /**
-     * sorting function
-     */
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
-
-    /**
      * Update this item's data completely.
      * Triggered by QY2ListView::updateAllItemData().
      *
@@ -340,24 +251,11 @@ public:
     void setDimmed( bool d = true ) { _dimmed = d; }
 
 
-    // Columns
-
-    int srpmStatusCol() const { return _pkgList->srpmStatusCol(); }
-
-
 protected:
 
-    /**
-     * Set the suitable icon for the source RPM status.
-     **/
-    void setSourceRpmIcon();
-
-
-    // Data members
-
-    YQPkgList *			_pkgList;
-    ZyppPkg	_zyppPkg;
-    bool			_dimmed;
+    YQPkgList *	_pkgList;
+    ZyppPkg     _zyppPkg;
+    bool	_dimmed;
 };
 
 

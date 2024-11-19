@@ -25,7 +25,7 @@
 */
 
 
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/qt/YQDialog.h>
 #include "YQi18n.h"
 #include <yui/qt/utf8.h>
@@ -125,6 +125,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 	     this,   SLOT  ( solveAndShowConflicts() ) );
 
 
+#if 0
     // "Expert" menu button
 
     button = new QPushButton( _( "&Expert" ), this );
@@ -141,6 +142,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     _expertMenu->addAction( _( "&Save This List to a File..." ),
 			     _conflictList, SLOT( askSaveToFile() ) );
+#endif
 
 
     // "Cancel" button
@@ -270,7 +272,7 @@ void
 YQPkgConflictDialog::prepareSolving()
 {
     Q_CHECK_PTR( _conflictList );
-    YQUI::ui()->busyCursor();
+    busyCursor();
 
     if ( isVisible() )
     {
@@ -315,7 +317,7 @@ YQPkgConflictDialog::processSolverResult( bool success )
     // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
 
-    YQUI::ui()->normalCursor();
+    normalCursor();
     int result = QDialog::Accepted;
 
     if ( success )	// Solving went without any complaints?
@@ -328,10 +330,10 @@ YQPkgConflictDialog::processSolverResult( bool success )
     else		// There were solving problems.
     {
 	logDebug() << "Dependency conflict!" << endl;
-	YQUI::ui()->busyCursor();
+	busyCursor();
 
 	_conflictList->fill( zypp::getZYpp()->resolver()->problems() );
-	YQUI::ui()->normalCursor();
+	normalCursor();
 
 	if ( ! isVisible() )
 	{
@@ -360,6 +362,8 @@ YQPkgConflictDialog::averageSolveTime() const
     return _totalSolveTime / _solveCount;
 }
 
+
+#if FIXME_SOLVER_TEST_CASE
 
 void
 YQPkgConflictDialog::askCreateSolverTestCase()
@@ -411,6 +415,8 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 			      QMessageBox::NoButton );
     }
 }
+
+#endif
 
 void
 YQPkgConflictDialog::keyPressEvent( QKeyEvent * event )

@@ -91,6 +91,7 @@
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "QY2LayoutUtils.h"
+#include "QY2CursorHelper.h"
 
 #include "Logger.h"
 #include "Exception.h"
@@ -678,8 +679,10 @@ YQPackageSelector::addMenus()
     QAction * action = _menuBar->addMenu( _fileMenu );
     action->setText( _( "&File" ));
 
+#if FIXME_IMPORT_EXPORT
     _fileMenu->addAction( _( "&Import..." ),	this, SLOT( pkgImport() ) );
     _fileMenu->addAction( _( "&Export..." ),	this, SLOT( pkgExport() ) );
+#endif
 
     _fileMenu->addSeparator();
 
@@ -888,7 +891,7 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->addSeparator();
 
-#ifdef FIXME
+#ifdef FIXME_ASK_SOLVER_TEST_CASE
     if ( _pkgConflictDialog )
 	_extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
 				_pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
@@ -1189,6 +1192,8 @@ YQPackageSelector::connectPatchList()
 }
 
 
+#if FIXME_IMPORT_EXPORT
+
 void
 YQPackageSelector::pkgExport()
 {
@@ -1416,6 +1421,9 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
     if ( oldStatus != newStatus )
 	selectable->setStatus( newStatus );
 }
+
+#endif // FIXME_IMPORT_EXPORT
+
 
 
 void

@@ -24,7 +24,7 @@
 
 
 #include "YQi18n.h"
-#include <yui/qt/YQUI.h>
+#include "QY2CursorHelper.h"
 #include <yui/qt/utf8.h>
 #include <yui/qt/YQSignalBlocker.h>
 
@@ -155,9 +155,9 @@ YQPkgHistoryDialog::showHistoryDialog( QWidget* parent)
     eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents,
 			     200 ); // millisec
 
-    YQUI::ui()->busyCursor();
+    busyCursor();
     dialog.populate(); // This takes a moment
-    YQUI::ui()->normalCursor();
+    normalCursor();
 
     dialog.exec();
 }

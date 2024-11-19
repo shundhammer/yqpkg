@@ -85,10 +85,12 @@ public slots:
      **/
     void applyResolutions();
 
+#if 0
     /**
      * Ask for a file name and save the current conflict list to file.
      **/
     void askSaveToFile() const;
+#endif
 
     void clear();
 
