@@ -1,3 +1,5 @@
+# -*- mode: makefile -*-
+#
 # CMakeLists.txt for libyui-qt-pkg
 #
 # Usage:
@@ -14,9 +16,10 @@
 #
 # Show the complete compiler commands with all arguments:
 #   make VERBOSE=1
+#
 
 cmake_minimum_required( VERSION 3.10 )
-project( libyui-qt-pkg )
+project( yqpkg )
 
 # Options usage:
 #
