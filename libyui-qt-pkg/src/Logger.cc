@@ -208,7 +208,23 @@ QTextStream & Logger::log( const QString &srcFile,
 
     if ( ! srcFile.isEmpty() )
     {
-	_logStream << srcFile;
+        if ( srcFile.contains( "/") )
+        {
+            // CMake just dumps the whole path wholesale to the compiler
+            // command line which gcc merrily uses as __FILE__;
+            // which results in an abysmal-looking log line.
+            // So let's cut off the path: Use only the last (No. -1)
+            // section delimited with '/'.
+
+            QString basename = srcFile.section( '/', -1 );
+            _logStream << basename;
+
+            // I hate CMake. Seriously, WTF?!
+        }
+        else
+        {
+            _logStream << srcFile;
+        }
 
 	if ( srcLine > 0 )
 	    _logStream << ":" << srcLine;
