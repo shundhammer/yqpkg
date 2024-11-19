@@ -380,7 +380,7 @@ void _throw_helper( const EX_t	  &exception,
 
 template<class EX_t>
 void _caught_helper( const EX_t	   &exception,
-		    Logger *	   logger,
+                     Logger *	   logger,
 		     const QString &srcFile,
 		     int	    srcLine,
 		     const QString &srcFunction )
