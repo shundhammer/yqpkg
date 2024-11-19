@@ -24,7 +24,7 @@ void logVersion()
     // VERSION is imported from the toplevel VERSION.cmake file
     // via a compiler command line "-DVERSION=..."
 
-    logInfo() << progName << VERSION
+    logInfo() << progName << "-" << VERSION
               << " built with Qt " << QT_VERSION_STR
               << endl;
 }
