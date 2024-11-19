@@ -1,3 +1,5 @@
+# -*- mode: makefile -*-
+#
 # CMakeLists.txt for libyui-qt-pkg/src
 
 include( ../../VERSION.cmake )
@@ -6,44 +8,27 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 #
 # Qt-specific
 #
+# See also
+#  https://doc.qt.io/qt-5/cmake-get-started.html
+#
 
-find_package( Qt5 COMPONENTS Widgets REQUIRED )
+set( TARGETBIN yqpkg )
+
+find_package( Qt5 COMPONENTS Core Gui Widgets REQUIRED )
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 set( CMAKE_AUTORCC on ) # Automatically handle Qt resource (.rcc) files
 set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 
+
 # find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
-# Fix things that were introduce with Qt 5.15 for Qt 6.x compatibility,
-# but that completely disregard that this introduces incompatibilities
-# with older code
-add_compile_options( "-Wno-deprecated" )
-add_compile_options( "-Wno-deprecated-declarations" )
-
-
-#
-# libyui plugin specific
-#
-
-set( TARGETLIB          libyui-qt-pkg )
-set( TARGETLIB_BASE     yui-qt-pkg    )
-
-set( HEADERS_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/yui/qt-pkg )
-set( PLUGIN_DIR          ${CMAKE_INSTALL_LIBDIR}/yui ) # /usr/lib64/yui
-
-# if DESTDIR is set, CMAKE_INSTALL_INCLUDEDIR already contains it
-# during "make install" (but not for other make targets!):
-#
-#    sudo make install DESTDIR=/work/foo
-# or
-#    DESTDIR=/work/foo sudo make install
-#
-# -> the include files are installed to /work/foo/usr/include/...
-# We need that for RPM builds to install everything to $RPM_BUILD_ROOT.
-
-
 set( SOURCES
+
+  main.cc
+  Logger.cc
+  Exception.cc
+
   YQPackageSelector.cc
   YQPackageSelectorBase.cc
   YQPackageSelectorHelp.cc
@@ -92,66 +77,69 @@ set( SOURCES
   QY2LayoutUtils.cc
   )
 
-
-set( HEADERS
-  YQPackageSelector.h
-  YQPackageSelectorBase.h
-  YQPackageSelectorPluginImpl.h
-  YQPatternSelector.h
-  YQSimplePatchSelector.h
-  YQPackageSelectorPlugin.h
-
-  YQPkgChangeLogView.h
-  YQPkgChangesDialog.h
-  YQPkgClassFilterView.h
-  YQPkgConflictDialog.h
-  YQPkgConflictList.h
-  YQPkgDependenciesView.h
-  YQPkgDescriptionDialog.h
-  YQPkgDescriptionView.h
-  YQPkgDiskUsageList.h
-  YQPkgDiskUsageWarningDialog.h
-  YQPkgFileListView.h
-  YQPkgFilterTab.h
-  YQPkgFilters.h
-  YQPkgGenericDetailsView.h
-  YQPkgHistoryDialog.h
-  YQPkgLangList.h
-  YQPkgList.h
-  YQPkgObjList.h
-  YQPkgPatchFilterView.h
-  YQPkgPatchList.h
-  YQPkgPatternList.h
-  YQPkgProductDialog.h
-  YQPkgProductList.h
-  YQPkgRepoFilterView.h
-  YQPkgRepoList.h
-  YQPkgSearchFilterView.h
-  YQPkgSecondaryFilterView.h
-  YQPkgSelDescriptionView.h
-  YQPkgSelMapper.h
-  YQPkgServiceFilterView.h
-  YQPkgServiceList.h
-  YQPkgStatusFilterView.h
-  YQPkgTechnicalDetailsView.h
-  YQPkgTextDialog.h
-  YQPkgUpdateProblemFilterView.h
-  YQPkgVersionsView.h
-
-  QY2LayoutUtils.h
-  YQIconPool.h
-  YQZypp.h
-  )
-
 set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 
 
-# Add shared lib to be built
-add_library( ${TARGETLIB} SHARED
+##  set( HEADERS
+##    ImplPtr.h
+##    Logger.h
+##    Exception.h
+##    Version.h
+##
+##    YQPackageSelector.h
+##    YQPackageSelectorBase.h
+##    YQPackageSelectorPluginImpl.h
+##    YQPatternSelector.h
+##    YQSimplePatchSelector.h
+##    YQPackageSelectorPlugin.h
+##
+##    YQPkgChangeLogView.h
+##    YQPkgChangesDialog.h
+##    YQPkgClassFilterView.h
+##    YQPkgConflictDialog.h
+##    YQPkgConflictList.h
+##    YQPkgDependenciesView.h
+##    YQPkgDescriptionDialog.h
+##    YQPkgDescriptionView.h
+##    YQPkgDiskUsageList.h
+##    YQPkgDiskUsageWarningDialog.h
+##    YQPkgFileListView.h
+##    YQPkgFilterTab.h
+##    YQPkgFilters.h
+##    YQPkgGenericDetailsView.h
+##    YQPkgHistoryDialog.h
+##    YQPkgLangList.h
+##    YQPkgList.h
+##    YQPkgObjList.h
+##    YQPkgPatchFilterView.h
+##    YQPkgPatchList.h
+##    YQPkgPatternList.h
+##    YQPkgProductDialog.h
+##    YQPkgProductList.h
+##    YQPkgRepoFilterView.h
+##    YQPkgRepoList.h
+##    YQPkgSearchFilterView.h
+##    YQPkgSecondaryFilterView.h
+##    YQPkgSelDescriptionView.h
+##    YQPkgSelMapper.h
+##    YQPkgServiceFilterView.h
+##    YQPkgServiceList.h
+##    YQPkgStatusFilterView.h
+##    YQPkgTechnicalDetailsView.h
+##    YQPkgTextDialog.h
+##    YQPkgUpdateProblemFilterView.h
+##    YQPkgVersionsView.h
+##
+##    QY2LayoutUtils.h
+##    YQIconPool.h
+##    YQZypp.h
+##    )
+
+
+add_executable( ${TARGETBIN}
   ${SOURCES}
-  ${HEADERS}
   ${QRC_FILES}
-  )
+)
 
 
 #
@@ -168,25 +156,36 @@ file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src    ${LOCAL_INCLUD
 file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-qt/src ${LOCAL_INCLUDE_DIR}/yui/qt  SYMBOLIC )
 
 # <yui/qt/YQFoo.h> from build/src/include/yui/qt -> ../../libyui-qt/src
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
+target_include_directories( ${TARGETBIN} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
 
 # <yui/YFoo.h> from build/src/include/yui/yui -> ../../libyui/src
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
+target_include_directories( ${TARGETBIN} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
 
+
+#
+# Compile options and definitions
+#
+
+# Fix things that were introduce with Qt 5.15 for Qt 6.x compatibility,
+# but that completely disregard that this introduces incompatibilities
+# with older code.
+
+target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated" )
+target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated-declarations" )
 
 # Make the version from ../../VERSION.cmake available as a #define
-target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
+target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
 
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers
-target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
+target_compile_definitions( ${TARGETBIN} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
 
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
 #
 # Notice that CMake will automatically add -fPIC etc. where needed,
 # like for this shared lib.
-### target_compile_options( ${TARGETLIB} PUBLIC "-Dfoo" )
+### target_compile_options( ${TARGETBIN} PUBLIC "-Dfoo" )
 
 # Show the complete compiler commands with all arguments:
 #   make VERBOSE=1
@@ -195,18 +194,20 @@ target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1
 ### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
 
 
+
+
 #
 # Linking
 #
 
 # Find yui during a combined build
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+target_link_directories( ${TARGETBIN} BEFORE PUBLIC ../../libyui/build/src )
 
 
 # Libraries that are needed to build this shared lib
 #
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
-target_link_libraries( ${TARGETLIB}
+target_link_libraries( yqpkg
   yui
   zypp
   Qt5::Core
@@ -221,18 +222,18 @@ target_link_libraries( ${TARGETLIB}
 # classes like QPixmap and QIcon. Qt takes loads the SVG plugin as needed.
 
 
-# https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
-set_target_properties( ${TARGETLIB} PROPERTIES
-  VERSION       ${SONAME}           # From ../../VERSION.cmake
-  SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
-  OUTPUT_NAME   ${TARGETLIB_BASE}
-  )
+##  # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
+##  set_target_properties( ${TARGETBIN} PROPERTIES
+##    VERSION       ${SONAME}           # From ../../VERSION.cmake
+##    SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
+##    OUTPUT_NAME   ${TARGETBIN_BASE}
+##    )
 
 
 #
 # Install
 #
 
-# Install the headers first so the message about the lib does not scroll away
-install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
-install( TARGETS ${TARGETLIB} LIBRARY DESTINATION ${PLUGIN_DIR} )
+##  # Install the headers first so the message about the lib does not scroll away
+##  install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
+##  install( TARGETS ${TARGETBIN} LIBRARY DESTINATION ${PLUGIN_DIR} )
