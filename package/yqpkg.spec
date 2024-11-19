@@ -105,6 +105,6 @@ popd
 %defattr(-,root,root)
 %{_bindir}/yqpkg
 %doc %dir %{_docdir}/%{bin_name}
-%license %{_docdir}/%{bin_name}/COPYING*
+%license %{_docdir}/%{bin_name}/LICENSE*
 
 %changelog
