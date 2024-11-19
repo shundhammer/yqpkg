@@ -160,6 +160,7 @@ YQPkgConflictList::applyResolutions()
 }
 
 
+#if 0
 void
 YQPkgConflictList::askSaveToFile() const
 {
@@ -169,6 +170,7 @@ YQPkgConflictList::askSaveToFile() const
     if ( ! filename.isEmpty() )
 	saveToFile( filename, true );
 }
+#endif
 
 
 void

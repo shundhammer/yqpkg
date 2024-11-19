@@ -34,7 +34,6 @@
 #include <zypp/Resolver.h>
 
 #include <QLabel>
-#include <QKeyEvent>
 #include <QLayout>
 #include <QMenu>
 #include <QPushButton>
@@ -402,7 +401,9 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 					   QMessageBox::Cancel | QMessageBox::Escape );
 
 	if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
-	    YQUI::ui()->askSaveLogs();
+        {
+	    // YQUI::ui()->askSaveLogs();
+        }
     }
     else // no success
     {
@@ -417,17 +418,3 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 }
 
 #endif
-
-void
-YQPkgConflictDialog::keyPressEvent( QKeyEvent * event )
-{
-    if ( event &&  event->key() == Qt::Key_Print )
-    {
-        YQUI::ui()->makeScreenShot( "" );
-        return;
-    }
-    QWidget::keyPressEvent( event );
-}
-
-
-

@@ -144,15 +144,6 @@ protected:
      **/
     int  processSolverResult( bool success );
     
-    /**
-     * Event handler for keyboard input.
-     * Only very special keys are processed here.
-     *
-     * Inherited from QWidget.
-     **/
-    void keyPressEvent( QKeyEvent * e );
-
-
 
     //
     // Data members
