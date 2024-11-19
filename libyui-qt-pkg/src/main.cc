@@ -7,21 +7,24 @@
  */
 
 
-#include <iostream>	// cerr
+//  #include <iostream>	// cerr
 
 #include <QApplication>
+#include "YQPackageSelector.h"
 #include "Logger.h"
 #include "Exception.h"
-#include "Version.h"
 
 
-using std::cerr;
+// using std::cerr;
 static const char * progName = "yqpkg";
 
 
 void logVersion()
 {
-    logInfo() << "yqpkg" << YQPKG_VERSION
+    // VERSION is imported from the toplevel VERSION.cmake file
+    // via a compiler command line "-DVERSION=..."
+
+    logInfo() << progName << VERSION
               << " built with Qt " << QT_VERSION_STR
               << endl;
 }
@@ -34,13 +37,13 @@ int main( int argc, char *argv[] )
 
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "openSUSE" );
-    QCoreApplication::setApplicationName ( "yqpkg" );
+    QCoreApplication::setApplicationName ( progName );
 
     QApplication qtApp( argc, argv);
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
 
-    MainWindow * mainWin = new YQPackageSelector();
+    QWidget * mainWin = new YQPackageSelector( 0, 0 );
     CHECK_PTR( mainWin );
     mainWin->show();
 
@@ -48,5 +51,5 @@ int main( int argc, char *argv[] )
 
     delete mainWin;
 
-    return fatal ? 1 : 0;
+    return 0;
 }
