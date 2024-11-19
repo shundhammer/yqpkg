@@ -49,12 +49,11 @@ class QY2ComboTabWidget : public QWidget
 public:
 
     /**
-     * Constructor. 'combo_box_label' is the user-visible label of the combo
+     * Constructor. 'label' is the user-visible label of the combo
      * box that is used to switch between the different tab pages.
      **/
-    QY2ComboTabWidget( const QString &	combo_box_label,
-		       QWidget *	parent = 0,
-		       const char *	name   = 0 );
+    QY2ComboTabWidget( const QString &	label,
+		       QWidget *	parent = 0 );
 
     /**
      * Destructor.
@@ -62,10 +61,10 @@ public:
     virtual ~QY2ComboTabWidget();
 
     /**
-     * Add a page. 'page_label' will be the user-visible combo box entry for
+     * Add a page. 'pageLabel' will be the user-visible combo box entry for
      * that page.
      **/
-    void addPage( const QString & page_label, QWidget * page );
+    void addPage( const QString & pageLabel, QWidget * page );
 
 
 signals:
@@ -98,10 +97,10 @@ protected slots:
 
 protected:
 
-    QComboBox		* combo_box;
-    QLabel		* combo_label;
-    QStackedWidget 	* widget_stack;
-    QHash<int, QWidget *> pages;
+    QComboBox		* _comboBox;
+    QLabel		* _comboLabel;
+    QStackedWidget 	* _widgetStack;
+    QHash<int, QWidget *> _pages;
 };
 
 #endif // QY2ComboTabWidget_h

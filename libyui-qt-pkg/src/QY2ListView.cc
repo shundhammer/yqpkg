@@ -47,34 +47,26 @@ QY2ListView::QY2ListView( QWidget * parent )
     //FIXME QTreeWidget::setShowToolTips( false );
     setRootIsDecorated(false);
 
-#if FIXME_TOOLTIP
-    _toolTip = new QY2ListViewToolTip( this );
-#endif
-
     if ( header() )
     {
 	header()->installEventFilter( this );
 	header()->setStretchLastSection( false );
     }
 
-    connect( header(),	&pclass(header())::sectionResized,
-	     this,	&pclass(this)::columnWidthChanged );
+    connect( header(),  SIGNAL( sectionResized     ( int, int, int ) ),
+	     this,	SLOT  ( columnWidthChanged ( int, int, int ) ) );
 
-    connect( this,      &pclass(this)::itemExpanded,
-             this,      &pclass(this)::treeExpanded );
+    connect( this,      SIGNAL( itemExpanded ( QTreeWidgetItem * ) ),
+             this,      SLOT  ( treeExpanded ( QTreeWidgetItem * ) ) );
 
-    connect( this,      &pclass(this)::itemCollapsed,
-             this,      &pclass(this)::treeCollapsed );
+    connect( this,      SIGNAL( itemCollapsed( QTreeWidgetItem * ) ),
+             this,      SLOT  ( treeCollapsed( QTreeWidgetItem * ) ) );
 
 }
 
 
 QY2ListView::~QY2ListView()
 {
-#if FIXME_TOOLTIP
-    if ( _toolTip )
-	delete _toolTip;
-#endif
 }
 
 
@@ -492,56 +484,6 @@ QY2CheckListItem::~QY2CheckListItem()
 {
     // NOP
 }
-
-
-
-#if FIXME_TOOLTIP
-void
-QY2ListViewToolTip::maybeTip( const QPoint & pos )
-{
-    Q3Header *       header        = _listView->header();
-    QTreeWidgetItem * item          = _listView->itemAt( pos );
-
-    if ( ! item )
-	return;
-
-    int x      = _listView->viewportToContents( pos ).x();
-    int column = header->sectionAt(x);
-    int indent = 0;
-
-    if ( column == 0 )
-    {
-	indent  =  item->depth() + ( _listView->rootIsDecorated() ? 1 : 0 );
-	indent *=  _listView->treeStepSize();
-
-	if ( pos.x() < indent )
-	    column = -1;
-    }
-
-    QString text = _listView->toolTip( item, column );
-
-    if ( ! text.isEmpty() )
-    {
-	QRect rect( _listView->itemRect( item ) );
-
-	if ( column < 0 )
-	{
-	    rect.setX(0);
-	    rect.setWidth( indent );
-	}
-	else
-	{
-	    QPoint topLeft( header->sectionPos( column ), 0 );
-	    topLeft = _listView->contentsToViewport( topLeft );
- 	    rect.setX( topLeft.x() );
-	    rect.setWidth( header->sectionSize( column ) );
-	}
-
-	tip( rect, text );
-    }
-}
-
-#endif
 
 
 void QY2ListView::treeExpanded( QTreeWidgetItem * listViewItem )

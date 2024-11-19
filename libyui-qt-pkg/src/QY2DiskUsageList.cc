@@ -168,12 +168,6 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     _freeSizeCol	= -42;
     _totalSizeCol	= -42;
 
-    // set temporary textdomain to enable translations
-    // in inherit classed (e.g. YQPkgDiskUsageList)
-    // see bnc #445716
-    QString savedTextdomain = textdomain( NULL ) ;
-    textdomain( TEXTDOMAIN );
-
     QStringList columnLabels;
 
     if ( addStdColumns )
@@ -192,8 +186,6 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 	sortItems( percentageBarCol(), Qt::AscendingOrder );
 	setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     }
-
-    textdomain( savedTextdomain.toLatin1() );
 
     saveColumnWidths();
     setSelectionMode( QAbstractItemView::NoSelection );

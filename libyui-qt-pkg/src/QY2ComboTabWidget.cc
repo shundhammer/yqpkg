@@ -32,23 +32,16 @@
 
 #include <QFrame>
 
-#define YUILogComponent "qt-pkg"
-#include <yui/YUILog.h>
-
-#include "YQUI.h"
+#include "Logger.h"
+#include "Exception.h"
 #include "QY2ComboTabWidget.h"
-
-
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
 
 using std::string;
 
 
 
 QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
-				      QWidget *		parent,
-				      const char *	name )
+				      QWidget *		parent )
     : QWidget(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -56,31 +49,29 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 
     QHBoxLayout *hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
-//     hbox->setFrameStyle( QFrame::Panel | QFrame::Raised );
-//     hbox->setLineWidth(2);
-//     hbox->setMidLineWidth(2);
+
     hbox->setSpacing( 0 );
     hbox->setMargin ( 0  );
 
     vbox->addLayout(hbox);
-    //this->setSpacing( SPACING );
     this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
-    combo_label = new QLabel(label);
-    hbox->addWidget(combo_label);
-    Q_CHECK_PTR( combo_label );
+    _comboLabel = new QLabel(label);
+    hbox->addWidget(_comboLabel);
+    Q_CHECK_PTR( _comboLabel );
 
-    combo_box = new QComboBox( this );
-    Q_CHECK_PTR( combo_box );
-    hbox->addWidget(combo_box);
-    combo_label->setBuddy( combo_box );
-    combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    connect( combo_box, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-	     this,	&pclass(this)::showPageIndex );
+    _comboBox = new QComboBox( this );
+    Q_CHECK_PTR( _comboBox );
+    hbox->addWidget(_comboBox);
+    _comboLabel->setBuddy( _comboBox );
+    _comboBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+    
+    connect( _comboBox, SIGNAL( activated    ( int ) ),
+             this,      SLOT  ( showPageIndex( int ) ) );
 
-    widget_stack = new QStackedWidget( this );
-    Q_CHECK_PTR( widget_stack );
-    vbox->addWidget(widget_stack);
+    _widgetStack = new QStackedWidget( this );
+    Q_CHECK_PTR( _widgetStack );
+    vbox->addWidget(_widgetStack);
 }
 
 
@@ -94,22 +85,22 @@ QY2ComboTabWidget::~QY2ComboTabWidget()
 void
 QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 {
-    pages.insert( combo_box->count(), new_page );
-    combo_box->addItem( page_label );
-    widget_stack->addWidget( new_page );
+    _pages.insert( _comboBox->count(), new_page );
+    _comboBox->addItem( page_label );
+    _widgetStack->addWidget( new_page );
 
-    if ( ! widget_stack->currentWidget() )
-	widget_stack->setCurrentWidget( new_page );
+    if ( ! _widgetStack->currentWidget() )
+	_widgetStack->setCurrentWidget( new_page );
 }
 
 
 void
 QY2ComboTabWidget::showPageIndex( int index )
 {
-    if ( pages.contains(index) )
+    if ( _pages.contains(index) )
     {
-        QWidget * page = pages[ index ];
-	widget_stack->setCurrentWidget( page );
+        QWidget * page = _pages[ index ];
+	_widgetStack->setCurrentWidget( page );
 	// yuiDebug() << "Changing current page" << endl;
 	emit currentChanged( page );
     }
@@ -124,9 +115,9 @@ QY2ComboTabWidget::showPageIndex( int index )
 void
 QY2ComboTabWidget::showPage( QWidget * page )
 {
-    widget_stack->setCurrentWidget( page );
+    _widgetStack->setCurrentWidget( page );
 
-    if ( page == pages[ combo_box->currentIndex() ] )
+    if ( page == _pages[ _comboBox->currentIndex() ] )
     {
           // Shortcut: If the requested page is the one that belongs to the item
           // currently selected in the combo box, don't bother searching the
@@ -136,14 +127,14 @@ QY2ComboTabWidget::showPage( QWidget * page )
 
     // Search the dict for this page
 
-    QHashIterator<int, QWidget *> it( pages );
+    QHashIterator<int, QWidget *> it( _pages );
 
     while ( it.hasNext() )
     {
         it.next();
 	if ( page == it.value() )
 	{
-	    combo_box->setCurrentIndex( it.key() );
+	    _comboBox->setCurrentIndex( it.key() );
 	    return;
 	}
     }
