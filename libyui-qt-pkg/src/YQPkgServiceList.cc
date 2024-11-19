@@ -20,16 +20,6 @@
 */
 
 
-#include "Logger.h"
-
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
-
-#include <zypp/PoolQuery.h>
-#include <zypp/RepoManager.h>
-#include <zypp/ServiceInfo.h>
-
 #include <algorithm>
 #include <set>
 #include <string>
@@ -39,8 +29,17 @@
 #include <QString>
 #include <QTreeWidget>
 
-#include "YQPkgServiceList.h"
+#include <zypp/PoolQuery.h>
+#include <zypp/RepoManager.h>
+#include <zypp/ServiceInfo.h>
+
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
 #include "YQPkgFilters.h"
+#include "YQPkgServiceList.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
 
 using std::string;
@@ -217,7 +216,7 @@ YQPkgServiceListItem::YQPkgServiceListItem( YQPkgServiceList *	parentList,
 
     setToolTip( nameCol(), infoToolTip);
 
-    setIcon( 0, YQUI::ui()->loadIcon( "yast-update" ) );
+    setIcon( 0, QY2IconLoader::loadIcon( "yast-update" ) );
 }
 
 YQPkgServiceListItem::~YQPkgServiceListItem()

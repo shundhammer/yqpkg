@@ -22,13 +22,11 @@
 */
 
 
-#include "Logger.h"
-
-#include "utf8.h"
-
 #include <QPixmap>
 #include <QIcon>
 
+#include "Logger.h"
+#include "utf8.h"
 #include "YQIconPool.h"
 
 

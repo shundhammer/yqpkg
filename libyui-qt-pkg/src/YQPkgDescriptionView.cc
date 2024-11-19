@@ -25,23 +25,23 @@
 */
 
 
-#include "Logger.h"
 
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
+#include <QBuffer>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QSettings>
 
 #include <zypp/VendorSupportOptions.h>
 
-#include <QRegExp>
-#include <QFile>
-#include <QFileInfo>
-#include <QList>
-#include <QSettings>
-#include <QBuffer>
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
-#include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
+#include "YQPkgDescriptionView.h"
 
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 15, 0 ))
@@ -239,7 +239,7 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
     {
         desktopEntries = readDesktopFile( desktopFiles[i] );
 
-        QIcon icon = YQUI::ui()->loadIcon( desktopEntries["Icon"].toStdString() );
+        QIcon icon = QY2IconLoader::loadIcon( desktopEntries["Icon"] );
 
 	if ( ! icon.isNull() )
 	{

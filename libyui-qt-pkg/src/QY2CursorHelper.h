@@ -26,12 +26,12 @@
 /-*/
 
 
-#ifndef QY2_CURSOR_HELPER
-#define QY2_CURSOR_HELPER
+#ifndef QY2CursorHelper_h
+#define QY2CursorHelper_h
 
 #include <QGuiApplication>
 
 void busyCursor();
 void normalCursor();
 
-#endif // QY2_CURSOR_HELPER
+#endif // QY2CursorHelper_h

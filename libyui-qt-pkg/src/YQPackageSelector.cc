@@ -26,44 +26,41 @@
 
 */
 
-
-#include <yui/YEvent.h>
-#include <yui/qt/YQDialog.h>
-#include "QY2ComboTabWidget.h"
-#include "utf8.h"
+#include <fstream>
+#include <algorithm>
+#include <boost/bind/bind.hpp>
 
 #include <zypp/SysContent.h>
 #include <zypp/base/String.h>
 #include <zypp/base/Sysconfig.h>
-#include <boost/bind/bind.hpp>
 
-#include <fstream>
-#include <algorithm>
-
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QAction>
-#include <QShortcut>
 #include <QApplication>
-#include <QCheckBox>
 #include <QDialog>
 #include <QFileDialog>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QMap>
+#include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSettings>
+#include <QShortcut>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QTimer>
-#include <QMenu>
-#include <QSettings>
+#include <QVBoxLayout>
 
-#include "YQZypp.h"
-#include "YQi18n.h"
-#include "YQPackageSelector.h"
+
+#include "Exception.h"
+#include "Logger.h"
+#include "QY2ComboTabWidget.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
+#include "YQPkgClassFilterView.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
 #include "YQPkgDependenciesView.h"
@@ -75,7 +72,6 @@
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
-#include "YQPkgClassFilterView.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
@@ -89,17 +85,12 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
-#include "QY2LayoutUtils.h"
-#include "QY2CursorHelper.h"
+#include "YQZypp.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
-#include "Logger.h"
-#include "Exception.h"
+#include "YQPackageSelector.h"
 
-
-using std::max;
-using std::string;
-using std::map;
-using std::pair;
 
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
@@ -121,7 +112,13 @@ using std::pair;
 #define OPTION_AUTO_CHECK		"PKGMGR_AUTO_CHECK"
 #define OPTION_RECOMMENDED		"PKGMGR_RECOMMENDED"
 
-YQPackageSelector::YQPackageSelector( YWidget *		parent,
+using std::max;
+using std::string;
+using std::map;
+using std::pair;
+
+
+YQPackageSelector::YQPackageSelector( QWidget *		parent,
 				      long		modeFlags )
     : YQPackageSelectorBase( parent, modeFlags )
 {
@@ -899,9 +896,6 @@ YQPackageSelector::addMenus()
     if ( _actionResetIgnoredDependencyProblems )
 	_extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
 
-    if ( (onlineSearchEnabled()) ) {
-	_extrasMenu->addAction(_("Search &Online"), this, SLOT( onlineSearch() ) );
-    }
 
     //
     // Help menu

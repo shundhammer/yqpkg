@@ -25,26 +25,25 @@
 */
 
 
-#include "QY2CursorHelper.h"
-#include <yui/YDialog.h>
-#include "YQi18n.h"
-#include "utf8.h"
+#include <QAction>
+#include <QApplication>
+#include <QDebug>
+#include <QHeaderView>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QPixmap>
 
 #include <zypp/ZYppFactory.h>
 
-#include <QPixmap>
-#include <QHeaderView>
-#include <QMenu>
-#include <QAction>
-#include <QDebug>
-#include <QKeyEvent>
+#include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "YQIconPool.h"
+#include "YQPkgTextDialog.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
 #include "YQPkgObjList.h"
-#include "YQPkgTextDialog.h"
-#include "YQIconPool.h"
-
-#include "Logger.h"
-#include "Exception.h"
 
 
 using std::list;
@@ -1356,7 +1355,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 
     logDebug() << "Showing license agreement for " << sel->name() << endl;
 
-    bool confirmed = YQPkgTextDialog::confirmText( (QWidget *) YDialog::currentDialog()->widgetRep(),
+    bool confirmed = YQPkgTextDialog::confirmText( 0, // parent
 						   sel, licenseText );
 
     if ( confirmed )

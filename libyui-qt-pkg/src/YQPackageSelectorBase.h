@@ -151,7 +151,7 @@ protected:
     //
     // Checks for the various modes
     //
-    
+
     bool testMode()		const { return _modeFlags & YPkg_TestMode;	   	}
     bool onlineUpdateMode()	const { return _modeFlags & YPkg_OnlineUpdateMode; 	}
     bool updateMode()		const { return _modeFlags & YPkg_UpdateMode;	   	}
@@ -160,7 +160,7 @@ protected:
     bool repoMode()		const { return _modeFlags & YPkg_RepoMode;         	}
     bool repoMgrEnabled()	const { return _modeFlags & YPkg_RepoMgr;		}
     bool confirmUnsupported()	const { return _modeFlags & YPkg_ConfirmUnsupported;	}
-    
+
     /**
      * Show all license agreements the user has not confirmed yet
      * (for all packages that will be installed, and in YOU mode also for

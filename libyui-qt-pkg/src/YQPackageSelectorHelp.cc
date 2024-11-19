@@ -33,6 +33,7 @@
 
 #include "Logger.h"
 #include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -232,7 +233,7 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    QIcon icon = YQUI::ui()->loadIcon( imgFileName.toStdString() );
+    QIcon icon = QY2IconLoader::loadIcon( imgFileName );
     QPixmap pixmap = icon.pixmap(16);
     QString html = "<tr valign='top'>";
     QByteArray byteArray;

@@ -98,7 +98,10 @@ YQPatternSelector::basicLayout()
     QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
     QWidget * right_pane = layoutRightPane( outer_splitter );
 
-    int left_pane_width = (int) ( 0.3 * YQUI::ui()->defaultSize( YD_HORIZ ) );
+    // int left_pane_width = (int) ( 0.3 * YQUI::ui()->defaultSize( YD_HORIZ ) );
+    // FIXME
+    int left_pane_width = (int) ( 0.3 * 1024.0 );
+
     left_pane->resize( QSize( left_pane_width, left_pane->height() ) );
 
     outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
@@ -261,7 +264,8 @@ void
 YQPatternSelector::detailedPackageSelection()
 {
     logInfo() << "\"Details..\" button clicked" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "details" ) );
+
+    // FIXME: Open a YQPackageSelector
 }
 
 

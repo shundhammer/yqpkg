@@ -22,16 +22,16 @@
 */
 
 
-#include "Logger.h"
-
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
-
 #include <unistd.h>
 
 #include <QRegExp>
-#include <qbuffer.h>
+#include <QBuffer>
+
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
 #include "YQPkgSelDescriptionView.h"
 
@@ -120,7 +120,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 
     if ( ! iconName.isEmpty() )
     {
-	QIcon icon = YQUI::ui()->loadIcon( iconName.toStdString() );
+	QIcon icon = QY2IconLoader::loadIcon( iconName );
         QPixmap pixmap = icon.pixmap( useBigFont ? 32 : 16 );
         QByteArray byteArray;
         QBuffer buffer(&byteArray);

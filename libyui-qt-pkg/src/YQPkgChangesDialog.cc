@@ -24,31 +24,25 @@
 
 */
 
-
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
+#include <QBoxLayout>
+#include <QLabel>
+#include <QScreen>
+#include <QPushButton>
 
 #include <zypp/ResStatus.h>
 #include <zypp/VendorSupportOptions.h>
 #include <zypp/ui/UserWantedPackages.h>
 
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QLabel>
-#include <QLayout>
-#include <QPushButton>
-#include <QStyle>
-#include <QBoxLayout>
-#include <QWindow>
-#include <QScreen>
-
-#include "YQPkgChangesDialog.h"
+#include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgList.h"
 #include "YQZypp.h"
-#include "QY2LayoutUtils.h"
+#include "YQi18n.h"
 
-#include "Logger.h"
-#include "Exception.h"
+#include "YQPkgChangesDialog.h"
 
 
 using std::set;
@@ -86,7 +80,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
-    iconLabel->setPixmap( YQUI::ui()->loadIcon( "dialog-information" ).pixmap(64) );
+    iconLabel->setPixmap( QY2IconLoader::loadIcon( "dialog-information" ).pixmap(64) );
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     // Label for the message

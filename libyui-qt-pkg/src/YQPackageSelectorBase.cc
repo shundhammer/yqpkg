@@ -54,11 +54,9 @@ using std::string;
 
 YQPackageSelectorBase::YQPackageSelectorBase( QWidget * parent,
 					      long	modeFlags )
-    : QFrame( QWidget )
+    : QFrame( parent )
     , _modeFlags( modeFlags )
 {
-    setWidgetRep( this );
-
     _showChangesDialog		= false;
     _pkgConflictDialog		= 0;
     _diskUsageList		= 0;
@@ -72,9 +70,9 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * parent,
 
     QString label = _( "Reset &Ignored Dependency Conflicts" );
     _actionResetIgnoredDependencyProblems = new QAction( label, this);
-    _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
-    //_actionResetIgnoredDependencyProblems->setMenuRole(QAction::TextHeuristicRole);
     Q_CHECK_PTR( _actionResetIgnoredDependencyProblems );
+
+    _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
 
     connect( _actionResetIgnoredDependencyProblems, &QAction::triggered,
              this,                                  &YQPackageSelectorBase::resetIgnoredDependencyProblems );

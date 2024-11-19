@@ -25,22 +25,21 @@
 */
 
 
-#include "Logger.h"
-
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
+#include <QElapsedTimer>
+#include <QHeaderView>
+#include <QTreeWidget>
 
 #include <zypp/RepoManager.h>
 #include <zypp/PoolQuery.h>
-#include <algorithm>
 
-#include <QTreeWidget>
-#include <QElapsedTimer>
-#include <QHeaderView>
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "YQPkgFilters.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
 #include "YQPkgRepoList.h"
-#include "YQPkgFilters.h"
 
 
 using std::string;
@@ -252,9 +251,8 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( repo.isSystemRepo() )
         iconName = "preferences-system";
 
-    setIcon( 0, YQUI::ui()->loadIcon( iconName.toStdString() ) );
+    setIcon( 0, QY2IconLoader::loadIcon( iconName ) );
 }
-
 
 
 YQPkgRepoListItem::~YQPkgRepoListItem()

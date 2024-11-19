@@ -25,22 +25,20 @@
 */
 
 
+
+#include <QLabel>
+#include <QBoxLayout>
+#include <QPushButton>
+
+#include "Exception.h"
+#include "Logger.h"
 #include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "QY2LayoutUtils.h"
+#include "YQPkgDiskUsageList.h"
 #include "YQi18n.h"
 
-#include <QApplication>
-#include <QLabel>
-#include <QLayout>
-#include <QPushButton>
-#include <QStyle>
-#include <QBoxLayout>
-
 #include "YQPkgDiskUsageWarningDialog.h"
-#include "YQPkgDiskUsageList.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
-#include "Exception.h"
 
 
 #define SPACING			2	// between subwidgets
@@ -76,11 +74,10 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 
     // Icon
 
-    //addHSpacing( hbox );
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
-    iconLabel->setPixmap( YQUI::ui()->loadIcon( "dialog-warning" ).pixmap(64) );
+    iconLabel->setPixmap( QY2IconLoader::loadIcon( "dialog-warning" ).pixmap(64) );
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     // Label for the message

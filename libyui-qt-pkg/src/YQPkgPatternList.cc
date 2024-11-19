@@ -25,26 +25,21 @@
 */
 
 
-#include "QY2CursorHelper.h"
-#include <yui/qt/YQApplication.h>
-#include "YQi18n.h"
-#include "utf8.h"
+#include <QHeaderView>
 
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 
-#include <QRegExp>
-#include <QPainter>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
-
-#include "YQPackageSelector.h"
-#include "YQPkgPatternList.h"
-#include "YQIconPool.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2IconLoader.h"
+#include "YQIconPool.h"
+#include "YQPackageSelector.h"
+#include "YQi18n.h"
+#include "utf8.h"
+
+#include "YQPkgPatternList.h"
 
 
 using std::string;
@@ -374,7 +369,7 @@ YQPkgPatternListItem::init()
 	if ( iconName.empty() )
 	    iconName = "pattern-generic";
 
-	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
+	setIcon( _patternList->iconCol(), QY2IconLoader::loadIcon( fromUTF8( iconName ) ) );
 
         if ( _patternList->showInvisiblePatterns() && ! _zyppPattern->userVisible() )
         {
