@@ -90,30 +90,10 @@ add_executable( ${TARGETBIN}
 
 
 #
-# Include directories and compile options
-#
-
-set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
-
-# Create an include dir with some symlinks to include headers from sibling projects:
-# build/src/include/yui/qt  -> ../../libyui-qt/src
-# build/src/include/yui/yui -> ../../libyui/src
-file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR}/yui )
-file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src    ${LOCAL_INCLUDE_DIR}/yui/yui SYMBOLIC )
-file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-qt/src ${LOCAL_INCLUDE_DIR}/yui/qt  SYMBOLIC )
-
-# <yui/qt/YQFoo.h> from build/src/include/yui/qt -> ../../libyui-qt/src
-target_include_directories( ${TARGETBIN} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
-
-# <yui/YFoo.h> from build/src/include/yui/yui -> ../../libyui/src
-target_include_directories( ${TARGETBIN} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
-
-
-#
 # Compile options and definitions
 #
 
-# Fix things that were introduce with Qt 5.15 for Qt 6.x compatibility,
+# Fix things that were introduced with Qt 5.15 for Qt 6.x compatibility,
 # but that completely disregard that this introduces incompatibilities
 # with older code.
 
@@ -126,6 +106,7 @@ target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers
 target_compile_definitions( ${TARGETBIN} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
+
 
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
@@ -147,15 +128,11 @@ target_compile_definitions( ${TARGETBIN} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1
 # Linking
 #
 
-# Find yui during a combined build
-target_link_directories( ${TARGETBIN} BEFORE PUBLIC ../../libyui/build/src )
 
-
-# Libraries that are needed to build this shared lib
+# Libraries that are needed to build this executable
 #
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( yqpkg
-  yui
   zypp
   Qt5::Core
   Qt5::Gui

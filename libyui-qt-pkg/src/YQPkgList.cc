@@ -25,31 +25,21 @@
 */
 
 
+#include <QAction>
+#include <QFontMetrics>
+#include <QHeaderView>
+#include <QMenu>
+#include <QTreeView>
+
+#include "Exception.h"
+#include "Logger.h"
 #include "QY2CursorHelper.h"
-#include <yui/qt/YQApplication.h>
+#include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
-#include <algorithm>
-
-#include <QPixmap>
-#include <QAction>
-#include <QMenu>
-#include <QMessageBox>
-#include <QFile>
-#include <QTreeView>
-#include <QDebug>
-#include <QHeaderView>
-#include <QFontMetrics>
-
 #include "YQPkgList.h"
-#include "YQIconPool.h"
 
-#include "Logger.h"
-#include "Exception.h"
-
-
-using std::max;
 
 #define SINGLE_VERSION_COL	1
 #define STATUS_ICON_SIZE	16

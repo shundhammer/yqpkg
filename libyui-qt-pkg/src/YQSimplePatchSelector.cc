@@ -25,27 +25,23 @@
 */
 
 
-#include <yui/YEvent.h>
-#include "utf8.h"
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include <yui/qt/YQDialog.h>
-
-#include <QApplication>
 #include <QBoxLayout>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QSplitter>
 
-#include "YQSimplePatchSelector.h"
+#include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
-#include "QY2LayoutUtils.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
-#include "Logger.h"
-#include "Exception.h"
+#include "YQSimplePatchSelector.h"
 
 
 using std::max;

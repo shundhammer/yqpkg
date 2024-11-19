@@ -20,14 +20,12 @@
 */
 
 
-#include <yui/YUIException.h>
-
-#include "YQPkgServiceFilterView.h"
+#include "Exception.h"
+#include "Logger.h"
 #include "YQPkgServiceList.h"
 #include "YQZypp.h"
 
-#include "Logger.h"
-#include "Exception.h"
+#include "YQPkgServiceFilterView.h"
 
 
 YQPkgServiceFilterView::YQPkgServiceFilterView( QWidget * parent )

@@ -25,26 +25,24 @@
 */
 
 
-#include <yui/FSize.h>
-#include "YQi18n.h"
-
-#include <zypp/Patch.h>
-
 #include <QComboBox>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QSplitter>
 #include <QTabWidget>
-#include <QElapsedTimer>
-#include <QFrame>
 #include <QVBoxLayout>
 
-#include "YQPkgPatchFilterView.h"
-#include "YQPkgPatchList.h"
-#include "YQPkgDescriptionView.h"
-#include "QY2LayoutUtils.h"
+#include <zypp/Patch.h>
 
-#include "Logger.h"
 #include "Exception.h"
+#include "FSize.h"
+#include "Logger.h"
+#include "QY2LayoutUtils.h"
+#include "YQPkgDescriptionView.h"
+#include "YQPkgPatchList.h"
+#include "YQi18n.h"
+
+#include "YQPkgPatchFilterView.h"
 
 
 typedef zypp::Patch::Contents			ZyppPatchContents;

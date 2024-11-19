@@ -25,31 +25,28 @@
 */
 
 
-#include "QY2CursorHelper.h"
-#include <yui/qt/YQApplication.h>
-#include "YQi18n.h"
-#include "utf8.h"
+#include <QCheckBox>
+#include <QComboBox>
+#include <QElapsedTimer>
+#include <QGroupBox>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QLayout>
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QPushButton>
 
 #include <zypp/PoolQuery.h>
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QLayout>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QProgressDialog>
-#include <QElapsedTimer>
-#include <QKeyEvent>
-#include <QMessageBox>
-
-#include "YQPackageSelector.h"
-#include "YQPkgSearchFilterView.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
+#include "YQPackageSelector.h"
+#include "YQi18n.h"
+#include "utf8.h"
+
+#include "YQPkgSearchFilterView.h"
 
 
 using std::list;

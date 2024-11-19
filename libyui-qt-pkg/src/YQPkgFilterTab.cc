@@ -21,16 +21,9 @@
   Author:     Stefan Hundhammer <shundhammer@suse.com>
 
   Textdomain "qt-pkg"
-  
+
 */
 
-
-#include <yui/YUI.h>
-#include <yui/YApplication.h>
-#include <yui/YUIException.h>
-#include "YQi18n.h"
-#include "utf8.h"
-#include "YQSignalBlocker.h"
 
 #include <vector>
 #include <algorithm> // std::swap()
@@ -39,18 +32,21 @@
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QPushButton>
+#include <QSettings>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTabBar>
 #include <QToolButton>
-#include <QSettings>
+
+#include "Exception.h"
+#include "Logger.h"
+#include "YQIconPool.h"
+#include "YQPkgDiskUsageList.h"
+#include "YQSignalBlocker.h"
+#include "YQi18n.h"
+#include "utf8.h"
 
 #include "YQPkgFilterTab.h"
-#include "YQPkgDiskUsageList.h"
-#include "YQIconPool.h"
-
-#include "Logger.h"
-#include "Exception.h"
 
 
 using std::vector;
@@ -110,8 +106,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     // Nasty hack: Find the base class's QStackedWidget in its widget tree so
     // we have a place to put our own widgets. Unfortunately, this is private
     // in the base class, but Qt lets us search the widget hierarchy by widget
-    // type. 
-    
+    // type.
+
     priv->baseClassWidgetStack = findChild<QStackedWidget*>();
     CHECK_PTR( priv->baseClassWidgetStack );
 
@@ -120,11 +116,11 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 
     disconnect( tabBar(), &QTabBar::currentChanged, 0, 0 );
 
-    
+
     //
     // Splitter that divides this widget into a left and a right pane
     //
-    
+
     priv->outerSplitter = new QSplitter( Qt::Horizontal, this );
     CHECK_NEW( priv->outerSplitter );
 
@@ -132,13 +128,13 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 						     QSizePolicy::Expanding ) );
     priv->baseClassWidgetStack->addWidget( priv->outerSplitter );
 
-    
+
 #if SHOW_ONLY_IMPORTANT_PAGES
 
     //
     // "View" and "Close" buttons
     //
-    
+
     QWidget * buttonBox = new QWidget( this );
     CHECK_NEW( buttonBox );
     setCornerWidget( buttonBox, Qt::TopRightCorner );
@@ -150,11 +146,11 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     buttonBoxLayout->setContentsMargins( 0, 0, 0, 0 );
 
 #if VIEW_BUTTON_LEFT
-    
+
     // Translators: Button with pop-up menu to open a new page (very much like
     // in a web browser) with another package filter view or to switch to an
     // existing one if it's open already
-    
+
     priv->viewButton = new QPushButton( _( "&View" ), this );
     CHECK_NEW( priv->viewButton );
     setCornerWidget( priv->viewButton, Qt::TopLeftCorner );
@@ -162,7 +158,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     priv->viewButton = new QPushButton( _( "&View" ), buttonBox );
     CHECK_NEW( priv->viewButton );
     buttonBoxLayout->addWidget( priv->viewButton );
-    
+
 #endif // VIEW_BUTTON_LEFT
 
     QMenu * menu = new QMenu( priv->viewButton );
@@ -182,14 +178,14 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     priv->leftPaneSplitter = new QSplitter( Qt::Vertical, priv->outerSplitter );
     CHECK_NEW( priv->leftPaneSplitter );
 
-    
+
     //
     // Left pane content
     //
 
     priv->filtersWidgetStack = new QStackedWidget( priv->leftPaneSplitter );
     CHECK_NEW( priv->filtersWidgetStack );
-    
+
     priv->diskUsageList = new YQPkgDiskUsageList( priv->leftPaneSplitter );
     CHECK_NEW( priv->diskUsageList );
 
@@ -214,7 +210,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     priv->rightPane = new QWidget( priv->outerSplitter );
     CHECK_NEW( priv->rightPane );
 
-    
+
     //
     // Stretch factors for left and right pane
     //
@@ -231,7 +227,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
              this,     static_cast<void (YQPkgFilterTab::*)(int)>(&YQPkgFilterTab::showPage) );
 
     tabBar()->installEventFilter( this ); // for tab context menu
-    
+
 
     //
     // Cosmetics
@@ -241,12 +237,12 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 						    MARGIN + TOP_EXTRA_MARGIN,	// top
 						    MARGIN,			// right
 						    MARGIN );			// bottom
-    
+
     priv->leftPaneSplitter->setContentsMargins	( 0,				// left
 						  0,				// top
 						  SPLITTER_HALF_SPACING,	// right
 						  0 );				// bottom
-						
+
     // priv->rightPane->setContentsMargins() is set when widgets are added to the right pane
 }
 
@@ -254,7 +250,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 YQPkgFilterTab::~YQPkgFilterTab()
 {
     saveSettings();
-    
+
     for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	  it != priv->pages.end();
 	  ++it )
@@ -289,7 +285,7 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
 						  pageContent,
 						  internalName );
     CHECK_NEW( page );
-    
+
     priv->pages.push_back( page );
     priv->filtersWidgetStack->addWidget( pageContent );
 
@@ -299,10 +295,10 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
 	QAction * action = new QAction( pageLabel, this );
 	CHECK_NEW( action );
 	action->setData( QVariant::fromValue( pageContent ) );
-	
+
 	priv->viewButton->menu()->addAction( action );
     }
-    
+
 #if ! SHOW_ONLY_IMPORTANT_PAGES
     page->tabIndex = tabBar()->addTab( pageLabel );
 #endif
@@ -314,7 +310,7 @@ YQPkgFilterTab::showPage( QWidget * pageContent )
 {
     YQPkgFilterPage * page = findPage( pageContent );
     CHECK_PTR( page );
-    
+
     showPage( page );
 }
 
@@ -324,7 +320,7 @@ YQPkgFilterTab::showPage( const QString & internalName )
 {
     YQPkgFilterPage * page = findPage( internalName );
     CHECK_PTR( page );
-    
+
     showPage( page );
 }
 
@@ -377,7 +373,7 @@ YQPkgFilterTab::closeAllPages()
     {
 	tabBar()->removeTab( 0 );
     }
-    
+
     for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	  it != priv->pages.end();
 	  ++it )
@@ -403,7 +399,7 @@ YQPkgFilterTab::closeCurrentPage()
 	//
 	// Adjust tab index of the active pages to the right of that page
 	//
-	
+
 	for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	      it != priv->pages.end();
 	      ++it )
@@ -429,7 +425,7 @@ YQPkgFilterTab::findPage( QWidget * pageContent )
 	if ( (*it)->content == pageContent )
 	    return *it;
     }
-    
+
     return 0;
 }
 
@@ -454,7 +450,7 @@ YQPkgFilterTab::findPage( int tabIndex )
 {
     if ( tabIndex < 0 )
 	return 0;
-    
+
     for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	  it != priv->pages.end();
 	  ++it )
@@ -510,8 +506,13 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		priv->tabContextMenu = new QMenu( this );
 		CHECK_NEW( priv->tabContextMenu );
 
+                // bool reverseLayout = YUI::yApp()->reverseLayout();
+                // FIXME
+                bool reverseLayout = false;
+
+
 		// Translators: Change this to "right" for Arabic and Hebrew
-		priv->actionMovePageLeft  = new QAction( YUI::yApp()->reverseLayout() ?
+		priv->actionMovePageLeft  = new QAction( reverseLayout ?
 							 YQIconPool::arrowRight() : YQIconPool::arrowLeft(),
 							 _( "Move page &left"  ), this );
 		CHECK_NEW( priv->actionMovePageLeft );
@@ -519,9 +520,9 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		connect( priv->actionMovePageLeft, 	SIGNAL( triggered() ),
 			 this,				SLOT  ( contextMovePageLeft() ) );
 
-		
+
 		// Translators: Change this to "left" for Arabic and Hebrew
-		priv->actionMovePageRight = new QAction(  YUI::yApp()->reverseLayout() ?
+		priv->actionMovePageRight = new QAction(  reverseLayout ?
 							  YQIconPool::arrowLeft() : YQIconPool::arrowRight(),
 							 _( "Move page &right" ), this );
 		CHECK_NEW( priv->actionMovePageRight );
@@ -529,27 +530,27 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		connect( priv->actionMovePageRight, 	SIGNAL( triggered()   ),
 			 this,				SLOT  ( contextMovePageRight() ) );
 
-		
+
 		priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), this );
 		CHECK_NEW( priv->actionClosePage );
-		
+
 		connect( priv->actionClosePage, 	SIGNAL( triggered()   	),
 			 this,				SLOT  ( contextClosePage() ) );
 
-		
+
 		priv->tabContextMenu->addAction( priv->actionMovePageLeft  );
 		priv->tabContextMenu->addAction( priv->actionMovePageRight );
 		priv->tabContextMenu->addAction( priv->actionClosePage     );
 	    }
 
 	    // Enable / disable actions
-	    
+
 	    priv->actionMovePageLeft->setEnabled( tabIndex > 0 );
 	    priv->actionMovePageRight->setEnabled( tabIndex < ( tabBar()->count() - 1 ) );
 	    priv->actionClosePage->setEnabled( tabBar()->count() > 1 && priv->tabContextMenuPage->closeEnabled );
-	    
+
 	    priv->tabContextMenu->popup( tabBar()->mapToGlobal( pos ) );
-	    
+
 	    return true; // event consumed - no further processing
 	}
     }
@@ -595,16 +596,16 @@ YQPkgFilterTab::swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 )
 {
     if ( ! page1 or ! page2 )
 	return;
-    
+
     int oldCurrentIndex = tabBar()->currentIndex();
     std::swap( page1->tabIndex, page2->tabIndex );
     tabBar()->setTabText( page1->tabIndex, page1->label );
     tabBar()->setTabText( page2->tabIndex, page2->label );
-    
-    
+
+
     // If one of the two pages was the currently displayed one,
     // make sure the same page is still displayed.
-	    
+
     if ( oldCurrentIndex == page1->tabIndex )
     {
 	YQSignalBlocker sigBlocker( tabBar() );
@@ -627,11 +628,11 @@ YQPkgFilterTab::contextClosePage()
 	priv->tabContextMenuPage->tabIndex = -1;
 	tabBar()->removeTab( pageIndex );
 
-	
+
 	//
 	// Adjust tab index of the active pages to the right of that page
 	//
-	
+
 	for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	      it != priv->pages.end();
 	      ++it )
@@ -652,7 +653,7 @@ YQPkgFilterTab::loadSettings()
 {
     closeAllPages();
     QSettings settings( QSettings::UserScope, SETTINGS_DIR, priv->settingsName );
-    
+
     int size = settings.beginReadArray( "Tab_Pages" );
 
     for ( int i=0; i < size; i++ )
@@ -669,7 +670,7 @@ YQPkgFilterTab::loadSettings()
 	else
 	    logWarning() << "No page with ID \"" << toUTF8( id ) << "\"" << endl;
     }
-    
+
     settings.endArray();
 
     QString id = settings.value( "Current_Page" ).toString();
@@ -705,7 +706,7 @@ YQPkgFilterTab::saveSettings()
     }
 
     settings.endArray();
-    
+
     YQPkgFilterPage * currentPage = findPage( tabBar()->currentIndex() );
 
     if ( currentPage )
