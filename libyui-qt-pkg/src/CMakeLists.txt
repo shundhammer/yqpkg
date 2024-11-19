@@ -151,6 +151,4 @@ target_link_libraries( yqpkg
 # Install
 #
 
-## FIXME install the binary to BINDIR (or whatever)
-
-##  install( TARGETS ${TARGETBIN} LIBRARY DESTINATION ${PLUGIN_DIR} )
+install(TARGETS ${TARGETBIN} RUNTIME DESTINATION bin)
