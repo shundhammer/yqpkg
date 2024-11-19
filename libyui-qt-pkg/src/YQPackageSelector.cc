@@ -30,7 +30,7 @@
 #include <yui/YEvent.h>
 #include <yui/qt/YQDialog.h>
 #include "QY2ComboTabWidget.h"
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <zypp/SysContent.h>
 #include <zypp/base/String.h>

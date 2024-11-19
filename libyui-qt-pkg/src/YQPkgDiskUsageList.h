@@ -25,11 +25,13 @@
 #ifndef YQPkgDiskUsageList_h
 #define YQPkgDiskUsageList_h
 
-#include <zypp/DiskUsageCounter.h>
-#include <yui/qt/QY2DiskUsageList.h>
 #include <QKeyEvent>
 #include <QMap>
 #include <QByteArray>
+
+#include <zypp/DiskUsageCounter.h>
+
+#include "QY2DiskUsageList.h"
 
 typedef zypp::DiskUsageCounter::MountPoint ZyppPartitionDu;
 class YQPkgDiskUsageListItem;

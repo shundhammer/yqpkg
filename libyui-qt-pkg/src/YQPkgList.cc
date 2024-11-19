@@ -28,7 +28,7 @@
 #include "QY2CursorHelper.h"
 #include <yui/qt/YQApplication.h>
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <algorithm>
 

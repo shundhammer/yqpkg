@@ -27,7 +27,7 @@
 
 #include <zypp/Repository.h>
 #include <zypp/Product.h>
-#include <yui/qt/QY2ListView.h>
+#include "QY2ListView.h"
 
 #include "YQZypp.h"
 

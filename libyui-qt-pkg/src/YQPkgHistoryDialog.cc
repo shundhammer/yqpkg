@@ -25,8 +25,8 @@
 
 #include "YQi18n.h"
 #include "QY2CursorHelper.h"
-#include <yui/qt/utf8.h>
-#include <yui/qt/YQSignalBlocker.h>
+#include "utf8.h"
+#include "YQSignalBlocker.h"
 
 #include <zypp/Date.h>
 #include <zypp/Edition.h>

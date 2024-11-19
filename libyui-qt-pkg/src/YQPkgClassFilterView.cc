@@ -30,7 +30,7 @@
 #include "Logger.h"
 
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <QApplication>
 

@@ -24,7 +24,7 @@
 
 #include "Logger.h"
 
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <QPixmap>
 #include <QIcon>

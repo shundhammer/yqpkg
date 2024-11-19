@@ -19,20 +19,19 @@
 */
 
 
-#include <yui/YUIException.h>
-#include <yui/qt/QY2ComboTabWidget.h>
-#include "YQi18n.h"
-
 #include <QVBoxLayout>
 #include <QSplitter>
 
-#include "YQPkgSecondaryFilterView.h"
+#include "QY2ComboTabWidget.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
-#include "QY2LayoutUtils.h"
+#include "YQi18n.h"
 
 #include "Logger.h"
 #include "Exception.h"
+
+#include "YQPkgSecondaryFilterView.h"
 
 
 YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )

@@ -32,7 +32,7 @@
 #include <yui/qt/YQDialog.h>
 #include <yui/qt/YQWizard.h>
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <QApplication>
 #include <QHeaderView>

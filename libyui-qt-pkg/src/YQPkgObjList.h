@@ -33,14 +33,15 @@
 #include <map>
 #include <list>
 
-#include <yui/FSize.h>
-#include <yui/qt/QY2ListView.h>
-#include <zypp/Edition.h>
+#include "FSize.h"
+#include "QY2ListView.h"
 #include "YQZypp.h"
+#include <zypp/Edition.h>
+
 
 class YQPkgObjListItem;
 class QAction;
-class QMenu;
+
 using std::string;
 using std::list;
 

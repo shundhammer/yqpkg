@@ -29,8 +29,8 @@
 #include <yui/YApplication.h>
 #include <yui/YUIException.h>
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
-#include <yui/qt/YQSignalBlocker.h>
+#include "utf8.h"
+#include "YQSignalBlocker.h"
 
 #include <vector>
 #include <algorithm> // std::swap()

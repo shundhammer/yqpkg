@@ -25,19 +25,17 @@
 */
 
 
-#include <yui/YUIException.h>
-#include "YQi18n.h"
-#include <yui/qt/QY2ComboTabWidget.h>
-
 #include <QVBoxLayout>
 #include <QSplitter>
 
-#include "YQPkgRepoFilterView.h"
-#include "YQPkgRepoList.h"
+#include "YQi18n.h"
+#include "QY2ComboTabWidget.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQZypp.h"
-#include "QY2LayoutUtils.h"
+#include "YQPkgRepoFilterView.h"
+#include "YQPkgRepoList.h"
 
 #include "Logger.h"
 #include "Exception.h"

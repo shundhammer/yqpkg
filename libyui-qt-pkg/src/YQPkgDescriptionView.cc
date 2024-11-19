@@ -29,7 +29,7 @@
 
 #include "QY2CursorHelper.h"
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
+#include "utf8.h"
 
 #include <zypp/VendorSupportOptions.h>
 

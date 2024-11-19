@@ -26,8 +26,7 @@
 #include "Logger.h"
 
 #include "YQi18n.h"
-#include <yui/qt/utf8.h>
-#include <yui/qt/QY2Styler.h>
+#include "utf8.h"
 
 #include <QTabWidget>
 #include <QRegExp>
@@ -156,9 +155,7 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html = "<table";
-
-    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
-        html +=  " class=\"stats\"";
+    html +=  " class=\"stats\"";
 
     html += "><tr><td><b>"
 	+ fromUTF8( zyppObj->name() )
@@ -195,9 +192,7 @@ QString
 YQPkgGenericDetailsView::table( const QString & contents )
 {
     QString html = "<table";
-    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
-        html +=  " class=\"stats\"";
-
+    html +=  " class=\"stats\"";
     html += ">" + contents + "</table>";
 
     return html;
