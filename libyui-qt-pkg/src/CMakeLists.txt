@@ -73,6 +73,7 @@ set( SOURCES
 
   YQIconPool.cc
   QY2ComboTabWidget.cc
+  QY2CursorHelper.cc
   QY2DiskUsageList.cc
   QY2LayoutUtils.cc
   QY2ListView.cc

@@ -28,10 +28,8 @@
 
 
 #include <yui/YEvent.h>
-#include <yui/qt/YQUI.h>
 #include <yui/qt/YQApplication.h>
 #include <yui/qt/YQDialog.h>
-#include "YQi18n.h"
 #include <yui/qt/QY2ComboTabWidget.h>
 #include <yui/qt/utf8.h>
 
@@ -63,6 +61,7 @@
 #include <QSettings>
 
 #include "YQZypp.h"
+#include "YQi18n.h"
 #include "YQPackageSelector.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
@@ -773,6 +772,7 @@ YQPackageSelector::addMenus()
     }
 
 
+#ifdef FIXME_REPO_MGMT
     //
     // Configuration menu
     //
@@ -786,6 +786,7 @@ YQPackageSelector::addMenus()
 	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
 	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
     }
+#endif
 
 
     //
@@ -887,17 +888,14 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->addSeparator();
 
+#ifdef FIXME
     if ( _pkgConflictDialog )
 	_extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
 				_pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
+#endif
 
     if ( _actionResetIgnoredDependencyProblems )
 	_extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
-
-#ifdef FIXME
-    if ( _patchList )
-	_extrasMenu->addAction(_patchList->actionShowRawPatchInfo);
-#endif
 
     if ( (onlineSearchEnabled()) ) {
 	_extrasMenu->addAction(_("Search &Online"), this, SLOT( onlineSearch() ) );
@@ -1882,12 +1880,12 @@ YQPackageSelector::saveCommonSettings()
 
 void YQPackageSelector::busyCursor()
 {
-    YQUI::ui()->busyCursor();
+    ::busyCursor();
 }
 
 void YQPackageSelector::normalCursor()
 {
-    YQUI::ui()->normalCursor();
+    ::normalCursor();
 }
 
 
