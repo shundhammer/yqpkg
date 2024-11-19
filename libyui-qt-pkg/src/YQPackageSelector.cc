@@ -31,7 +31,7 @@
 #include <yui/qt/YQUI.h>
 #include <yui/qt/YQApplication.h>
 #include <yui/qt/YQDialog.h>
-#include <yui/qt/YQi18n.h>
+#include "YQi18n.h"
 #include <yui/qt/QY2ComboTabWidget.h>
 #include <yui/qt/utf8.h>
 

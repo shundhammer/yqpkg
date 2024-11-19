@@ -26,7 +26,7 @@
 
 
 #include <yui/qt/YQSignalBlocker.h>
-#include <yui/qt/YQi18n.h>
+#include "YQi18n.h"
 #include <yui/qt/utf8.h>
 
 #include <zypp/Repository.h>

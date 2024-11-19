@@ -26,7 +26,7 @@
 
 
 #include <yui/FSize.h>
-#include <yui/qt/YQi18n.h>
+#include "YQi18n.h"
 
 #include <zypp/Patch.h>
 

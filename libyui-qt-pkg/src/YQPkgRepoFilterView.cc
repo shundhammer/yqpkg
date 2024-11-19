@@ -26,7 +26,7 @@
 
 
 #include <yui/YUIException.h>
-#include <yui/qt/YQi18n.h>
+#include "YQi18n.h"
 #include <yui/qt/QY2ComboTabWidget.h>
 
 #include <QVBoxLayout>

@@ -28,7 +28,7 @@
 #include <yui/YEvent.h>
 #include <yui/qt/utf8.h>
 #include <yui/qt/YQUI.h>
-#include <yui/qt/YQi18n.h>
+#include "YQi18n.h"
 #include <yui/qt/YQDialog.h>
 
 #include <QApplication>
