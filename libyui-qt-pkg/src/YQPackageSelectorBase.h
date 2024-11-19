@@ -28,9 +28,6 @@
 #include <QEvent>
 #include <QFrame>
 
-#include <yui/YEventFilter.h>
-#include <yui/YPackageSelector.h>
-
 #include "YQZypp.h"
 
 
@@ -42,10 +39,20 @@ class YQPkgDiskUsageList;
 class YQPkgSelWmCloseHandler;
 
 
+#define YPkg_TestMode		1 << 0	// Test mode for debugging
+#define YPkg_OnlineUpdateMode	1 << 1	// Online update mode: Show patches
+#define YPkg_UpdateMode		1 << 2	// Start with "Update problems" filter view
+#define YPkg_SearchMode		1 << 3	// Start with "Search"  filter view
+#define YPkg_SummaryMode	1 << 4	// Start with "Summary" filter view
+#define YPkg_RepoMode		1 << 5	// Start with "Repositories" filter view
+#define YPkg_RepoMgr		1 << 6	// Add "Manage Repositories" to menu
+#define YPkg_ConfirmUnsupported	1 << 7	// Confirm unsupported packages
+
+
 /**
  * Abstract base class for package selectors.
  **/
-class YQPackageSelectorBase : public QFrame, public YPackageSelector
+class YQPackageSelectorBase: public QFrame
 {
     Q_OBJECT
 
@@ -57,49 +64,12 @@ protected:
      * Will initialize package and selection managers and create conflict
      * dialogs.
      **/
-    YQPackageSelectorBase( YWidget * parent, long modeFlags = 0 );
+    YQPackageSelectorBase( QWidget * parent, long modeFlags = 0 );
 
     /**
      * Destructor
      **/
     virtual ~YQPackageSelectorBase();
-
-
-public:
-    /**
-     * Set enabled/disabled state.
-     *
-     * Reimplemented from YWidget.
-     **/
-    virtual void setEnabling( bool enabled );
-
-    /**
-     * Preferred width of the widget.
-     *
-     * Reimplemented from YWidget.
-     **/
-    virtual int preferredWidth();
-
-    /**
-     * Preferred height of the widget.
-     *
-     * Reimplemented from YWidget.
-     **/
-    virtual int preferredHeight();
-
-    /**
-     * Set the new size of the widget.
-     *
-     * Reimplemented from YWidget.
-     **/
-    virtual void setSize( int newWidth, int newHeight );
-
-    /**
-     * Accept the keyboard focus.
-     *
-     * Reimplemented from YWidget.
-     **/
-    virtual bool setKeyboardFocus();
 
 
 public slots:
@@ -148,21 +118,6 @@ public slots:
     void accept();
 
     /**
-     * Close processing and request start of the repository manager
-     **/
-    void repoManager();
-
-    /**
-     * Close processing and request start of the online update configuration
-     **/
-    void onlineUpdateConfiguration();
-
-    /**
-     * Close processing and request start of the online search
-     **/
-    void onlineSearch();
-
-    /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.
      **/
@@ -193,6 +148,19 @@ protected slots:
 
 protected:
 
+    //
+    // Checks for the various modes
+    //
+    
+    bool testMode()		const { return _modeFlags & YPkg_TestMode;	   	}
+    bool onlineUpdateMode()	const { return _modeFlags & YPkg_OnlineUpdateMode; 	}
+    bool updateMode()		const { return _modeFlags & YPkg_UpdateMode;	   	}
+    bool searchMode() 		const { return _modeFlags & YPkg_SearchMode;	   	}
+    bool summaryMode()		const { return _modeFlags & YPkg_SummaryMode;	   	}
+    bool repoMode()		const { return _modeFlags & YPkg_RepoMode;         	}
+    bool repoMgrEnabled()	const { return _modeFlags & YPkg_RepoMgr;		}
+    bool confirmUnsupported()	const { return _modeFlags & YPkg_ConfirmUnsupported;	}
+    
     /**
      * Show all license agreements the user has not confirmed yet
      * (for all packages that will be installed, and in YOU mode also for
@@ -222,43 +190,13 @@ protected:
 
     // Data members
 
-    YQPkgSelWmCloseHandler *	_wmCloseHandler;
-
+    long                        _modeFlags;
     bool			_showChangesDialog;
     YQPkgConflictDialog *	_pkgConflictDialog;
     YQPkgDiskUsageList *	_diskUsageList;
     QAction *			_actionResetIgnoredDependencyProblems;
 };
 
-
-
-/**
- * Helper class: Event filter for the WM_CLOSE event
- **/
-class YQPkgSelWmCloseHandler: public YEventFilter
-{
-public:
-    YQPkgSelWmCloseHandler( YQPackageSelectorBase * pkgSel )
-	: YEventFilter()
-	, _pkgSel( pkgSel )
-	, _inReject( false )
-	{}
-
-    virtual ~YQPkgSelWmCloseHandler() {};
-
-    /**
-     * The filter method: This is what this class is all about.
-     * Check for Cancel events (WM_CLOSE).
-     **/
-    virtual YEvent * filter( YEvent * event );
-
-    YQPackageSelectorBase * pkgSel() const { return _pkgSel; }
-
-private:
-
-    YQPackageSelectorBase * 	_pkgSel;
-    bool			_inReject;
-};
 
 
 #endif // YQPackageSelectorBase_h

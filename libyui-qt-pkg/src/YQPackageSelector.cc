@@ -28,9 +28,8 @@
 
 
 #include <yui/YEvent.h>
-#include <yui/qt/YQApplication.h>
 #include <yui/qt/YQDialog.h>
-#include <yui/qt/QY2ComboTabWidget.h>
+#include "QY2ComboTabWidget.h"
 #include <yui/qt/utf8.h>
 
 #include <zypp/SysContent.h>

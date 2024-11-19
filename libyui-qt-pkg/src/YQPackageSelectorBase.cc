@@ -25,13 +25,6 @@
 */
 
 
-#include <yui/YEvent.h>
-#include "QY2CursorHelper.h"
-#include <yui/qt/YQApplication.h>
-#include <yui/qt/YQDialog.h>
-#include "YQi18n.h"
-#include <yui/qt/QY2Styler.h>
-#include <yui/qt/utf8.h>
 
 #include <QAction>
 #include <QVBoxLayout>
@@ -39,6 +32,7 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
+#include "YQi18n.h"
 #include "YQPackageSelectorBase.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
@@ -47,6 +41,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgObjList.h"
 #include "QY2LayoutUtils.h"
+#include "QY2CursorHelper.h"
 
 #include "Logger.h"
 #include "Exception.h"
@@ -57,21 +52,20 @@ using std::string;
 
 
 
-YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
+YQPackageSelectorBase::YQPackageSelectorBase( QWidget * parent,
 					      long	modeFlags )
-    : QFrame( (QWidget *) parent->widgetRep() )
-    , YPackageSelector( parent, modeFlags )
+    : QFrame( QWidget )
+    , _modeFlags( modeFlags )
 {
     setWidgetRep( this );
 
-    _wmCloseHandler		= 0;
     _showChangesDialog		= false;
     _pkgConflictDialog		= 0;
     _diskUsageList		= 0;
     _pkgConflictDialog 		= 0;
 
-    YQUI::setTextdomain( "qt-pkg" );
-    setFont( YQUI::yqApp()->currentFont() );
+    // YQUI::setTextdomain( "qt-pkg" );
+    // setFont( YQUI::yqApp()->currentFont() );
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     Q_CHECK_PTR( _pkgConflictDialog );
@@ -89,9 +83,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Patch    >();
 
-    _wmCloseHandler = new YQPkgSelWmCloseHandler( this );
-
-    QY2Styler::styler()->registerWidget( this );
+    // FIXME: Handle WM_CLOSE
 
     logInfo() << "PackageSelectorBase init done" << endl;
 }
@@ -100,11 +92,6 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
     logInfo() << "Destroying PackageSelector" << endl;
-
-    QY2Styler::styler()->unregisterWidget( this );
-
-    if ( _wmCloseHandler )
-	delete _wmCloseHandler;
 }
 
 
@@ -246,7 +233,6 @@ YQPackageSelectorBase::reject()
 	zyppPool().restoreState<zypp::Patch    >();
 
 	logInfo() << "Closing PackageSelector with \"Cancel\"" << endl;
-	YQUI::ui()->sendEvent( new YCancelEvent() );
 
 	return true; 	// Really reject
     }
@@ -297,7 +283,7 @@ YQPackageSelectorBase::accept()
     {
         logInfo() << "Confirm unsupported packages enabled." << endl;
 	// Show which packages are unsupported
-	
+
 	QString msg =
 	    "<p><b>"
 	    // Dialog header
@@ -320,29 +306,8 @@ YQPackageSelectorBase::accept()
 	return;
 
     logInfo() << "Closing PackageSelector with \"Accept\"" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "accept" ) );
 }
 
-void
-YQPackageSelectorBase::repoManager()
-{
-    logInfo() << "Closing PackageSelector with \"RepoManager\"" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "repo_mgr" ) );
-}
-
-void
-YQPackageSelectorBase::onlineUpdateConfiguration()
-{
-    logInfo() << "Closing PackageSelector with \"OnlineUpdateConfiguration\"" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "online_update_configuration" ) );
-}
-
-void
-YQPackageSelectorBase::onlineSearch()
-{
-    logInfo() << "Closing PackageSelector with \"OnlineSearch\"" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "online_search" ) );
-}
 
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
@@ -443,67 +408,4 @@ YQPackageSelectorBase::keyPressEvent( QKeyEvent * event )
 
     QWidget::keyPressEvent( event );
 }
-
-
-int YQPackageSelectorBase::preferredWidth()
-{
-    return max( 640, sizeHint().width() );
-}
-
-
-int YQPackageSelectorBase::preferredHeight()
-{
-    return max( 480, sizeHint().height() );
-}
-
-
-void
-YQPackageSelectorBase::setSize( int newWidth, int newHeight )
-{
-    resize( newWidth, newHeight );
-}
-
-
-void
-YQPackageSelectorBase::setEnabling( bool enabled )
-{
-    QWidget::setEnabled( enabled );
-}
-
-
-bool
-YQPackageSelectorBase::setKeyboardFocus()
-{
-    setFocus();
-
-    return true;
-}
-
-
-YEvent *
-YQPkgSelWmCloseHandler::filter( YEvent * event )
-{
-    if ( event && event->eventType() == YEvent::CancelEvent	// WM_CLOSE
-	 && ! _inReject )		// prevent recursion
-    {
-	// Handle WM_CLOSE like "Cancel"
-	logInfo() << "Caught WM_CLOSE from package selector dialog" << endl;
-
-	YUI::app()->normalCursor();
-	CHECK_PTR( _pkgSel );
-	
-	_inReject = true;	// reject() might send a CancelEvent, too
-	bool reallyReject = _pkgSel->reject();
-	_inReject = false;
-
-	if ( ! reallyReject )
-	{
-	    event = 0;		// Stop processing this event
-	    logInfo() << "User changed his mind - discarding CancelEvent" << endl;
-	}
-    }
-
-    return event;		// Don't stop processing this event
-}
-
 
