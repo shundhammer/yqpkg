@@ -18,11 +18,9 @@
 
   File:	      QY2DiskUsageList.cc
 
-  Author:     Stefan Hundhammer <shundhammer@suse.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.com>
 
-  Textdomain "qt"
-
-  This is a pure Qt widget - it can be used independently of YaST2.
+  Textdomain "qt-pkg"
 
 
 /-*/
@@ -31,14 +29,9 @@
 #include "YQi18n.h"
 #include <QPainter>
 #include <QItemDelegate>
-#include <QDebug>
 
-#ifdef TEXTDOMAIN
-#    undef TEXTDOMAIN
-#endif
-
-#define TEXTDOMAIN "qt"
-
+#include "Logger.h"
+#include "Exception.h"
 
 
 /**

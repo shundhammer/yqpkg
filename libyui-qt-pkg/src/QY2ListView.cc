@@ -28,11 +28,11 @@
 #include <QPixmap>
 #include <QHeaderView>
 #include <QMouseEvent>
-#include "YQUI.h"
 #include "QY2ListView.h"
 
-#define YUILogComponent "qt-pkg"
-#include <yui/YUILog.h>
+#include "Logger.h"
+#include "Exception.h"
+
 
 QY2ListView::QY2ListView( QWidget * parent )
     : QTreeWidget( parent )

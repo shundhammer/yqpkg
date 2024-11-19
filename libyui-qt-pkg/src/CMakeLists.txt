@@ -15,13 +15,12 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 set( TARGETBIN yqpkg )
 
 find_package( Qt5 COMPONENTS Core Gui Widgets REQUIRED )
+# find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 set( CMAKE_AUTORCC on ) # Automatically handle Qt resource (.rcc) files
 set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 
-
-# find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
 set( SOURCES
 
@@ -34,7 +33,6 @@ set( SOURCES
   YQPackageSelectorHelp.cc
   YQPatternSelector.cc
   YQSimplePatchSelector.cc
-  YQPackageSelectorPluginImpl.cc
 
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc
@@ -74,69 +72,13 @@ set( SOURCES
   YQPkgVersionsView.cc
 
   YQIconPool.cc
+  QY2ComboTabWidget.cc
   QY2DiskUsageList.cc
   QY2LayoutUtils.cc
   QY2ListView.cc
   )
 
 set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
-
-
-##  set( HEADERS
-##    ImplPtr.h
-##    Logger.h
-##    Exception.h
-##    Version.h
-##
-##    YQPackageSelector.h
-##    YQPackageSelectorBase.h
-##    YQPackageSelectorPluginImpl.h
-##    YQPatternSelector.h
-##    YQSimplePatchSelector.h
-##    YQPackageSelectorPlugin.h
-##
-##    YQPkgChangeLogView.h
-##    YQPkgChangesDialog.h
-##    YQPkgClassFilterView.h
-##    YQPkgConflictDialog.h
-##    YQPkgConflictList.h
-##    YQPkgDependenciesView.h
-##    YQPkgDescriptionDialog.h
-##    YQPkgDescriptionView.h
-##    YQPkgDiskUsageList.h
-##    YQPkgDiskUsageWarningDialog.h
-##    YQPkgFileListView.h
-##    YQPkgFilterTab.h
-##    YQPkgFilters.h
-##    YQPkgGenericDetailsView.h
-##    YQPkgHistoryDialog.h
-##    YQPkgLangList.h
-##    YQPkgList.h
-##    YQPkgObjList.h
-##    YQPkgPatchFilterView.h
-##    YQPkgPatchList.h
-##    YQPkgPatternList.h
-##    YQPkgProductDialog.h
-##    YQPkgProductList.h
-##    YQPkgRepoFilterView.h
-##    YQPkgRepoList.h
-##    YQPkgSearchFilterView.h
-##    YQPkgSecondaryFilterView.h
-##    YQPkgSelDescriptionView.h
-##    YQPkgSelMapper.h
-##    YQPkgServiceFilterView.h
-##    YQPkgServiceList.h
-##    YQPkgStatusFilterView.h
-##    YQPkgTechnicalDetailsView.h
-##    YQPkgTextDialog.h
-##    YQPkgUpdateProblemFilterView.h
-##    YQPkgVersionsView.h
-##
-##    QY2LayoutUtils.h
-##    YQIconPool.h
-##    YQZypp.h
-##    )
-
 
 add_executable( ${TARGETBIN}
   ${SOURCES}
@@ -224,18 +166,11 @@ target_link_libraries( yqpkg
 # classes like QPixmap and QIcon. Qt takes loads the SVG plugin as needed.
 
 
-##  # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
-##  set_target_properties( ${TARGETBIN} PROPERTIES
-##    VERSION       ${SONAME}           # From ../../VERSION.cmake
-##    SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
-##    OUTPUT_NAME   ${TARGETBIN_BASE}
-##    )
-
 
 #
 # Install
 #
 
-##  # Install the headers first so the message about the lib does not scroll away
-##  install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
+## FIXME install the binary to BINDIR (or whatever)
+
 ##  install( TARGETS ${TARGETBIN} LIBRARY DESTINATION ${PLUGIN_DIR} )
