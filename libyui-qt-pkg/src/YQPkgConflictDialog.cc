@@ -162,7 +162,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     _busyPopup->setWindowTitle( "" );
     _busyPopup->resize( _busyPopup->sizeHint() );
-    YQDialog::center( _busyPopup, parent );
 
 
     // Here comes a real nasty hack.
@@ -290,7 +289,6 @@ YQPkgConflictDialog::prepareSolving()
 
     if ( _solveCount++ == 0 || averageSolveTime() > SUPPRESS_BUSY_DIALOG_SECONDS )
     {
-	YQDialog::center( _busyPopup, parentWidget() );
 	_busyPopup->show();
 
 	// No _busyPopup->repaint() - that doesn't help anyway: Qt doesn't do
