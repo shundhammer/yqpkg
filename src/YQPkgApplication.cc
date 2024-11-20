@@ -68,6 +68,10 @@ void YQPkgApplication::createPkgSel()
     QObject::connect( _pkgSel, SIGNAL( commit() ),
                       qApp,    SLOT  ( quit()   ) );
 
+    QString windowTitle( "YQPkg" );
+    windowTitle += runningAsRoot() ? _( " [root]" ) : _( " (read-only)" );
+    _pkgSel->setWindowTitle( windowTitle );
+
     _pkgSel->show();
 }
 

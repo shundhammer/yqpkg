@@ -657,7 +657,6 @@ YQPackageSelector::layoutMenuBar( QWidget *parent )
     _configMenu		= 0;
     _dependencyMenu	= 0;
     _helpMenu		= 0;
-
 }
 
 
@@ -916,6 +915,14 @@ YQPackageSelector::addMenus()
 
     // Menu entry for keyboard help
     _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )	);
+
+
+    //
+    // Program name and version in the top right corner
+    //
+
+    QString txt( "YQPkg-" VERSION );
+    _menuBar->setCornerWidget( new QLabel( txt ) );
 }
 
 
