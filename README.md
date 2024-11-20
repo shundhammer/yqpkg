@@ -1,12 +1,20 @@
 # YQPkg - Standalone Qt Package Selector
 
 This is a fork of the YaST Qt package selector as a standalone Qt program
-without any YaST dependencies.
+without any YaST dependencies. It works directly with libzypp.
 
 
 ## License
 
 GPL V2; see file LICENSE.
+
+
+## Development Status
+
+Pre-alpha.
+
+The binary is standalone already, not needing any YaST infrastructure or libs,
+just libzypp and Qt 5.
 
 
 ## Building
@@ -37,7 +45,7 @@ From the build directory (without `sudo make install`):
 
 ```
 cd build
-src/
+src/yqpkg
 ```
 
 After `sudo make install`:
