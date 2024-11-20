@@ -13,6 +13,9 @@
 
 #include <QObject>
 
+#include <zypp/ZYpp.h>
+#include <zypp/RepoManager.h>
+
 
 class YQPackageSelector;
 
@@ -60,13 +63,23 @@ protected:
      **/
     void createPkgSel();
 
+    void initZypp();
+    void shutdownZypp();
+
+    /**
+     * Connect to libzypp
+     **/
+    zypp::ZYpp::Ptr zypp_ptr();
 
     //
     // Data members
     //
 
     YQPackageSelector * _pkgSel;
-    
+
+    zypp::ZYpp::Ptr     _zypp_pointer;
+    zypp::RepoManager * _repo_manager;
+
     static YQPkgApplication * _instance;
 };
 
