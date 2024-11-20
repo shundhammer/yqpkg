@@ -58,6 +58,7 @@
 #include "QY2ComboTabWidget.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
+#include "WindowSettings.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgClassFilterView.h"
@@ -106,7 +107,6 @@
 #define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
 #define FAST_SOLVER			1
 
-#define SETTINGS_DIR			"YaST2"
 #define PATH_TO_YAST_SYSCONFIG		"/etc/sysconfig/yast2"
 #define OPTION_VERIFY			"PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK		"PKGMGR_AUTO_CHECK"
@@ -1775,15 +1775,12 @@ YQPackageSelector::anyRetractedPkgInstalled()
 void
 YQPackageSelector::loadSettings()
 {
-    QString settingsName = "YQPackageSelector";
+    QString settingsGroup = "YQPackageSelector";
 
-    if ( onlineUpdateMode() )
-	settingsName = "YQOnlineUpdate";
+    WindowSettings::read( this, settingsGroup );
 
-    if ( updateMode() )
-	settingsName = "YQSystemUpdate";
-
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
+    QSettings settings;
+    settings.beginGroup( settingsGroup );
 
     _showDevelAction->setChecked(settings.value( "Options/showDevelPackages", true ).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
@@ -1792,6 +1789,7 @@ YQPackageSelector::loadSettings()
     pkgExcludeDebugChanged(_showDebugAction->isChecked());
 
     loadCommonSettings();
+    settings.endGroup();
 }
 
 
@@ -1839,20 +1837,18 @@ YQPackageSelector::loadCommonSettings()
 void
 YQPackageSelector::saveSettings()
 {
-    QString settingsName = "YQPackageSelector";
+    QString settingsGroup = "YQPackageSelector";
 
-    if ( onlineUpdateMode() )
-	settingsName = "YQOnlineUpdate";
+    WindowSettings::write( this, settingsGroup );
 
-    if ( updateMode() )
-	settingsName = "YQSystemUpdate";
-
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
+    QSettings settings;
+    settings.beginGroup( settingsGroup );
 
     settings.setValue("Options/showDevelPackages", _showDevelAction->isChecked() );
     settings.setValue("Options/showDebugPackages", _showDebugAction->isChecked() );
 
     saveCommonSettings();
+    settings.endGroup();
 }
 
 void

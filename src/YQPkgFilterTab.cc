@@ -652,7 +652,9 @@ void
 YQPkgFilterTab::loadSettings()
 {
     closeAllPages();
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, priv->settingsName );
+    
+    QSettings settings;
+    settings.beginGroup( priv->settingsName );
 
     int size = settings.beginReadArray( "Tab_Pages" );
 
@@ -677,13 +679,16 @@ YQPkgFilterTab::loadSettings()
 
     if ( ! id.isEmpty() )
 	showPage( id );
+
+    settings.endGroup();
 }
 
 
 void
 YQPkgFilterTab::saveSettings()
 {
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, priv->settingsName );
+    QSettings settings;
+    settings.beginGroup( priv->settingsName );
 
     settings.beginWriteArray( "Tab_Pages" );
 
@@ -711,6 +716,8 @@ YQPkgFilterTab::saveSettings()
 
     if ( currentPage )
 	settings.setValue( "Current_Page", currentPage->id );
+    
+    settings.endGroup();
 }
 
 

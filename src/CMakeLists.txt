@@ -28,6 +28,7 @@ set( SOURCES
   Logger.cc
   Exception.cc
   FSize.cc
+  WindowSettings.cc
 
   YQPackageSelector.cc
   YQPackageSelectorBase.cc
