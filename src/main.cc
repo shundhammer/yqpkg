@@ -10,6 +10,7 @@
 //  #include <iostream>	// cerr
 
 #include <QApplication>
+#include <QObject>
 #include "YQPackageSelector.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -46,6 +47,9 @@ int main( int argc, char *argv[] )
     QWidget * mainWin = new YQPackageSelector( 0, 0 );
     CHECK_PTR( mainWin );
     mainWin->show();
+
+    QObject::connect( mainWin, SIGNAL( commit() ),
+                      &qtApp,  SLOT  ( quit()   ) );
 
     qtApp.exec();
 

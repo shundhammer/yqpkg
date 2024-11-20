@@ -704,7 +704,7 @@ YQPkgFilterTab::saveSettings()
 		logWarning() << "No ID for tab page \"" << page->label << "\"" << endl;
 	    else
 	    {
-		logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
+		// logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
 		settings.setValue( "Page_ID", page->id );
 	    }
 	}

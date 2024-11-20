@@ -52,7 +52,6 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-
 #include "Exception.h"
 #include "Logger.h"
 #include "QY2ComboTabWidget.h"

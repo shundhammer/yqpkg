@@ -25,7 +25,6 @@
 #ifndef YQPackageSelectorBase_h
 #define YQPackageSelectorBase_h
 
-#include <QEvent>
 #include <QFrame>
 
 #include "YQZypp.h"
@@ -33,6 +32,8 @@
 
 class QY2ComboTabWidget;
 class QAction;
+class QCloseEvent;
+class QKeyEvent;
 
 class YQPkgConflictDialog;
 class YQPkgDiskUsageList;
@@ -106,11 +107,8 @@ public slots:
     /**
      * Close processing and abandon changes.
      * If there were changes, this will post an "Abandon all changes?" pop-up.
-     *
-     * Return 'true' if the user really wants to reject (or if there were no
-     * changes anyway), 'false' if not.
      **/
-    bool reject();
+    void reject();
 
     /**
      * Close processing and accept changes
@@ -136,6 +134,12 @@ signals:
      * Emitted when package resolving is finished.
      **/
     void resolvingFinished();
+
+    /**
+     * Emitted when the user accepted and solved all pending dependency
+     * problems: Commit the package transactions.
+     **/
+    void commit();
 
 
 protected slots:
@@ -185,7 +189,14 @@ protected:
      *
      * Reimplemented from QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * ev );
+    virtual void keyPressEvent( QKeyEvent * event );
+
+    /**
+     * Event handler for WM_CLOSE (Alt-F4).
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void closeEvent( QCloseEvent * event );
 
 
     // Data members

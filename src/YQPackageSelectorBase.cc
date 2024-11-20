@@ -27,6 +27,7 @@
 
 
 #include <QAction>
+#include <QCloseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -80,8 +81,6 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * parent,
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Patch    >();
-
-    // FIXME: Handle WM_CLOSE
 
     logInfo() << "PackageSelectorBase init done" << endl;
 }
@@ -190,7 +189,7 @@ YQPackageSelectorBase::showAutoPkgList()
 
 
 
-bool
+void
 YQPackageSelectorBase::reject()
 {
     bool changes =
@@ -216,9 +215,9 @@ YQPackageSelectorBase::reject()
     {
 	int result =
 	    QMessageBox::warning( this, "",
-				  _( "Do you want to Abandon all changes and exit?" ),
+				  _( "Really abandon all changes and exit?" ),
 				  _( "&Yes" ), _( "&No" ), "",
-				  1, // defaultButtonNumber (from 0)
+				  1,   // defaultButtonNumber (from 0)
 				  1 ); // escapeButtonNumber
 
 	confirm = ( result == 0 );
@@ -226,19 +225,21 @@ YQPackageSelectorBase::reject()
 
     if ( ! changes || confirm )
     {
+        // Really reject
+
 	zyppPool().restoreState<zypp::Package  >();
 	zyppPool().restoreState<zypp::Pattern  >();
 	zyppPool().restoreState<zypp::Patch    >();
 
-	logInfo() << "Closing PackageSelector with \"Cancel\"" << endl;
+	logInfo() << "Quitting the application" << endl;
 
-	return true; 	// Really reject
+        qApp->quit();
     }
     else
     {
 	logInfo() << "Returning to package selector" << endl;
 
-	return false;	// User changed his mind - don't reject
+	// User changed his mind - don't reject
     }
 }
 
@@ -383,6 +384,18 @@ void
 YQPackageSelectorBase::resetIgnoredDependencyProblems()
 {
     YQPkgConflictDialog::resetIgnoredDependencyProblems();
+}
+
+
+void
+YQPackageSelectorBase::closeEvent( QCloseEvent * event )
+{
+    Q_UNUSED( event );
+
+    logInfo() << "Caught WM_CLOSE" << endl;
+
+    event->ignore();
+    reject();
 }
 
 
