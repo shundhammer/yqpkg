@@ -48,6 +48,11 @@ public:
      **/
     void run();
 
+    /**
+     * Return 'true' if this program is running with root privileges.
+     **/
+    static bool runningAsRoot();
+
 protected:
 
     /**

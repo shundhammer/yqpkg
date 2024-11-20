@@ -33,8 +33,10 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
+#include "Logger.h"
+#include "Exception.h"
+
 #include "YQi18n.h"
-#include "YQPackageSelectorBase.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
@@ -44,8 +46,7 @@
 #include "QY2LayoutUtils.h"
 #include "QY2CursorHelper.h"
 
-#include "Logger.h"
-#include "Exception.h"
+#include "YQPackageSelectorBase.h"
 
 
 using std::max;

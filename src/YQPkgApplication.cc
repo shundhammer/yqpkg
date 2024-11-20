@@ -8,6 +8,8 @@
  */
 
 
+#include <unistd.h>     // getuid()
+
 #include <QApplication>
 
 #include "YQPackageSelector.h"
@@ -31,13 +33,13 @@ YQPkgApplication::YQPkgApplication()
 YQPkgApplication::~YQPkgApplication()
 {
     logDebug() << "Destroying YQPkgApplication..." << endl;
-    
+
     if ( _pkgSel )
     {
         delete _pkgSel;
         _pkgSel = 0;
     }
-    
+
     logDebug() << "Destroying YQPkgApplication done" << endl;
     _instance = 0;
 }
@@ -54,7 +56,7 @@ void YQPkgApplication::createPkgSel()
 {
     if ( _pkgSel )
         return;
-    
+
     _pkgSel = new YQPackageSelector( 0, 0 );
     CHECK_PTR( _pkgSel );
 
@@ -62,4 +64,10 @@ void YQPkgApplication::createPkgSel()
                       qApp,    SLOT  ( quit()   ) );
 
     _pkgSel->show();
+}
+
+
+bool YQPkgApplication::runningAsRoot()
+{
+    return geteuid() == 0;
 }

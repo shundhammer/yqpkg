@@ -58,6 +58,7 @@
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "WindowSettings.h"
+#include "YQPkgApplication.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgClassFilterView.h"
@@ -632,6 +633,7 @@ YQPackageSelector::layoutButtons( QWidget *parent )
     CHECK_NEW( accept_button );
     layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+    accept_button->setEnabled( YQPkgApplication::runningAsRoot() );
 
     connect( accept_button, SIGNAL( clicked() ),
 	     this,	    SLOT  ( accept()   ) );
@@ -1850,6 +1852,9 @@ YQPackageSelector::saveSettings()
 void
 YQPackageSelector::saveCommonSettings()
 {
+    if ( ! YQPkgApplication::runningAsRoot() )
+        return;
+
     try
     {
 	zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
