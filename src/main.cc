@@ -11,7 +11,7 @@
 
 #include <QApplication>
 #include <QObject>
-#include "YQPackageSelector.h"
+#include "YQPkgApplication.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -37,23 +37,19 @@ int main( int argc, char *argv[] )
     logVersion();
 
     // Set org/app name for QSettings
-    QCoreApplication::setOrganizationName( "openSUSE" );
-    QCoreApplication::setApplicationName ( progName );
+    QCoreApplication::setOrganizationName( "openSUSE" ); // ~/.cache/openSUSE
+    QCoreApplication::setApplicationName ( progName );   // ~/.cache/openSUSE/yqpkg
 
-    QApplication qtApp( argc, argv);
-    QStringList argList = QCoreApplication::arguments();
-    argList.removeFirst(); // Remove program name
+    QApplication     qtApp( argc, argv);
 
-    QWidget * mainWin = new YQPackageSelector( 0, 0 );
-    CHECK_PTR( mainWin );
-    mainWin->show();
+    {
+        // New scope to limit the life time of this instance
 
-    QObject::connect( mainWin, SIGNAL( commit() ),
-                      &qtApp,  SLOT  ( quit()   ) );
+        YQPkgApplication app;
+        app.run();
+    }
 
-    qtApp.exec();
-
-    delete mainWin;
+    logDebug() << "YQPkgApplication finished" << endl;
 
     return 0;
 }

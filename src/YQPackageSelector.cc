@@ -145,9 +145,7 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
     _excludeDevelPkgs		= 0;
     _excludeDebugInfoPkgs	= 0;
 
-    // VERSION is a command-line #define (-DVERSION="1.2.3") added
-    // to the compiler command line by cmake from ../../VERSION.cmake
-    logInfo() << "This is libyui-qt-pkg " << VERSION << endl;
+    logDebug() << "Creating YQPackageSelectorBase..." << endl;
 
     if ( onlineUpdateMode() )	logInfo() << "Online update mode" << endl;
     if ( updateMode() )		logInfo() << "Update mode" << endl;
@@ -254,8 +252,6 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
     if ( _filters->diskUsageList() )
 	_filters->diskUsageList()->updateDiskUsage();
 
-    logInfo() << "PackageSelector init done" << endl;
-
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
@@ -268,6 +264,7 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
     }
 #endif
 
+    logDebug() << "YQPackageSelectorBase init done" << endl;
 }
 
 
@@ -1883,5 +1880,3 @@ void YQPackageSelector::normalCursor()
 {
     ::normalCursor();
 }
-
-

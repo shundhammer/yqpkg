@@ -35,6 +35,7 @@ set( SOURCES
   YQPackageSelectorHelp.cc
   YQPatternSelector.cc
 
+  YQPkgApplication.cc
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc
   YQPkgClassFilterView.cc
