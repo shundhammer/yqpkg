@@ -41,6 +41,8 @@
 
 #include "YQPkgRepoList.h"
 
+#define TIME_FILTER     0
+
 
 using std::string;
 using std::list;
@@ -51,7 +53,7 @@ using std::vector;
 YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     : QY2ListView( parent )
 {
-    logDebug() << "Creating repository list" << endl;
+    // logVerbose() << "Creating repository list" << endl;
 
     _nameCol	= -1;
     _urlCol	= -1;
@@ -78,7 +80,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     sortByColumn( nameCol(), Qt::AscendingOrder );
     selectSomething();
 
-    logDebug() << "Creating repository list done" << endl;
+    // logVerbose() << "Creating repository list done" << endl;
 }
 
 
@@ -92,7 +94,7 @@ void
 YQPkgRepoList::fillList()
 {
     clear();
-    logDebug() << "Filling repository list" << endl;
+    // logVerbose() << "Filling repository list" << endl;
 
     for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
 	  it != ZyppRepositoriesEnd();
@@ -101,7 +103,7 @@ YQPkgRepoList::fillList()
 	addRepo( *it );
     }
 
-    logDebug() << "Inst repository filled" << endl;
+    // logVerbose() << "Inst repository filled" << endl;
 }
 
 
@@ -125,9 +127,11 @@ YQPkgRepoList::filter()
 {
     emit filterStart();
 
+#if TIME_FILTER
     logInfo() << "Collecting packages in selected repositories..." << endl;
     QElapsedTimer stopWatch;
     stopWatch.start();
+#endif
 
 
     //
@@ -160,9 +164,11 @@ YQPkgRepoList::filter()
 	}
     }
 
+#if TIME_FILTER
     logDebug() << "Packages sent to package list. Elapsed time: "
 	       << stopWatch.elapsed() / 1000.0 << " sec"
 	       << endl;
+#endif
 
     emit filterFinished();
 }

@@ -45,7 +45,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     : YQPkgObjList( parent )
 //FIXME "base class works with zypp::Resolvable, but zypp::Locale isn't one any longer!"
 {
-    logDebug() << "Creating language list" << endl;
+    // logVerbose() << "Creating language list" << endl;
 
     int numCol = 0;
     QStringList headers;
@@ -76,7 +76,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     selectSomething();
     resizeColumnToContents(_statusCol);
 
-    logDebug() << "Creating language list done" << endl;
+    // logVerbose() << "Creating language list done" << endl;
 }
 
 
@@ -90,7 +90,7 @@ void
 YQPkgLangList::fillList()
 {
     clear();
-    logDebug() << "Filling language list" << endl;
+    // logVerbose() << "Filling language list" << endl;
 
     zypp::LocaleSet locales = zypp::getZYpp()->pool().getAvailableLocales();
 
@@ -101,7 +101,7 @@ YQPkgLangList::fillList()
         addLangItem( *it );
     }
 
-    logDebug() << "Language list filled" << endl;
+    // logVerbose() << "Language list filled" << endl;
 }
 
 

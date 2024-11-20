@@ -121,14 +121,14 @@ YQIconPool::loadIcon( const QString icon_name, const bool enabled )
 
     if ( QIcon::hasThemeIcon( icon_name ) )
     {
-        logDebug() << "Loading theme icon " << icon_name << endl;
+        // logVerbose() << "Loading theme icon " << icon_name << endl;
 
         QIcon icon = QIcon::fromTheme( icon_name, QIcon( ":/" + icon_name ) );
         iconPixmap = icon.pixmap( QSize( 16, 16 ), enabled ? QIcon::Normal : QIcon::Disabled );
     }
     else
     {
-        logDebug() << "Loading built-in icon " << icon_name << endl;
+        // logVerbose() << "Loading built-in icon " << icon_name << endl;
 
         QIcon icon = QIcon( ":/" + icon_name );
         iconPixmap = icon.pixmap( QSize( 16, 16 ), enabled ? QIcon::Normal : QIcon::Disabled );

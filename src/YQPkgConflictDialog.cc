@@ -50,6 +50,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define SOLVING_TIMER           0
 
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
@@ -230,19 +231,23 @@ YQPkgConflictDialog::solveAndShowConflicts()
 {
     prepareSolving();
 
+#if SOLVING_TIMER
     logDebug() << "Solving..." << endl;
     QElapsedTimer solveTime;
     solveTime.start();
+#endif
 
     // Solve.
 
     bool success = zypp::getZYpp()->resolver()->resolvePool();
 
+#if SOLVING_TIMER
     _totalSolveTime += solveTime.elapsed() / 1000.0;
 
     logDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
 	       << " s - average: "  << " s" << averageSolveTime()
 	       << endl;
+#endif
 
     return processSolverResult( success );
 }

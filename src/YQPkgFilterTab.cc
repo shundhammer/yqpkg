@@ -666,7 +666,7 @@ YQPkgFilterTab::loadSettings()
 
 	if ( page )
 	{
-	    logDebug() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
+	    // logVerbose() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
 	    showPage( page );
 	}
 	else
