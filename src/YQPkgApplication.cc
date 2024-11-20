@@ -81,9 +81,11 @@ bool YQPkgApplication::runningAsRoot()
 void YQPkgApplication::initZypp()
 {
     logDebug() << "Initializing zypp..." << endl;
+
     zypp_ptr()->initializeTarget( "/",
-                                  false );      // rebuild_rpmdb
-    zypp_ptr()->target()->load();
+                                  false );  // rebuild_rpmdb
+    zypp_ptr()->target()->load(); // Load pkgs from the target (rpmdb)
+
 
     logDebug() << "Initializing zypp done" << endl;
 }
