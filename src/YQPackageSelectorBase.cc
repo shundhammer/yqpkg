@@ -37,6 +37,7 @@
 #include "Exception.h"
 
 #include "YQi18n.h"
+#include "YQPkgApplication.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
@@ -211,6 +212,12 @@ YQPackageSelectorBase::reject()
     }
 
     bool confirm = false;
+
+    if ( ! YQPkgApplication::runningAsRoot() && changes )
+    {
+        logInfo() << "Read-only mode (no root privileges) - abandoning changes" << endl;
+        changes = false;
+    }
 
     if ( changes )
     {

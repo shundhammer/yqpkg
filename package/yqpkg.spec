@@ -19,7 +19,7 @@
 Name:           yqpkg
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        0.1.0
+Version:        0.3.0
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
