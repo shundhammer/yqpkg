@@ -27,6 +27,18 @@ void Exception::setSrcLocation( const QString &srcFile,
     _srcFile	 = srcFile;
     _srcLine	 = srcLine;
     _srcFunction = srcFunction;
+
+    if ( _srcFile.contains( "/" ) )
+    {
+        // CMake just dumps the whole path wholesale to the compiler command
+        // line which gcc merrily uses as __FILE__; which results in
+        // abysmal-looking log lines.
+        //
+        // So let's cut off the path: Use only the last (No. -1) section
+        // delimited with '/'.
+
+        _srcFile = _srcFile.section( '/', -1 );
+    }
 }
 
 
