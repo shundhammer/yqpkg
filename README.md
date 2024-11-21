@@ -13,8 +13,7 @@ GPL V2; see file LICENSE.
 
 Pre-alpha.
 
-The binary is standalone already, not needing any YaST infrastructure or libs,
-just libzypp and Qt 5.
+For details, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
 
 
 ## Building
