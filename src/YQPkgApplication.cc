@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -51,9 +51,9 @@ YQPkgApplication::~YQPkgApplication()
     }
 
     shutdownZypp();
+    _instance = 0;
 
     logDebug() << "Destroying YQPkgApplication done" << endl;
-    _instance = 0;
 }
 
 
@@ -93,10 +93,10 @@ void YQPkgApplication::initZypp()
 {
     logDebug() << "Initializing zypp..." << endl;
 
-    zypp_ptr()->initializeTarget( "/",
-                                  false );  // rebuild_rpmdb
-    zypp_ptr()->target()->load(); // Load pkgs from the target (rpmdb)
+    zyppPtr()->initializeTarget( "/", false );  // don't rebuild rpmdb
+    zyppPtr()->target()->load(); // Load pkgs from the target (rpmdb)
 
+    loadRepos();
 
     logDebug() << "Initializing zypp done" << endl;
 }
@@ -106,55 +106,75 @@ void YQPkgApplication::shutdownZypp()
 {
     logDebug() << "Shutting down zypp..." << endl;
 
-    _zypp_pointer = 0;
+    _repo_manager_ptr.reset();  // deletes the RepoManager
+    _zypp_ptr.reset();          // deletes the ZYpp instance
 
     logDebug() << "Shutting down zypp done" << endl;
 }
+
 
 //
 // Stolen from yast-pkg-bindings/src/PkgFunctions.cc
 //
 
 zypp::ZYpp::Ptr
-YQPkgApplication::zypp_ptr()
+YQPkgApplication::zyppPtr()
 {
-    if ( _zypp_pointer )
-	return _zypp_pointer;
+    if ( _zypp_ptr )
+	return _zypp_ptr;
 
-    int max_count = 5;
-    unsigned int wait_seconds = 3;
+    int maxCount = 5;
+    unsigned int waitSeconds = 3;
 
-    while ( _zypp_pointer == NULL && max_count > 0 )
+    while ( _zypp_ptr == NULL && maxCount > 0 )
     {
 	try
 	{
 	    logInfo() << "Initializing Zypp library..." << endl;
-	    _zypp_pointer = zypp::getZYpp();
+	    _zypp_ptr = zypp::getZYpp();
 
  	    // initialize solver flag, be compatible with zypper
-	    _zypp_pointer->resolver()->setIgnoreAlreadyRecommended( true );
+	    _zypp_ptr->resolver()->setIgnoreAlreadyRecommended( true );
 
-	    return _zypp_pointer;
+	    return _zypp_ptr;
 	}
 	catch ( const zypp::Exception & ex )
 	{
-	    if ( max_count == 1 )  // last attempt?
+	    if ( maxCount == 1 )  // last attempt?
 		ZYPP_RETHROW( ex );
 	}
 
-	max_count--;
+	maxCount--;
 
-	if ( _zypp_pointer == NULL && max_count > 0 )
-	    sleep( wait_seconds );
+	if ( _zypp_ptr == NULL && maxCount > 0 )
+	    sleep( waitSeconds );
     }
 
-    if ( _zypp_pointer == NULL )
+    if ( _zypp_ptr == NULL )
     {
 	// Still not initialized; throw an exception.
 	// Translators: This is an error message
 	THROW( Exception( _( "Cannot connect to the package manager" ) ) );
     }
 
-    return _zypp_pointer;
+    return _zypp_ptr;
 }
 
+
+RepoManager_Ptr
+YQPkgApplication::repoManager()
+{
+    if ( ! _repo_manager_ptr )
+    {
+        logDebug() << "Creating RepoManager" << endl;
+        _repo_manager_ptr.reset( new zypp::RepoManager() );
+    }
+
+    return _repo_manager_ptr;
+}
+
+
+void YQPkgApplication::loadRepos()
+{
+    repoManager();
+}
