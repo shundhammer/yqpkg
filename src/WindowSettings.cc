@@ -1,10 +1,17 @@
-/*
- *   File name: WindowSettings.cpp
- *   Summary:	Helper class for QSettings
- *   License:	GPL V2 - See file LICENSE for details.
- *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
- *              Donated by the QDirStat project.
+/*  ------------------------------------------------------
+              __   _____  ____  _         
+              \ \ / / _ \|  _ \| | ____ _ 
+               \ V / | | | |_) | |/ / _` |
+                | || |_| |  __/|   < (_| |
+                |_| \__\_\_|   |_|\_\__, |
+                                    |___/
+    ------------------------------------------------------
+
+    Project:  YQPkg Package Selector
+    Copyright (c) 2024 SUSE LLC
+    License:  GPL V2 - See file LICENSE for details.
+
+    Textdomain "qt-pkg"
  */
 
 
