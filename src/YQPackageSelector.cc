@@ -680,7 +680,8 @@ YQPackageSelector::addMenus()
     _fileMenu->addSeparator();
 
     _fileMenu->addAction( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->addAction( _( "&Quit -- Save Changes"	 ), this, SLOT( accept() ) );
+    action = _fileMenu->addAction( _( "&Quit -- Save Changes"	 ), this, SLOT( accept() ) );
+    action->setEnabled( YQPkgApplication::runningAsRoot() );
 
 
     if ( _pkgList )
