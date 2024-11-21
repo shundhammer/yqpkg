@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -152,7 +152,8 @@ YQPkgObjList::pkgObjClicked( int		button,
 
     if ( item )
     {
-        //y2internal("CLICKED: %s", item->zyppObj()->name().c_str());
+        // logDebug() << "CLICKED: %s", item->zyppObj()->name().c_str()) << endl;
+
 	if ( button == Qt::LeftButton )
 	{
 	    if ( col == statusCol() )
