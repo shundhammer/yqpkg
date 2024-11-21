@@ -13,7 +13,7 @@ GPL V2; see file LICENSE.
 
 Pre-alpha.
 
-For details, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
+For details and screenshots, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
 
 
 ## Building
@@ -62,6 +62,8 @@ _TO DO: More information_
 
 
 ## Reference
+
+- Development status and screenshots: [issue #1](https://github.com/shundhammer/yqpkg/issues/1)
 
 - [Original project](https://github.com/libyui/libyui) that this was forked from
 - [2024/11 SUSE Hack Week Project](https://hackweek.opensuse.org/24/projects/yqpkg-bringing-the-single-package-selection-back-to-life)
