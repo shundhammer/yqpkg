@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -123,7 +123,7 @@ public slots:
     virtual void showDetails( ZyppSel selectable ) = 0;
 
 
-    
+
 protected slots:
 
     /**
@@ -134,7 +134,7 @@ protected slots:
 
 
 protected:
-    
+
     // Data members
 
     QTabWidget	* 	_parentTab;

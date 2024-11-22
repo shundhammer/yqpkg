@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -29,7 +29,7 @@ void busyCursor()
 void normalCursor()
 {
     // qApp is Qt's global QApplication instance
-    
+
     while ( qApp->overrideCursor() )
 	qApp->restoreOverrideCursor();
 }

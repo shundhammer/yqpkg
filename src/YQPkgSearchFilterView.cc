@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -163,7 +163,7 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
     if ( event )
     {
 	if ( event->modifiers() == Qt::NoModifier ||    // No Ctrl / Alt / Shift etc. pressed
-             event->modifiers() == Qt::KeypadModifier )	
+             event->modifiers() == Qt::KeypadModifier )
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
@@ -329,7 +329,7 @@ YQPkgSearchFilterView::filter()
 	    blanks.fill( ' ', 50 - heading.length() );
 	    heading += blanks;
 	}
-	
+
 	msgBox.setText( heading );
 	msgBox.setIcon( QMessageBox::Warning );
 	msgBox.setInformativeText( fromUTF8( exception.what() ) );

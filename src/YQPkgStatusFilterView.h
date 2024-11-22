@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -83,7 +83,7 @@ public slots:
      * Reset all check boxes (set them all to "off")
      **/
     void clear();
-    
+
     /**
      * Set up the check boxes so all pending transactions are displayed.
      **/
@@ -94,7 +94,7 @@ public slots:
      * are displayed.
      **/
     void showManualTransactions();
-    
+
     /**
      * Set up the check boxes so pending automatic transactions (the "auto" states)
      * are displayed.
@@ -116,7 +116,7 @@ public slots:
      **/
     void showNotInstalled();
 
-    
+
 signals:
 
     /**

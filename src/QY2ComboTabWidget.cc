@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -55,7 +55,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     hbox->addWidget(_comboBox);
     _comboLabel->setBuddy( _comboBox );
     _comboBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    
+
     connect( _comboBox, SIGNAL( activated    ( int ) ),
              this,      SLOT  ( showPageIndex( int ) ) );
 

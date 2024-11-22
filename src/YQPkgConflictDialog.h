@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -99,7 +99,7 @@ public slots:
      **/
     int verifySystem();
 
-    
+
 #if FIXME_SOLVER_TEST_CASE
     /**
      * Mini-wizard to generate solver test case:
@@ -114,7 +114,7 @@ public slots:
     void askCreateSolverTestCase();
 #endif
 
-    
+
 signals:
 
     /**
@@ -127,7 +127,7 @@ protected:
 
     /**
      * Initialize solving: Post "busy" popup etc.
-     **/ 
+     **/
     void prepareSolving();
 
     /**
@@ -136,7 +136,7 @@ protected:
      * Returns either QDialog::Accepted or QDialog::Rejected.
      **/
     int  processSolverResult( bool success );
-    
+
 
     //
     // Data members

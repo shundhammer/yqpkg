@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -78,14 +78,14 @@ void
 YQPkgConflictList::clear()
 {
     YQPkgConflict * conflict;
-    
+
     foreach( conflict, _conflicts )
     {
         _layout->removeWidget( conflict );
         delete conflict;
     }
     _conflicts.clear();
-    
+
     // kill the stretch item, too
     delete _layout->takeAt( 0 );
 }
@@ -120,7 +120,7 @@ void YQPkgConflictList::relayout()
     QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
 
     YQPkgConflict * conflict;
-    
+
     foreach( conflict, _conflicts )
     {
         minSize = minSize.expandedTo( conflict->minimumSizeHint() );
@@ -135,7 +135,7 @@ YQPkgConflictList::applyResolutions()
 {
     zypp::ProblemSolutionList userChoices;
     YQPkgConflict *           conflict;
-    
+
     foreach( conflict, _conflicts )
     {
         zypp::ProblemSolution_Ptr userChoice = conflict->userSelectedResolution();
@@ -196,7 +196,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     file.write(header.toUtf8());
 
     YQPkgConflict * conflict;
-    
+
     foreach( conflict, _conflicts )
     {
 	conflict->saveToFile( file );
@@ -228,9 +228,9 @@ YQPkgConflict::YQPkgConflict( QWidget *				parent,
     _layout = new QVBoxLayout( this );
     _layout->setSpacing( 0 );
     _layout->setMargin( 0 );
-    
+
     formatHeading();
-    
+
     QLabel * detailsLabel = new QLabel( fromUTF8 ( _problem->details() ), this );
     _layout->addWidget( detailsLabel );
 
@@ -246,7 +246,7 @@ YQPkgConflict::formatHeading()
 {
     QFrame * frame = new QFrame( this );
     frame->setProperty( "class", "conflict-frame" );
-    
+
     QHBoxLayout * hbox  = new QHBoxLayout( frame );
 
     QLabel * pix = new QLabel( this );
@@ -258,7 +258,7 @@ YQPkgConflict::formatHeading()
     heading->setProperty( "class", "conflict-heading" );
     heading->setStyleSheet( "font-size: +2; font: bold;" );
     hbox->addWidget( heading );
-    
+
     hbox->addStretch( 1 );
 
     _layout->addWidget( frame );
@@ -293,23 +293,23 @@ YQPkgConflict::addSolutions()
         _solutions[ solutionButton ] = *it;
 
         QString details = fromUTF8( ( *it )->details() );
-	
+
         if ( ! details.isEmpty() )
         {
             QStringList lines = details.split( "\n" );
-	    
+
             if ( lines.count() > 7 )
             {
                 details = "<qt>";
-		
+
                 for ( int i = 0; i < 4; i++ )
                     details += lines[i] + "<br>\n";
-		
+
                 details += _( "<a href='/'>%1 more...</a>" ).arg( lines.count() - 4 );
             }
-	    
+
             QLabel * detailsLabel = new QLabel( details, this );
-	    
+
             connect( detailsLabel, 	SIGNAL( linkActivated ( const QString & ) ),
                      this,		SLOT  ( detailsExpanded()                 ) );
 
@@ -319,7 +319,7 @@ YQPkgConflict::addSolutions()
             vbox->addLayout( hbox );
             _details[ detailsLabel ] = *it;
         }
-	
+
 	++it;
     }
 }
@@ -328,7 +328,7 @@ void
 YQPkgConflict::detailsExpanded()
 {
     QLabel * obj = qobject_cast<QLabel*>( sender() );
-    
+
     if ( !obj || ! _details.contains( obj ) )
         return;
 
@@ -390,7 +390,7 @@ YQPkgConflict::saveToFile( QFile &file ) const
 	buffer += "\n";
         file.write( buffer.toUtf8() );
     }
-    
+
     file.write( "\n\n" );
 }
 

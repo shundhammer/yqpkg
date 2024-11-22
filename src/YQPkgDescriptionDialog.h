@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -46,7 +46,7 @@ public:
      **/
     virtual QSize sizeHint () const;
 
-    
+
 protected:
 
     /**
@@ -57,7 +57,7 @@ protected:
 
     /**
      * Apply the filter criteria: Fill the pkg list with pkgs that match the
-     * specified package name.  
+     * specified package name.
      **/
     void filter( const QString & pkgName );
 

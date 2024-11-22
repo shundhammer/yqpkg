@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -53,7 +53,7 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 
 
     QString html_text = htmlStart();
-    
+
     html_text += htmlHeading( selectable );
 
     ZyppPkg candidate = tryCastToZyppPkg( selectable->candidateObj() );
@@ -125,7 +125,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
     html += row( hcell( _( "Source Package:"    ) ) + cell( pkg->sourcePkgName() + "-" + pkg->sourcePkgEdition().asString() ) );
     html += row( hcell( _( "Media No.:"		) ) + cell( pkg->mediaNr()			) );
     html += row( hcell( _( "Authors:"		) ) + authorsListCell( pkg			) );
-    
+
     html = "<br>" + table( html );
 
     return html;
@@ -159,14 +159,14 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
     html += row( hcell( _( "Architecture:"	) ) + cell( p1->arch().asString()		) + cell( p2->arch().asString()		) );
     html += row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		) );
     html += row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			) );
-    html += row( hcell( _( "Source Package:"	) ) + cell( p1->sourcePkgName() + "-" + p1->sourcePkgEdition().asString() )	
+    html += row( hcell( _( "Source Package:"	) ) + cell( p1->sourcePkgName() + "-" + p1->sourcePkgEdition().asString() )
 						    + cell( p2->sourcePkgName() + "-" + p2->sourcePkgEdition().asString()		) );
     html += row( hcell( _( "Media No.:"		) ) + cell( p1->mediaNr()			) + cell( p2->mediaNr()			) );
     html += row( hcell( _( "Authors:"		) ) + authorsListCell( p1			) + authorsListCell( p2			) );
 
 
     html = "<br>" + table( html );
-    
+
     return html;
 }
 

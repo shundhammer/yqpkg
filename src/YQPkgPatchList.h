@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -176,7 +176,7 @@ signals:
 
 
 protected:
-   /** 
+   /**
      * returns or creates a category item for a defined category
      */
     YQPkgPatchCategoryItem * category( YQPkgPatchCategory category );
@@ -329,7 +329,7 @@ public:
      * Reimplemented from QListViewItem to force categories open at all times
      **/
     virtual void setExpanded( bool open );
-    
+
     /**
      * Maps a string patch category to the corresponding enum.
      **/
@@ -340,7 +340,7 @@ public:
      **/
     static QString asString( YQPkgPatchCategory category );
 
-   
+
     /**
      * Category (and order ) for this item
      */

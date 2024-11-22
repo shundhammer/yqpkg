@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -124,14 +124,14 @@ public slots:
      * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
      **/
     void clear();
-    
+
     /**
      * Sort the tree widget again according to the column selected and
      * its current sort order.
      **/
     void resort();
 
-    
+
 protected:
 
     /**
@@ -153,7 +153,7 @@ protected:
      * Needed for empty list.
      **/
     void resetOptimalColumnWidthValues();
-    
+
     /**
      * Set and save optimal column widths depending on content only
      * There is currently no way to get the optimal widths without setting them, so we have to do it.
@@ -177,7 +177,7 @@ protected:
     //
 
     // Optimal (sized-to-content) column widths
-    
+
     int _optimalColWidth_statusIcon;
     int _optimalColWidth_name;
     int _optimalColWidth_summary;

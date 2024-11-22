@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -81,7 +81,7 @@ public:
 
     /**
      * Add a page with a user-visible "pageLabel", a widget with the page
-     * content and an internal name (or ID). 
+     * content and an internal name (or ID).
      * 'pageContent' will be reparented to a subwidget of this class.
      **/
     void addPage( const QString &       pageLabel,

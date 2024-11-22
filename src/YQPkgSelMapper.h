@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -60,7 +60,7 @@ public:
     /**
      * Rebuild the shared cache. This is expensive. Call this only when the
      * ZyppPool has changed, i.e. after installation sources were added or
-     * removed. 
+     * removed.
      *
      * Since the cache is shared, this affects all instances of this class.
      **/

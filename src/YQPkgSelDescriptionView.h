@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -57,7 +57,7 @@ protected:
 
     /**
      * Check if 'icon' exists. Returns 'icon' if it exists and an empty string
-     * if it doesn't exist. 
+     * if it doesn't exist.
      **/
     QString findIcon( const QString & icon ) const;
 };

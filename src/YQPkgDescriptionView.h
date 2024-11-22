@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -66,7 +66,7 @@ protected:
      * Format a multi-line text into paragraphs
      **/
     QString simpleHtmlParagraphs( QString text );
-    
+
     /**
      * Show information for a hyperlinked object,
      * e.g., a "pkg:somepkg" link to another package.

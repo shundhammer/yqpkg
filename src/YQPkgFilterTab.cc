@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -642,7 +642,7 @@ void
 YQPkgFilterTab::loadSettings()
 {
     closeAllPages();
-    
+
     QSettings settings;
     settings.beginGroup( priv->settingsName );
 
@@ -706,7 +706,7 @@ YQPkgFilterTab::saveSettings()
 
     if ( currentPage )
 	settings.setValue( "Current_Page", currentPage->id );
-    
+
     settings.endGroup();
 }
 

@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -171,8 +171,8 @@ protected:
      **/
     void filter( const QRegExp & regexp, Filters f = FilterAutomatic );
 
-    /** 
-     * extra filter for child classes 
+    /**
+     * extra filter for child classes
      */
     virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
 
@@ -230,7 +230,7 @@ public:
                                              Filters f = FilterAutomatic,
                                              Options o = OptionAutoAcceptIfEmpty );
 protected:
-  /** 
+  /**
    * leave supported packages out.
    */
   virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );

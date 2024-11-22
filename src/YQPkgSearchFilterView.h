@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -140,12 +140,12 @@ protected:
     bool check( ZyppSel	selectable,
 		ZyppObj 	zyppObj,
 		const QRegExp & 		regexp );
-    
+
     /**
      * Check if a single pkg attribute matches the search criteria.
      **/
     bool check( const string & attribute, const QRegExp & regexp );
-    
+
     /**
      * Check capability like
      * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),

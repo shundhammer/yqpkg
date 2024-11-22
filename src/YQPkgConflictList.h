@@ -1,6 +1,6 @@
 /*  ------------------------------------------------------
-              __   _____  ____  _         
-              \ \ / / _ \|  _ \| | ____ _ 
+              __   _____  ____  _
+              \ \ / / _ \|  _ \| | ____ _
                \ V / | | | |_) | |/ / _` |
                 | || |_| |  __/|   < (_| |
                 |_| \__\_\_|   |_|\_\__, |
@@ -153,13 +153,13 @@ public:
      **/
     void saveToFile( QFile &file ) const;
 
-					
+
 protected slots:
-    
+
     void detailsExpanded();
 
 signals:
-    
+
     void expanded();
 
 protected:
