@@ -18,15 +18,12 @@
 #ifndef YQPkgApplication_h
 #define YQPkgApplication_h
 
-#include <list>
 #include <QObject>
-
 #include <zypp/ZYpp.h>
-#include <zypp/RepoManager.h>
-#include <zypp/RepoInfo.h>
 
 
 class YQPackageSelector;
+class YQPkgRepoManager;
 
 typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
@@ -70,18 +67,6 @@ public:
      **/
     static bool runningAsRoot();
 
-    /**
-     * Return the connection to zypp.
-     * The first call will establish the connection.
-     **/
-    zypp::ZYpp::Ptr zyppPtr();
-
-
-    /**
-     * Return the repo manager. The first call will create it.
-     **/
-    RepoManager_Ptr repoManager();
-
 
 protected:
 
@@ -90,19 +75,29 @@ protected:
      **/
     void createPkgSel();
 
-    void initZypp();
-    void shutdownZypp();
-    void loadRepos();
+    /**
+     * Initialize and attach the repos:
+     *
+     *   - Create the YQPkgRepoManager
+     *   - Connect to libzypp
+     *   - initialize the target (load the resolvables from the RPMDB)
+     *   - attach all active repos
+     **/
+    void attachRepos();
+
+    /**
+     * Shut down and detach the repos.
+     * This also destroys the YQPkgRepoManager.
+     **/
+    void detachRepos();
+
 
     //
     // Data members
     //
 
     YQPackageSelector * _pkgSel;
-
-    zypp::ZYpp::Ptr     _zypp_ptr;
-    RepoManager_Ptr     _repo_manager_ptr;
-    RepoInfoList        _repos;
+    YQPkgRepoManager  * _yqPkgRepoManager;
 
     static YQPkgApplication * _instance;
 };

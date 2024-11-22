@@ -40,7 +40,8 @@ QIcon QY2IconLoader::loadIcon( const QString & iconName )
 
 QIcon QY2IconLoader::loadThemeIcon( const QString & iconName )
 {
-    logVerbose() << "Using theme icon for " << iconName << endl;
+    // logVerbose() << "Using theme icon for " << iconName << endl;
+
     return QIcon::fromTheme( iconName );
 }
 
@@ -50,10 +51,12 @@ QIcon QY2IconLoader::loadIconFromPath( const QString & iconName )
     if ( access( iconName.toUtf8(), R_OK ) != 0 )
     {
         logWarning() << "Can't open icon file " << iconName << endl;
+
         return QIcon();
     }
 
-    logVerbose() << "Loading icon from absolute path " << iconName << endl;
+    // logVerbose() << "Loading icon from absolute path " << iconName << endl;
+
     return QIcon( iconName );
 }
 
@@ -68,12 +71,14 @@ QIcon QY2IconLoader::loadBuiltInIcon( const QString & iconName )
     if ( QFile( iconPath ).exists() )
         // Using QFile because it can handle Qt resources and their aliases
     {
-        logVerbose() << "Using built-in icon " << iconName << endl;
+        // logVerbose() << "Using built-in icon " << iconName << endl;
+
         return QIcon( iconPath );
     }
     else
     {
         logWarning() << "No built-in icon " << iconName << endl;
+
         return QIcon();
     }
 }

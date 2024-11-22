@@ -18,12 +18,14 @@
 #include <unistd.h>     // getuid()
 
 #include <QApplication>
+#include <QMessageBox>
 
-#include "YQi18n.h"
-#include "YQPackageSelector.h"
-#include "YQPkgApplication.h"
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "YQPackageSelector.h"
+#include "YQi18n.h"
+#include "YQPkgRepoManager.h"
+#include "YQPkgApplication.h"
 
 
 YQPkgApplication * YQPkgApplication::_instance = 0;
@@ -32,11 +34,12 @@ YQPkgApplication * YQPkgApplication::_instance = 0;
 YQPkgApplication::YQPkgApplication()
     : QObject()
     , _pkgSel(0)
+    , _yqPkgRepoManager(0)
 {
     _instance = this;
     logDebug() << "Creating YQPkgApplication" << endl;
 
-    initZypp();
+    attachRepos();
 }
 
 
@@ -45,12 +48,9 @@ YQPkgApplication::~YQPkgApplication()
     logDebug() << "Destroying YQPkgApplication..." << endl;
 
     if ( _pkgSel )
-    {
         delete _pkgSel;
-        _pkgSel = 0;
-    }
 
-    shutdownZypp();
+    detachRepos();
     _instance = 0;
 
     logDebug() << "Destroying YQPkgApplication done" << endl;
@@ -89,92 +89,43 @@ bool YQPkgApplication::runningAsRoot()
 }
 
 
-void YQPkgApplication::initZypp()
+void YQPkgApplication::attachRepos()
 {
     logDebug() << "Initializing zypp..." << endl;
 
-    zyppPtr()->initializeTarget( "/", false );  // don't rebuild rpmdb
-    zyppPtr()->target()->load(); // Load pkgs from the target (rpmdb)
+    if ( ! _yqPkgRepoManager )
+    {
+        _yqPkgRepoManager = new YQPkgRepoManager();
+        CHECK_NEW( _yqPkgRepoManager );
+    }
 
-    loadRepos();
+    try
+    {
+        _yqPkgRepoManager->zyppConnect(); // This may throw
+        _yqPkgRepoManager->initTarget();
+        _yqPkgRepoManager->attachRepos();
+    }
+    catch ( ... )
+    {
+        QString message = _( "Can't connect to the package manager!\n"
+                             "It may be busy in another window.\n" );
+
+        QMessageBox::warning( 0, // parent
+                              _( "Error" ),
+                              message,
+                              QMessageBox::Ok );
+        throw;
+    }
 
     logDebug() << "Initializing zypp done" << endl;
 }
 
 
-void YQPkgApplication::shutdownZypp()
+void YQPkgApplication::detachRepos()
 {
-    logDebug() << "Shutting down zypp..." << endl;
-
-    _repo_manager_ptr.reset();  // deletes the RepoManager
-    _zypp_ptr.reset();          // deletes the ZYpp instance
-
-    logDebug() << "Shutting down zypp done" << endl;
-}
-
-
-//
-// Stolen from yast-pkg-bindings/src/PkgFunctions.cc
-//
-
-zypp::ZYpp::Ptr
-YQPkgApplication::zyppPtr()
-{
-    if ( _zypp_ptr )
-	return _zypp_ptr;
-
-    int maxCount = 5;
-    unsigned int waitSeconds = 3;
-
-    while ( _zypp_ptr == NULL && maxCount > 0 )
+    if ( _yqPkgRepoManager )
     {
-	try
-	{
-	    logInfo() << "Initializing Zypp library..." << endl;
-	    _zypp_ptr = zypp::getZYpp();
-
- 	    // initialize solver flag, be compatible with zypper
-	    _zypp_ptr->resolver()->setIgnoreAlreadyRecommended( true );
-
-	    return _zypp_ptr;
-	}
-	catch ( const zypp::Exception & ex )
-	{
-	    if ( maxCount == 1 )  // last attempt?
-		ZYPP_RETHROW( ex );
-	}
-
-	maxCount--;
-
-	if ( _zypp_ptr == NULL && maxCount > 0 )
-	    sleep( waitSeconds );
+        delete _yqPkgRepoManager;
+        _yqPkgRepoManager = 0;
     }
-
-    if ( _zypp_ptr == NULL )
-    {
-	// Still not initialized; throw an exception.
-	// Translators: This is an error message
-	THROW( Exception( _( "Cannot connect to the package manager" ) ) );
-    }
-
-    return _zypp_ptr;
-}
-
-
-RepoManager_Ptr
-YQPkgApplication::repoManager()
-{
-    if ( ! _repo_manager_ptr )
-    {
-        logDebug() << "Creating RepoManager" << endl;
-        _repo_manager_ptr.reset( new zypp::RepoManager() );
-    }
-
-    return _repo_manager_ptr;
-}
-
-
-void YQPkgApplication::loadRepos()
-{
-    repoManager();
 }

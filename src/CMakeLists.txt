@@ -61,6 +61,7 @@ set( SOURCES
   YQPkgProductList.cc
   YQPkgRepoFilterView.cc
   YQPkgRepoList.cc
+  YQPkgRepoManager.cc
   YQPkgSearchFilterView.cc
   YQPkgSecondaryFilterView.cc
   YQPkgSelDescriptionView.cc
