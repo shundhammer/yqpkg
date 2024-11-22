@@ -91,9 +91,26 @@ protected:
     zypp::ZYpp::Ptr zyppConnectInternal( int attempts    = 5,
                                          int waitSeconds = 3 );
 
-
-    void initZypp();
+    /**
+     * Shut down all the zypp objects that we created in the correct order.
+     **/
     void shutdownZypp();
+
+    /**
+     * Find the enabled repos from the zypp repo manager and put them into
+     * _repos.
+     **/
+    void findEnabledRepos();
+
+    /**
+     * Refresh the enabled repos if needed.
+     * This is skipped for non-privileged users.
+     **/
+    void refreshRepos();
+
+    /**
+     * Load the resolvables from the enabled repos.
+     **/
     void loadRepos();
 
     //

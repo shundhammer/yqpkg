@@ -20,6 +20,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "YQi18n.h"
+#include "YQPkgApplication.h"
 #include "YQPkgRepoManager.h"
 
 
@@ -134,6 +135,64 @@ YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 
 void YQPkgRepoManager::attachRepos()
 {
-    logDebug() << "TO DO: Load the repos" << endl;
+    // TO DO: Progress callbacks
+    // TO DO: check and load services (?)
+
+    findEnabledRepos();
+    refreshRepos();
+    loadRepos();
 }
 
+
+void YQPkgRepoManager::findEnabledRepos()
+{
+    for ( zypp::RepoManager::RepoConstIterator it = repoManager()->repoBegin();
+          it != repoManager()->repoEnd();
+          ++it )
+    {
+        zypp::RepoInfo repo = *it;
+
+        if ( repo.enabled() )
+        {
+            _repos.push_back( repo );
+
+            logInfo() << "Found repo \"" << repo.name() << "\""
+                      << " URL: " << repo.url().asString()
+                      << endl;
+        }
+        else
+        {
+            logInfo() << "Ignoring disabled repo \"" << repo.name() << "\""
+                      << endl;
+        }
+    }
+}
+
+
+void YQPkgRepoManager::refreshRepos()
+{
+    if ( ! YQPkgApplication::runningAsRoot() )
+    {
+        logWarning() << "Skipping repos refresh for non-root user" << endl;
+        return;
+    }
+
+    // TO DO: Refresh the repos if needed
+}
+
+
+void YQPkgRepoManager::loadRepos()
+{
+    for ( const zypp::RepoInfo & repo: _repos )
+    {
+        logDebug() << "Loading resolvables from " << repo.name() << endl;
+
+        // TO DO: progress callbacks
+	repoManager()->loadFromCache( repo );
+
+        // TO DO: This is greatly simplified.
+        //
+        // See y-pkg-bindings/src/Source_Resolvables.cc for the mind-boggling
+        // gory details.
+    }
+}
