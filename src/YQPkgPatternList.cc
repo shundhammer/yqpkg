@@ -31,6 +31,7 @@
 
 #include "YQPkgPatternList.h"
 
+#define VERBOSE_PATTERN_LIST   0
 
 using std::string;
 using std::set;
@@ -137,9 +138,11 @@ YQPkgPatternList::fillList()
 	    {
 		addPatternItem( *it, zyppPattern );
 	    }
+#if VERBOSE_PATTERN_LIST
 	    else
 		logDebug() << "Pattern " << zyppPattern->name()
 			   << " is not user-visible" << endl;
+#endif
 	}
 	else
 	{
@@ -147,7 +150,11 @@ YQPkgPatternList::fillList()
 	}
     }
 
+
+#if VERBOSE_PATTERN_LIST
     logDebug() << "Pattern list filled" << endl;
+#endif
+
     resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
 }
@@ -163,7 +170,9 @@ YQPkgPatternList::category( const QString & categoryName )
 
     if ( ! cat )
     {
+#if VERBOSE_PATTERN_LIST
 	logDebug() << "New pattern category \""<< categoryName << "\"" << endl;
+#endif
 
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
 	Q_CHECK_PTR( cat );

@@ -40,7 +40,7 @@ YQPkgFilters::singleProductFilter(std::function<bool(const zypp::PoolItem& item)
 
     if (product_it == end)
     {
-        logInfo() << "No product found " << endl;
+        // logDebug() << "No product found " << endl;
         return product;
     }
 
