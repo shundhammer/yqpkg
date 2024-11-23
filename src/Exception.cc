@@ -1,5 +1,5 @@
 /*
- *   File name: Exception.cpp
+ *   File name: Exception.cc
  *   Summary:	Exception classes for yqpkg
  *   License:	GPL V2 - See file LICENSE for details.
  *

@@ -1,5 +1,5 @@
 /*
- *   File name: Logger.cpp
+ *   File name: Logger.cc
  *   Summary:	Logger class for yqpkg
  *   License:	GPL V2 - See file LICENSE for details.
  *
