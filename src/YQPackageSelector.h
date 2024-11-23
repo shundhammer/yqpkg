@@ -63,7 +63,14 @@ class YQPackageSelector : public YQPackageSelectorBase
 
 public:
 
+    /**
+     * Constructor: Create an empty (!) package selector.
+     **/
     YQPackageSelector( QWidget * parent, long modeFlags = 0 );
+
+    /**
+     * Destructor.
+     **/
     ~YQPackageSelector();
 
 

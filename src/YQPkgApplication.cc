@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
+#include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "YQPackageSelector.h"
@@ -69,6 +70,8 @@ void YQPkgApplication::createPkgSel()
     if ( _pkgSel )
         return;
 
+    BusyPopup busyPopup( _( "Preparing the package selector..." ) );
+
     _pkgSel = new YQPackageSelector( 0, 0 );
     CHECK_PTR( _pkgSel );
 
@@ -78,7 +81,6 @@ void YQPkgApplication::createPkgSel()
     QString windowTitle( "YQPkg" );
     windowTitle += runningAsRoot() ? _( " [root]" ) : _( " (read-only)" );
     _pkgSel->setWindowTitle( windowTitle );
-
     _pkgSel->show();
 }
 
@@ -101,9 +103,14 @@ void YQPkgApplication::attachRepos()
 
     try
     {
+        BusyPopup busyPopup( _( "Loading package manager data..." ) );
+
         _yqPkgRepoManager->zyppConnect(); // This may throw
         _yqPkgRepoManager->initTarget();
         _yqPkgRepoManager->attachRepos();
+
+        // The BusyPopup closes when it goes out of scope
+        logDebug() << "Busy Popup closed" << endl;
     }
     catch ( ... )
     {

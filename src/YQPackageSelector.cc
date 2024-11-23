@@ -253,7 +253,7 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
     }
 #endif
 
-    logDebug() << "YQPackageSelectorBase init done" << endl;
+    logDebug() << "YQPackageSelector init done" << endl;
 }
 
 
