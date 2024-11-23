@@ -309,9 +309,11 @@ void
 YQPkgFilterTab::showPage( const QString & internalName )
 {
     YQPkgFilterPage * page = findPage( internalName );
-    CHECK_PTR( page );
 
-    showPage( page );
+    if ( page )
+        showPage( page );
+    else
+        logWarning() << "No page with ID \"" << internalName << "\"" << endl;
 }
 
 
@@ -656,7 +658,7 @@ YQPkgFilterTab::loadSettings()
 
 	if ( page )
 	{
-	    // logVerbose() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
+	    logVerbose() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
 	    showPage( page );
 	}
 	else
