@@ -77,7 +77,7 @@ QIcon QY2IconLoader::loadBuiltInIcon( const QString & iconName )
     }
     else
     {
-        logWarning() << "No built-in icon " << iconName << endl;
+        // logWarning() << "No built-in icon " << iconName << endl;
 
         return QIcon();
     }
