@@ -30,6 +30,7 @@ set( SOURCES
   Exception.cc
   FSize.cc
   WindowSettings.cc
+  Workflow.cc
 
   YQPackageSelector.cc
   YQPackageSelectorBase.cc

@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 #
-# CMakeLists.txt for libyui-qt-pkg
+# CMakeLists.txt for yqpkg
 #
 # Usage:
 #
@@ -23,9 +23,10 @@ project( yqpkg )
 
 # Options usage:
 #
-#   cmake -DBUILD_EXAMPLES=off ..
+#   cmake -DBUILD_TEST=off ..
 
 option( BUILD_SRC         "Build in src/ subdirectory"                on )
+option( BUILD_TEST        "Build in test/ subdirectory"               off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
 
@@ -73,4 +74,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 if ( BUILD_SRC )
   add_subdirectory( src )
+endif()
+
+if ( BUILD_TEST )
+  add_subdirectory( test )
 endif()
