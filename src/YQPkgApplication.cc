@@ -70,10 +70,6 @@ void YQPkgApplication::run()
     createPkgSel();
     _mainWin->showPage( _pkgSel );
 
-    QLabel * bogus = new QLabel( "Ällabätsch" );
-    _mainWin->addPage( bogus );
-    _mainWin->showPage( bogus );
-
     qApp->exec();
 }
 
