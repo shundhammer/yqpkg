@@ -186,7 +186,8 @@ protected:
      **/
     WorkflowStep( const QString & id,
                   const QString & next = QString() )
-        : _id( id )
+        : _workflow(0)
+        , _id( id )
         , _next( next )
         , _includeInHistory(true)
         {}
@@ -273,9 +274,9 @@ public:
 protected:
 
     Workflow * _workflow;
-    QString _id;
-    QString _next;
-    bool _includeInHistory;
+    QString    _id;
+    QString    _next;
+    bool       _includeInHistory;
 };
 
 
