@@ -52,20 +52,22 @@ void TestWfStep::deactivate( bool goingForward )
 }
 
 
-
 int main( int argc, char *argv[] )
 {
     Logger logger( "/tmp/yqpkg-$USER", "workflow-tester.log" );
 
-    QList<WorkflowStep *> workflowSteps;
-    workflowSteps << new TestWfStep( "First Step ID 2",  2 )
-                  << new TestWfStep( "Step ID  4",       4, 8 ) // next: ID 8
-                  << new TestWfStep( "Left out ID 7",    7 )    // Should almost never be seen
-                  << new TestWfStep( "Step ID  8",       8 )
-                  << new TestWfStep( "Step ID 16",      16 )
-                  << new TestWfStep( "Last Step ID 32", 32 );
+    WorkflowStepList workflowSteps;
+    workflowSteps << new TestWfStep( "Init Phase ID 42",  42 )
+                  << new TestWfStep( "Step ID 101",      101 )
+                  << new TestWfStep( "Step ID 102",      102, 103 ) // next: ID 103
+                  << new TestWfStep( "Rare ID  99",       99 )      // Should almost never be seen
+                  << new TestWfStep( "Step ID 103",      103 )
+                  << new TestWfStep( "Step ID 104",      104 )
+                  << new TestWfStep( "Last Step ID 199", 199 );
 
     Workflow * workflow = new Workflow( workflowSteps );
+
+    workflow->step( 42 )->excludeFromHistory();
 
 
     logDebug() << "Going through the workflow past the end" << endl;
@@ -86,9 +88,9 @@ int main( int argc, char *argv[] )
 
     sleep( 1 );
     logNewline();
-    logDebug() << "Going to step 16 directly" << endl;
+    logDebug() << "Going to step 104 directly" << endl;
 
-    workflow->gotoStep( 16 );
+    workflow->gotoStep( 104 );
 
     sleep( 1 );
     logNewline();
@@ -112,7 +114,6 @@ int main( int argc, char *argv[] )
     logNewline();
     logDebug() << "Going forward until the end" << endl;
 
-    // for ( int i=0; i < workflowSteps.size(); i++ )
     while ( ! workflow->atLastStep() )
     {
         logDebug() << "Next" << endl;
@@ -137,11 +138,11 @@ int main( int argc, char *argv[] )
     logNewline();
     logDebug() << "Going on a wild ride" << endl;
 
-    workflow->gotoStep(  7 );
-    workflow->gotoStep( 16 );
-    workflow->gotoStep(  4 );
-    workflow->gotoStep( 32 );
-    workflow->gotoStep( 2 );
+    workflow->gotoStep(  99 ); // the one that is usually skipped
+    workflow->gotoStep( 104 );
+    workflow->gotoStep( 102 );
+    workflow->gotoStep( 199 );
+    workflow->gotoStep( 101 );
 
 
     sleep( 1 );

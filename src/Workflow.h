@@ -23,13 +23,16 @@
 
 class WorkflowStep;
 
+typedef QList<WorkflowStep *> WorkflowStepList;
+
+
 /**
  * Class describing a workflow consisting of workflow steps.
  * This class is meant to be instantiated, not to be derived from.
  *
  * Usage example:
  *
- *   QList<WorkflowStep *> steps;
+ *   WorkflowStepList steps;
  *   steps << new AppInitWorkflowStep     ( WF_InitStep      )
  *         << new AppReadDataWorkflowStep ( WF_ReadDataStep  )
  *         << new AppUserInputWorkflowStep( WF_UserInputStep )
@@ -55,7 +58,7 @@ public:
      * needed. For each step, WorkflowStep::setWorkflow() is called to set its
      * parent workflow to this one.
      **/
-    Workflow( const QList<WorkflowStep *> & steps );
+    Workflow( const WorkflowStepList & steps );
 
     /**
      * Destructor. This will delete all added workflow steps.
@@ -132,7 +135,7 @@ protected:
      * Return 0 if the history is already empty.
      **/
     WorkflowStep * popHistory();
-    
+
     /**
      * Deactivate the current workflow step (if there is any)
      * and activate 'step' instead.
@@ -144,9 +147,9 @@ protected:
     // Data members
     //
 
-    QList<WorkflowStep *> _steps;       // Takes ownership
-    QList<WorkflowStep *> _history;     // no ownership
-    WorkflowStep *        _currentStep;
+    WorkflowStepList _steps;       // Takes ownership
+    WorkflowStepList _history;     // no ownership
+    WorkflowStep *   _currentStep;
 };
 
 
@@ -169,10 +172,14 @@ protected:
      *
      * It is recommended to do lazy creation of complex member objects like
      * widgets / widget trees that might cause a delay.
+     *
+     * Consider using an enum for the workflow step IDs to ensure that there
+     * are no duplicate IDs.
      **/
     WorkflowStep( int id, int next = -1 )
         : _id( id )
-        ,_next( next )
+        , _next( next )
+        , _includeInHistory(true)
         {}
 
 public:
@@ -213,18 +220,47 @@ public:
 
     /**
      * Set the parent workflow. This is done implicitly when a new workflow is
-     * created with a QList<WorkflowStep *>.
+     * created with a WorkflowStepList.
      *
      * This member variable can be used to tell the workflow to go to the next
      * or the previous step if the user clicks a "Next" or "Back" button.
      **/
     void setWorkflow( Workflow * workflow ) { _workflow = workflow; }
 
+    /**
+     * Return 'true' if this step should be included in history.
+     *
+     * Some steps, e.g. initialization, should not be there, so the next page
+     * is the first one that makes sense to store in history, and the first one
+     * that should be enabled to go back to.
+     **/
+    bool includeInHistory() const { return _includeInHistory; }
+
+    /**
+     * Set the 'includeInHistory' flag. See also 'excludeFromHistory()'.
+     **/
+    void setIncludeInHistory( bool value = true ) { _includeInHistory = value; }
+
+    /**
+     * Exclude this step from history. That makes sense if this is an
+     * initialization step that is done only once, so it does not make sense to
+     * invite the user to go back to this one with a "Back" button.
+     *
+     * Remember that you can use
+     *
+     *   workflow->step( MyStepID )->excludeFromHistory();
+     *
+     * after creating the worflow from a list of WorkflowSteps.
+     **/
+    void excludeFromHistory() { _includeInHistory = false; }
+
+
 protected:
 
     Workflow * _workflow;
     int _id;
     int _next;
+    bool _includeInHistory;
 };
 
 

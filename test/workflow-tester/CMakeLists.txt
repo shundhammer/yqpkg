@@ -1,6 +1,23 @@
 # -*- mode: makefile -*-
 #
-# CMakeLists.txt for libyui-qt-pkg/src
+# CMakeLists.txt for yqpkg/test/workflow-tester
+#
+# Building:
+#
+#   cd <project-root>
+#   mkdir build
+#   cd build
+#   cmake -DBUILD_TEST=on -DBUILD_SRC=on ..
+#   make
+#
+# or
+#
+#   cd test
+#   make
+#
+# Start with
+#
+#   test/workflow-tester/workflow-tester
 
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 

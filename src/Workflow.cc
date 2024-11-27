@@ -24,7 +24,7 @@
 #endif
 
 
-Workflow::Workflow( const QList<WorkflowStep *> & steps )
+Workflow::Workflow( const WorkflowStepList & steps )
 {
     _steps = steps; // This takes ownership of the steps!
 
@@ -77,7 +77,7 @@ void Workflow::next()
         if ( index >= 0 && index + 1 < _steps.size() )  // in range?
             activate( _steps.at( index + 1 ) );
         else
-            logError() << "No workflow step after ID " << _currentStep->id()
+            logError() << "No workflow step after step with ID " << _currentStep->id()
                        << " (#" << index << ")"
                        << endl;
     }
@@ -109,7 +109,7 @@ void Workflow::activate( WorkflowStep * step, bool goingForward )
     {
 #if VERBOSE_WORKFLOW
         logDebug() << "Going " << QString( goingForward ? "forward" : "backward" )
-                   << " to step ID " << step->id()
+                   << " to step with ID " << step->id()
                    << endl;
 #endif
 
@@ -159,10 +159,19 @@ void Workflow::pushHistory( WorkflowStep * step )
 {
     if ( step )
     {
+        if ( ! step->includeInHistory() )
+        {
 #if VERBOSE_WORKFLOW
-        logDebug() << "Saving ID " << step->id() << " to history" << endl;
+            logDebug() << "Step with ID " << step->id() << " is excluded from history" << endl;
+#endif
+        }
+        else
+        {
+#if VERBOSE_WORKFLOW
+            logDebug() << "Saving step with ID " << step->id() << " to history" << endl;
 #endif
         _history << step;
+        }
     }
     else
         logError() << "Refusing to push null pointer to history" << endl;
@@ -182,7 +191,7 @@ Workflow::popHistory()
     CHECK_PTR( step );
 
 #if VERBOSE_WORKFLOW
-    logDebug() << "Taking ID " << step->id() << " from history" << endl;
+    logDebug() << "Taking step with ID " << step->id() << " from history" << endl;
 #endif
 
     return step;
