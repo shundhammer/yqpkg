@@ -18,6 +18,7 @@
 #ifndef Workflow_h
 #define Workflow_h
 
+#include <QString>
 #include <QList>
 
 
@@ -33,10 +34,10 @@ typedef QList<WorkflowStep *> WorkflowStepList;
  * Usage example:
  *
  *   WorkflowStepList steps;
- *   steps << new AppInitWorkflowStep     ( WF_InitStep      )
- *         << new AppReadDataWorkflowStep ( WF_ReadDataStep  )
- *         << new AppUserInputWorkflowStep( WF_UserInputStep )
- *         << new AppWriteDataWorkflowStep( WF_WriteDataStep );
+ *   steps << new AppInitWorkflowStep     ( "Init" )
+ *         << new AppReadDataWorkflowStep ( "ReadData"  )
+ *         << new AppUserInputWorkflowStep( "UserInput  )
+ *         << new AppWriteDataWorkflowStep( "WriteData" );
  *
  *   Workflow * appWorkflow = new Workflow( steps );
  *   ...
@@ -71,9 +72,9 @@ public:
     WorkflowStep * currentStep() const { return _currentStep; }
 
     /**
-     * Return the workflow step with ID 'id', or 0 if there is no such step.
+     * Return the workflow step the specified ID, or 0 if there is no such step.
      **/
-    WorkflowStep * step( int id ) const;
+    WorkflowStep * step( const QString & id ) const;
 
     /**
      * Go to the next step and add the current step to the steps history.
@@ -95,7 +96,7 @@ public:
      *
      * This does nothing if there is no step with that ID.
      **/
-    void gotoStep( int id );
+    void gotoStep( const QString & id );
 
     /**
      * Go back to the very first step in the workflow and clear the steps
@@ -124,6 +125,13 @@ public:
 
 
 protected:
+
+    /**
+     * Check for duplicate step IDs.
+     *
+     * This will throw if there are any duplicates.
+     **/
+    void checkDuplicateIds();
 
     /**
      * Push a step to the history unless it is 0.
@@ -168,7 +176,7 @@ protected:
      * Create a workflow step with ID 'id'.
      *
      * The next step is the one with the ID in 'next' or simply the next one in
-     * the list if 'next' is -1.
+     * the list if 'next' empty.
      *
      * It is recommended to do lazy creation of complex member objects like
      * widgets / widget trees that might cause a delay.
@@ -176,7 +184,8 @@ protected:
      * Consider using an enum for the workflow step IDs to ensure that there
      * are no duplicate IDs.
      **/
-    WorkflowStep( int id, int next = -1 )
+    WorkflowStep( const QString & id,
+                  const QString & next = QString() )
         : _id( id )
         , _next( next )
         , _includeInHistory(true)
@@ -206,17 +215,23 @@ public:
 
     /**
      * Return this workflow step's own ID.
+     *
+     * Notice that QStrings are implicitly shared, so it wouldn't make much
+     * sense to return a const QString & here.
      **/
-    int id() const { return _id; }
+    QString id() const { return _id; }
 
     /**
      * Return the ID of the next workflow step, if one is defined, or
      * WF_StepAuto if the next step in the workflow list should be the next.
      *
      * Notice that there is no 'prev()' counterpart: The workflow manager
-     * determines this based on what step was actually the previous one.
+     * keeps track of the actual history.
+     *
+     * Notice that QStrings are implicitly shared, so it wouldn't make much
+     * sense to return a const QString & here.
      **/
-    int next() const { return _next; }
+    QString next() const { return _next; }
 
     /**
      * Set the parent workflow. This is done implicitly when a new workflow is
@@ -258,8 +273,8 @@ public:
 protected:
 
     Workflow * _workflow;
-    int _id;
-    int _next;
+    QString _id;
+    QString _next;
     bool _includeInHistory;
 };
 

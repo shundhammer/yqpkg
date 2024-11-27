@@ -15,6 +15,8 @@
  */
 
 
+#include <QSet>
+
 #include "Logger.h"
 #include "Exception.h"
 #include "Workflow.h"
@@ -34,6 +36,8 @@ Workflow::Workflow( const WorkflowStepList & steps )
         return;
     }
 
+    checkDuplicateIds();
+
     foreach ( WorkflowStep * step, _steps )
     {
         CHECK_PTR( step );
@@ -50,8 +54,31 @@ Workflow::~Workflow()
 }
 
 
+void Workflow::checkDuplicateIds()
+{
+    QSet<QString> ids;
+    QStringList duplicates;
+
+    foreach ( WorkflowStep * step, _steps )
+    {
+        CHECK_PTR( step );
+
+        if ( ids.contains( step->id() ) )
+            duplicates << step->id();
+        else
+            ids << step->id();
+    }
+
+    if ( ! duplicates.isEmpty() )
+    {
+        logError() << "Duplicate workflow step IDs: " << duplicates << endl;
+        THROW( Exception( "Duplicate worflow step IDs" ) );
+    }
+}
+
+
 WorkflowStep *
-Workflow::step( int id ) const
+Workflow::step( const QString & id ) const
 {
     foreach ( WorkflowStep * step, _steps )
     {
@@ -59,14 +86,14 @@ Workflow::step( int id ) const
             return step;
     }
 
-    logWarning() << "No workflow step with ID " << id << endl;
+    logWarning() << "No workflow step \"" << id << "\"" << endl;
     return 0;
 }
 
 
 void Workflow::next()
 {
-    if ( _currentStep && _currentStep->next() >= 0 ) // Step has a nonstandard 'next'
+    if ( _currentStep && ! _currentStep->next().isEmpty() ) // Step has a nonstandard 'next'
     {
         activate( step( _currentStep->next() ) );
     }
@@ -77,7 +104,7 @@ void Workflow::next()
         if ( index >= 0 && index + 1 < _steps.size() )  // in range?
             activate( _steps.at( index + 1 ) );
         else
-            logError() << "No workflow step after step with ID " << _currentStep->id()
+            logError() << "No workflow step after step " << _currentStep->id()
                        << " (#" << index << ")"
                        << endl;
     }
@@ -97,7 +124,7 @@ void Workflow::back()
 }
 
 
-void Workflow::gotoStep( int id )
+void Workflow::gotoStep( const QString & id )
 {
     activate( step( id ) );
 }
@@ -109,7 +136,7 @@ void Workflow::activate( WorkflowStep * step, bool goingForward )
     {
 #if VERBOSE_WORKFLOW
         logDebug() << "Going " << QString( goingForward ? "forward" : "backward" )
-                   << " to step with ID " << step->id()
+                   << " to step " << step->id()
                    << endl;
 #endif
 
@@ -162,13 +189,13 @@ void Workflow::pushHistory( WorkflowStep * step )
         if ( ! step->includeInHistory() )
         {
 #if VERBOSE_WORKFLOW
-            logDebug() << "Step with ID " << step->id() << " is excluded from history" << endl;
+            logDebug() << "Step " << step->id() << " is excluded from history" << endl;
 #endif
         }
         else
         {
 #if VERBOSE_WORKFLOW
-            logDebug() << "Saving step with ID " << step->id() << " to history" << endl;
+            logDebug() << "Saving step " << step->id() << " to history" << endl;
 #endif
         _history << step;
         }
@@ -191,7 +218,7 @@ Workflow::popHistory()
     CHECK_PTR( step );
 
 #if VERBOSE_WORKFLOW
-    logDebug() << "Taking step with ID " << step->id() << " from history" << endl;
+    logDebug() << "Taking step " << step->id() << " from history" << endl;
 #endif
 
     return step;

@@ -26,29 +26,25 @@
 class TestWfStep: public WorkflowStep
 {
 public:
-    TestWfStep( const QString & name, int id, int next = -1 )
+    TestWfStep( const QString & id,
+                const QString & next = QString() )
         : WorkflowStep( id, next )
-        , _name( name )
         {}
 
     void activate  ( bool goingForward ) override;
     void deactivate( bool goingForward ) override;
-
-protected:
-
-    QString _name;
 };
 
 
 void TestWfStep::activate( bool goingForward )
 {
-    logDebug() << "  +++ " << _name << endl;
+    logDebug() << "  +++ " << _id << endl;
 }
 
 
 void TestWfStep::deactivate( bool goingForward )
 {
-    logDebug() << "--- " << _name << endl;
+    logDebug() << "--- " << _id << endl;
 }
 
 
@@ -57,17 +53,17 @@ int main( int argc, char *argv[] )
     Logger logger( "/tmp/yqpkg-$USER", "workflow-tester.log" );
 
     WorkflowStepList workflowSteps;
-    workflowSteps << new TestWfStep( "Init Phase ID 42",  42 )
-                  << new TestWfStep( "Step ID 101",      101 )
-                  << new TestWfStep( "Step ID 102",      102, 103 ) // next: ID 103
-                  << new TestWfStep( "Rare ID  99",       99 )      // Should almost never be seen
-                  << new TestWfStep( "Step ID 103",      103 )
-                  << new TestWfStep( "Step ID 104",      104 )
-                  << new TestWfStep( "Last Step ID 199", 199 );
+    workflowSteps << new TestWfStep( "Init Phase" )
+                  << new TestWfStep( "Page 101" )
+                  << new TestWfStep( "Page 102", "Page 103" ) // next: Page 103
+                  << new TestWfStep( "Rare Page 99" )      // Should almost never be seen
+                  << new TestWfStep( "Page 103" )
+                  << new TestWfStep( "Page 104" )
+                  << new TestWfStep( "Page 199 (last)" );
 
     Workflow * workflow = new Workflow( workflowSteps );
 
-    workflow->step( 42 )->excludeFromHistory();
+    workflow->step( "Init Phase" )->excludeFromHistory();
 
 
     logDebug() << "Going through the workflow past the end" << endl;
@@ -88,9 +84,9 @@ int main( int argc, char *argv[] )
 
     sleep( 1 );
     logNewline();
-    logDebug() << "Going to step 104 directly" << endl;
+    logDebug() << "Going to page 104 directly" << endl;
 
-    workflow->gotoStep( 104 );
+    workflow->gotoStep( "Page 104" );
 
     sleep( 1 );
     logNewline();
@@ -108,7 +104,7 @@ int main( int argc, char *argv[] )
     workflow->back();
     workflow->back();
 
-    logDebug() << "Current step ID: " << workflow->currentStep()->id() << endl;
+    logDebug() << "Current step: " << workflow->currentStep()->id() << endl;
 
     sleep( 1 );
     logNewline();
@@ -138,11 +134,11 @@ int main( int argc, char *argv[] )
     logNewline();
     logDebug() << "Going on a wild ride" << endl;
 
-    workflow->gotoStep(  99 ); // the one that is usually skipped
-    workflow->gotoStep( 104 );
-    workflow->gotoStep( 102 );
-    workflow->gotoStep( 199 );
-    workflow->gotoStep( 101 );
+    workflow->gotoStep( "Rare Page 99" ); // the one that is usually skipped
+    workflow->gotoStep( "Page 104" );
+    workflow->gotoStep( "Page 102" );
+    workflow->gotoStep( "Page 199" );
+    workflow->gotoStep( "Page 101" );
 
 
     sleep( 1 );
