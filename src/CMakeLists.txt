@@ -29,6 +29,7 @@ set( SOURCES
   Logger.cc
   Exception.cc
   FSize.cc
+  MainWindow.cc
   WindowSettings.cc
   Workflow.cc
 
