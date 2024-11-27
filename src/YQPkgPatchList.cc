@@ -34,6 +34,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define VERBOSE_PATCHES         0
+
 
 using std::list;
 using std::set;
@@ -112,7 +114,9 @@ YQPkgPatchList::category( YQPkgPatchCategory category )
 
     if ( ! cat )
     {
+#if VERBOSE_PATCHES
         logDebug() << "New patch category \""<< category << "\"" << endl;
+#endif
 
         cat = new YQPkgPatchCategoryItem( category, this );
         Q_CHECK_PTR( cat );
@@ -137,7 +141,7 @@ YQPkgPatchList::fillList()
     _categories.clear();
 
     clear();
-    logDebug() << "Filling patch list" << endl;
+    // logDebug() << "Filling patch list" << endl;
 
     for ( ZyppPoolIterator it = zyppPatchesBegin();
 	  it != zyppPatchesEnd();
@@ -203,9 +207,11 @@ YQPkgPatchList::fillList()
 
             if ( displayPatch )
             {
+#if VERBOSE_PATCHES
                 logDebug() << "Displaying patch " << zyppPatch->name()
                            << " - " <<  zyppPatch->summary()
                            << endl;
+#endif
                 addPatchItem( *it, zyppPatch);
             }
         }
@@ -215,7 +221,10 @@ YQPkgPatchList::fillList()
         }
     }
 
+#if VERBOSE_PATCHES
     logDebug() << "Patch list filled" << endl;
+#endif
+
     resizeColumnToContents(_statusCol);
     //resizeColumnToContents(_nameCol);
     //resizeColumnToContents(_categoryCol);

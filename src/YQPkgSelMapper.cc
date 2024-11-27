@@ -19,6 +19,8 @@
 
 #include "YQPkgSelMapper.h"
 
+#define VERBOSE_MAPPER  0
+
 
 int			YQPkgSelMapper::_refCount = 0;
 YQPkgSelMapper::Cache	YQPkgSelMapper::_cache;
@@ -91,7 +93,11 @@ YQPkgSelMapper::findZyppSel( ZyppPkg pkg )
     if ( it != YQPkgSelMapper::_cache.end() )
 	sel = it->second;
     else
-	logWarning() << "No selectable found for package " << pkg->name() << endl;
+    {
+#if VERBOSE_MAPPER
+	logInfo() << "No selectable found for package " << pkg->name() << endl;
+#endif
+    }
 
     return sel;
 }
