@@ -25,7 +25,7 @@ set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 set( SOURCES
 
   main.cc
-  BusyPopup.cc
+  # BusyPopup.cc
   Logger.cc
   Exception.cc
   FSize.cc
@@ -36,7 +36,6 @@ set( SOURCES
   YQPackageSelector.cc
   YQPackageSelectorBase.cc
   YQPackageSelectorHelp.cc
-  YQPatternSelector.cc
 
   YQPkgApplication.cc
   YQPkgChangeLogView.cc
@@ -74,7 +73,6 @@ set( SOURCES
   YQPkgStatusFilterView.cc
   YQPkgTechnicalDetailsView.cc
   YQPkgTextDialog.cc
-  YQPkgUpdateProblemFilterView.cc
   YQPkgVersionsView.cc
 
   YQIconPool.cc

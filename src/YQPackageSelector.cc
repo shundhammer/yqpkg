@@ -72,7 +72,6 @@
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
-#include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
@@ -80,11 +79,11 @@
 
 #include "YQPackageSelector.h"
 
-
+#define USE_UPDATE_PROBLEM_FILTER_VIEW                  0
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
-#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
+#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	1
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 #define ENABLE_SOURCE_RPMS				0
 #define BRAINDEAD_LIB_NAMING_SCHEME			1
@@ -99,6 +98,10 @@
 #define OPTION_VERIFY			"PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK		"PKGMGR_AUTO_CHECK"
 #define OPTION_RECOMMENDED		"PKGMGR_RECOMMENDED"
+
+#if USE_UPDATE_PROBLEM_FILTER_VIEW
+#  include "YQPkgUpdateProblemFilterView.h"
+#endif
 
 using std::max;
 using std::string;
@@ -188,11 +191,13 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
 	    _repoFilterView->filter();
 	}
     }
+#if USE_UPDATE_PROBLEM_FILTER_VIEW
     else if ( _updateProblemFilterView )
     {
 	_filters->showPage( _updateProblemFilterView );
 	_updateProblemFilterView->filter();
     }
+#endif
     else if ( searchMode() && _searchFilterView )
     {
 	if ( _pkgClassFilterView && anyRetractedPkgInstalled() )
@@ -286,6 +291,7 @@ YQPackageSelector::basicLayout()
 void
 YQPackageSelector::layoutFilters( QWidget *parent )
 {
+#if USE_UPDATE_PROBLEM_FILTER_VIEW
     //
     // Update problem view
     //
@@ -300,6 +306,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 	    _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView, "update_problems" );
 	}
     }
+#endif
 
 
     //
@@ -974,7 +981,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
 void
 YQPackageSelector::makeConnections()
 {
+#if USE_UPDATE_PROBLEM_FILTER_VIEW
     connectFilter( _updateProblemFilterView,	_pkgList, false );
+#endif
     connectFilter( _patternList,		_pkgList );
     connectFilter( _langList,			_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
