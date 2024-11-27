@@ -23,6 +23,7 @@
 #include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
@@ -34,12 +35,14 @@ YQPkgApplication * YQPkgApplication::_instance = 0;
 
 YQPkgApplication::YQPkgApplication()
     : QObject()
+    , _mainWin(0)
     , _pkgSel(0)
     , _yqPkgRepoManager(0)
 {
     _instance = this;
     logDebug() << "Creating YQPkgApplication" << endl;
 
+    createMainWin();
     attachRepos();
 }
 
@@ -51,6 +54,9 @@ YQPkgApplication::~YQPkgApplication()
     if ( _pkgSel )
         delete _pkgSel;
 
+    if ( _mainWin )
+        delete _mainWin;
+
     detachRepos();
     _instance = 0;
 
@@ -61,7 +67,33 @@ YQPkgApplication::~YQPkgApplication()
 void YQPkgApplication::run()
 {
     createPkgSel();
+    _mainWin->showPage( _pkgSel );
+
     qApp->exec();
+}
+
+
+void YQPkgApplication::createMainWin()
+{
+    if ( _mainWin )
+        return;
+
+    _mainWin = new MainWindow();
+    CHECK_NEW( _mainWin );
+
+    setWindowTitle( _mainWin );
+    _mainWin->show();
+}
+
+
+void YQPkgApplication::setWindowTitle( QWidget * window )
+{
+    if ( window )
+    {
+        QString windowTitle( "YQPkg" );
+        windowTitle += runningAsRoot() ? _( " [root]" ) : _( " (read-only)" );
+        window->setWindowTitle( windowTitle );
+    }
 }
 
 
@@ -70,7 +102,10 @@ void YQPkgApplication::createPkgSel()
     if ( _pkgSel )
         return;
 
-    BusyPopup busyPopup( _( "Preparing the package selector..." ) );
+    QLabel busyPage( _( "Preparing the package selector..." ) );
+
+    if ( _mainWin )
+        _mainWin->splashPage( &busyPage );
 
     _pkgSel = new YQPackageSelector( 0, 0 );
     CHECK_PTR( _pkgSel );
@@ -78,10 +113,7 @@ void YQPkgApplication::createPkgSel()
     QObject::connect( _pkgSel, SIGNAL( commit() ),
                       qApp,    SLOT  ( quit()   ) );
 
-    QString windowTitle( "YQPkg" );
-    windowTitle += runningAsRoot() ? _( " [root]" ) : _( " (read-only)" );
-    _pkgSel->setWindowTitle( windowTitle );
-    _pkgSel->show();
+    _mainWin->addPage( _pkgSel );
 }
 
 
@@ -94,6 +126,10 @@ bool YQPkgApplication::runningAsRoot()
 void YQPkgApplication::attachRepos()
 {
     logDebug() << "Initializing zypp..." << endl;
+    QLabel repoSplashPage( _( "Loading package manager data..." ) );
+
+    if ( _mainWin )
+        _mainWin->splashPage( &repoSplashPage );
 
     if ( ! _yqPkgRepoManager )
     {
@@ -103,14 +139,9 @@ void YQPkgApplication::attachRepos()
 
     try
     {
-        BusyPopup busyPopup( _( "Loading package manager data..." ) );
-
         _yqPkgRepoManager->zyppConnect(); // This may throw
         _yqPkgRepoManager->initTarget();
         _yqPkgRepoManager->attachRepos();
-
-        // The BusyPopup closes when it goes out of scope
-        logDebug() << "Busy Popup closed" << endl;
     }
     catch ( ... )
     {

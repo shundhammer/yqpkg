@@ -22,6 +22,7 @@
 #include <zypp/ZYpp.h>
 
 
+class MainWindow;
 class YQPackageSelector;
 class YQPkgRepoManager;
 
@@ -71,6 +72,17 @@ public:
 protected:
 
     /**
+     * Create and set up the main window.
+     **/
+    void createMainWin();
+
+    /**
+     * Set the appropriate window title, depending if the applicaton is running
+     * with or without root permissions.
+     **/
+    void setWindowTitle( QWidget * window );
+
+    /**
      * Create (and show) the YQPackageSelector if it doesn't already exist.
      **/
     void createPkgSel();
@@ -96,6 +108,7 @@ protected:
     // Data members
     //
 
+    MainWindow *        _mainWin;
     YQPackageSelector * _pkgSel;
     YQPkgRepoManager  * _yqPkgRepoManager;
 

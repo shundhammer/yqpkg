@@ -17,6 +17,7 @@
 
 #include <QCloseEvent>
 #include <QVBoxLayout>
+#include <QEventLoop>
 
 #include "Logger.h"
 #include "Exception.h"
@@ -33,6 +34,8 @@ MainWindow::MainWindow( QWidget * parent )
 {
     _instance = this;
     basicLayout();
+
+    resize( 1000, 800 ); // Some reasonable size if there is nothing in the settings
     WindowSettings::read( this, "MainWindow" );
 }
 
@@ -40,10 +43,6 @@ MainWindow::MainWindow( QWidget * parent )
 MainWindow::~MainWindow()
 {
     WindowSettings::write( this, "MainWindow" );
-
-    if ( _emptyPage )
-        delete _emptyPage;
-
     _instance = 0;
 }
 
@@ -82,9 +81,13 @@ void MainWindow::showPage( QWidget * page )
                        << " class " << page->metaObject()->className()
                        << endl;
         }
+        else
+        {
+            logDebug() << "Showing class " << page->metaObject()->className() << endl;
+        }
 
         _layout->addWidget( page );
-        _page->show();
+        page->show();
     }
 }
 
@@ -103,7 +106,7 @@ void MainWindow::clearClientArea()
 
 void MainWindow::showPage( const QString & pageName )
 {
-    QWidget * page = findPage( page );
+    QWidget * page = findPage( pageName );
 
     if ( page )
         showPage( page );
@@ -120,11 +123,16 @@ QWidget * MainWindow::findPage( const QString & pageName )
 
     foreach ( QWidgetPointer page, _pages )
     {
-        if ( page->objectName() == pageName )
+        // Notice that 'page' might easily be 0 if it has been deleted in the
+        // meantime from the outside; for example if it was a local variable
+        // that went out of scope. See the splashPage() example in the header
+        // file.
+
+        if ( page && page->objectName() == pageName )
             return page;
     }
 
-    logError() << "No page with name \"" << pageName "\"" << endl;
+    logError() << "No page with name \"" << pageName << "\"" << endl;
 
     return 0;
 }
@@ -135,6 +143,17 @@ void MainWindow::processEvents( int millisec )
     QEventLoop eventLoop;
     eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents,
 			     millisec );
+}
+
+
+void MainWindow::splashPage( QWidget * page )
+{
+    if ( page )
+    {
+        addPage( page );
+        showPage( page );
+        processEvents();
+    }
 }
 
 

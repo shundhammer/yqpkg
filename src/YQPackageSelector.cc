@@ -1769,12 +1769,8 @@ YQPackageSelector::anyRetractedPkgInstalled()
 void
 YQPackageSelector::loadSettings()
 {
-    QString settingsGroup = "YQPackageSelector";
-
-    WindowSettings::read( this, settingsGroup );
-
     QSettings settings;
-    settings.beginGroup( settingsGroup );
+    settings.beginGroup( "YQPackageSelector" );
 
     _showDevelAction->setChecked(settings.value( "Options/showDevelPackages", true ).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
@@ -1831,12 +1827,8 @@ YQPackageSelector::loadCommonSettings()
 void
 YQPackageSelector::saveSettings()
 {
-    QString settingsGroup = "YQPackageSelector";
-
-    WindowSettings::write( this, settingsGroup );
-
     QSettings settings;
-    settings.beginGroup( settingsGroup );
+    settings.beginGroup( "YQPackageSelector" );
 
     settings.setValue("Options/showDevelPackages", _showDevelAction->isChecked() );
     settings.setValue("Options/showDebugPackages", _showDebugAction->isChecked() );

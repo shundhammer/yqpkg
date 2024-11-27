@@ -34,6 +34,8 @@ class QVBoxLayout;
 /**
  * Main window class that can hold multiple pages, of which one at a time is
  * shown.
+ *
+ * Create a MainWindow, add pages and show one of them.
  **/
 class MainWindow: public QWidget
 {
@@ -55,8 +57,8 @@ public:
      * Return the instance of this class or 0 if there is none.
      *
      * This is not a singleton, but in each normal application there is no more
-     * than one instance, and during the lifetime of any subordinate widgets,
-     * it is safe to assume that the MainWindow also exists.
+     * than one instance, and during the lifetime of any widgets inside the
+     * MainWindow it is safe to assume that the MainWindow also exists.
      **/
     static MainWindow * instance() { return _instance; }
 
@@ -109,6 +111,27 @@ public:
      * this is very much like the BusyPopup class, but in the main window.
      **/
     void processEvents( int millisec = 500 );
+
+
+    /**
+     * Add and show a splash screen page and process events to try to make sure
+     * that it's actually displayed before lengthy operation are done.
+     *
+     * This is typically a QLabel created on the stack (not on the heap with
+     * 'new') that exists in a code block just before the lengthy operations
+     * start. Simply let it go out of scope.
+     *
+     * Example:
+     *
+     *   {
+     *       QLabel message( _( "Computing world solution..." ) );
+     *       myMainWindow->splashPage( &message );
+     *       doComputations();
+     *       computeSomeMore();
+     *   }
+     *
+     **/
+    void splashPage( QWidget * page );
 
 
 protected:
