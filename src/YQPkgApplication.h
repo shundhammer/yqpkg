@@ -25,6 +25,7 @@
 class MainWindow;
 class YQPackageSelector;
 class YQPkgRepoManager;
+class QEvent;
 
 typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
@@ -102,6 +103,13 @@ protected:
      * This also destroys the YQPkgRepoManager.
      **/
     void detachRepos();
+
+    /**
+     * Event filter to catch foreign events, e.g. the MainWindow WM_CLOSE.
+     *
+     * Reimplemented from QObject.
+     **/
+    virtual bool eventFilter( QObject * watchedObj, QEvent * event ) override;
 
 
     //

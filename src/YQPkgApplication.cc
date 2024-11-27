@@ -19,6 +19,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QCloseEvent>
 
 #include "BusyPopup.h"
 #include "Exception.h"
@@ -69,6 +70,10 @@ void YQPkgApplication::run()
     createPkgSel();
     _mainWin->showPage( _pkgSel );
 
+    QLabel * bogus = new QLabel( "Ällabätsch" );
+    _mainWin->addPage( bogus );
+    _mainWin->showPage( bogus );
+
     qApp->exec();
 }
 
@@ -82,6 +87,7 @@ void YQPkgApplication::createMainWin()
     CHECK_NEW( _mainWin );
 
     setWindowTitle( _mainWin );
+    _mainWin->installEventFilter( this );
     _mainWin->show();
 }
 
@@ -113,7 +119,7 @@ void YQPkgApplication::createPkgSel()
     QObject::connect( _pkgSel, SIGNAL( commit() ),
                       qApp,    SLOT  ( quit()   ) );
 
-    _mainWin->addPage( _pkgSel );
+    _mainWin->addPage( _pkgSel, "pkgSel" );
 }
 
 
@@ -166,4 +172,26 @@ void YQPkgApplication::detachRepos()
         delete _yqPkgRepoManager;
         _yqPkgRepoManager = 0;
     }
+}
+
+
+bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
+{
+    if ( _mainWin && watchedObj == _mainWin && _pkgSel
+	 && event && event->type() == QEvent::Close ) // WM_CLOSE (Alt-F4)
+    {
+        if ( _mainWin->currentPage() == _pkgSel )
+        {
+            logInfo() << "Caught WM_CLOSE for YQPackageSelector" << endl;
+            _pkgSel->reject();  // _pkgSel handles asking for confirmation etc.
+
+            return true;        // Event processing finished for this one
+        }
+        else
+        {
+            logInfo() << "Caught WM_CLOSE, but not for YQPackageSelector" << endl;
+        }
+    }
+
+    return false; // Event processing not yet finished, continue down the chain
 }
