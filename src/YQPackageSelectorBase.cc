@@ -387,8 +387,6 @@ YQPackageSelectorBase::resetIgnoredDependencyProblems()
 void
 YQPackageSelectorBase::closeEvent( QCloseEvent * event )
 {
-    Q_UNUSED( event );
-
     logInfo() << "Caught WM_CLOSE" << endl;
 
     event->ignore();
