@@ -648,41 +648,38 @@ YQPkgFilterTab::loadSettings()
     QSettings settings;
     settings.beginGroup( priv->settingsName );
 
-    int size = settings.beginReadArray( "TabPages" );
-
-    for ( int i=0; i < size; i++ )
-    {
-	settings.setArrayIndex(i);
-	QString id = settings.value( "PageID" ).toString();
-	YQPkgFilterPage * page = findPage( id );
-
-	if ( page )
-	{
-	    logVerbose() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
-	    showPage( page );
-	}
-	else
-	    logWarning() << "No page with ID \"" << toUTF8( id ) << "\"" << endl;
-    }
-
-    settings.endArray();
-
-    QString id = settings.value( "CurrentPage" ).toString();
-
-    if ( ! id.isEmpty() )
-	showPage( id );
+    QStringList pages = settings.value( "TabPages" ).toStringList();
+    QString current   = settings.value( "CurrentPage" ).toString();
 
     settings.endGroup();
+
+
+    logDebug() << "Restoring pages " << pages << endl;
+    logDebug() << "Current page: " << current << endl;
+
+    foreach ( QString id, pages )
+    {
+	YQPkgFilterPage * page = findPage( id );
+
+        if ( page )
+            showPage( page );
+        else
+            logWarning() << "No page with ID \"" << id << "\"" << endl;
+    }
+
+    YQPkgFilterPage * page = findPage( current );
+
+    if ( page )
+        showPage( page );
+    else
+        logWarning() << "Can't restore current page with ID \"" << current << "\"" << endl;
 }
 
 
 void
 YQPkgFilterTab::saveSettings()
 {
-    QSettings settings;
-    settings.beginGroup( priv->settingsName );
-
-    settings.beginWriteArray( "TabPages" );
+    QStringList pages;
 
     for ( int i=0; i < tabBar()->count(); i++ )
     {
@@ -690,21 +687,20 @@ YQPkgFilterTab::saveSettings()
 
 	if ( page )
 	{
-	    settings.setArrayIndex(i);
-
 	    if ( page->id.isEmpty() )
 		logWarning() << "No ID for tab page \"" << page->label << "\"" << endl;
 	    else
-	    {
-		// logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
-		settings.setValue( "PageID", page->id );
-	    }
-	}
+                pages << page->id;
+        }
     }
 
-    settings.endArray();
-
     YQPkgFilterPage * currentPage = findPage( tabBar()->currentIndex() );
+
+
+    QSettings settings;
+    settings.beginGroup( priv->settingsName );
+
+    settings.setValue( "TabPages", pages );
 
     if ( currentPage )
 	settings.setValue( "CurrentPage", currentPage->id );
