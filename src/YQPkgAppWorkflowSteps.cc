@@ -37,7 +37,7 @@ YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( YQPkgApplication * app,
     , _doProcessEvents( false )
     , _doDeletePage( true )
 {
-
+    logDebug() << "Creating step " << id << endl;
 }
 
 
@@ -51,13 +51,17 @@ YQPkgAppWorkflowStep::~YQPkgAppWorkflowStep()
 void YQPkgAppWorkflowStep::activate( bool goingForward )
 {
     Q_UNUSED( goingForward );
+    logDebug() << "Activating step " << _id << endl;
 
     if ( ! _page )
     {
-        createPage();
+        _page = createPage();
+        CHECK_PTR( _page );
+
         _app->mainWin()->addPage( _page );
     }
 
+    CHECK_PTR( _page );
     _app->mainWin()->showPage( _page );
 
     if ( _doProcessEvents )
@@ -76,9 +80,15 @@ void YQPkgInitReposStep::activate( bool goingForward )
     // Automatically continue with the next step in the same direction
 
     if ( goingForward || _app->workflow()->historyEmpty() )
+    {
+        logDebug() << "_app->next()" << endl;
         _app->next();
+    }
     else
+    {
+        logDebug() << "_app->back()" << endl;
         _app->back();
+    }
 }
 
 

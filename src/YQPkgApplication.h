@@ -111,6 +111,14 @@ public slots:
     void restart();
 
     /**
+     * The user finished the package selection with "Accept", but there was no
+     * change: Skip the "commit" phase and go traight to the summary screen.
+     *
+     * Alternatively this could simply quit the workflow.
+     **/
+    void skipCommit();
+
+    /**
      * Quit the program.
      *
      * Ask for confirmation if 'askForConfirmation' is 'true'.

@@ -77,6 +77,17 @@ public:
     WorkflowStep * step( const QString & id ) const;
 
     /**
+     * Start the workflow.
+     *
+     * This is not done automatically in the constructor because it tends to
+     * confuse the application initialization: The first step might be an
+     * initialization step that might need to automatically call
+     * workflow->next() before the constructor is even done, so that variable
+     * might not have a value yet. This is what happened in YQPkg.
+     **/
+    void start();
+
+    /**
      * Go to the next step and add the current step to the steps history.
      * This does nothing if there is no next step.
      **/
@@ -178,6 +189,8 @@ protected:
      * The next step is the one with the ID in 'next' or simply the next one in
      * the list if 'next' empty.
      *
+     * Remember to call 'start()' after creating the workflow to actually start it!
+     *
      * It is recommended to do lazy creation of complex member objects like
      * widgets / widget trees that might cause a delay.
      *
@@ -253,7 +266,7 @@ public:
     bool includeInHistory() const { return _includeInHistory; }
 
     /**
-     * Set the 'includeInHistory' flag. See also 'excludeFromHistory()'.
+     * Set the 'includeInHistory' flag. See also 'setExcludeFromHistory()'.
      **/
     void setIncludeInHistory( bool value = true ) { _includeInHistory = value; }
 
@@ -264,7 +277,7 @@ public:
      *
      * Remember that you can use
      *
-     *   workflow->step( MyStepID )->excludeFromHistory();
+     *   workflow->step( MyStepID )->setExcludeFromHistory();
      *
      * after creating the worflow from a list of WorkflowSteps.
      **/

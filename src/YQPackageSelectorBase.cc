@@ -179,9 +179,8 @@ YQPackageSelectorBase::showAutoPkgList()
 }
 
 
-
-void
-YQPackageSelectorBase::reject()
+bool
+YQPackageSelectorBase::pendingChanges()
 {
     bool changes =
 	zyppPool().diffState<zypp::Package  >()	||
@@ -200,6 +199,14 @@ YQPackageSelectorBase::reject()
 	    logInfo() << "diffState() reports changed patches" << endl;
     }
 
+    return changes;
+}
+
+
+void
+YQPackageSelectorBase::reject()
+{
+    bool changes = pendingChanges();
     bool confirm = false;
 
     if ( ! YQPkgApplication::runningAsRoot() && changes )
@@ -270,9 +277,15 @@ YQPackageSelectorBase::accept()
 		 " have been changed to resolve dependencies:" )
 	    + "<p>";
 
-	if ( YQPkgChangesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterAutomatic, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
+	if ( YQPkgChangesDialog::showChangesDialog( this,
+                                                    msg,
+                                                    _( "C&ontinue" ), _( "&Cancel" ),
+                                                    YQPkgChangesDialog::FilterAutomatic,
+                                                    YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
 	     == QDialog::Rejected )
+        {
 	    return;
+        }
     }
 
     if ( confirmUnsupported() )
@@ -291,9 +304,15 @@ YQPackageSelectorBase::accept()
 		 " requires an additional customer contract for support." )
 	    + "<p>";
 
-	if ( YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterUser, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
+	if ( YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( this,
+                                                                            msg,
+                                                                            _( "C&ontinue" ), _( "&Cancel" ),
+                                                                            YQPkgChangesDialog::FilterUser,
+                                                                            YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
 	     == QDialog::Rejected )
+        {
 	    return;
+        }
     }
 
 
@@ -301,7 +320,16 @@ YQPackageSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
-    logInfo() << "Closing PackageSelector with \"Accept\"" << endl;
+    if ( pendingChanges() )
+    {
+        logInfo() << "Closing PackageSelector with 'commit'" << endl;
+        emit commit();
+    }
+    else
+    {
+        logInfo() << "No changes - closing PackageSelector with 'finished'" << endl;
+        emit finished();
+    }
 }
 
 

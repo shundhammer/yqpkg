@@ -19,7 +19,7 @@
 
 #include "YQPkgSelMapper.h"
 
-#define VERBOSE_MAPPER  0
+#define VERBOSE_MAPPER  1
 
 
 int			YQPkgSelMapper::_refCount = 0;
@@ -28,6 +28,8 @@ YQPkgSelMapper::Cache	YQPkgSelMapper::_cache;
 
 YQPkgSelMapper::YQPkgSelMapper()
 {
+    logDebug() << "Creating YQPkgSelMapper; refCount: " << _refCount + 1 << endl;
+
     if ( ++_refCount == 1 )
 	rebuildCache();
 }
@@ -40,6 +42,8 @@ YQPkgSelMapper::~YQPkgSelMapper()
 	logDebug() << "Destroying pkg -> selectable cache"  << endl;
 	_cache.clear();
     }
+
+    logDebug() << "Destroying YQPkgSelMapper done." << endl;
 }
 
 

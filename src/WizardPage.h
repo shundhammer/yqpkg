@@ -56,17 +56,18 @@ public:
      **/
     void connect( QObject * receiver );
 
+
 signals:
 
     /**
      * Emitted when the user clicks the "Back" button or activates the "Back"
-     * action with its keyboard shortcut (F9).
+     * action.
      **/
     void back();
 
     /**
      * Emitted when the user clicks the "Next" button or activates the "Next"
-     * action with its keyboard shortcut (F10).
+     * action.
      **/
     void next();
 

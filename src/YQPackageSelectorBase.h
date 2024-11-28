@@ -109,6 +109,12 @@ public slots:
     void accept();
 
     /**
+     * Return 'true' if there are any pending changes,
+     * i.e. package transactions that need to be committed.
+     **/
+    bool pendingChanges();
+
+    /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.
      **/
@@ -133,6 +139,12 @@ signals:
      * problems: Commit the package transactions.
      **/
     void commit();
+
+    /**
+     * Emitted when the user accepted, and there is nothing to be done:
+     * No package actions to commit.
+     **/
+    void finished();
 
 
 protected slots:

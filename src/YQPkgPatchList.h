@@ -20,7 +20,6 @@
 
 #include <string>
 #include "YQPkgObjList.h"
-#include "YQPkgSelMapper.h"
 #include <QTreeWidgetItem>
 #include <QEvent>
 #include <QMenu>
@@ -207,7 +206,6 @@ protected:
     // Data members
 
     int			_categoryCol;
-    YQPkgSelMapper	_selMapper;
     FilterCriteria	_filterCriteria;
     QMap<YQPkgPatchCategory, YQPkgPatchCategoryItem*> _categories;
 };

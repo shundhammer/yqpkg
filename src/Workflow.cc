@@ -43,8 +43,6 @@ Workflow::Workflow( const WorkflowStepList & steps )
         CHECK_PTR( step );
         step->setWorkflow( this );
     }
-
-    restart();
 }
 
 
@@ -151,6 +149,16 @@ void Workflow::activate( WorkflowStep * step, bool goingForward )
         _currentStep = step;
         step->activate( goingForward );
     }
+}
+
+
+void Workflow::start()
+{
+#if VERBOSE_WORKFLOW
+        logDebug() << "Starting the workflow" << endl;
+#endif
+
+    restart();
 }
 
 

@@ -54,6 +54,7 @@ YQPkgApplication::YQPkgApplication()
     }
 
     createMainWin(); // Create this early to get early visual feedback
+    logDebug() << "Creating YQPkgApplication done" << endl;
 }
 
 
@@ -81,7 +82,9 @@ YQPkgApplication::~YQPkgApplication()
 
 void YQPkgApplication::run()
 {
-    if ( _workflow )
+    logDebug() << endl;
+
+    if ( ! _workflow )
         createWorkflow();
     else
         _workflow->restart();
@@ -101,8 +104,12 @@ void YQPkgApplication::run()
 
 void YQPkgApplication::createMainWin()
 {
+    logDebug() << endl;
+
     if ( _mainWin )
         return;
+
+    logDebug() << "Creating the main window" << endl;
 
     _mainWin = new MainWindow();
     CHECK_NEW( _mainWin );
@@ -127,6 +134,10 @@ void YQPkgApplication::createWorkflow()
           << new YQPkgWizardStep   ( this, "summary"   );
 
     _workflow = new Workflow( steps );
+    CHECK_PTR( _workflow );
+
+    logDebug() << "Starting workflow" << endl;
+    _workflow->start();
 }
 
 
@@ -165,6 +176,9 @@ void YQPkgApplication::createPkgSel()
 
     QObject::connect( _pkgSel, SIGNAL( commit() ),
                       this,    SLOT  ( next()   ) );
+
+    QObject::connect( _pkgSel, SIGNAL( finished()   ),   // "accept" without changes
+                      this,    SLOT  ( skipCommit() ) );
 }
 
 
@@ -225,6 +239,9 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 
 void YQPkgApplication::next()
 {
+    logDebug() << endl;
+    CHECK_PTR( _workflow );
+
     if ( ! _workflow )
         return;
 
@@ -237,6 +254,9 @@ void YQPkgApplication::next()
 
 void YQPkgApplication::back()
 {
+    logDebug() << endl;
+    CHECK_PTR( _workflow );
+
     if ( ! _workflow )
         return;
 
@@ -246,6 +266,9 @@ void YQPkgApplication::back()
 
 void YQPkgApplication::restart()
 {
+    logDebug() << endl;
+    CHECK_PTR( _workflow );
+
     if ( ! _workflow )
         return;
 
@@ -253,8 +276,27 @@ void YQPkgApplication::restart()
 }
 
 
+void YQPkgApplication::skipCommit()
+{
+    // The user finished the package selection with "Accept", but there was no
+    // change: Skip the "commit" phase and go traight to the summary screen.
+
+    logDebug() << endl;
+    CHECK_PTR( _workflow );
+
+    if ( ! _workflow )
+        return;
+
+    _workflow->gotoStep( "summary" );
+    // alternatively:
+    // quit();
+}
+
+
 void YQPkgApplication::quit( bool askForConfirmation )
 {
+    logDebug() << endl;
+
     if ( askForConfirmation )
     {
 	int result = QMessageBox::warning( _mainWin,

@@ -83,7 +83,7 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
-#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	1
+#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 #define ENABLE_SOURCE_RPMS				0
 #define BRAINDEAD_LIB_NAMING_SCHEME			1
@@ -429,6 +429,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 YQPackageSelector::~YQPackageSelector()
 {
     saveSettings();
+    logDebug() << "Destroying YQPackageSelector done." << endl;
 }
 
 

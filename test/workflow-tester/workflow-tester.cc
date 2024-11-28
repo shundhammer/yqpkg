@@ -63,7 +63,8 @@ int main( int argc, char *argv[] )
 
     Workflow * workflow = new Workflow( workflowSteps );
 
-    workflow->step( "Init Phase" )->excludeFromHistory();
+    workflow->step( "Init Phase" )->setExcludeFromHistory();
+    workflow->start();
 
 
     logDebug() << "Going through the workflow past the end" << endl;
