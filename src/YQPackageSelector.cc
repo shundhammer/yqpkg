@@ -162,12 +162,9 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
 	// Add a number of default tabs in the desired order
 	//
 
-	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
-
-	if ( ! searchMode() && ! summaryMode()
-	     && _patternList )			_filters->showPage( _patternList );
-
-	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
+	if ( _searchFilterView )        _filters->showPage( _searchFilterView );
+        if ( _repoFilterView   )        _filters->showPage( _repoFilterView );
+        if ( _patternList      )	_filters->showPage( _patternList );
     }
 
 
@@ -235,11 +232,6 @@ YQPackageSelector::YQPackageSelector( QWidget *		parent,
 	_filters->showPage( _statusFilterView );
 	_statusFilterView->filter();
 	_pkgList->selectNextItem();
-    }
-    else if ( _patternList )
-    {
-	_filters->showPage( _patternList );
-	_patternList->filter();
     }
 
 
