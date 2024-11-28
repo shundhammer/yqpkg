@@ -428,7 +428,10 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
 YQPackageSelector::~YQPackageSelector()
 {
+    logDebug() << "Destroying YQPackageSelector..." << endl;
+
     saveSettings();
+
     logDebug() << "Destroying YQPackageSelector done." << endl;
 }
 
@@ -1782,19 +1785,20 @@ YQPackageSelector::loadSettings()
     QSettings settings;
     settings.beginGroup( "YQPackageSelector" );
 
-    _showDevelAction->setChecked(settings.value( "Options/showDevelPackages", true ).toBool());
+    _showDevelAction->setChecked(settings.value( "showDevelPackages", true ).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
 
-    _showDebugAction->setChecked(settings.value( "Options/showDebugPackages", true ).toBool());
+    _showDebugAction->setChecked(settings.value( "showDebugPackages", true ).toBool());
     pkgExcludeDebugChanged(_showDebugAction->isChecked());
 
-    loadCommonSettings();
     settings.endGroup();
+
+    read_etc_sysconfig_yast();
 }
 
 
 void
-YQPackageSelector::loadCommonSettings()
+YQPackageSelector::read_etc_sysconfig_yast()
 {
     map<string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
 
@@ -1840,17 +1844,19 @@ YQPackageSelector::saveSettings()
     QSettings settings;
     settings.beginGroup( "YQPackageSelector" );
 
-    settings.setValue("Options/showDevelPackages", _showDevelAction->isChecked() );
-    settings.setValue("Options/showDebugPackages", _showDebugAction->isChecked() );
+    settings.setValue("showDevelPackages", _showDevelAction->isChecked() );
+    settings.setValue("showDebugPackages", _showDebugAction->isChecked() );
 
-    saveCommonSettings();
     settings.endGroup();
+
+    write_etc_sysconfig_yast();
 }
 
+
 void
-YQPackageSelector::saveCommonSettings()
+YQPackageSelector::write_etc_sysconfig_yast()
 {
-    if ( ! YQPkgApplication::runningAsRoot() )
+    if ( ! geteuid() == 0 )
         return;
 
     try
@@ -1878,6 +1884,7 @@ void YQPackageSelector::busyCursor()
 {
     ::busyCursor();
 }
+
 
 void YQPackageSelector::normalCursor()
 {

@@ -354,12 +354,12 @@ protected:
     /**
      * loads settings that are shared with other frontends
      */
-    void loadCommonSettings();
+    void read_etc_sysconfig_yast();
 
     /**
      * saves settings that are shared with other frontends
      */
-    void saveCommonSettings();
+    void write_etc_sysconfig_yast();
 
     /**
      * Basic HTML formatting: Embed text into <p> ... </p>

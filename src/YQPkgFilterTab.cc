@@ -648,12 +648,12 @@ YQPkgFilterTab::loadSettings()
     QSettings settings;
     settings.beginGroup( priv->settingsName );
 
-    int size = settings.beginReadArray( "Tab_Pages" );
+    int size = settings.beginReadArray( "TabPages" );
 
     for ( int i=0; i < size; i++ )
     {
 	settings.setArrayIndex(i);
-	QString id = settings.value( "Page_ID" ).toString();
+	QString id = settings.value( "PageID" ).toString();
 	YQPkgFilterPage * page = findPage( id );
 
 	if ( page )
@@ -667,7 +667,7 @@ YQPkgFilterTab::loadSettings()
 
     settings.endArray();
 
-    QString id = settings.value( "Current_Page" ).toString();
+    QString id = settings.value( "CurrentPage" ).toString();
 
     if ( ! id.isEmpty() )
 	showPage( id );
@@ -682,7 +682,7 @@ YQPkgFilterTab::saveSettings()
     QSettings settings;
     settings.beginGroup( priv->settingsName );
 
-    settings.beginWriteArray( "Tab_Pages" );
+    settings.beginWriteArray( "TabPages" );
 
     for ( int i=0; i < tabBar()->count(); i++ )
     {
@@ -697,7 +697,7 @@ YQPkgFilterTab::saveSettings()
 	    else
 	    {
 		// logDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
-		settings.setValue( "Page_ID", page->id );
+		settings.setValue( "PageID", page->id );
 	    }
 	}
     }
@@ -707,7 +707,7 @@ YQPkgFilterTab::saveSettings()
     YQPkgFilterPage * currentPage = findPage( tabBar()->currentIndex() );
 
     if ( currentPage )
-	settings.setValue( "Current_Page", currentPage->id );
+	settings.setValue( "CurrentPage", currentPage->id );
 
     settings.endGroup();
 }

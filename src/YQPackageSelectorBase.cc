@@ -79,7 +79,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * parent,
 
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
-    logInfo() << "Destroying PackageSelector" << endl;
+    logInfo() << "Destroying PackageSelectorBase" << endl;
 }
 
 
