@@ -667,12 +667,15 @@ YQPkgFilterTab::loadSettings()
             logWarning() << "No page with ID \"" << id << "\"" << endl;
     }
 
-    YQPkgFilterPage * page = findPage( current );
+    if ( ! current.isEmpty() )
+    {
+        YQPkgFilterPage * page = findPage( current );
 
-    if ( page )
-        showPage( page );
-    else
-        logWarning() << "Can't restore current page with ID \"" << current << "\"" << endl;
+        if ( page )
+            showPage( page );
+        else
+            logWarning() << "Can't restore current page with ID \"" << current << "\"" << endl;
+    }
 }
 
 
