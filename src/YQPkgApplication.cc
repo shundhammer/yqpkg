@@ -65,11 +65,11 @@ YQPkgApplication::~YQPkgApplication()
     if ( _pkgSel )
         delete _pkgSel;
 
-    if ( _mainWin )
-        delete _mainWin;
-
     if ( _workflow )
         delete _workflow;
+
+    if ( _mainWin )
+        delete _mainWin;
 
     if ( _yqPkgRepoManager )
         delete _yqPkgRepoManager;

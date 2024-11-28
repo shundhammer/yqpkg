@@ -37,14 +37,21 @@ YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( YQPkgApplication * app,
     , _doProcessEvents( false )
     , _doDeletePage( true )
 {
-    logDebug() << "Creating step " << id << endl;
+    logDebug() << "Creating step " << _id << endl;
 }
 
 
 YQPkgAppWorkflowStep::~YQPkgAppWorkflowStep()
 {
+    logDebug() << "Destroying step " << _id << "..." << endl;
+
     if ( _doDeletePage && _page )
+    {
+        logDebug() << "  Deleting page of step " << _id << endl;
         delete _page;
+    }
+
+    logDebug() << "Destroying step " << _id << " done" << endl;
 }
 
 

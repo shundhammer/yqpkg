@@ -58,7 +58,7 @@ protected:
     //
 
     YQPkgApplication *  _app;
-    QWidget *           _page;
+    QPointer<QWidget>   _page;
     bool                _doProcessEvents;
     bool                _doDeletePage;
 };
