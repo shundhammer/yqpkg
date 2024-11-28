@@ -120,7 +120,8 @@ protected:
     YQPackageSelector * _pkgSel;
     YQPkgRepoManager  * _yqPkgRepoManager;
 
-    static YQPkgApplication * _instance;
+    static YQPkgApplication *   _instance;
+    static bool                 _fakeRoot;      // env YQPKG_FAKE_ROOT
 };
 
 #endif // YQPkgApplication_h

@@ -32,6 +32,7 @@
 
 
 YQPkgApplication * YQPkgApplication::_instance = 0;
+bool               YQPkgApplication::_fakeRoot = false;
 
 
 YQPkgApplication::YQPkgApplication()
@@ -42,6 +43,13 @@ YQPkgApplication::YQPkgApplication()
 {
     _instance = this;
     logDebug() << "Creating YQPkgApplication" << endl;
+
+    if ( getenv( "YQPKG_FAKE_ROOT" ) )
+    {
+        logInfo() << "Faking root with environment variable YQPKG_FAKE_ROOT" << endl;
+        _fakeRoot = true;
+    }
+
 
     createMainWin();
     attachRepos();
@@ -121,6 +129,9 @@ void YQPkgApplication::createPkgSel()
 
 bool YQPkgApplication::runningAsRoot()
 {
+    if ( _fakeRoot )
+        return true;
+
     return geteuid() == 0;
 }
 
