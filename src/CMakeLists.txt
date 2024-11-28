@@ -31,6 +31,7 @@ set( SOURCES
   FSize.cc
   MainWindow.cc
   WindowSettings.cc
+  WizardPage.cc
   Workflow.cc
 
   YQPackageSelector.cc
@@ -85,11 +86,29 @@ set( SOURCES
   QY2ListView.cc
   )
 
+# Qt resource files
 set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 
+#
+# .ui widget forms generated with Qt designer (designer-qt5) or Qt Creator
+#
+# For each one, the Qt uic (User Interface Compiler) generates a file
+# ui_formname.h at build time to include in a .cc file.
+# This is done automatically with CMAKE_AUTOUIC above.
+#
+# See WizardPage.{h,cc} and wizard-page.ui (and the generated ui_wizard-page.h)
+# for a very simple usage example.
+#
+
+set( UI_FILES
+     wizard-page.ui
+   )
+
+# Putting it all together
 add_executable( ${TARGETBIN}
   ${SOURCES}
   ${QRC_FILES}
+  ${UI_FILES}
 )
 
 
