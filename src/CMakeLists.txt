@@ -39,6 +39,7 @@ set( SOURCES
   YQPackageSelectorHelp.cc
 
   YQPkgApplication.cc
+  YQPkgAppWorkflowSteps.cc
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc
   YQPkgClassFilterView.cc

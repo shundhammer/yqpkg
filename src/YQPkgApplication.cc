@@ -18,16 +18,18 @@
 #include <unistd.h>     // getuid()
 
 #include <QApplication>
+#include <QLabel>
 #include <QMessageBox>
 #include <QCloseEvent>
 
-#include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "Workflow.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
+#include "YQPkgAppWorkflowSteps.h"
 #include "YQPkgApplication.h"
 
 
@@ -38,6 +40,7 @@ bool               YQPkgApplication::_fakeRoot = false;
 YQPkgApplication::YQPkgApplication()
     : QObject()
     , _mainWin(0)
+    , _workflow(0)
     , _pkgSel(0)
     , _yqPkgRepoManager(0)
 {
@@ -50,9 +53,7 @@ YQPkgApplication::YQPkgApplication()
         _fakeRoot = true;
     }
 
-
-    createMainWin();
-    attachRepos();
+    createMainWin(); // Create this early to get early visual feedback
 }
 
 
@@ -66,7 +67,12 @@ YQPkgApplication::~YQPkgApplication()
     if ( _mainWin )
         delete _mainWin;
 
-    detachRepos();
+    if ( _workflow )
+        delete _workflow;
+
+    if ( _yqPkgRepoManager )
+        delete _yqPkgRepoManager;
+
     _instance = 0;
 
     logDebug() << "Destroying YQPkgApplication done" << endl;
@@ -75,10 +81,21 @@ YQPkgApplication::~YQPkgApplication()
 
 void YQPkgApplication::run()
 {
-    createPkgSel();
-    _mainWin->showPage( _pkgSel );
+    if ( _workflow )
+        createWorkflow();
+    else
+        _workflow->restart();
 
-    qApp->exec();
+    // Control between main window pages and workflow steps is now entirely up
+    // to the workflow object and the events passed back and forth between the
+    // pages / workflow steps (each step has one page):
+    //
+    // They send signals to trigger slots like 'next()', 'back()', 'quit()',
+    // 'restart()' (which goes back to the package selection).
+
+    qApp->exec();  // Qt main event loop
+
+    // Only 'quit()' or an exception terminates the event loop
 }
 
 
@@ -96,6 +113,23 @@ void YQPkgApplication::createMainWin()
 }
 
 
+void YQPkgApplication::createWorkflow()
+{
+    if ( _workflow )
+        return;
+
+    logDebug() << "Creating the application workflow" << endl;
+
+    WorkflowStepList steps;
+    steps << new YQPkgInitReposStep( this, "initRepos" ) // excluded from history
+          << new YQPkgSelStep      ( this, "pkgSel"    )
+          << new YQPkgWizardStep   ( this, "pkgCommit" )
+          << new YQPkgWizardStep   ( this, "summary"   );
+
+    _workflow = new Workflow( steps );
+}
+
+
 void YQPkgApplication::setWindowTitle( QWidget * window )
 {
     if ( window )
@@ -106,6 +140,15 @@ void YQPkgApplication::setWindowTitle( QWidget * window )
     }
 }
 
+
+YQPackageSelector *
+YQPkgApplication::pkgSel()
+{
+    if ( ! _pkgSel )
+        createPkgSel(); // Created lazy because this takes a moment
+
+    return _pkgSel;
+}
 
 void YQPkgApplication::createPkgSel()
 {
@@ -121,9 +164,7 @@ void YQPkgApplication::createPkgSel()
     CHECK_PTR( _pkgSel );
 
     QObject::connect( _pkgSel, SIGNAL( commit() ),
-                      qApp,    SLOT  ( quit()   ) );
-
-    _mainWin->addPage( _pkgSel, "pkgSel" );
+                      this,    SLOT  ( next()   ) );
 }
 
 
@@ -136,52 +177,30 @@ bool YQPkgApplication::runningAsRoot()
 }
 
 
-void YQPkgApplication::attachRepos()
+YQPkgRepoManager *
+YQPkgApplication::repoMan()
 {
-    logDebug() << "Initializing zypp..." << endl;
-    QLabel repoSplashPage( _( "Loading package manager data..." ) );
-
-    if ( _mainWin )
-        _mainWin->splashPage( &repoSplashPage );
-
     if ( ! _yqPkgRepoManager )
-    {
-        _yqPkgRepoManager = new YQPkgRepoManager();
-        CHECK_NEW( _yqPkgRepoManager );
-    }
+        createRepoMan();
 
-    try
-    {
-        _yqPkgRepoManager->zyppConnect(); // This may throw
-        _yqPkgRepoManager->initTarget();
-        _yqPkgRepoManager->attachRepos();
-    }
-    catch ( ... )
-    {
-        QString message = _( "Can't connect to the package manager!\n"
-                             "It may be busy in another window.\n" );
-
-        QMessageBox::warning( 0, // parent
-                              _( "Error" ),
-                              message,
-                              QMessageBox::Ok );
-        throw;
-    }
-
-    logDebug() << "Initializing zypp done" << endl;
+    return _yqPkgRepoManager;
 }
 
 
-void YQPkgApplication::detachRepos()
+void YQPkgApplication::createRepoMan()
 {
     if ( _yqPkgRepoManager )
-    {
-        delete _yqPkgRepoManager;
-        _yqPkgRepoManager = 0;
-    }
+        return;
+
+    _yqPkgRepoManager = new YQPkgRepoManager();
+    CHECK_NEW( _yqPkgRepoManager );
 }
 
 
+/**
+ * Catch some events from other QObjects to redirect them if needed:
+ * For example WM_CLOSE triggers the same as "Cancel" in the package selector.
+ **/
 bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 {
     if ( _mainWin && watchedObj == _mainWin && _pkgSel
@@ -201,4 +220,52 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
     }
 
     return false; // Event processing not yet finished, continue down the chain
+}
+
+
+void YQPkgApplication::next()
+{
+    if ( ! _workflow )
+        return;
+
+    if ( _workflow->atLastStep() )
+        quit(); // TO DO: ask for confirmation?
+    else
+        _workflow->next();
+}
+
+
+void YQPkgApplication::back()
+{
+    if ( ! _workflow )
+        return;
+
+    _workflow->back();
+}
+
+
+void YQPkgApplication::restart()
+{
+    if ( ! _workflow )
+        return;
+
+    _workflow->gotoStep( "pkgSel" );
+}
+
+
+void YQPkgApplication::quit( bool askForConfirmation )
+{
+    if ( askForConfirmation )
+    {
+	int result = QMessageBox::warning( _mainWin,
+                                           "",  // Window title
+                                           _( "Really quit?" ),
+                                           _( "&Yes" ), _( "&No" ), "",
+                                           0,   // defaultButtonNumber (from 0)
+                                           1 ); // escapeButtonNumber
+        if ( result != 0 ) // button #0 (Yes)
+            return;
+    }
+
+    qApp->quit();
 }

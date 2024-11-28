@@ -23,6 +23,7 @@
 
 
 class MainWindow;
+class Workflow;
 class YQPackageSelector;
 class YQPkgRepoManager;
 class QEvent;
@@ -69,40 +70,81 @@ public:
      **/
     static bool runningAsRoot();
 
+    //
+    // Access to some important member variables
+    //
+
+    Workflow *   workflow() const { return _workflow; }
+    MainWindow * mainWin()  const { return _mainWin; }
+
+    /**
+     * Return the package selector. Create it if it doesn't exist yet.
+     *
+     * Ownership remains with this class; do not delete it.
+     **/
+    YQPackageSelector * pkgSel();
+
+    /**
+     * Return the YQPkgRepoManager. Create it if it doesn't exist yet.
+     *
+     * Ownership remains with this class; do not delete it.
+     **/
+    YQPkgRepoManager * repoMan();
+
+
+public slots:
+
+    /**
+     * Go to the next worflow step.
+     * If there is no more step, quit the program.
+     **/
+    void next();
+
+    /**
+     * Go to the previous worflow step.
+     **/
+    void back();
+
+    /**
+     * Restart the workflow: Go back to the package selection.
+     **/
+    void restart();
+
+    /**
+     * Quit the program.
+     *
+     * Ask for confirmation if 'askForConfirmation' is 'true'.
+     **/
+    void quit( bool askForConfirmation = false );
+
 
 protected:
 
     /**
-     * Create and set up the main window.
+     * Create and set up the main window if it doesn't exist yet.
      **/
     void createMainWin();
+
+    /**
+     * Create the workflow if it doesn't exist yet.
+     **/
+    void createWorkflow();
+
+    /**
+     * Create the YQPackageSelector if it doesn't exist yet.
+     **/
+    void createPkgSel();
+
+    /**
+     * Create the YQPkgRepoManager if it doesn't exist yet.
+     **/
+    void createRepoMan();
 
     /**
      * Set the appropriate window title, depending if the applicaton is running
      * with or without root permissions.
      **/
     void setWindowTitle( QWidget * window );
-
-    /**
-     * Create (and show) the YQPackageSelector if it doesn't already exist.
-     **/
-    void createPkgSel();
-
-    /**
-     * Initialize and attach the repos:
-     *
-     *   - Create the YQPkgRepoManager
-     *   - Connect to libzypp
-     *   - initialize the target (load the resolvables from the RPMDB)
-     *   - attach all active repos
-     **/
-    void attachRepos();
-
-    /**
-     * Shut down and detach the repos.
-     * This also destroys the YQPkgRepoManager.
-     **/
-    void detachRepos();
 
     /**
      * Event filter to catch foreign events, e.g. the MainWindow WM_CLOSE.
@@ -117,6 +159,7 @@ protected:
     //
 
     MainWindow *        _mainWin;
+    Workflow *          _workflow;
     YQPackageSelector * _pkgSel;
     YQPkgRepoManager  * _yqPkgRepoManager;
 

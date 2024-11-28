@@ -268,7 +268,7 @@ public:
      *
      * after creating the worflow from a list of WorkflowSteps.
      **/
-    void excludeFromHistory() { _includeInHistory = false; }
+    void setExcludeFromHistory() { _includeInHistory = false; }
 
 
 protected:
