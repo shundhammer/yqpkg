@@ -102,6 +102,7 @@ set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 #
 
 set( UI_FILES
+     pkg-commit.ui
      wizard-page.ui
    )
 
