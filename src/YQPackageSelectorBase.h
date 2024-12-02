@@ -104,6 +104,11 @@ public slots:
     void reject();
 
     /**
+     * WM_CLOSE: ALT-F4 or the close window [x] icon in the window decoration.
+     **/
+    void wmClose() { reject(); }
+
+    /**
      * Close processing and accept changes
      **/
     void accept();

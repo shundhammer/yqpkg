@@ -15,12 +15,18 @@
  */
 
 
-#include <QWidget>
-#include "ui_wizard-page.h"    // Generated with 'uic' from a Qt designer .ui form
-
-
 #ifndef WizardPage_h
 #define WizardPage_h
+
+#include <QWidget>
+
+
+// Generated with 'uic' from a Qt designer .ui form: wizard-page.ui
+//
+// Check out ../build/src/yqpkg_autogen/include/ui_wizard-page.h
+// for the variable names of the widgets.
+
+#include "ui_wizard-page.h"
 
 
 /**

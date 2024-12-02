@@ -74,7 +74,7 @@
      <property name="handleWidth">
       <number>3</number>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="detailsSplitterPane">
       <layout class="QHBoxLayout" name="detailsFrameHBox">
        <item>
         <widget class="QFrame" name="detailsFrame">
@@ -116,13 +116,74 @@
              </widget>
             </item>
             <item>
-             <widget class="QListView" name="toDoList">
+             <widget class="QListWidget" name="toDoList">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>1</horstretch>
                 <verstretch>1</verstretch>
                </sizepolicy>
               </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::NoSelection</enum>
+              </property>
+              <property name="textElideMode">
+               <enum>Qt::ElideMiddle</enum>
+              </property>
+              <property name="uniformItemSizes">
+               <bool>true</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>bash</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libfoobar</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libfoobar-devel</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MozillaFireFoxBlafaselWrglbrmpf</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MozillaFireFoxBlafaselWrglbrmpf-plugins-bad</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MozillaFireFoxBlafaselWrglbrmpf-plugins-good</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MozillaFireFoxBlafaselWrglbrmpf-plugins-ugly</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>zsh</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
@@ -133,11 +194,11 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
+             <enum>QSizePolicy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>15</width>
+              <width>30</width>
               <height>20</height>
              </size>
             </property>
@@ -151,7 +212,7 @@
                <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
+               <enum>QSizePolicy::MinimumExpanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -169,9 +230,9 @@
              </widget>
             </item>
             <item>
-             <widget class="QListView" name="doingList">
+             <widget class="QListWidget" name="doingList">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -181,6 +242,24 @@
               </property>
               <property name="frameShadow">
                <enum>QFrame::Sunken</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::NoSelection</enum>
+              </property>
+              <property name="textElideMode">
+               <enum>Qt::ElideMiddle</enum>
+              </property>
+              <property name="uniformItemSizes">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -192,11 +271,11 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
+             <enum>QSizePolicy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>15</width>
+              <width>30</width>
               <height>20</height>
              </size>
             </property>
@@ -212,12 +291,33 @@
              </widget>
             </item>
             <item>
-             <widget class="QListView" name="doneList">
+             <widget class="QListWidget" name="doneList">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>1</horstretch>
                 <verstretch>1</verstretch>
                </sizepolicy>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::NoSelection</enum>
+              </property>
+              <property name="textElideMode">
+               <enum>Qt::ElideMiddle</enum>
+              </property>
+              <property name="uniformItemSizes">
+               <bool>true</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -228,7 +328,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="progressSplitterPane">
       <layout class="QVBoxLayout" name="progressVBox">
        <property name="spacing">
         <number>13</number>
@@ -329,7 +429,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="showSummaryCheckBox">
+      <widget class="QCheckBox" name="showSummaryPageCheckBox">
        <property name="text">
         <string>Show &amp;Summary Page</string>
        </property>

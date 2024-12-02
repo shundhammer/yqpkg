@@ -30,6 +30,7 @@ set( SOURCES
   Exception.cc
   FSize.cc
   MainWindow.cc
+  PkgCommitter.cc
   WindowSettings.cc
   WizardPage.cc
   Workflow.cc
@@ -102,7 +103,7 @@ set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 #
 
 set( UI_FILES
-     pkg-commit.ui
+     pkg-commit-page.ui
      wizard-page.ui
    )
 

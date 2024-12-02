@@ -25,6 +25,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "PkgCommitter.h"
 #include "Workflow.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
@@ -42,6 +43,7 @@ YQPkgApplication::YQPkgApplication()
     , _mainWin(0)
     , _workflow(0)
     , _pkgSel(0)
+    , _pkgCommitter(0)
     , _yqPkgRepoManager(0)
 {
     _instance = this;
@@ -64,6 +66,9 @@ YQPkgApplication::~YQPkgApplication()
 
     if ( _pkgSel )
         delete _pkgSel;
+
+    if ( _pkgCommitter )
+        delete _pkgCommitter;
 
     if ( _workflow )
         delete _workflow;
@@ -130,7 +135,7 @@ void YQPkgApplication::createWorkflow()
     WorkflowStepList steps;
     steps << new YQPkgInitReposStep( this, "initRepos" ) // excluded from history
           << new YQPkgSelStep      ( this, "pkgSel"    )
-          << new YQPkgWizardStep   ( this, "pkgCommit" )
+          << new YQPkgCommitStep   ( this, "pkgCommit" ) // excluded from history
           << new YQPkgWizardStep   ( this, "summary"   );
 
     _workflow = new Workflow( steps );
@@ -182,6 +187,29 @@ void YQPkgApplication::createPkgSel()
 }
 
 
+PkgCommitter *
+YQPkgApplication::pkgCommitter()
+{
+    if ( ! _pkgCommitter )
+        createPkgCommitter();
+
+    return _pkgCommitter;
+}
+
+
+void YQPkgApplication::createPkgCommitter()
+{
+    if ( _pkgCommitter )
+        return;
+
+    _pkgCommitter = new PkgCommitter();
+    CHECK_PTR( _pkgCommitter );
+
+    QObject::connect( _pkgCommitter, SIGNAL( next() ),
+                      this,          SLOT  ( next() ) );
+}
+
+
 bool YQPkgApplication::runningAsRoot()
 {
     if ( _fakeRoot )
@@ -192,16 +220,16 @@ bool YQPkgApplication::runningAsRoot()
 
 
 YQPkgRepoManager *
-YQPkgApplication::repoMan()
+YQPkgApplication::repoManager()
 {
     if ( ! _yqPkgRepoManager )
-        createRepoMan();
+        createRepoManager();
 
     return _yqPkgRepoManager;
 }
 
 
-void YQPkgApplication::createRepoMan()
+void YQPkgApplication::createRepoManager()
 {
     if ( _yqPkgRepoManager )
         return;
@@ -220,10 +248,19 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
     if ( _mainWin && watchedObj == _mainWin && _pkgSel
 	 && event && event->type() == QEvent::Close ) // WM_CLOSE (Alt-F4)
     {
-        if ( _mainWin->currentPage() == _pkgSel )
+        QWidget * currentPage = _mainWin->currentPage();
+
+        if ( currentPage == _pkgSel )
         {
             logInfo() << "Caught WM_CLOSE for YQPackageSelector" << endl;
-            _pkgSel->reject();  // _pkgSel handles asking for confirmation etc.
+            _pkgSel->wmClose();  // _pkgSel handles asking for confirmation etc.
+
+            return true;        // Event processing finished for this one
+        }
+        else if ( currentPage == _pkgCommitter )
+        {
+            logInfo() << "Caught WM_CLOSE for PkgCommitter" << endl;
+            _pkgCommitter->wmClose();
 
             return true;        // Event processing finished for this one
         }
@@ -239,16 +276,36 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 
 void YQPkgApplication::next()
 {
-    logDebug() << endl;
     CHECK_PTR( _workflow );
 
     if ( ! _workflow )
         return;
 
+    logDebug() << "Current page: " << _workflow->currentStep()->id() << endl;
+
+    if ( _workflow->currentStep()->id() == "pkgCommit" )
+    {
+        // FIXME: Move this to the summary page once it's no longer a wizard placeholder page.
+
+        if ( ! _pkgCommitter->showSummaryPage() )
+        {
+            logInfo() << "Skipping summary page -> quitting" << endl;
+            quit();
+
+            return;
+        }
+    }
+
     if ( _workflow->atLastStep() )
-        quit(); // TO DO: ask for confirmation?
+    {
+        logDebug() << "This was the last step. Quitting." << endl;
+        quit();
+    }
     else
+    {
+        logDebug() << "Next step in the workflow." << endl;
         _workflow->next();
+    }
 }
 
 
@@ -279,7 +336,7 @@ void YQPkgApplication::restart()
 void YQPkgApplication::skipCommit()
 {
     // The user finished the package selection with "Accept", but there was no
-    // change: Skip the "commit" phase and go traight to the summary screen.
+    // change: Skip the "commit" phase and go straight to the summary screen.
 
     logDebug() << endl;
     CHECK_PTR( _workflow );

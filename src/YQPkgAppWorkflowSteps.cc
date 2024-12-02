@@ -20,6 +20,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "PkgCommitter.h"
 #include "WizardPage.h"
 #include "YQPackageSelector.h"
 #include "YQPkgRepoManager.h"
@@ -76,14 +77,8 @@ void YQPkgAppWorkflowStep::activate( bool goingForward )
 }
 
 
-//----------------------------------------------------------------------
-
-
-void YQPkgInitReposStep::activate( bool goingForward )
+void YQPkgAppWorkflowStep::nextPage( bool goingForward )
 {
-    YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
-    initRepos();  // Do the one-time work
-
     // Automatically continue with the next step in the same direction
 
     if ( goingForward || _app->workflow()->historyEmpty() )
@@ -96,6 +91,20 @@ void YQPkgInitReposStep::activate( bool goingForward )
         logDebug() << "_app->back()" << endl;
         _app->back();
     }
+}
+
+
+//----------------------------------------------------------------------
+
+
+void YQPkgInitReposStep::activate( bool goingForward )
+{
+    YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+
+    if ( goingForward )
+        initRepos();  // Do the one-time work
+
+    nextPage( goingForward );
 }
 
 
@@ -115,7 +124,7 @@ void YQPkgInitReposStep::initRepos()
 
     logDebug() << "Initializing zypp..." << endl;
 
-    YQPkgRepoManager * repoMan = _app->repoMan();
+    YQPkgRepoManager * repoMan = _app->repoManager();
     CHECK_PTR( repoMan );
 
     try
@@ -150,6 +159,34 @@ YQPkgSelStep::createPage()
     _doDeletePage = false; // We don't own it, the app object does
 
     return _app->pkgSel();
+}
+
+
+//----------------------------------------------------------------------
+
+
+QWidget *
+YQPkgCommitStep::createPage()
+{
+    _doDeletePage    = false; // We don't own it, the app object does
+    _doProcessEvents = true;  // Make sure to display this page
+
+    return _app->pkgCommitter();
+}
+
+
+
+void YQPkgCommitStep::activate( bool goingForward )
+{
+    if ( goingForward )
+    {
+        YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+        _app->pkgCommitter()->reset();  // Reset the widgets on the page
+
+        _app->pkgCommitter()->commit(); // Do the package transactions
+    }
+
+    nextPage( goingForward );
 }
 
 

@@ -15,14 +15,13 @@
  */
 
 
+#ifndef MainWindow_h
+#define MainWindow_h
+
 #include <QString>
 #include <QWidget>
 #include <QList>
 #include <QPointer>
-
-
-#ifndef MainWindow_h
-#define MainWindow_h
 
 
 typedef QPointer<QWidget> QWidgetPointer;

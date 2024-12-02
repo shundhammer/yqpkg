@@ -53,6 +53,15 @@ protected:
      **/
     virtual QWidget * createPage() = 0;
 
+    /**
+     * Go to the next page in the same direction.
+     *
+     * If there is no more page in the history while going back, change
+     * direction to forward and go to the next page.
+     **/
+    void nextPage( bool goingForward );
+
+
     //
     // Data members
     //
@@ -130,6 +139,33 @@ protected:
 
     /**
      * Create the page for this step: The package selector.
+     **/
+    virtual QWidget * createPage() override;
+};
+
+
+/**
+ * The "package commit" step
+ **/
+class YQPkgCommitStep: public YQPkgAppWorkflowStep
+{
+public:
+
+    YQPkgCommitStep( YQPkgApplication * app,
+                     const QString &    id,
+                     const QString &    next = QString() )
+        : YQPkgAppWorkflowStep( app, id, next )
+        {
+            setExcludeFromHistory();
+        }
+
+
+    virtual void activate( bool goingForward ) override;
+
+protected:
+
+    /**
+     * Create the page for this step: The package committer.
      **/
     virtual QWidget * createPage() override;
 };

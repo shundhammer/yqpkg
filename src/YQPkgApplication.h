@@ -25,6 +25,7 @@
 class MainWindow;
 class Workflow;
 class YQPackageSelector;
+class PkgCommitter;
 class YQPkgRepoManager;
 class QEvent;
 
@@ -85,11 +86,18 @@ public:
     YQPackageSelector * pkgSel();
 
     /**
+     * Return the package committer. Create it if it doesn't exist yet.
+     *
+     * Ownership remains with this class; do not delete it.
+     **/
+    PkgCommitter * pkgCommitter();
+
+    /**
      * Return the YQPkgRepoManager. Create it if it doesn't exist yet.
      *
      * Ownership remains with this class; do not delete it.
      **/
-    YQPkgRepoManager * repoMan();
+    YQPkgRepoManager * repoManager();
 
 
 public slots:
@@ -144,9 +152,14 @@ protected:
     void createPkgSel();
 
     /**
+     * Create the PkgCommitter if it doesn't exist yet.
+     **/
+    void createPkgCommitter();
+
+    /**
      * Create the YQPkgRepoManager if it doesn't exist yet.
      **/
-    void createRepoMan();
+    void createRepoManager();
 
     /**
      * Set the appropriate window title, depending if the applicaton is running
@@ -169,6 +182,7 @@ protected:
     MainWindow *        _mainWin;
     Workflow *          _workflow;
     YQPackageSelector * _pkgSel;
+    PkgCommitter *      _pkgCommitter;
     YQPkgRepoManager  * _yqPkgRepoManager;
 
     static YQPkgApplication *   _instance;
