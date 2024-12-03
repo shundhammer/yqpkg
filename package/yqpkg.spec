@@ -18,8 +18,9 @@
 
 Name:           yqpkg
 
-# DO NOT manually bump the version here; instead, use rake version:bump
-Version:        0.4.0
+# If you change the version here, don't forget ../VERSION.cmake !
+# To increase only the last number, use  rake version:bump
+Version:        0.5.0
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
