@@ -39,9 +39,13 @@ PkgCommitter::PkgCommitter( QWidget * parent )
     reset();
 
     // See ui_pkg-commit-page.h in ../build/yqkg_autogen/include for the
-    // variable names. They are taken from the widget names in the .ui form (an
-    // XML file) that was generated with Qt designer, so choose them carefully
-    // when using Qt designer.
+    // widgets' variable names. They are taken from the widget names in the .ui
+    // form (an XML file) that was generated with Qt designer, so choose them
+    // carefully when using Qt designer.
+
+    QFont font( _ui->headingLabel->font() );
+    font.setBold( true );
+    _ui->headingLabel->setFont( font );
 
     connect( _ui->detailsButton, SIGNAL( clicked()       ),
              this,               SLOT  ( toggleDetails() ) );
@@ -68,10 +72,10 @@ void PkgCommitter::commit()
     // DEBUG
     // DEBUG
 
-    for ( int i=0; i < 100; ++i )
+    for ( int i=1; i <= 200; ++i )
     {
         usleep( 100 * 1000 ); // microseconds
-        _ui->totalProgressBar->setValue( i );
+        _ui->totalProgressBar->setValue( i / 2 );
         processEvents();
     }
 
