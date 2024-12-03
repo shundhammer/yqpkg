@@ -30,6 +30,10 @@
 #include "ui_summary-page.h"
 
 
+class QAction;
+class QActionGroup;
+
+
 /**
  * Summary page with buttons "Back" and "Finish" and a countdown.
  **/
@@ -114,8 +118,29 @@ protected slots:
      **/
     void updateCountdownWidgets();
 
+    /**
+     * Configure the countdown value from a QAction.
+     * The new value is taken from data() of the sending action.
+     **/
+    void configureCountdown( QAction * action );
+
 
 protected:
+
+    /**
+     * Set up the "..." countdown configuration menu button.
+     **/
+    void setupCountdownMenuButton();
+
+    /**
+     * Add a menu action to the "..." countdown configuration menu.
+     *
+     * The text is generated automatically from the 'seconds' parameter unless
+     * 'overrideText' is non-empty.
+     **/
+    void addMenuAction( QActionGroup *  actionGroup,
+                        int             seconds,
+                        const QString & overrideText = QString() );
 
     /**
      * Set up the internal signal / slot connections.
@@ -141,6 +166,7 @@ protected:
     int                 _countdownSec;
     QTimer              _countdownTimer;
     QTimer              _intervalTimer;
+    QMenu *             _countdownMenu;
 };
 
 

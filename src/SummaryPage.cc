@@ -15,11 +15,15 @@
  */
 
 
+#include <QAction>
+#include <QActionGroup>
+#include <QMenu>
 #include <QSettings>
 
 #include "Logger.h"
 #include "Exception.h"
 #include "MainWindow.h"
+#include "YQi18n.h"
 #include "SummaryPage.h"
 
 
@@ -27,6 +31,7 @@ SummaryPage::SummaryPage( QWidget * parent )
     : QWidget( parent )
     , _ui( new Ui::SummaryPage ) // Use the Qt designer .ui form (XML)
     , _countdownSec( 10 )
+    , _countdownMenu( 0 )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -41,6 +46,7 @@ SummaryPage::SummaryPage( QWidget * parent )
     // for the _ui object.
 
     readSettings();
+    setupCountdownMenuButton();
     reset();
     connectWidgets();
 
@@ -53,9 +59,14 @@ SummaryPage::SummaryPage( QWidget * parent )
 
 SummaryPage::~SummaryPage()
 {
+    logDebug() << "Destroying SummaryPage..." << endl;
     writeSettings();
 
+    if ( _countdownMenu )
+        delete _countdownMenu;
+
     delete _ui;
+    logDebug() << "Destroying SummaryPage done" << endl;
 }
 
 
@@ -124,14 +135,14 @@ void SummaryPage::updateCountdownWidgets()
 
 void SummaryPage::startCountdown()
 {
-    if ( _countdownSec <= 0 )
-        return;
+    if ( _countdownSec > 0 )
+    {
+        _intervalTimer.setInterval( 1000 ); // millisec
+        _intervalTimer.start();
 
-    _intervalTimer.setInterval( 1000 ); // millisec
-    _intervalTimer.start();
-
-    _countdownTimer.setSingleShot( true );
-    _countdownTimer.start( _countdownSec * 1000 );
+        _countdownTimer.setSingleShot( true );
+        _countdownTimer.start( _countdownSec * 1000 );
+    }
 
     updateCountdownWidgets();
 }
@@ -153,6 +164,60 @@ void SummaryPage::timeout()
     MainWindow::processEvents();
 
     emit finish();
+}
+
+
+void SummaryPage::setupCountdownMenuButton()
+{
+    if ( _countdownMenu )
+        return;
+
+    _countdownMenu = new QMenu();
+    CHECK_NEW( _countdownMenu );
+
+    QActionGroup * actionGroup = new QActionGroup( _countdownMenu );
+    CHECK_NEW( actionGroup );
+
+    addMenuAction( actionGroup,  10 );
+    addMenuAction( actionGroup,  30 );
+    addMenuAction( actionGroup,  60 );
+    addMenuAction( actionGroup, 300, _( "Close after 300 seconds (5 minutes)" ) );
+    addMenuAction( actionGroup,   0, _( "Don't automatically close" ) );
+
+    connect( _countdownMenu, SIGNAL( triggered         ( QAction * ) ),
+             this,           SLOT  ( configureCountdown( QAction * ) ) );
+
+    _ui->countdownMenuButton->setMenu( _countdownMenu );
+}
+
+
+void SummaryPage::addMenuAction( QActionGroup *  actionGroup,
+                                 int             seconds,
+                                 const QString & overrideText )
+{
+    QString text = overrideText;
+
+    if ( text.isEmpty() )
+        text = _( "Close after %1 seconds" ).arg( seconds );
+
+    QAction * action = new QAction( text, _countdownMenu );
+    CHECK_NEW( action );
+
+    action->setData( seconds );
+    actionGroup->addAction( action );
+    _countdownMenu->addAction( action );
+}
+
+
+void SummaryPage::configureCountdown( QAction * action )
+{
+    if ( action )
+    {
+        _countdownSec = action->data().toInt();
+        logDebug() << "Setting new countdown: " << _countdownSec << endl;
+
+        startCountdown();  // this also updates the widgets
+    }
 }
 
 
