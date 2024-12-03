@@ -26,6 +26,7 @@ class MainWindow;
 class Workflow;
 class YQPackageSelector;
 class PkgCommitter;
+class SummaryPage;
 class YQPkgRepoManager;
 class QEvent;
 
@@ -93,6 +94,13 @@ public:
     PkgCommitter * pkgCommitter();
 
     /**
+     * Return the summary page. Create it if it doesn't exist yet.
+     *
+     * Ownership remains with this class; do not delete it.
+     **/
+    SummaryPage * summaryPage();
+
+    /**
      * Return the YQPkgRepoManager. Create it if it doesn't exist yet.
      *
      * Ownership remains with this class; do not delete it.
@@ -112,6 +120,11 @@ public slots:
      * Go to the previous worflow step.
      **/
     void back();
+
+    /**
+     * Quit the program when the last workflow step was reached.
+     **/
+    void finish();
 
     /**
      * Restart the workflow: Go back to the package selection.
@@ -136,29 +149,14 @@ public slots:
 
 protected:
 
-    /**
-     * Create and set up the main window if it doesn't exist yet.
-     **/
+    // Create the various objects (and set up Qt connections if necessary)
+    // if they don't exist yet.
+
     void createMainWin();
-
-    /**
-     * Create the workflow if it doesn't exist yet.
-     **/
     void createWorkflow();
-
-    /**
-     * Create the YQPackageSelector if it doesn't exist yet.
-     **/
     void createPkgSel();
-
-    /**
-     * Create the PkgCommitter if it doesn't exist yet.
-     **/
     void createPkgCommitter();
-
-    /**
-     * Create the YQPkgRepoManager if it doesn't exist yet.
-     **/
+    void createSummaryPage();
     void createRepoManager();
 
     /**
@@ -183,6 +181,7 @@ protected:
     Workflow *          _workflow;
     YQPackageSelector * _pkgSel;
     PkgCommitter *      _pkgCommitter;
+    SummaryPage *       _summaryPage;
     YQPkgRepoManager  * _yqPkgRepoManager;
 
     static YQPkgApplication *   _instance;

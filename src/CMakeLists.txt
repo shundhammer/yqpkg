@@ -31,8 +31,8 @@ set( SOURCES
   FSize.cc
   MainWindow.cc
   PkgCommitter.cc
+  SummaryPage.cc
   WindowSettings.cc
-  WizardPage.cc
   Workflow.cc
 
   YQPackageSelector.cc
@@ -104,7 +104,7 @@ set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 
 set( UI_FILES
      pkg-commit-page.ui
-     wizard-page.ui
+     summary-page.ui
    )
 
 # Putting it all together

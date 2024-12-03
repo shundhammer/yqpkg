@@ -72,10 +72,10 @@ void PkgCommitter::commit()
     // DEBUG
     // DEBUG
 
-    for ( int i=1; i <= 200; ++i )
+    for ( int i=1; i <= 100; ++i )
     {
         usleep( 100 * 1000 ); // microseconds
-        _ui->totalProgressBar->setValue( i / 2 );
+        _ui->totalProgressBar->setValue( i );
         processEvents();
     }
 

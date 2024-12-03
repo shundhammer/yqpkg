@@ -47,11 +47,25 @@ public:
 protected:
 
     /**
+     * Get the MainWindow page for this step.
+     * Ownership remains with the derived class; it won't be deleted.
+     *
+     * Derived classes are required to implement either this method or
+     * createPage().
+     **/
+    virtual QWidget * page() { return 0; }
+
+    /**
      * Create a MainWindow page for this step.
      *
-     * Derived classes are required to implement this.
+     * Ownership is transferred to this class; it will be deleted in the
+     * Workflow destructor (unless the _doDeletePage flag is set to 'false' in
+     * the reimplemented createPage() method).
+     *
+     * Derived classes are required to implement either this method or
+     * page().
      **/
-    virtual QWidget * createPage() = 0;
+    virtual QWidget * createPage() { return 0; };
 
     /**
      * Go to the next page in the same direction.
@@ -60,6 +74,16 @@ protected:
      * direction to forward and go to the next page.
      **/
     void nextPage( bool goingForward );
+
+    /**
+     * Get the page for this step, either with page() or with createPage(),
+     * and add it to the MainWindow pages.
+     *
+     * This will throw if none of them is implemented and returns a page.
+     **/
+    void ensurePage();
+
+protected:
 
 
     //
@@ -138,9 +162,13 @@ public:
 protected:
 
     /**
-     * Create the page for this step: The package selector.
+     * Get the page for this step: The package selector.
+     *
+     * Since this subclass implements page() and not createPage(),
+     * ownership of the page is not transferred to the Workflow,
+     * so it is not deleted.
      **/
-    virtual QWidget * createPage() override;
+    virtual QWidget * page() override;
 };
 
 
@@ -165,12 +193,43 @@ public:
 protected:
 
     /**
-     * Create the page for this step: The package committer.
+     * Get the page for this step: The package committer.
+     *
+     * Since this subclass implements page() and not createPage(),
+     * ownership of the page is not transferred to the Workflow,
+     * so it is not deleted.
      **/
-    virtual QWidget * createPage() override;
+    virtual QWidget * page() override;
 };
 
 
+class YQPkgSummaryStep: public YQPkgAppWorkflowStep
+{
+public:
+
+    YQPkgSummaryStep( YQPkgApplication * app,
+                      const QString &    id,
+                      const QString &    next = QString() )
+        : YQPkgAppWorkflowStep( app, id, next )
+        {}
+
+protected:
+
+    /**
+     * Create the page for this step: The summary page.
+     *
+     * Since this subclass implements page() and not createPage(),
+     * ownership of the page is not transferred to the Workflow,
+     * so it is not deleted.
+     **/
+    virtual QWidget * page() override;
+
+    virtual void activate  ( bool goingForward ) override;
+    virtual void deactivate( bool goingForward ) override;
+};
+
+
+#if 0
 /**
  * A generic wizard step with "Back" and "Next" buttons
  **/
@@ -188,9 +247,16 @@ protected:
 
     /**
      * Create the page for this step: A wizard page.
+     *
+     * Since this subclass implements createPage and not page(),
+     * ownwership of the page is transferred to the Workflow,
+     * and it is deleted in the Workflow destructor.
      **/
     virtual QWidget * createPage() override;
+
+    virtual void activate( bool goingForward ) override;
 };
+#endif
 
 
 #endif // YQPkgAppWorkflowSteps_h

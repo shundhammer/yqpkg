@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "PkgCommitter.h"
 #include "Workflow.h"
+#include "SummaryPage.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
@@ -44,6 +45,7 @@ YQPkgApplication::YQPkgApplication()
     , _workflow(0)
     , _pkgSel(0)
     , _pkgCommitter(0)
+    , _summaryPage(0)
     , _yqPkgRepoManager(0)
 {
     _instance = this;
@@ -69,6 +71,9 @@ YQPkgApplication::~YQPkgApplication()
 
     if ( _pkgCommitter )
         delete _pkgCommitter;
+
+    if ( _summaryPage )
+        delete _summaryPage;
 
     if ( _workflow )
         delete _workflow;
@@ -136,7 +141,7 @@ void YQPkgApplication::createWorkflow()
     steps << new YQPkgInitReposStep( this, "initRepos" ) // excluded from history
           << new YQPkgSelStep      ( this, "pkgSel"    )
           << new YQPkgCommitStep   ( this, "pkgCommit" ) // excluded from history
-          << new YQPkgWizardStep   ( this, "summary"   );
+          << new YQPkgSummaryStep  ( this, "summary"   );
 
     _workflow = new Workflow( steps );
     CHECK_PTR( _workflow );
@@ -177,7 +182,7 @@ void YQPkgApplication::createPkgSel()
         _mainWin->splashPage( &busyPage );
 
     _pkgSel = new YQPackageSelector( 0, 0 );
-    CHECK_PTR( _pkgSel );
+    CHECK_NEW( _pkgSel );
 
     QObject::connect( _pkgSel, SIGNAL( commit() ),
                       this,    SLOT  ( next()   ) );
@@ -203,19 +208,37 @@ void YQPkgApplication::createPkgCommitter()
         return;
 
     _pkgCommitter = new PkgCommitter();
-    CHECK_PTR( _pkgCommitter );
+    CHECK_NEW( _pkgCommitter );
 
     QObject::connect( _pkgCommitter, SIGNAL( next() ),
                       this,          SLOT  ( next() ) );
 }
 
 
-bool YQPkgApplication::runningAsRoot()
+SummaryPage *
+YQPkgApplication::summaryPage()
 {
-    if ( _fakeRoot )
-        return true;
+    if ( ! _summaryPage )
+        createSummaryPage();
 
-    return geteuid() == 0;
+    return _summaryPage;
+}
+
+
+void YQPkgApplication::createSummaryPage()
+{
+    if ( _summaryPage )
+        return;
+
+    _summaryPage = new SummaryPage();
+    CHECK_NEW( _summaryPage );
+
+    QObject::connect( _summaryPage, SIGNAL( back() ),
+                      this,         SLOT  ( back() ) );
+
+    QObject::connect( _summaryPage, SIGNAL( finish() ),
+                      this,         SLOT  ( finish() ) );
+
 }
 
 
@@ -223,7 +246,10 @@ YQPkgRepoManager *
 YQPkgApplication::repoManager()
 {
     if ( ! _yqPkgRepoManager )
-        createRepoManager();
+    {
+        _yqPkgRepoManager = new YQPkgRepoManager();
+        CHECK_NEW( _yqPkgRepoManager );
+    }
 
     return _yqPkgRepoManager;
 }
@@ -234,8 +260,15 @@ void YQPkgApplication::createRepoManager()
     if ( _yqPkgRepoManager )
         return;
 
-    _yqPkgRepoManager = new YQPkgRepoManager();
-    CHECK_NEW( _yqPkgRepoManager );
+}
+
+
+bool YQPkgApplication::runningAsRoot()
+{
+    if ( _fakeRoot )
+        return true;
+
+    return geteuid() == 0;
 }
 
 
@@ -298,14 +331,21 @@ void YQPkgApplication::next()
 
     if ( _workflow->atLastStep() )
     {
-        logDebug() << "This was the last step. Quitting." << endl;
-        quit();
+        logDebug() << "This was the last step." << endl;
+        finish();
     }
     else
     {
         logDebug() << "Next step in the workflow." << endl;
         _workflow->next();
     }
+}
+
+
+void YQPkgApplication::finish()
+{
+    logDebug() << "Quitting the program." << endl;
+    quit();
 }
 
 

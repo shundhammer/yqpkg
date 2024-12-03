@@ -109,7 +109,7 @@ public:
      * Notice that you can use a simple QLabel as a page for this purpose;
      * this is very much like the BusyPopup class, but in the main window.
      **/
-    void processEvents( int millisec = 500 );
+    static void processEvents( int millisec = 500 );
 
 
     /**

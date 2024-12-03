@@ -21,12 +21,23 @@
 #include "Logger.h"
 #include "MainWindow.h"
 #include "PkgCommitter.h"
-#include "WizardPage.h"
+#include "SummaryPage.h"
 #include "YQPackageSelector.h"
 #include "YQPkgRepoManager.h"
 #include "YQi18n.h"
 #include "YQPkgApplication.h"
 #include "YQPkgAppWorkflowSteps.h"
+
+#if 0
+#include "WizardPage.h"
+// If needed, move the source files back here  from the attic/ subdirectory:
+//
+//   WizardPage.h
+//   WizardPage.cc
+//   wizard-page.ui
+//
+// and re-enable them in CMakeLists.txt
+#endif
 
 
 YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( YQPkgApplication * app,
@@ -56,24 +67,43 @@ YQPkgAppWorkflowStep::~YQPkgAppWorkflowStep()
 }
 
 
+void YQPkgAppWorkflowStep::ensurePage()
+{
+    if ( _page )
+        return;
+
+    _page = page(); // First try: Get it without creating
+
+    if ( _page )
+        _doDeletePage = false; // We don't own this one
+    else
+    {
+        // Second try: Create it
+
+        _doDeletePage = true;  // We own it now (by default)
+        _page = createPage();
+    }
+
+    if ( ! _page )      // Still no page?
+    {
+        logError() << "FATAL: Implement one of page() or createPage()" << endl;
+        CHECK_PTR( _page );
+    }
+
+    _app->mainWin()->addPage( _page );
+}
+
+
 void YQPkgAppWorkflowStep::activate( bool goingForward )
 {
     Q_UNUSED( goingForward );
     logDebug() << "Activating step " << _id << endl;
 
-    if ( ! _page )
-    {
-        _page = createPage();
-        CHECK_PTR( _page );
-
-        _app->mainWin()->addPage( _page );
-    }
-
-    CHECK_PTR( _page );
+    ensurePage();
     _app->mainWin()->showPage( _page );
 
     if ( _doProcessEvents )
-        _app->mainWin()->processEvents();
+        MainWindow::processEvents();
 }
 
 
@@ -108,8 +138,7 @@ void YQPkgInitReposStep::activate( bool goingForward )
 }
 
 
-QWidget *
-YQPkgInitReposStep::createPage()
+QWidget * YQPkgInitReposStep::createPage()
 {
     _doProcessEvents = true; // This is a splash screen, so process events
 
@@ -154,10 +183,8 @@ void YQPkgInitReposStep::initRepos()
 
 
 QWidget *
-YQPkgSelStep::createPage()
+YQPkgSelStep::page()
 {
-    _doDeletePage = false; // We don't own it, the app object does
-
     return _app->pkgSel();
 }
 
@@ -165,15 +192,12 @@ YQPkgSelStep::createPage()
 //----------------------------------------------------------------------
 
 
-QWidget *
-YQPkgCommitStep::createPage()
+QWidget * YQPkgCommitStep::page()
 {
-    _doDeletePage    = false; // We don't own it, the app object does
     _doProcessEvents = true;  // Make sure to display this page
 
     return _app->pkgCommitter();
 }
-
 
 
 void YQPkgCommitStep::activate( bool goingForward )
@@ -193,6 +217,33 @@ void YQPkgCommitStep::activate( bool goingForward )
 //----------------------------------------------------------------------
 
 
+QWidget * YQPkgSummaryStep::page()
+{
+    return _app->summaryPage();
+}
+
+
+void YQPkgSummaryStep::activate( bool goingForward )
+{
+    YQPkgAppWorkflowStep::activate( goingForward );
+
+    _app->summaryPage()->updateSummary();
+    _app->summaryPage()->startCountdown();
+}
+
+
+void YQPkgSummaryStep::deactivate( bool goingForward )
+{
+    _app->summaryPage()->stopCountdown();
+    YQPkgAppWorkflowStep::deactivate( goingForward );
+}
+
+
+//----------------------------------------------------------------------
+
+
+#if 0
+
 QWidget * YQPkgWizardStep::createPage()
 {
     WizardPage * wizardPage = new WizardPage( _id );
@@ -202,3 +253,5 @@ QWidget * YQPkgWizardStep::createPage()
 
     return wizardPage;
 }
+
+#endif
