@@ -85,7 +85,7 @@ YQIconPool::~YQIconPool()
 QPixmap
 YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
 {
-    Q_INIT_RESOURCE(qt_pkg_icons);
+    Q_INIT_RESOURCE( icons );
     QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
 
     if ( !iconPixmap )
