@@ -83,22 +83,25 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *               parent,
     _filter = new QComboBox(this);
 
     // add the items.
-    _filter->addItem(_("All"), QVariant::fromValue(Filters(FilterAll)));
-    _filter->addItem(_("Selected by the user"), QVariant::fromValue(Filters(FilterUser)));
-    _filter->addItem(_("Automatic Changes"), QVariant::fromValue(Filters(FilterAutomatic)));
+    _filter->addItem( _( "All" ),                  QVariant::fromValue( Filters( FilterAll       ) ) );
+    _filter->addItem( _( "Selected by the user" ), QVariant::fromValue( Filters( FilterUser      ) ) );
+    _filter->addItem( _( "Automatic Changes" ),    QVariant::fromValue( Filters( FilterAutomatic ) ) );
 
     _filter->setCurrentIndex(0);
 
-    layout->addWidget(_filter);
-    connect( _filter, SIGNAL(currentIndexChanged(int)),
-             SLOT(slotFilterChanged(int)));
+    layout->addWidget( _filter );
+
+    connect( _filter,
+             SIGNAL( currentIndexChanged( int ) ),
+             SLOT  ( slotFilterChanged  ( int ) ) );
+
 
     // Pkg list
 
     _pkgList = new YQPkgList( this );
     Q_CHECK_PTR( _pkgList );
-    _pkgList->setEditable( false );
 
+    _pkgList->setEditable( false );
     layout->addWidget( _pkgList );
 
 
@@ -106,30 +109,35 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *               parent,
 
     hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
-    layout->addLayout( hbox );
 
+    layout->addLayout( hbox );
     hbox->addStretch();
 
+
     // Accept button - usually "OK" or "Continue"
+
     QPushButton * button = new QPushButton( acceptButtonLabel, this );
     Q_CHECK_PTR( button );
+
     hbox->addWidget( button );
     button->setDefault( true );
 
-    connect( button,    SIGNAL( clicked() ),
-             this,      SLOT  ( accept()  ) );
+    connect( button, SIGNAL( clicked() ),
+             this,   SLOT  ( accept()  ) );
 
     hbox->addStretch();
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
-        // Reject button ( if desired ) - usually "Cancel"
+        // Reject button (if desired) - usually "Cancel"
 
         button = new QPushButton( rejectButtonLabel, this );
         Q_CHECK_PTR( button );
+
         hbox->addWidget(button);
-        connect( button,        SIGNAL( clicked() ),
-                 this,          SLOT  ( reject()  ) );
+
+        connect( button, SIGNAL( clicked() ),
+                 this,   SLOT  ( reject()  ) );
 
         hbox->addStretch();
     }
@@ -147,11 +155,11 @@ void
 YQPkgChangesDialog::slotFilterChanged( int index )
 {
     logInfo() << "filter index changed to: " << index << endl;
-    QVariant v = _filter->itemData(index);
+    QVariant var = _filter->itemData( index );
 
-    if ( v.isValid() && v.canConvert<Filters>() )
+    if ( var.isValid() && var.canConvert<Filters>() )
     {
-        Filters flt = v.value<Filters>();
+        Filters flt = var.value<Filters>();
         filter( flt );
     }
     else
@@ -176,16 +184,16 @@ YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
 
     int index = -1;
 
-    for ( int k = 0; k < _filter->count(); ++k )
+    for ( int i = 0; i < _filter->count(); ++i )
     {
-        QVariant v = _filter->itemData( k );
+        QVariant var = _filter->itemData( i );
 
-        if ( v.isValid() && v.canConvert<Filters>() )
+        if ( var.isValid() && var.canConvert<Filters>() )
         {
 
-            Filters setf = v.value<Filters>();
+            Filters setf = var.value<Filters>();
             if ( setf == flt )
-                index = k;
+                index = i;
         }
     }
 
