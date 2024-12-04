@@ -33,12 +33,13 @@
 #include <QPixmap>
 #include <QBoxLayout>
 
-#include "YQPkgConflictDialog.h"
-#include "YQPkgConflictList.h"
-#include "QY2LayoutUtils.h"
-
 #include "Logger.h"
 #include "Exception.h"
+#include "WindowSettings.h"
+#include "QY2LayoutUtils.h"
+#include "YQPkgConflictList.h"
+#include "YQPkgConflictDialog.h"
+
 
 #define SOLVING_TIMER           0
 
@@ -200,12 +201,14 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // Make sure the newly emptied text doesn't cause the busy dialog to be
     // resized to nil (or a window manager dependent minimum size).
     _busyPopup->setFixedSize( _busyPopup->size() );
+
+    WindowSettings::read( this, "PkgConflictDialog" );
 }
 
 
 YQPkgConflictDialog::~YQPkgConflictDialog()
 {
-    // NOP
+    WindowSettings::write( this, "PkgConflictDialog" );
 }
 
 
