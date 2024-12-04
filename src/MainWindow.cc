@@ -52,6 +52,9 @@ void MainWindow::basicLayout()
     _layout = new QVBoxLayout( this );
     CHECK_NEW( _layout );
 
+    // Don't let margins accumulate: The UI designer generated forms have their
+    // own, the manally created YQPackageManager doesn't need or want them
+    _layout->setContentsMargins( 0, 0, 0, 0 ); // left, right, top, bottom
     _layout->setAlignment( Qt::AlignCenter );
 }
 
