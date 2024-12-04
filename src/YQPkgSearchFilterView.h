@@ -153,7 +153,20 @@ protected:
      **/
     bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
 
+    /**
+     * Read settings from the config file.
+     **/
+    void readSettings();
+
+    /**
+     * Write settings to the config file.
+     **/
+    void writeSettings();
+
+
+    //
     // Data members
+    //
 
     QComboBox *		_searchText;
     QPushButton *	_searchButton;

@@ -231,8 +231,6 @@ void SummaryPage::readSettings()
     _countdownSec = settings.value( "countdownSec", 10 ).toInt();
 
     settings.endGroup();
-
-    logDebug() << "countdownSec from settings: " << _countdownSec << endl;
 }
 
 

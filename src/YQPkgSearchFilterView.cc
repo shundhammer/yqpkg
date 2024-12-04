@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QPushButton>
+#include <QSettings>
 
 #include <zypp/PoolQuery.h>
 
@@ -106,7 +107,6 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     _searchInName->setChecked( true );
     _searchInKeywords->setChecked( true );
-    _searchInSummary->setChecked( true );
 
     layout->addStretch();
 
@@ -148,12 +148,14 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     setWidgetResizable(true);
     setWidget(content);
+
+    readSettings();
 }
 
 
 YQPkgSearchFilterView::~YQPkgSearchFilterView()
 {
-    // NOP
+    writeSettings();
 }
 
 
@@ -439,3 +441,44 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
     return false;
 }
 
+
+void YQPkgSearchFilterView::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "YQPkgSearchFilterView" );
+
+    _searchInName->setChecked        ( settings.value( "searchInName",        true  ).toBool() );
+    _searchInKeywords->setChecked    ( settings.value( "searchInKeywords",    true  ).toBool() );
+    _searchInSummary->setChecked     ( settings.value( "searchInSummary",     false ).toBool() );
+    _searchInDescription->setChecked ( settings.value( "searchInDescription", false ).toBool() );
+    _searchInProvides->setChecked    ( settings.value( "searchInProvides",    false ).toBool() );
+    _searchInRequires->setChecked    ( settings.value( "searchInRequires",    false ).toBool() );
+    _searchInFileList->setChecked    ( settings.value( "searchInFileList",    false ).toBool() );
+
+    _caseSensitive->setChecked       ( settings.value( "caseSensitive",       false ).toBool() );
+
+    _searchMode->setCurrentIndex     ( settings.value( "searchMode", (int) BeginsWith ).toInt() );
+
+    settings.endGroup();
+}
+
+
+void YQPkgSearchFilterView::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "YQPkgSearchFilterView" );
+
+    settings.setValue( "searchInName",        _searchInName->isChecked()        );
+    settings.setValue( "searchInKeywords",    _searchInKeywords->isChecked()    );
+    settings.setValue( "searchInSummary",     _searchInSummary->isChecked()     );
+    settings.setValue( "searchInDescription", _searchInDescription->isChecked() );
+    settings.setValue( "searchInProvides",    _searchInProvides->isChecked()    );
+    settings.setValue( "searchInRequires",    _searchInRequires->isChecked()    );
+    settings.setValue( "searchInFileList",    _searchInFileList->isChecked()    );
+
+    settings.setValue( "caseSensitive",       _caseSensitive->isChecked()       );
+    settings.setValue( "searchMode",          _searchMode->currentIndex()       );
+
+
+    settings.endGroup();
+}
