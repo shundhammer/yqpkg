@@ -42,7 +42,7 @@ public:
 
     /**
      * filter combobox entries
-     */
+     **/
     enum FilterIndex
     {
         FilterIndexAll = 0,
@@ -75,7 +75,7 @@ public:
      *
      * This will change the combo box current selected filter and update the
      * list
-     */
+     **/
     void setFilter( Filters f );
 
     /**
@@ -83,7 +83,7 @@ public:
      *
      * This will change the combo box current selected filter and update the
      * list
-     */
+     **/
     void setFilter( const QRegExp & regexp, Filters flt );
 
     /**
@@ -133,11 +133,14 @@ public:
      **/
     virtual QSize sizeHint () const;
 
+
 protected slots:
+
     /**
      * called when the filter is changed
-     */
+     **/
     void slotFilterChanged( int index );
+
 
 protected:
     /**
@@ -174,7 +177,7 @@ protected:
 
     /**
      * extra filter for child classes
-     */
+     **/
     virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
 
     /**
@@ -233,9 +236,10 @@ public:
                                              Filters         flt = FilterAutomatic,
                                              Options         opt = OptionAutoAcceptIfEmpty );
 protected:
+
   /**
    * leave supported packages out.
-   */
+   **/
   virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
 
 };
