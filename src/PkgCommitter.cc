@@ -18,6 +18,7 @@
 #include <unistd.h>             // usleep()
 
 #include <QApplication>
+#include <QSettings>
 #include <QMessageBox>
 
 #include "Logger.h"
@@ -36,6 +37,7 @@ PkgCommitter::PkgCommitter( QWidget * parent )
 {
     CHECK_PTR( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    readSettings();
     reset();
 
     // See ui_pkg-commit-page.h in ../build/yqkg_autogen/include for the
@@ -59,6 +61,7 @@ PkgCommitter::PkgCommitter( QWidget * parent )
 
 PkgCommitter::~PkgCommitter()
 {
+    writeSettings();
     delete _ui;
     _instance = 0;
 }
@@ -156,13 +159,27 @@ bool PkgCommitter::askForCancelCommitConfirmation()
 
 void PkgCommitter::readSettings()
 {
-    // FIXME: TO DO
+    QSettings settings;
+    settings.beginGroup( "PkgCommitPage" );
+
+    _showingDetails      = settings.value( "showingDetails",  false ).toBool();
+    bool showSummaryPage = settings.value( "showSummaryPage", true ).toBool();
+
+    settings.endGroup();
+
+    _ui->showSummaryPageCheckBox->setChecked( showSummaryPage );
 }
 
 
 void PkgCommitter::writeSettings()
 {
-    // FIXME: TO DO
+    QSettings settings;
+    settings.beginGroup( "PkgCommitPage" );
+
+    settings.setValue( "showingDetails",  _showingDetails );
+    settings.setValue( "showSummaryPage", showSummaryPage() );
+
+    settings.endGroup();
 }
 
 

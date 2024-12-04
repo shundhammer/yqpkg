@@ -30,7 +30,7 @@
 SummaryPage::SummaryPage( QWidget * parent )
     : QWidget( parent )
     , _ui( new Ui::SummaryPage ) // Use the Qt designer .ui form (XML)
-    , _countdownSec( 10 )
+    , _countdownSec( 30 )
     , _countdownMenu( 0 )
 {
     CHECK_NEW( _ui );
@@ -99,7 +99,7 @@ void SummaryPage::reset()
 
 void SummaryPage::updateSummary()
 {
-    QString text = "No package changes.";
+    QString text = _( "No package changes." );
 
     // FIXME: TO DO
     // FIXME: TO DO
@@ -126,7 +126,9 @@ void SummaryPage::updateCountdownWidgets()
     if ( timerActive )
     {
         float seconds = _countdownTimer.remainingTime() / 1000.0 ;
-        remaining = QString( "%1" ).arg( (int) (seconds + 0.5) );
+
+        // Translators: Number of seconds remaining in a countdown
+        remaining = _( "%1 s" ).arg( (int) (seconds + 0.5) );
     }
 
     _ui->countdownLabel->setText( remaining );
@@ -224,11 +226,13 @@ void SummaryPage::configureCountdown( QAction * action )
 void SummaryPage::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Summary Page" );
+    settings.beginGroup( "SummaryPage" );
 
     _countdownSec = settings.value( "countdownSec", 10 ).toInt();
 
     settings.endGroup();
+
+    logDebug() << "countdownSec from settings: " << _countdownSec << endl;
 }
 
 
