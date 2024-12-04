@@ -89,7 +89,7 @@ set( SOURCES
   )
 
 # Qt resource files
-set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
+set( QRC_FILES icons.qrc ) # Compiled-in resources: icons
 
 #
 # .ui widget forms generated with Qt designer (designer-qt5) or Qt Creator
