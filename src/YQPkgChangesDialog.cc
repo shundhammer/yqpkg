@@ -224,12 +224,6 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
     bool byUser = flt.testFlag( FilterUser      );
     bool byApp  = flt.testFlag( FilterUser      );
 
-    int discard_regex        = 0;
-    int discard_ignored      = 0;
-    int discard_extra        = 0;
-    int discard_not_modified = 0;
-    int discard_who_modified = 0;
-
     set<string> ignoredNames;
 
     if ( ! byUser || ! byApp )
@@ -259,40 +253,11 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
 
                         if ( extraFilter( selectable, pkg ) )
                             _pkgList->addPkgItem( selectable, pkg );
-                        else
-                        {
-                            discard_extra++;
-                        }
-                    }
-                    else
-                    {
-                        discard_ignored++;
                     }
                 }
-                else
-                {
-                    discard_regex++;
-                }
             }
-            else
-            {
-                discard_who_modified++;
-            }
-
         }
-        else
-        {
-            discard_not_modified++;
-        }
-
     }
-
-    logInfo() << "Filter result summary: " << endl;
-    logInfo() << "Discarded by extra filter: "      << discard_extra        << endl;
-    logInfo() << "Discarded by ignored: "           << discard_ignored      << endl;
-    logInfo() << "Discarded by regex: "             << discard_regex        << endl;
-    logInfo() << "Discarded because not modified: " << discard_not_modified << endl;
-    logInfo() << "Discarded by who modified: "      << discard_who_modified << endl;
 
     normalCursor();
 }
