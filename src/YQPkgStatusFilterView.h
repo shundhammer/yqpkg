@@ -59,7 +59,7 @@ public:
      * Check if pkg matches the filter criteria.
      **/
     bool check( ZyppSel	selectable,
-		ZyppObj 	pkg );
+		ZyppObj pkg );
 
 
 public slots:

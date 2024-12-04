@@ -50,13 +50,6 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     layout->addStretch();
 
-#if 0
-    // Headline
-    QLabel * label = new QLabel( _( "Changes Overview" ), this );
-    Q_CHECK_PTR( label );
-    label->setFont( YQUI::ui()->headingFont() );
-#endif
-
 
     //
     // Packages with what status to show
@@ -79,7 +72,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::pkgProtected(),	true );
 
     box->addSpacing( 8 );
-    box->addStretch(); // For the other columns of the QGroupBox ( prevent wraparound )
+    box->addStretch(); // For the other columns of the QGroupBox (prevent wraparound)
     box->addStretch();
 
     _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::pkgKeepInstalled(), false );
@@ -90,7 +83,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     // Box for refresh button
     QHBoxLayout *hbox = new QHBoxLayout();
-    layout->addLayout(hbox);
+    layout->addLayout( hbox );
 
     hbox->addStretch();
 
@@ -125,7 +118,7 @@ YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 					  const QPixmap &	icon,
 					  bool			initiallyChecked )
 {
-    QBoxLayout *layout = dynamic_cast<QBoxLayout*>(parent->layout());
+    QBoxLayout *layout = dynamic_cast<QBoxLayout*>( parent->layout() );
 
     QHBoxLayout *hbox = new QHBoxLayout;
     layout->addLayout(hbox);
