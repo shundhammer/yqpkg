@@ -108,7 +108,7 @@ void YQPkgApplication::run()
 
     qApp->exec();  // Qt main event loop
 
-    // Only 'quit()' or an exception terminates the event loop
+    // Only 'quit()' or an exception terminate the event loop.
 }
 
 
@@ -405,6 +405,9 @@ void YQPkgApplication::quit( bool askForConfirmation )
         if ( result != 0 ) // button #0 (Yes)
             return;
     }
+
+    if ( _mainWin )
+        _mainWin->hide();  // For instant user feedback
 
     qApp->quit();
 }
