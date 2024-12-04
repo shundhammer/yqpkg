@@ -25,7 +25,7 @@
 class MainWindow;
 class Workflow;
 class YQPackageSelector;
-class PkgCommitter;
+class PkgCommitPage;
 class SummaryPage;
 class YQPkgRepoManager;
 class QEvent;
@@ -91,7 +91,7 @@ public:
      *
      * Ownership remains with this class; do not delete it.
      **/
-    PkgCommitter * pkgCommitter();
+    PkgCommitPage * pkgCommitPage();
 
     /**
      * Return the summary page. Create it if it doesn't exist yet.
@@ -155,7 +155,7 @@ protected:
     void createMainWin();
     void createWorkflow();
     void createPkgSel();
-    void createPkgCommitter();
+    void createPkgCommitPage();
     void createSummaryPage();
     void createRepoManager();
 
@@ -180,7 +180,7 @@ protected:
     MainWindow *        _mainWin;
     Workflow *          _workflow;
     YQPackageSelector * _pkgSel;
-    PkgCommitter *      _pkgCommitter;
+    PkgCommitPage *      _pkgCommitPage;
     SummaryPage *       _summaryPage;
     YQPkgRepoManager  * _yqPkgRepoManager;
 

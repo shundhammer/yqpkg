@@ -1775,7 +1775,7 @@ void
 YQPackageSelector::loadSettings()
 {
     QSettings settings;
-    settings.beginGroup( "YQPackageSelector" );
+    settings.beginGroup( "PackageSelector" );
 
     _showDevelAction->setChecked(settings.value( "showDevelPackages", true ).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
@@ -1834,7 +1834,7 @@ void
 YQPackageSelector::saveSettings()
 {
     QSettings settings;
-    settings.beginGroup( "YQPackageSelector" );
+    settings.beginGroup( "PackageSelector" );
 
     settings.setValue("showDevelPackages", _showDevelAction->isChecked() );
     settings.setValue("showDebugPackages", _showDebugAction->isChecked() );

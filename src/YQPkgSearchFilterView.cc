@@ -445,7 +445,7 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
 void YQPkgSearchFilterView::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "YQPkgSearchFilterView" );
+    settings.beginGroup( "PkgSearchFilterView" );
 
     _searchInName->setChecked        ( settings.value( "searchInName",        true  ).toBool() );
     _searchInKeywords->setChecked    ( settings.value( "searchInKeywords",    true  ).toBool() );
@@ -466,7 +466,7 @@ void YQPkgSearchFilterView::readSettings()
 void YQPkgSearchFilterView::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "YQPkgSearchFilterView" );
+    settings.beginGroup( "PkgSearchFilterView" );
 
     settings.setValue( "searchInName",        _searchInName->isChecked()        );
     settings.setValue( "searchInKeywords",    _searchInKeywords->isChecked()    );

@@ -25,7 +25,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
-#include "PkgCommitter.h"
+#include "PkgCommitPage.h"
 #include "Workflow.h"
 #include "SummaryPage.h"
 #include "YQPackageSelector.h"
@@ -44,7 +44,7 @@ YQPkgApplication::YQPkgApplication()
     , _mainWin(0)
     , _workflow(0)
     , _pkgSel(0)
-    , _pkgCommitter(0)
+    , _pkgCommitPage(0)
     , _summaryPage(0)
     , _yqPkgRepoManager(0)
 {
@@ -69,8 +69,8 @@ YQPkgApplication::~YQPkgApplication()
     if ( _pkgSel )
         delete _pkgSel;
 
-    if ( _pkgCommitter )
-        delete _pkgCommitter;
+    if ( _pkgCommitPage )
+        delete _pkgCommitPage;
 
     if ( _summaryPage )
         delete _summaryPage;
@@ -192,25 +192,25 @@ void YQPkgApplication::createPkgSel()
 }
 
 
-PkgCommitter *
-YQPkgApplication::pkgCommitter()
+PkgCommitPage *
+YQPkgApplication::pkgCommitPage()
 {
-    if ( ! _pkgCommitter )
-        createPkgCommitter();
+    if ( ! _pkgCommitPage )
+        createPkgCommitPage();
 
-    return _pkgCommitter;
+    return _pkgCommitPage;
 }
 
 
-void YQPkgApplication::createPkgCommitter()
+void YQPkgApplication::createPkgCommitPage()
 {
-    if ( _pkgCommitter )
+    if ( _pkgCommitPage )
         return;
 
-    _pkgCommitter = new PkgCommitter();
-    CHECK_NEW( _pkgCommitter );
+    _pkgCommitPage = new PkgCommitPage();
+    CHECK_NEW( _pkgCommitPage );
 
-    QObject::connect( _pkgCommitter, SIGNAL( next() ),
+    QObject::connect( _pkgCommitPage, SIGNAL( next() ),
                       this,          SLOT  ( next() ) );
 }
 
@@ -290,10 +290,10 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 
             return true;        // Event processing finished for this one
         }
-        else if ( currentPage == _pkgCommitter )
+        else if ( currentPage == _pkgCommitPage )
         {
-            logInfo() << "Caught WM_CLOSE for PkgCommitter" << endl;
-            _pkgCommitter->wmClose();
+            logInfo() << "Caught WM_CLOSE for PkgCommitPage" << endl;
+            _pkgCommitPage->wmClose();
 
             return true;        // Event processing finished for this one
         }
@@ -320,7 +320,7 @@ void YQPkgApplication::next()
     {
         // FIXME: Move this to the summary page once it's no longer a wizard placeholder page.
 
-        if ( ! _pkgCommitter->showSummaryPage() )
+        if ( ! _pkgCommitPage->showSummaryPage() )
         {
             logInfo() << "Skipping summary page -> quitting" << endl;
             quit();

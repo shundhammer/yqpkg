@@ -24,13 +24,13 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "YQi18n.h"
-#include "PkgCommitter.h"
+#include "PkgCommitPage.h"
 
 
-PkgCommitter * PkgCommitter::_instance = 0;
+PkgCommitPage * PkgCommitPage::_instance = 0;
 
 
-PkgCommitter::PkgCommitter( QWidget * parent )
+PkgCommitPage::PkgCommitPage( QWidget * parent )
     : QWidget( parent )
     , _ui( new Ui::PkgCommitPage ) // Use the Qt designer .ui form (XML)
     , _showingDetails( false )
@@ -51,7 +51,7 @@ PkgCommitter::PkgCommitter( QWidget * parent )
 }
 
 
-PkgCommitter::~PkgCommitter()
+PkgCommitPage::~PkgCommitPage()
 {
     writeSettings();
     delete _ui;
@@ -59,7 +59,7 @@ PkgCommitter::~PkgCommitter()
 }
 
 
-void PkgCommitter::connectWidgets()
+void PkgCommitPage::connectWidgets()
 {
 
     connect( _ui->detailsButton, SIGNAL( clicked()       ),
@@ -69,7 +69,7 @@ void PkgCommitter::connectWidgets()
              this,               SLOT  ( cancelCommit()  ) );
 }
 
-void PkgCommitter::commit()
+void PkgCommitPage::commit()
 {
     logInfo() << "Starting package transactions" << endl;
 
@@ -92,13 +92,13 @@ void PkgCommitter::commit()
 }
 
 
-bool PkgCommitter::showSummaryPage() const
+bool PkgCommitPage::showSummaryPage() const
 {
     return _ui->showSummaryPageCheckBox->isChecked();
 }
 
 
-void PkgCommitter::reset()
+void PkgCommitPage::reset()
 {
     _ui->totalProgressBar->setValue( 0 );
 
@@ -111,7 +111,7 @@ void PkgCommitter::reset()
 }
 
 
-void PkgCommitter::toggleDetails()
+void PkgCommitPage::toggleDetails()
 {
     _showingDetails = ! _showingDetails;
     _ui->detailsFrame->setVisible( _showingDetails );
@@ -119,7 +119,7 @@ void PkgCommitter::toggleDetails()
 }
 
 
-void PkgCommitter::updateDetailsButton()
+void PkgCommitPage::updateDetailsButton()
 {
     QString text = showingDetails() ?
         _( "Hide &Details" ) : _( "Show &Details" );
@@ -128,21 +128,21 @@ void PkgCommitter::updateDetailsButton()
 }
 
 
-void PkgCommitter::cancelCommit()
+void PkgCommitPage::cancelCommit()
 {
     if ( askForCancelCommitConfirmation() )
         emit next();
 }
 
 
-void PkgCommitter::wmClose()
+void PkgCommitPage::wmClose()
 {
     if ( askForCancelCommitConfirmation() )
         qApp->quit();
 }
 
 
-bool PkgCommitter::askForCancelCommitConfirmation()
+bool PkgCommitPage::askForCancelCommitConfirmation()
 {
     // Not all users might know what "package transactions" means,
     // so let's be a bit clearer (albeit less precise)
@@ -159,7 +159,7 @@ bool PkgCommitter::askForCancelCommitConfirmation()
 }
 
 
-void PkgCommitter::readSettings()
+void PkgCommitPage::readSettings()
 {
     QSettings settings;
     settings.beginGroup( "PkgCommitPage" );
@@ -173,7 +173,7 @@ void PkgCommitter::readSettings()
 }
 
 
-void PkgCommitter::writeSettings()
+void PkgCommitPage::writeSettings()
 {
     QSettings settings;
     settings.beginGroup( "PkgCommitPage" );
@@ -185,7 +185,7 @@ void PkgCommitter::writeSettings()
 }
 
 
-void PkgCommitter::processEvents()
+void PkgCommitPage::processEvents()
 {
     // This is just an alias for now, but it might change in the future.
     QCoreApplication::processEvents();

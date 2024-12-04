@@ -16,8 +16,8 @@
 
 
 
-#ifndef PkgCommitter_h
-#define PkgCommitter_h
+#ifndef PkgCommitPage_h
+#define PkgCommitPage_h
 
 #include <QWidget>
 
@@ -57,7 +57,7 @@
  * This whole class relies heavily on libzypp callbacks reporting progress and
  * possible problems.
  **/
-class PkgCommitter: public QWidget
+class PkgCommitPage: public QWidget
 {
     Q_OBJECT
 
@@ -69,12 +69,12 @@ public:
      * This just creates the widget tree for the page; it doesn't start the
      * package transactions yet. Use commit() for that.
      **/
-    PkgCommitter( QWidget * parent = 0 );
+    PkgCommitPage( QWidget * parent = 0 );
 
     /**
      * Destructor.
      **/
-    virtual ~PkgCommitter();
+    virtual ~PkgCommitPage();
 
     /**
      * Reset the widgets and the internal transaction status:
@@ -123,7 +123,7 @@ public:
      * than one instance, and during the lifetime of any widgets inside the
      * MainWindow it is safe to assume that the MainWindow also exists.
      **/
-    static PkgCommitter * instance() { return _instance; }
+    static PkgCommitPage * instance() { return _instance; }
 
     /**
      * Return the UI (the widget tree) of the instance of this class or 0 if
@@ -213,9 +213,9 @@ protected:
     Ui::PkgCommitPage *   _ui;
     bool                  _showingDetails;
 
-    static PkgCommitter * _instance;
+    static PkgCommitPage * _instance;
 };
 
 
-#endif  // PkgCommitter_h
+#endif  // PkgCommitPage_h
 

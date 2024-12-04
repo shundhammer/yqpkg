@@ -20,7 +20,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
-#include "PkgCommitter.h"
+#include "PkgCommitPage.h"
 #include "SummaryPage.h"
 #include "YQPackageSelector.h"
 #include "YQPkgRepoManager.h"
@@ -196,7 +196,7 @@ QWidget * YQPkgCommitStep::page()
 {
     _doProcessEvents = true;  // Make sure to display this page
 
-    return _app->pkgCommitter();
+    return _app->pkgCommitPage();
 }
 
 
@@ -205,9 +205,9 @@ void YQPkgCommitStep::activate( bool goingForward )
     if ( goingForward )
     {
         YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
-        _app->pkgCommitter()->reset();  // Reset the widgets on the page
+        _app->pkgCommitPage()->reset();  // Reset the widgets on the page
 
-        _app->pkgCommitter()->commit(); // Do the package transactions
+        _app->pkgCommitPage()->commit(); // Do the package transactions
     }
 
     nextPage( goingForward );
