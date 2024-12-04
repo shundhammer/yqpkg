@@ -135,11 +135,13 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     }
 }
 
+
 void
-YQPkgChangesDialog::filter( Filters f )
+YQPkgChangesDialog::filter( Filters flt )
 {
-    filter( QRegExp( "" ), f );
+    filter( QRegExp( "" ), flt );
 }
+
 
 void
 YQPkgChangesDialog::slotFilterChanged( int index )
@@ -149,8 +151,8 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 
     if ( v.isValid() && v.canConvert<Filters>() )
     {
-        Filters f = v.value<Filters>();
-        filter(f);
+        Filters flt = v.value<Filters>();
+        filter( flt );
     }
     else
     {
@@ -159,26 +161,30 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 
 }
 
+
 void
-YQPkgChangesDialog::setFilter( Filters f )
+YQPkgChangesDialog::setFilter( Filters filters )
 {
-    setFilter(QRegExp(""), f);
+    setFilter( QRegExp( "" ), filters );
 }
 
+
 void
-YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
+YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
 {
-    logInfo() << "filter changed to: " << f << endl;
+    logInfo() << "filter changed to: " << flt << endl;
 
     int index = -1;
+
     for ( int k = 0; k < _filter->count(); ++k )
     {
-        QVariant v = _filter->itemData(k);
+        QVariant v = _filter->itemData( k );
+
         if ( v.isValid() && v.canConvert<Filters>() )
         {
 
             Filters setf = v.value<Filters>();
-            if ( setf == f )
+            if ( setf == flt )
                 index = k;
         }
     }
@@ -186,34 +192,35 @@ YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
     if ( index != -1 )
     {
         // so we dont get called again
-        _filter->blockSignals(true);
+        _filter->blockSignals( true );
+
         // try to set the widget
-        _filter->setCurrentIndex(f);
-        _filter->blockSignals(false);
-        filter(regexp, f);
+        _filter->setCurrentIndex( flt );
+        _filter->blockSignals( false );
+        filter( regexp, flt );
     }
     else
     {
-        logError() << "Can't find index for filter " << f << endl;
+        logError() << "Can't find index for filter " << flt << endl;
     }
 }
 
 
 void
-YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
+YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
 {
     busyCursor();
     _pkgList->clear();
 
-    bool byAuto = f.testFlag(FilterAutomatic);
-    bool byUser = f.testFlag(FilterUser);
-    bool byApp = f.testFlag(FilterUser);
+    bool byAuto = flt.testFlag( FilterAutomatic );
+    bool byUser = flt.testFlag( FilterUser      );
+    bool byApp  = flt.testFlag( FilterUser      );
 
-    int discard_regex = 0;
-    int discard_ignored = 0;
-    int discard_extra = 0;
-    int discard_notmodified = 0;
-    int discard_whomodified = 0;
+    int discard_regex        = 0;
+    int discard_ignored      = 0;
+    int discard_extra        = 0;
+    int discard_not_modified = 0;
+    int discard_who_modified = 0;
 
     set<string> ignoredNames;
 
@@ -231,9 +238,9 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
             zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
 
 	    if ( ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ) ||
-           ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
-               modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
-           ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
+                 ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
+                     modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
+                 ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
                 if ( regexp.isEmpty()
                      || regexp.indexIn( selectable->name().c_str() ) >= 0 )
@@ -241,32 +248,44 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
                     if ( ! contains( ignoredNames, selectable->name() ) )
                     {
                         ZyppPkg pkg = tryCastToZyppPkg( selectable->theObj() );
+
                         if ( extraFilter( selectable, pkg ) )
                             _pkgList->addPkgItem( selectable, pkg );
                         else
+                        {
                             discard_extra++;
+                        }
                     }
                     else
-                    { discard_ignored++; }
+                    {
+                        discard_ignored++;
+                    }
                 }
                 else
-                { discard_regex++; }
+                {
+                    discard_regex++;
+                }
 	    }
             else
-            { discard_whomodified++; }
+            {
+                discard_who_modified++;
+            }
 
 	}
         else
-        { discard_notmodified++; }
+        {
+            discard_not_modified++;
+        }
 
     }
 
     logInfo() << "Filter result summary: " << endl;
-    logInfo() << "Discarded by extra filter: " << discard_extra << endl;
-    logInfo() << "Discarded by ignored: " << discard_ignored << endl;
-    logInfo() << "Discarded by regex: " << discard_regex << endl;
-    logInfo() << "Discarded because not modified: " << discard_notmodified << endl;
-    logInfo() << "Discarded by who modified: " << discard_whomodified << endl;
+    logInfo() << "Discarded by extra filter: "      << discard_extra       << endl;
+    logInfo() << "Discarded by ignored: "           << discard_ignored     << endl;
+    logInfo() << "Discarded by regex: "             << discard_regex       << endl;
+    logInfo() << "Discarded because not modified: " << discard_not_modified << endl;
+    logInfo() << "Discarded by who modified: "      << discard_who_modified << endl;
+
     normalCursor();
 }
 
@@ -295,17 +314,17 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 				       const QString & 	message,
 				       const QString &	acceptButtonLabel,
 				       const QString &	rejectButtonLabel,
-                                       Filters f,
-                                       Options o )
+                                       Filters          flt,
+                                       Options          options )
 {
     YQPkgChangesDialog dialog( parent,
 			       message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
 
-    dialog.setFilter(f);
+    dialog.setFilter( flt );
 
-    if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
+    if ( dialog.isEmpty() && options.testFlag( OptionAutoAcceptIfEmpty ) )
     {
         logInfo() << "No items to show in changes dialog, accepting it automatically" << endl;
 	return true;
@@ -324,16 +343,16 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 				       const QRegExp &  regexp,
 				       const QString &	acceptButtonLabel,
 				       const QString &	rejectButtonLabel,
-                                       Filters f,
-                                       Options o )
+                                       Filters          flt,
+                                       Options          options )
 {
     YQPkgChangesDialog dialog( parent,
 			       message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
-    dialog.setFilter(regexp,f);
+    dialog.setFilter( regexp, flt );
 
-    if ( dialog.isEmpty() &&  o.testFlag(OptionAutoAcceptIfEmpty) )
+    if ( dialog.isEmpty() &&  options.testFlag(OptionAutoAcceptIfEmpty) )
     {
         logInfo() << "No items to show in dialog, accepting it automatically" << endl;
 	return true;
@@ -344,11 +363,14 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
     return dialog.result() == QDialog::Accepted;
 }
 
-YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *parent,
+YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *       parent,
                                                                 const QString &	message,
                                                                 const QString &	acceptButtonLabel,
                                                                 const QString &	rejectButtonLabel )
-    : YQPkgChangesDialog( parent, message, acceptButtonLabel, rejectButtonLabel )
+    : YQPkgChangesDialog( parent,
+                          message,
+                          acceptButtonLabel,
+                          rejectButtonLabel )
 {
 }
 
@@ -365,17 +387,17 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *	parent,
                                                                const QString & 	message,
                                                                const QString &	acceptButtonLabel,
                                                                const QString &	rejectButtonLabel,
-                                                               Filters f,
-                                                               Options o )
+                                                               Filters          flt,
+                                                               Options          options )
 {
     YQPkgUnsupportedPackagesDialog dialog( parent,
                                            message,
                                            acceptButtonLabel,
                                            rejectButtonLabel );
 
-    dialog.setFilter(f);
+    dialog.setFilter( flt );
 
-    if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
+    if ( dialog.isEmpty() && options.testFlag( OptionAutoAcceptIfEmpty ) )
     {
         logInfo() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
 	return true;

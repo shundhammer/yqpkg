@@ -42,10 +42,11 @@
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     : QScrollArea( parent )
 {
-    QWidget * content = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout();
+    QWidget     * content = new QWidget;
+    QVBoxLayout * layout  = new QVBoxLayout();
+
     content->setLayout(layout);
-    layout->setMargin( MARGIN );
+    layout->setMargin ( MARGIN );
     layout->setSpacing( SPACING );
 
     layout->addStretch();
@@ -55,12 +56,12 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QGroupBox * gbox = new QGroupBox( _( "Show packages with status" ), content );
+    QGroupBox * gbox  = new QGroupBox( _( "Show packages with status" ), content );
     Q_CHECK_PTR( gbox );
 
-    QVBoxLayout *box = new QVBoxLayout;
-    gbox->setLayout(box);
-    layout->addWidget(gbox);
+    QVBoxLayout * box = new QVBoxLayout;
+    gbox->setLayout( box );
+    layout->addWidget( gbox );
 
     _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::pkgDel(),	   	true );
     _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::pkgInstall(),	true );
@@ -120,14 +121,14 @@ YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 {
     QBoxLayout *layout = dynamic_cast<QBoxLayout*>( parent->layout() );
 
-    QHBoxLayout *hbox = new QHBoxLayout;
-    layout->addLayout(hbox);
+    QHBoxLayout *hbox  = new QHBoxLayout;
+    layout->addLayout( hbox );
 
     QCheckBox * checkBox = new QCheckBox( text, parent );
     Q_CHECK_PTR( checkBox );
     checkBox->setChecked( initiallyChecked );
 
-    hbox->addWidget(checkBox);
+    hbox->addWidget( checkBox );
 
     QLabel * label = new QLabel( parent );
     Q_CHECK_PTR( label );
@@ -188,8 +189,8 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( ZyppSel	selectable,
-			      ZyppObj	zyppObj )
+YQPkgStatusFilterView::check( ZyppSel selectable,
+			      ZyppObj zyppObj )
 {
     bool match = false;
 
