@@ -37,23 +37,15 @@ PkgCommitter::PkgCommitter( QWidget * parent )
 {
     CHECK_PTR( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
-    readSettings();
-    reset();
 
     // See ui_pkg-commit-page.h in ../build/yqkg_autogen/include for the
     // widgets' variable names. They are taken from the widget names in the .ui
     // form (an XML file) that was generated with Qt designer, so choose them
     // carefully when using Qt designer.
 
-    QFont font( _ui->headingLabel->font() );
-    font.setBold( true );
-    _ui->headingLabel->setFont( font );
-
-    connect( _ui->detailsButton, SIGNAL( clicked()       ),
-             this,               SLOT  ( toggleDetails() ) );
-
-    connect( _ui->cancelButton,  SIGNAL( clicked() ),
-             this,               SLOT  ( cancelCommit()  ) );
+    readSettings();
+    reset();
+    connectWidgets();
 
     _instance = this;
 }
@@ -66,6 +58,16 @@ PkgCommitter::~PkgCommitter()
     _instance = 0;
 }
 
+
+void PkgCommitter::connectWidgets()
+{
+
+    connect( _ui->detailsButton, SIGNAL( clicked()       ),
+             this,               SLOT  ( toggleDetails() ) );
+
+    connect( _ui->cancelButton,  SIGNAL( clicked() ),
+             this,               SLOT  ( cancelCommit()  ) );
+}
 
 void PkgCommitter::commit()
 {

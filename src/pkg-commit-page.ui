@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Stefan Hundhammer</author>
  <class>PkgCommitPage</class>
  <widget class="QWidget" name="PkgCommitPage">
   <property name="geometry">
@@ -37,7 +38,7 @@
      <item>
       <widget class="QLabel" name="headingLabel">
        <property name="text">
-        <string>Installing / Updating / Removing Packages</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Installing / Removing Packages&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

@@ -175,6 +175,11 @@ protected slots:
 protected:
 
     /**
+     * Set up the internal Qt signal / slot connections.
+     **/
+    void connectWidgets();
+
+    /**
      * Ask the user for confirmation if the package transactions should really
      * be cancelled. Return 'true' if the user confirms, 'false' if not.
      **/

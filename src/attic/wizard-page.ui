@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Stefan Hundhammer</author>
  <class>WizardPage</class>
  <widget class="QWidget" name="WizardPage">
   <property name="geometry">
