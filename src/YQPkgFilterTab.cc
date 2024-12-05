@@ -239,7 +239,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 
 YQPkgFilterTab::~YQPkgFilterTab()
 {
-    saveSettings();
+    writeSettings();
 
     for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	  it != priv->pages.end();
@@ -641,7 +641,7 @@ YQPkgFilterTab::contextClosePage()
 
 
 void
-YQPkgFilterTab::loadSettings()
+YQPkgFilterTab::readSettings()
 {
     closeAllPages();
 
@@ -680,7 +680,7 @@ YQPkgFilterTab::loadSettings()
 
 
 void
-YQPkgFilterTab::saveSettings()
+YQPkgFilterTab::writeSettings()
 {
     QStringList pages;
 

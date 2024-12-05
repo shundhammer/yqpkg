@@ -149,7 +149,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     makeConnections();
     emit loadData();
 
-    _filters->loadSettings();
+    _filters->readSettings();
     bool pagesRestored = _filters->tabCount() > 0;
 
     if ( _pkgList )

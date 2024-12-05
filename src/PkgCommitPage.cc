@@ -17,7 +17,6 @@
 
 #include <unistd.h>             // usleep()
 
-#include <QApplication>
 #include <QSettings>
 #include <QMessageBox>
 
@@ -160,7 +159,7 @@ void PkgCommitPage::cancelCommit()
 void PkgCommitPage::wmClose()
 {
     if ( askForCancelCommitConfirmation() )
-        qApp->quit();
+        YQPkgApplication::instance()->quit();
 }
 
 

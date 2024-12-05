@@ -237,7 +237,7 @@ YQPkgSelectorBase::reject()
 
         logInfo() << "Quitting the application" << endl;
 
-        qApp->quit();
+        YQPkgApplication::instance()->quit();
     }
     else
     {

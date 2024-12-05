@@ -163,13 +163,13 @@ public slots:
      * If tabCount() is still 0 afterwards, there were no settings, so it might
      * make sense to open a number of default pages.
      **/
-    void loadSettings();
+    void readSettings();
 
     /**
      * Save the current settings, including which tabs are currently open and
      * in which order. This is implicitly done in the destructor.
      **/
-    void saveSettings();
+    void writeSettings();
 
     /**
      * Close all currently open pages.
