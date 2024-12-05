@@ -31,7 +31,7 @@
  **/
 enum PkgTaskAction
 {
-    PkgNoAction    = 0, // Error
+    PkgNoAction    = 0,
 
     PkgInstall     = 0x01,
     PkgUpdate      = 0x02,
@@ -49,7 +49,7 @@ enum PkgTaskAction
  **/
 enum PkgTaskRequester
 {
-    PkgReqError = 0,
+    PkgReqNone = 0,
 
     PkgReqUser = 0x01, //
     PkgReqDep  = 0x02, // Dependencies
@@ -190,7 +190,7 @@ public:
     /**
      * Return the list of package tasks that are to do (not done yet, pending).
      **/
-    PkgTaskList & toDo()   { return _toDo; }
+    PkgTaskList & todo()   { return _todo; }
 
     /**
      * Return the list of package tasks that are currently being done.
@@ -221,7 +221,7 @@ public:
 
 protected:
 
-    PkgTaskList _toDo;
+    PkgTaskList _todo;
     PkgTaskList _doing;
     PkgTaskList _done;
     PkgTaskList _failed;

@@ -22,19 +22,19 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
-#include "Logger.h"
 #include "Exception.h"
-
-#include "YQi18n.h"
+#include "Logger.h"
+#include "PkgTasks.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgApplication.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
-#include "YQPkgTextDialog.h"
 #include "YQPkgObjList.h"
-#include "QY2LayoutUtils.h"
-#include "QY2CursorHelper.h"
+#include "YQPkgTextDialog.h"
+#include "YQi18n.h"
 
 #include "YQPackageSelectorBase.h"
 
@@ -319,6 +319,8 @@ YQPackageSelectorBase::accept()
     // Check disk usage
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
+
+    YQPkgApplication::instance()->pkgTasks()->initFromZypp();
 
     if ( pendingChanges() )
     {

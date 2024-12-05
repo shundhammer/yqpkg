@@ -17,6 +17,8 @@
 
 #include "Logger.h"
 #include "Exception.h"
+#include "utf8.h"
+#include "YQZypp.h"
 #include "PkgTasks.h"
 
 
@@ -60,18 +62,10 @@ PkgTaskList::filtered( PkgTaskAction    filterAction,
 
 void PkgTasks::clearAll()
 {
-    _toDo.clear();
+    _todo.clear();
     _doing.clear();
     _done.clear();
     _failed.clear();
-}
-
-
-void PkgTasks::initFromZypp()
-{
-    clearAll();
-
-    // Iterate over all zypp selectables
 }
 
 
@@ -88,5 +82,49 @@ void PkgTasks::moveTask( const PkgTask & task,
     }
 
     toList.add( fromList.takeAt( index ) );
+}
+
+
+void PkgTasks::initFromZypp()
+{
+    clearAll();
+
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	ZyppSel selectable = *it;
+        CHECK_PTR( selectable );;
+
+        PkgTaskAction    action = PkgNoAction;
+        PkgTaskRequester req    = PkgReqNone;
+
+        switch ( selectable->status() )
+        {
+            case S_Install:     req = PkgReqUser; action = PkgInstall; break;
+            case S_Update:      req = PkgReqUser; action = PkgUpdate;  break;
+            case S_Del:         req = PkgReqUser; action = PkgRemove;  break;
+
+            case S_AutoInstall: req = PkgReqDep;  action = PkgInstall; break;
+            case S_AutoUpdate:  req = PkgReqDep;  action = PkgUpdate;  break;
+            case S_AutoDel:     req = PkgReqDep;  action = PkgRemove;  break;
+
+            case S_NoInst:
+            case S_KeepInstalled:
+            case S_Protected:
+            case S_Taboo:
+                action = PkgNoAction;
+                break;
+
+                // Intentionally omitting 'default' branch so the compiler can
+                // catch unhandled enum states
+        }
+
+        if ( action != PkgNoAction )
+        {
+            QString name = fromUTF8( selectable->name() );
+            _todo.add( PkgTask( name, action, req ) );
+        }
+    }
 }
 

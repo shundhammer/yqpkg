@@ -26,6 +26,7 @@
 #include "Logger.h"
 #include "MainWindow.h"
 #include "PkgCommitPage.h"
+#include "PkgTasks.h"
 #include "Workflow.h"
 #include "SummaryPage.h"
 #include "YQPackageSelector.h"
@@ -47,6 +48,7 @@ YQPkgApplication::YQPkgApplication()
     , _pkgCommitPage(0)
     , _summaryPage(0)
     , _yqPkgRepoManager(0)
+    , _pkgTasks(0)
 {
     _instance = this;
     logDebug() << "Creating YQPkgApplication" << endl;
@@ -246,10 +248,7 @@ YQPkgRepoManager *
 YQPkgApplication::repoManager()
 {
     if ( ! _yqPkgRepoManager )
-    {
-        _yqPkgRepoManager = new YQPkgRepoManager();
-        CHECK_NEW( _yqPkgRepoManager );
-    }
+        createRepoManager();
 
     return _yqPkgRepoManager;
 }
@@ -260,6 +259,28 @@ void YQPkgApplication::createRepoManager()
     if ( _yqPkgRepoManager )
         return;
 
+    _yqPkgRepoManager = new YQPkgRepoManager();
+    CHECK_NEW( _yqPkgRepoManager );
+}
+
+
+PkgTasks *
+YQPkgApplication::pkgTasks()
+{
+    if ( ! _pkgTasks )
+        createPkgTasks();
+
+    return _pkgTasks;
+}
+
+
+void YQPkgApplication::createPkgTasks()
+{
+    if ( _pkgTasks )
+        return;
+
+    _pkgTasks = new PkgTasks();
+    CHECK_NEW( _pkgTasks );
 }
 
 

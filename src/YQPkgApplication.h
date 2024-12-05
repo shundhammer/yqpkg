@@ -23,12 +23,13 @@
 
 
 class MainWindow;
+class PkgCommitPage;
+class PkgTasks;
+class QEvent;
+class SummaryPage;
 class Workflow;
 class YQPackageSelector;
-class PkgCommitPage;
-class SummaryPage;
 class YQPkgRepoManager;
-class QEvent;
 
 typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
@@ -43,6 +44,7 @@ class YQPkgApplication: public QObject
     Q_OBJECT
 
 public:
+
     /**
      * Constructor
      **/
@@ -101,6 +103,13 @@ public:
     SummaryPage * summaryPage();
 
     /**
+     * Return the package tasks object. Create it if it doesn't exist yet.
+     *
+     * Ownership remains with this class; do not delete it.
+     **/
+    PkgTasks * pkgTasks();
+
+    /**
      * Return the YQPkgRepoManager. Create it if it doesn't exist yet.
      *
      * Ownership remains with this class; do not delete it.
@@ -157,6 +166,7 @@ protected:
     void createPkgSel();
     void createPkgCommitPage();
     void createSummaryPage();
+    void createPkgTasks();
     void createRepoManager();
 
     /**
@@ -180,9 +190,10 @@ protected:
     MainWindow *        _mainWin;
     Workflow *          _workflow;
     YQPackageSelector * _pkgSel;
-    PkgCommitPage *      _pkgCommitPage;
+    PkgCommitPage *     _pkgCommitPage;
     SummaryPage *       _summaryPage;
     YQPkgRepoManager  * _yqPkgRepoManager;
+    PkgTasks *          _pkgTasks;
 
     static YQPkgApplication *   _instance;
     static bool                 _fakeRoot;      // env YQPKG_FAKE_ROOT
