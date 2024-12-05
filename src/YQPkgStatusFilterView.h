@@ -89,32 +89,14 @@ public slots:
     void showTransactions();
 
     /**
-     * Set up the check boxes so pending manual transactions (no "auto" states)
-     * are displayed.
+     * Read settings from the config file.
      **/
-    void showManualTransactions();
+    void readSettings();
 
     /**
-     * Set up the check boxes so pending automatic transactions (the "auto"
-     * states) are displayed.
+     * Write settings to the config file.
      **/
-    void showAutoTransactions();
-
-    /**
-     * Set the check boxes for locked packages ("Taboo" and "Protected") to
-     * "on".
-     **/
-    void showLocks();
-
-    /**
-     * Set the check box for installed packages to "on".
-     **/
-    void showInstalled();
-
-    /**
-     * Set the check box for not installed packages to "on".
-     **/
-    void showNotInstalled();
+    void writeSettings();
 
 
 signals:
@@ -146,16 +128,6 @@ protected:
                                    const QString & label,
                                    const QPixmap & icon,
                                    bool            initiallyChecked );
-    /**
-     * Read settings from the config file.
-     **/
-    void readSettings();
-
-    /**
-     * Write settings to the config file.
-     **/
-    void writeSettings();
-
 
     // Data members
 

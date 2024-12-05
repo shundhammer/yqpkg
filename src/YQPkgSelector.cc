@@ -1426,7 +1426,6 @@ YQPkgSelector::importSelectable( ZyppSel             selectable,
 #endif // FIXME_IMPORT_EXPORT
 
 
-
 void
 YQPkgSelector::globalUpdatePkg( bool force )
 {
@@ -1457,6 +1456,7 @@ YQPkgSelector::globalUpdatePkg( bool force )
     if ( _statusFilterView )
     {
         _filters->showPage( _statusFilterView );
+        _statusFilterView->writeSettings();
         _statusFilterView->clear();
         _statusFilterView->showTransactions();
         _statusFilterView->filter();

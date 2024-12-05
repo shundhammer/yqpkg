@@ -235,43 +235,12 @@ void YQPkgStatusFilterView::clear()
 
 void YQPkgStatusFilterView::showTransactions()
 {
-    showManualTransactions();
-    showAutoTransactions();
-}
-
-
-void YQPkgStatusFilterView::showManualTransactions()
-{
     _showDel->setChecked( true );
     _showInstall->setChecked( true );
     _showUpdate->setChecked( true );
-}
-
-
-void YQPkgStatusFilterView::showAutoTransactions()
-{
     _showAutoDel->setChecked( true );
     _showAutoInstall->setChecked( true );
     _showAutoUpdate->setChecked( true );
-}
-
-
-void YQPkgStatusFilterView::showLocks()
-{
-    _showTaboo->setChecked( true );
-    _showProtected->setChecked( true );
-}
-
-
-void YQPkgStatusFilterView::showInstalled()
-{
-    _showKeepInstalled->setChecked( true );
-}
-
-
-void YQPkgStatusFilterView::showNotInstalled()
-{
-    _showNoInst->setChecked( true );
 }
 
 
