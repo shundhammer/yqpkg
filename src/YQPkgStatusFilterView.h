@@ -20,7 +20,6 @@
 
 #include "YQZypp.h"
 #include <QWidget>
-#include <QRegExp>
 #include <QPixmap>
 #include <QScrollArea>
 
@@ -31,7 +30,7 @@ class QPushButton;
 
 
 /**
- * @short Filter view for packages that made problems during update
+ * Filter view for packages by status
  **/
 class YQPkgStatusFilterView : public QScrollArea
 {
@@ -58,8 +57,8 @@ public:
     /**
      * Check if pkg matches the filter criteria.
      **/
-    bool check( ZyppSel	selectable,
-		ZyppObj pkg );
+    bool check( ZyppSel selectable,
+                ZyppObj pkg );
 
 
 public slots:
@@ -67,9 +66,9 @@ public slots:
     /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
-     *	  filterStart()
-     *	  filterMatch() for each pkg that matches the filter
-     *	  filterFinished()
+     *    filterStart()
+     *    filterMatch() for each pkg that matches the filter
+     *    filterFinished()
      **/
     void filter();
 
@@ -96,13 +95,14 @@ public slots:
     void showManualTransactions();
 
     /**
-     * Set up the check boxes so pending automatic transactions (the "auto" states)
-     * are displayed.
+     * Set up the check boxes so pending automatic transactions (the "auto"
+     * states) are displayed.
      **/
     void showAutoTransactions();
 
     /**
-     * Set the check boxes for locked packages ("Taboo" and "Protected") to "on".
+     * Set the check boxes for locked packages ("Taboo" and "Protected") to
+     * "on".
      **/
     void showLocks();
 
@@ -128,8 +128,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -142,25 +142,35 @@ protected:
     /**
      * Add a check box
      **/
-    QCheckBox * addStatusCheckBox( QWidget * 		parent,
-				   const QString & 	label,
-				   const QPixmap &	icon,
-				   bool 		initiallyChecked );
+    QCheckBox * addStatusCheckBox( QWidget *       parent,
+                                   const QString & label,
+                                   const QPixmap & icon,
+                                   bool            initiallyChecked );
+    /**
+     * Read settings from the config file.
+     **/
+    void readSettings();
+
+    /**
+     * Write settings to the config file.
+     **/
+    void writeSettings();
+
 
     // Data members
 
-    QCheckBox *		_showAutoDel;
-    QCheckBox *		_showAutoInstall;
-    QCheckBox *		_showAutoUpdate;
-    QCheckBox *		_showDel;
-    QCheckBox *		_showInstall;
-    QCheckBox *		_showKeepInstalled;
-    QCheckBox *		_showNoInst;
-    QCheckBox *		_showTaboo;
-    QCheckBox *		_showProtected;
-    QCheckBox *		_showUpdate;
+    QCheckBox *    _showAutoDel;
+    QCheckBox *    _showAutoInstall;
+    QCheckBox *    _showAutoUpdate;
+    QCheckBox *    _showDel;
+    QCheckBox *    _showInstall;
+    QCheckBox *    _showKeepInstalled;
+    QCheckBox *    _showNoInst;
+    QCheckBox *    _showTaboo;
+    QCheckBox *    _showProtected;
+    QCheckBox *    _showUpdate;
 
-    QPushButton *	_refreshButton;
+    QPushButton * _refreshButton;
 };
 
 

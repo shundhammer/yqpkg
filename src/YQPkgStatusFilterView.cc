@@ -15,28 +15,27 @@
  */
 
 
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
-#include <QPushButton>
-#include <QGroupBox>
 #include <QPixmap>
+#include <QPushButton>
+#include <QSettings>
 
-#include "YQPkgStatusFilterView.h"
-#include "YQIconPool.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
+#include "YQIconPool.h"
+#include "YQi18n.h"
+#include "utf8.h"
+#include "YQPkgStatusFilterView.h"
 
 
-
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING                 6       // between subwidgets
+#define MARGIN                  4       // around the widget
 
 
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
@@ -63,21 +62,21 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     gbox->setLayout( box );
     layout->addWidget( gbox );
 
-    _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::pkgDel(),	   	true );
-    _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::pkgInstall(),	true );
-    _showUpdate		= addStatusCheckBox( gbox, _( "Update" ), 	YQIconPool::pkgUpdate(),	true );
-    _showAutoDel	= addStatusCheckBox( gbox, _( "Autodelete" ), 	YQIconPool::pkgAutoDel(),	true );
-    _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall" ), 	YQIconPool::pkgAutoInstall(),   true );
-    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate" ), 	YQIconPool::pkgAutoUpdate(),	true );
-    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::pkgTaboo(),	   	true );
-    _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::pkgProtected(),	true );
+    _showDel            = addStatusCheckBox( gbox, _( "Delete" ),       YQIconPool::pkgDel(),           true );
+    _showInstall        = addStatusCheckBox( gbox, _( "Install" ),      YQIconPool::pkgInstall(),       true );
+    _showUpdate         = addStatusCheckBox( gbox, _( "Update" ),       YQIconPool::pkgUpdate(),        true );
+    _showAutoDel        = addStatusCheckBox( gbox, _( "Autodelete" ),   YQIconPool::pkgAutoDel(),       true );
+    _showAutoInstall    = addStatusCheckBox( gbox, _( "Autoinstall" ),  YQIconPool::pkgAutoInstall(),   true );
+    _showAutoUpdate     = addStatusCheckBox( gbox, _( "Autoupdate" ),   YQIconPool::pkgAutoUpdate(),    true );
+    _showTaboo          = addStatusCheckBox( gbox, _( "Taboo" ),        YQIconPool::pkgTaboo(),         true );
+    _showProtected      = addStatusCheckBox( gbox, _( "Protected" ),    YQIconPool::pkgProtected(),     true );
 
     box->addSpacing( 8 );
     box->addStretch(); // For the other columns of the QGroupBox (prevent wraparound)
     box->addStretch();
 
-    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::pkgKeepInstalled(), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::pkgNoInst(),	  false );
+    _showKeepInstalled  = addStatusCheckBox( gbox, _( "Keep" ),           YQIconPool::pkgKeepInstalled(), false );
+    _showNoInst         = addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::pkgNoInst(),        false );
 
     layout->addStretch();
 
@@ -95,29 +94,30 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     hbox->addStretch();
 
-    connect( _refreshButton,	SIGNAL( clicked() ),
-	     this,		SLOT  ( filter()  ) );
+    connect( _refreshButton,    SIGNAL( clicked() ),
+             this,              SLOT  ( filter()  ) );
 
     for ( int i=0; i < 6; i++ )
-	layout->addStretch();
+        layout->addStretch();
 
-    setWidgetResizable(true);
-    setWidget(content);
+    setWidgetResizable( true );
+    setWidget( content );
+    readSettings();
 }
 
 
 YQPkgStatusFilterView::~YQPkgStatusFilterView()
 {
-    // NOP
+    writeSettings();
 }
 
 
 
 QCheckBox *
-YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
-					  const QString &	text,
-					  const QPixmap &	icon,
-					  bool			initiallyChecked )
+YQPkgStatusFilterView::addStatusCheckBox( QWidget *       parent,
+                                          const QString & text,
+                                          const QPixmap & icon,
+                                          bool            initiallyChecked )
 {
     QBoxLayout *layout = dynamic_cast<QBoxLayout*>( parent->layout() );
 
@@ -138,8 +138,8 @@ YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 
     layout->addStretch();
 
-    connect( checkBox,	SIGNAL( clicked() ),
-	     this,	SLOT  ( filter()  ) );
+    connect( checkBox,  SIGNAL( clicked() ),
+             this,      SLOT  ( filter()  ) );
 
     return checkBox;
 }
@@ -156,7 +156,7 @@ void
 YQPkgStatusFilterView::filterIfVisible()
 {
     if ( isVisible() )
-	filter();
+        filter();
 }
 
 
@@ -166,22 +166,22 @@ YQPkgStatusFilterView::filter()
     emit filterStart();
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
-	  it != zyppPkgEnd();
-	  ++it )
+          it != zyppPkgEnd();
+          ++it )
     {
-	ZyppSel selectable = *it;
+        ZyppSel selectable = *it;
 
-	bool match =
-	    check( selectable, selectable->candidateObj() ) ||
-	    check( selectable, selectable->installedObj() );
+        bool match =
+            check( selectable, selectable->candidateObj() ) ||
+            check( selectable, selectable->installedObj() );
 
-	// If there is neither an installed nor a candidate package, check
-	// any other instance.
+        // If there is neither an installed nor a candidate package, check
+        // any other instance.
 
-	if ( ! match			  &&
-	     ! selectable->candidateObj() &&
-	     ! selectable->installedObj()   )
-	    check( selectable,  selectable->theObj() );
+        if ( ! match                      &&
+             ! selectable->candidateObj() &&
+             ! selectable->installedObj()   )
+            check( selectable,  selectable->theObj() );
     }
 
     emit filterFinished();
@@ -190,36 +190,36 @@ YQPkgStatusFilterView::filter()
 
 bool
 YQPkgStatusFilterView::check( ZyppSel selectable,
-			      ZyppObj zyppObj )
+                              ZyppObj zyppObj )
 {
     bool match = false;
 
     if ( ! zyppObj )
-	return false;
+        return false;
 
     switch ( selectable->status() )
     {
-	case S_AutoDel:		match = _showAutoDel->isChecked();		break;
-	case S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
-	case S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
-	case S_Del:		match = _showDel->isChecked();			break;
-	case S_Install:		match = _showInstall->isChecked();		break;
-	case S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
-	case S_NoInst:		match = _showNoInst->isChecked();		break;
-	case S_Protected:	match = _showProtected->isChecked();		break;
-	case S_Taboo:		match = _showTaboo->isChecked();		break;
-	case S_Update:		match = _showUpdate->isChecked();		break;
+        case S_AutoDel:       match = _showAutoDel->isChecked();       break;
+        case S_AutoInstall:   match = _showAutoInstall->isChecked();   break;
+        case S_AutoUpdate:    match = _showAutoUpdate->isChecked();    break;
+        case S_Del:           match = _showDel->isChecked();           break;
+        case S_Install:       match = _showInstall->isChecked();       break;
+        case S_KeepInstalled: match = _showKeepInstalled->isChecked(); break;
+        case S_NoInst:        match = _showNoInst->isChecked();        break;
+        case S_Protected:     match = _showProtected->isChecked();     break;
+        case S_Taboo:         match = _showTaboo->isChecked();         break;
+        case S_Update:        match = _showUpdate->isChecked();        break;
 
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // catch unhandled enum states
+            // Intentionally omitting 'default' branch so the compiler can
+            // catch unhandled enum states
     }
 
     if ( match )
     {
-	ZyppPkg zyppPkg = tryCastToZyppPkg( zyppObj );
+        ZyppPkg zyppPkg = tryCastToZyppPkg( zyppObj );
 
-	if ( zyppPkg )
-	    emit filterMatch( selectable, zyppPkg );
+        if ( zyppPkg )
+            emit filterMatch( selectable, zyppPkg );
     }
 
     return match;
@@ -229,16 +229,7 @@ YQPkgStatusFilterView::check( ZyppSel selectable,
 
 void YQPkgStatusFilterView::clear()
 {
-    _showDel->setChecked( false );
-    _showInstall->setChecked( false );
-    _showUpdate->setChecked( false );
-    _showAutoDel->setChecked( false );
-    _showAutoInstall->setChecked( false );
-    _showAutoUpdate->setChecked( false );
-    _showTaboo->setChecked( false );
-    _showProtected->setChecked( false );
-    _showKeepInstalled->setChecked( false );
-    _showNoInst->setChecked( false );
+    readSettings();
 }
 
 
@@ -284,4 +275,41 @@ void YQPkgStatusFilterView::showNotInstalled()
 }
 
 
+void YQPkgStatusFilterView::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "PkgStatusFilterView" );
 
+    _showDel->setChecked          ( settings.value( "showDel",           true  ).toBool() );
+    _showInstall->setChecked      ( settings.value( "showInstall",       true  ).toBool() );
+    _showUpdate->setChecked       ( settings.value( "showUpdate",        true  ).toBool() );
+    _showAutoDel->setChecked      ( settings.value( "showAutoDel",       true  ).toBool() );
+    _showAutoInstall->setChecked  ( settings.value( "showAutoInstall",   true  ).toBool() );
+    _showAutoUpdate->setChecked   ( settings.value( "showAutoUpdate",    true  ).toBool() );
+    _showTaboo->setChecked        ( settings.value( "showTaboo",         true  ).toBool() );
+    _showProtected->setChecked    ( settings.value( "showProtected",     true  ).toBool() );
+    _showKeepInstalled->setChecked( settings.value( "showKeepInstalled", false ).toBool() );
+    _showNoInst->setChecked       ( settings.value( "showNoInst",        false ).toBool() );
+
+    settings.endGroup();
+}
+
+
+void YQPkgStatusFilterView::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "PkgStatusFilterView" );
+
+    settings.setValue( "showDel",           _showDel->isChecked()           );
+    settings.setValue( "showInstall",       _showInstall->isChecked()       );
+    settings.setValue( "showUpdate",        _showUpdate->isChecked()        );
+    settings.setValue( "showAutoDel",       _showAutoDel->isChecked()       );
+    settings.setValue( "showAutoInstall",   _showAutoInstall->isChecked()   );
+    settings.setValue( "showAutoUpdate",    _showAutoUpdate->isChecked()    );
+    settings.setValue( "showTaboo",         _showTaboo->isChecked()         );
+    settings.setValue( "showProtected",     _showProtected->isChecked()     );
+    settings.setValue( "showKeepInstalled", _showKeepInstalled->isChecked() );
+    settings.setValue( "showNoInst",        _showNoInst->isChecked()        );
+
+    settings.endGroup();
+}

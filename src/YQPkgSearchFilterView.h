@@ -63,8 +63,8 @@ public:
      * Check one ResObject against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
-    bool check( ZyppSel	selectable,
-		ZyppObj zyppObj );
+    bool check( ZyppSel selectable,
+                ZyppObj zyppObj );
 
 
 public slots:
@@ -72,9 +72,9 @@ public slots:
     /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
-     *	  filterStart()
-     *	  filterMatch() for each pkg that matches the filter
-     *	  filterFinished()
+     *    filterStart()
+     *    filterMatch() for each pkg that matches the filter
+     *    filterFinished()
      **/
     void filter();
 
@@ -100,8 +100,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel   selectable,
+                      ZyppPkg   pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -119,11 +119,11 @@ protected:
     // Caution: Enum order must match corresponding message strings in combo box!
     enum SearchMode
     {
-	Contains = 0,
-	BeginsWith,
-	ExactMatch,
-	UseWildcards,
-	UseRegExp
+        Contains = 0,
+        BeginsWith,
+        ExactMatch,
+        UseWildcards,
+        UseRegExp
     };
 
     /**
@@ -137,9 +137,9 @@ protected:
     /**
      * Check if pkg matches the search criteria.
      **/
-    bool check( ZyppSel	selectable,
-		ZyppObj 	zyppObj,
-		const QRegExp & 		regexp );
+    bool check( ZyppSel         selectable,
+                ZyppObj         zyppObj,
+                const QRegExp & regexp );
 
     /**
      * Check if a single pkg attribute matches the search criteria.
@@ -168,21 +168,21 @@ protected:
     // Data members
     //
 
-    QComboBox *		_searchText;
-    QPushButton *	_searchButton;
+    QComboBox *         _searchText;
+    QPushButton *       _searchButton;
 
-    QCheckBox *		_searchInName;
-    QCheckBox *		_searchInKeywords;
-    QCheckBox *		_searchInSummary;
-    QCheckBox *		_searchInDescription;
-    QCheckBox *		_searchInRequires;
-    QCheckBox *		_searchInProvides;
-    QCheckBox *		_searchInFileList;
+    QCheckBox *         _searchInName;
+    QCheckBox *         _searchInKeywords;
+    QCheckBox *         _searchInSummary;
+    QCheckBox *         _searchInDescription;
+    QCheckBox *         _searchInRequires;
+    QCheckBox *         _searchInProvides;
+    QCheckBox *         _searchInFileList;
 
-    QComboBox *		_searchMode;
-    QCheckBox *		_caseSensitive;
+    QComboBox *         _searchMode;
+    QCheckBox *         _caseSensitive;
 
-    int			_matchCount;
+    int                 _matchCount;
 };
 
 

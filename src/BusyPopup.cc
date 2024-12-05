@@ -74,7 +74,7 @@ void BusyPopup::showEvent( QShowEvent * event )
     else
     {
         QRect screenGeo = qApp->primaryScreen()->availableGeometry();
-        
+
 	int x = ( screenGeo.width()  - width()  ) / 2;
 	int y = ( screenGeo.height() - height() ) / 2;
 
