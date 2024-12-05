@@ -31,6 +31,7 @@ set( SOURCES
   FSize.cc
   MainWindow.cc
   PkgCommitPage.cc
+  PkgTasks.cc
   SummaryPage.cc
   WindowSettings.cc
   Workflow.cc
