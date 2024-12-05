@@ -118,7 +118,7 @@ public:
      * Comparison operator, needed by some QList operations like 'indexOf()' or
      * 'contains()'.
      **/
-    bool operator==( const PkgTask & other );
+    bool operator==( const PkgTask & other ) const;
 
 
 protected:

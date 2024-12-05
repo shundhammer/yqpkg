@@ -32,6 +32,7 @@ set( SOURCES
   MainWindow.cc
   PkgCommitPage.cc
   PkgTasks.cc
+  PkgTaskListWidget.cc
   SummaryPage.cc
   WindowSettings.cc
   Workflow.cc
@@ -129,6 +130,16 @@ target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated-declarations" )
 
 # Make the version from ../../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
+
+
+# Add this $TOPDIR/src directory as an include directory for headers generated
+# into $(TOPDIR)/build/src/yqpkg_autogen from .ui files by uic.  This is needed
+# when using custom widget classes in Qt Designer: They include the headers for
+# those custom widget classes, but they are not in that build/.../..._autogen
+# directory, but in src/ where they belong.
+# Yet another problem to fix for CMake that wouldn't exist without CMake.
+
+target_include_directories( ${TARGETBIN} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers

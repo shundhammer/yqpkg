@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef PkgCommitPage_h
 #define PkgCommitPage_h
 
@@ -173,6 +172,17 @@ protected slots:
 
 
 protected:
+
+    /**
+     * A visual fake for committing packages: Just moving the progress bar
+     * ahead, not actually installing packages.
+     **/
+    void fakeCommit();
+
+    /**
+     * Fill the list widgets with content from the app's pkgTasks() lists.
+     **/
+    void populateLists();
 
     /**
      * Set up the internal Qt signal / slot connections.

@@ -103,12 +103,12 @@
          <number>15</number>
         </property>
         <item>
-         <layout class="QVBoxLayout" name="toDoVBox">
+         <layout class="QVBoxLayout" name="todoVBox">
           <property name="spacing">
            <number>5</number>
           </property>
           <item>
-           <widget class="QLabel" name="toDoLabel">
+           <widget class="QLabel" name="todoLabel">
             <property name="text">
              <string>To Do</string>
             </property>
@@ -118,7 +118,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="toDoList">
+           <widget class="PkgTaskListWidget" name="todoList">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
               <horstretch>1</horstretch>
@@ -235,7 +235,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="doingList">
+           <widget class="PkgTaskListWidget" name="doingList">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
               <horstretch>1</horstretch>
@@ -305,7 +305,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="doneList">
+           <widget class="PkgTaskListWidget" name="doneList">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
               <horstretch>1</horstretch>
@@ -480,6 +480,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PkgTaskListWidget</class>
+   <extends>QListWidget</extends>
+   <header>PkgTaskListWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>

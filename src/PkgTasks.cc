@@ -22,7 +22,7 @@
 #include "PkgTasks.h"
 
 
-bool PkgTask::operator==( const PkgTask & other )
+bool PkgTask::operator==( const PkgTask & other ) const
 {
     return _name      == other.name()
         && _action    == other.action()

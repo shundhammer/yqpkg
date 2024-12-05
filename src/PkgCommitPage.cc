@@ -23,6 +23,9 @@
 
 #include "Logger.h"
 #include "Exception.h"
+#include "PkgTasks.h"
+#include "PkgTaskListWidget.h"
+#include "YQPkgApplication.h"
 #include "YQi18n.h"
 #include "PkgCommitPage.h"
 
@@ -69,13 +72,17 @@ void PkgCommitPage::connectWidgets()
              this,               SLOT  ( cancelCommit()  ) );
 }
 
+
 void PkgCommitPage::commit()
 {
-    logInfo() << "Starting package transactions" << endl;
+    populateLists();
+    fakeCommit();
+}
 
-    // DEBUG
-    // DEBUG
-    // DEBUG
+
+void PkgCommitPage::fakeCommit()
+{
+    logInfo() << "Starting package transactions" << endl;
 
     for ( int i=1; i <= 100; ++i )
     {
@@ -84,11 +91,26 @@ void PkgCommitPage::commit()
         processEvents();
     }
 
-    // DEBUG
-    // DEBUG
-    // DEBUG
-
     logInfo() << "Package transactions done" << endl;
+}
+
+
+void PkgCommitPage::populateLists()
+{
+    _ui->todoList->clear();
+    _ui->doingList->clear();
+    _ui->doneList->clear();
+
+    PkgTasks * pkgTasks = YQPkgApplication::instance()->pkgTasks();
+
+    _ui->todoList->addTaskItems( pkgTasks->todo() );
+
+    // The other lists are almost certainly empty anyway at this point, but
+    // let's make sure, not make assumptions; this will be over very quickly if
+    // they are actually empty.
+
+    _ui->doingList->addTaskItems( pkgTasks->doing() );
+    _ui->doneList->addTaskItems ( pkgTasks->done()  );
 }
 
 
@@ -102,7 +124,7 @@ void PkgCommitPage::reset()
 {
     _ui->totalProgressBar->setValue( 0 );
 
-    _ui->toDoList->clear();
+    _ui->todoList->clear();
     _ui->doingList->clear();
     _ui->doneList->clear();
 
