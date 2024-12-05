@@ -28,7 +28,7 @@ class PkgTasks;
 class QEvent;
 class SummaryPage;
 class Workflow;
-class YQPackageSelector;
+class YQPkgSelector;
 class YQPkgRepoManager;
 
 typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
@@ -86,7 +86,7 @@ public:
      *
      * Ownership remains with this class; do not delete it.
      **/
-    YQPackageSelector * pkgSel();
+    YQPkgSelector * pkgSel();
 
     /**
      * Return the package committer. Create it if it doesn't exist yet.
@@ -189,7 +189,7 @@ protected:
 
     MainWindow *        _mainWin;
     Workflow *          _workflow;
-    YQPackageSelector * _pkgSel;
+    YQPkgSelector *     _pkgSel;
     PkgCommitPage *     _pkgCommitPage;
     SummaryPage *       _summaryPage;
     YQPkgRepoManager  * _yqPkgRepoManager;

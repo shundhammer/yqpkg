@@ -37,9 +37,9 @@ set( SOURCES
   WindowSettings.cc
   Workflow.cc
 
-  YQPackageSelector.cc
-  YQPackageSelectorBase.cc
-  YQPackageSelectorHelp.cc
+  YQPkgSelector.cc
+  YQPkgSelectorBase.cc
+  YQPkgSelectorHelp.cc
 
   YQPkgApplication.cc
   YQPkgAppWorkflowSteps.cc

@@ -15,8 +15,8 @@
  */
 
 
-#ifndef YQPackageSelectorBase_h
-#define YQPackageSelectorBase_h
+#ifndef YQPkgSelectorBase_h
+#define YQPkgSelectorBase_h
 
 #include <QFrame>
 
@@ -46,7 +46,7 @@ class YQPkgSelWmCloseHandler;
 /**
  * Abstract base class for package selectors.
  **/
-class YQPackageSelectorBase: public QFrame
+class YQPkgSelectorBase: public QFrame
 {
     Q_OBJECT
 
@@ -58,12 +58,12 @@ protected:
      * Will initialize package and selection managers and create conflict
      * dialogs.
      **/
-    YQPackageSelectorBase( QWidget * parent, long modeFlags = 0 );
+    YQPkgSelectorBase( QWidget * parent, long modeFlags = 0 );
 
     /**
      * Destructor
      **/
-    virtual ~YQPackageSelectorBase();
+    virtual ~YQPkgSelectorBase();
 
 
 public slots:
@@ -220,4 +220,4 @@ protected:
 
 
 
-#endif // YQPackageSelectorBase_h
+#endif // YQPkgSelectorBase_h

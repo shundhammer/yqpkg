@@ -33,7 +33,7 @@
 #include "Logger.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
-#include "YQPackageSelector.h"
+#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -231,7 +231,7 @@ YQPkgSearchFilterView::filter()
 	    progress.setWindowTitle( "" );
 	    progress.setMinimumDuration( 1500 ); // millisec
 
-	    // HACK, this should go to YQPackageSelector
+	    // HACK, this should go to YQPkgSelector
 	    parentWidget()->parentWidget()->setCursor(Qt::WaitCursor);
 	    progress.setCursor(Qt::ArrowCursor);
 

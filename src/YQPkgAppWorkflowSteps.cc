@@ -22,7 +22,7 @@
 #include "MainWindow.h"
 #include "PkgCommitPage.h"
 #include "SummaryPage.h"
-#include "YQPackageSelector.h"
+#include "YQPkgSelector.h"
 #include "YQPkgRepoManager.h"
 #include "YQi18n.h"
 #include "YQPkgApplication.h"

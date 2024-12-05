@@ -15,13 +15,13 @@
  */
 
 
-#ifndef YQPackageSelector_h
-#define YQPackageSelector_h
+#ifndef YQPkgSelector_h
+#define YQPkgSelector_h
 
 #include <QWidget>
 #include <QColor>
 
-#include "YQPackageSelectorBase.h"
+#include "YQPkgSelectorBase.h"
 #include "YQPkgObjList.h"
 
 class QCheckBox;
@@ -57,7 +57,7 @@ class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
 class YQPkgVersionsView;
 
-class YQPackageSelector : public YQPackageSelectorBase
+class YQPkgSelector : public YQPkgSelectorBase
 {
     Q_OBJECT
 
@@ -66,12 +66,12 @@ public:
     /**
      * Constructor: Create an empty (!) package selector.
      **/
-    YQPackageSelector( QWidget * parent, long modeFlags = 0 );
+    YQPkgSelector( QWidget * parent, long modeFlags = 0 );
 
     /**
      * Destructor.
      **/
-    ~YQPackageSelector();
+    ~YQPkgSelector();
 
 
 public slots:
@@ -183,14 +183,14 @@ public slots:
     void updateRepositoryUpgradeLabel();
 
     /**
-     * loads settings for the checkboxes in the option menu
+     * Read the settings from the config file
      */
-    void loadSettings();
+    void readSettings();
 
     /**
-     * saves settings of the checkboxes in the option menu
+     * Write the settings to the config file
      */
-    void saveSettings();
+    void writeSettings();
 
 
 signals:
@@ -424,4 +424,4 @@ protected:
 
 
 
-#endif // YQPackageSelector_h
+#endif // YQPkgSelector_h

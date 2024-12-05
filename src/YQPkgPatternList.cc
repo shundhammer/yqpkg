@@ -25,7 +25,7 @@
 #include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "YQIconPool.h"
-#include "YQPackageSelector.h"
+#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
 

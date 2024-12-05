@@ -29,7 +29,7 @@
 #include "PkgTasks.h"
 #include "Workflow.h"
 #include "SummaryPage.h"
-#include "YQPackageSelector.h"
+#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
 #include "YQPkgAppWorkflowSteps.h"
@@ -164,7 +164,7 @@ void YQPkgApplication::setWindowTitle( QWidget * window )
 }
 
 
-YQPackageSelector *
+YQPkgSelector *
 YQPkgApplication::pkgSel()
 {
     if ( ! _pkgSel )
@@ -183,7 +183,7 @@ void YQPkgApplication::createPkgSel()
     if ( _mainWin )
         _mainWin->splashPage( &busyPage );
 
-    _pkgSel = new YQPackageSelector( 0, 0 );
+    _pkgSel = new YQPkgSelector( 0, 0 );
     CHECK_NEW( _pkgSel );
 
     QObject::connect( _pkgSel, SIGNAL( commit() ),
@@ -306,7 +306,7 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 
         if ( currentPage == _pkgSel )
         {
-            logInfo() << "Caught WM_CLOSE for YQPackageSelector" << endl;
+            logInfo() << "Caught WM_CLOSE for YQPkgSelector" << endl;
             _pkgSel->wmClose();  // _pkgSel handles asking for confirmation etc.
 
             return true;        // Event processing finished for this one
@@ -320,7 +320,7 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
         }
         else
         {
-            logInfo() << "Caught WM_CLOSE, but not for YQPackageSelector" << endl;
+            logInfo() << "Caught WM_CLOSE, but not for YQPkgSelector" << endl;
         }
     }
 

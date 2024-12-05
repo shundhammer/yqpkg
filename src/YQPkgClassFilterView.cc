@@ -23,7 +23,7 @@
 #include <QApplication>
 
 #include "YQPkgClassFilterView.h"
-#include "YQPackageSelector.h"
+#include "YQPkgSelector.h"
 
 
 using std::string;
