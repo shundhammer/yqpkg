@@ -40,7 +40,7 @@ using std::list;
 
 
 /**
- * @short Abstract base class to display a list of zypp::ResObjects.
+ * Abstract base class to display a list of zypp::ResObjects.
  * Handles most generic stuff like setting status etc.
  **/
 class YQPkgObjList : public QY2ListView

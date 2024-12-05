@@ -30,7 +30,7 @@ class QLabel;
 
 
 /**
- * @short Dialog that takes care of dependency checking and resolving
+ * Dialog that takes care of dependency checking and resolving
  * conflicts.
  **/
 class YQPkgConflictDialog: public QDialog

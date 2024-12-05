@@ -21,7 +21,7 @@
 #include "YQZypp.h"
 
 /**
- * @short Zypp filtering helpers
+ * Zypp filtering helpers
  **/
 class YQPkgFilters
 {

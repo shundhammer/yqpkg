@@ -35,7 +35,7 @@ class YQPkgVersion;
 
 
 /**
- * @short Package version selector: Display a list of available versions from
+ * Package version selector: Display a list of available versions from
  * all the different installation sources and let the user change the candidate
  * version for installation / update.
  **/

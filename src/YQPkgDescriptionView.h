@@ -26,7 +26,7 @@ using std::string;
 
 
 /**
- * @short Display the description of a ZyppObj derived object along with its
+ * Display the description of a ZyppObj derived object along with its
  * name and summary.
  **/
 class YQPkgDescriptionView : public YQPkgGenericDetailsView

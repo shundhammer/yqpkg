@@ -27,7 +27,7 @@ class YQPkgPatternCategoryItem;
 
 
 /**
- * @short Display a list of zypp::Pattern objects.
+ * Display a list of zypp::Pattern objects.
  **/
 class YQPkgPatternList : public YQPkgObjList
 {

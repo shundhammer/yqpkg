@@ -123,7 +123,7 @@ protected:
 
 
 /**
- * @short List of disk usage of all attached partitions.
+ * List of disk usage of all attached partitions.
  **/
 class YQPkgDiskUsageList : public QY2DiskUsageList
 {

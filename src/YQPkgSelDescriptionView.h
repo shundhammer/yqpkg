@@ -22,7 +22,7 @@
 
 
 /**
- * @short Display the description of a zypp::ResObject derived object along with its
+ * Display the description of a zypp::ResObject derived object along with its
  * name and summary.
  **/
 class YQPkgSelDescriptionView : public YQPkgDescriptionView

@@ -28,7 +28,7 @@ using std::string;
 
 
 /**
- * @short Abstract base class for details views. Handles generic stuff like
+ * Abstract base class for details views. Handles generic stuff like
  * HTML formatting, Qt slots and display only if this view is visible at all
  * ( it may be hidden if it's part of a QTabWidget ).
  **/

@@ -27,7 +27,7 @@ class YQPkgProductListItem;
 
 
 /**
- * @short Display a list of zypp::Product objects.
+ * Display a list of zypp::Product objects.
  **/
 class YQPkgProductList : public YQPkgObjList
 {

@@ -26,7 +26,7 @@ class YQPkgListItem;
 
 
 /**
- * @short Display a list of zypp::Package objects.
+ * Display a list of zypp::Package objects.
  **/
 class YQPkgList : public YQPkgObjList
 {

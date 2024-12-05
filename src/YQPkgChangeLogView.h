@@ -27,7 +27,7 @@ using std::string;
 
 
 /**
- * @short Display a pkg's file list
+ * Display a pkg's file list
  **/
 class YQPkgChangeLogView : public YQPkgGenericDetailsView
 {

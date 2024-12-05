@@ -24,7 +24,7 @@
 class YQPkgLangListItem;
 
 /**
- * @short Display a list of zypp::Selection objects.
+ * Display a list of zypp::Selection objects.
  **/
 class YQPkgLangList : public YQPkgObjList
 {

@@ -31,7 +31,7 @@ typedef zypp::Repository	ZyppRepo;
 
 
 /**
- * @short Display a list of libzypp repositories.
+ * Display a list of libzypp repositories.
  **/
 class YQPkgRepoList : public QY2ListView
 {

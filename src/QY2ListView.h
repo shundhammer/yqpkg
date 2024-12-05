@@ -32,7 +32,7 @@ class QY2ListViewToolTip;
 
 
 /**
- * @short Enhanced QTreeWidget
+ * Enhanced QTreeWidget
  **/
 class QY2ListView : public QTreeWidget
 {

@@ -37,7 +37,7 @@ class YQPkgConflictDialog;
 
 
 /**
- * @short Display package dependency conflicts in a tree list and let the user
+ * Display package dependency conflicts in a tree list and let the user
  * choose how to resolve each conflict.
  **/
 class YQPkgConflictList : public QScrollArea
@@ -118,7 +118,7 @@ signals:
 
 
 /**
- * @short Root item for each individual conflict
+ * Root item for each individual conflict
  **/
 class YQPkgConflict: public QFrame
 {

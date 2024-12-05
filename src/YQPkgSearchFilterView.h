@@ -35,7 +35,7 @@ using std::string;
 
 
 /**
- * @short Filter view for searching within packages
+ * Filter view for searching within packages
  **/
 class YQPkgSearchFilterView : public QScrollArea
 {

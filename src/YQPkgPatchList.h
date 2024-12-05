@@ -45,7 +45,7 @@ enum YQPkgPatchCategory	// This is also the sort order
 
 
 /**
- * @short Display a list of zypp::Patch objects.
+ * Display a list of zypp::Patch objects.
  **/
 class YQPkgPatchList : public YQPkgObjList
 {

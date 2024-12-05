@@ -32,7 +32,7 @@ class QTabWidget;
 
 
 /**
- * @short Display a list of zypp::Patch objects and ( below ) details about the
+ * Display a list of zypp::Patch objects and ( below ) details about the
  * currently selected patch.
  **/
 class YQPkgPatchFilterView : public QWidget

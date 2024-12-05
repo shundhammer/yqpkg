@@ -30,7 +30,7 @@ using std::string;
 
 
 /**
- * @short Dialog that shows a scrolled (HTML) text.
+ * Dialog that shows a scrolled (HTML) text.
  **/
 class YQPkgTextDialog: public QDialog
 {
