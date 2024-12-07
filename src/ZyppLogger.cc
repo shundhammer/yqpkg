@@ -35,10 +35,12 @@ ZyppLogger::ZyppLogger()
         return;
     }
 
+#if 0
     logInfo() << "Installing the zypp logger" << endl;
 
     zypp::base::LogControl::instance().setLineFormater( _lineFormatter );
     zypp::base::LogControl::instance().setLineWriter  ( _lineWriter    );
+#endif
 }
 
 
