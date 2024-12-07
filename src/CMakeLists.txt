@@ -36,6 +36,7 @@ set( SOURCES
   SummaryPage.cc
   WindowSettings.cc
   Workflow.cc
+  ZyppLogger.cc
 
   YQPkgSelector.cc
   YQPkgSelectorBase.cc
@@ -144,6 +145,9 @@ target_include_directories( ${TARGETBIN} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers
 target_compile_definitions( ${TARGETBIN} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
+
+# Strip off the full path from __FILE__. See Logger.cc, Exception.cc.
+target_compile_definitions( ${TARGETBIN} PUBLIC FIX_CMAKE_FILENAME_BUG=1 )
 
 
 # Add more compile options to this target in addition to those

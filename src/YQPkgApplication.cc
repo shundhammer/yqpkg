@@ -34,6 +34,7 @@
 #include "YQPkgRepoManager.h"
 #include "YQPkgAppWorkflowSteps.h"
 #include "YQPkgApplication.h"
+#include "ZyppLogger.h"
 
 
 YQPkgApplication * YQPkgApplication::_instance = 0;
@@ -48,6 +49,7 @@ YQPkgApplication::YQPkgApplication()
     , _pkgCommitPage(0)
     , _summaryPage(0)
     , _yqPkgRepoManager(0)
+    , _zyppLogger(0)
     , _pkgTasks(0)
 {
     _instance = this;
@@ -85,6 +87,9 @@ YQPkgApplication::~YQPkgApplication()
 
     if ( _yqPkgRepoManager )
         delete _yqPkgRepoManager;
+
+    if ( _zyppLogger )
+        delete _zyppLogger;
 
     _instance = 0;
 
@@ -264,6 +269,26 @@ void YQPkgApplication::createRepoManager()
 }
 
 
+ZyppLogger *
+YQPkgApplication::zyppLogger()
+{
+    if ( ! _zyppLogger )
+        createZyppLogger();
+
+    return _zyppLogger;
+}
+
+
+void YQPkgApplication::createZyppLogger()
+{
+    if ( _zyppLogger )
+        return;
+
+    _zyppLogger = new ZyppLogger();
+    CHECK_NEW( _zyppLogger );
+}
+
+
 PkgTasks *
 YQPkgApplication::pkgTasks()
 {
@@ -406,8 +431,6 @@ void YQPkgApplication::skipCommit()
         return;
 
     _workflow->gotoStep( "summary" );
-    // alternatively:
-    // quit();
 }
 
 

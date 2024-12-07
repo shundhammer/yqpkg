@@ -42,6 +42,9 @@ YQPkgRepoManager::~YQPkgRepoManager()
 
 void YQPkgRepoManager::initTarget()
 {
+    logDebug() << "Creating the ZyppLogger" << endl;
+    YQPkgApplication::instance()->createZyppLogger();
+
     logDebug() << "Initializing zypp..." << endl;
 
     zyppPtr()->initializeTarget( "/", false );  // don't rebuild rpmdb
@@ -99,6 +102,8 @@ void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
 zypp::ZYpp::Ptr
 YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 {
+
+
     while ( _zypp_ptr == NULL && attempts > 0 )
     {
 	try

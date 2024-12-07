@@ -30,6 +30,7 @@ class SummaryPage;
 class Workflow;
 class YQPkgSelector;
 class YQPkgRepoManager;
+class ZyppLogger;
 
 typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
@@ -116,6 +117,16 @@ public:
      **/
     YQPkgRepoManager * repoManager();
 
+    /**
+     * Return the ZyppLogger. Create it if it doesn't exist yet.
+     **/
+    ZyppLogger * zyppLogger();
+
+    /**
+     * Create the ZyppLogger if it doesn't exist yet.
+     **/
+    void createZyppLogger();
+
 
 public slots:
 
@@ -193,6 +204,7 @@ protected:
     PkgCommitPage *     _pkgCommitPage;
     SummaryPage *       _summaryPage;
     YQPkgRepoManager  * _yqPkgRepoManager;
+    ZyppLogger *        _zyppLogger;
     PkgTasks *          _pkgTasks;
 
     static YQPkgApplication *   _instance;
