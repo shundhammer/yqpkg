@@ -26,37 +26,50 @@
 
 
 ZyppLogger::ZyppLogger()
-    : _lineWriter   ( new ZyppLogLineWriter()    )
+    : _lineWriter   ( new ZyppLogLineWriter( this ) )
     , _lineFormatter( new ZyppLogLineFormatter() )
+    , _zyppThreadLogger( Logger::lastLogDir(), "zypp.log" )
 {
-    if ( getenv( "YQPKG_NO_ZYPP_LOG" ) )
-    {
-        logInfo() << "env $YQPKG_NO_ZYPP_LOG is set - not installing a zypp logger." << endl;
-        return;
-    }
-
-#if 0
     logInfo() << "Installing the zypp logger" << endl;
 
     zypp::base::LogControl::instance().setLineFormater( _lineFormatter );
     zypp::base::LogControl::instance().setLineWriter  ( _lineWriter    );
-#endif
 }
 
 
 ZyppLogger::~ZyppLogger()
 {
     logInfo() << "Uninstalling the zypp logger" << endl;
+
+    // Avoid error "QMutex: destroying locked mutex" in the (main) log:
+    // The zypp thread might still be writing log messages.
+    // Give it some time to complete that.
+
+    bool locked = _mutex.tryLock( 1000 ); // millisec
+
+    zypp::base::LogControl::instance().setLineFormater( 0 );
+    zypp::base::LogControl::instance().setLineWriter  ( 0 );
+
+    if ( locked )
+        _mutex.unlock();
 }
+
+
+void ZyppLogger::logLine( const std::string & message )
+{
+    QMutexLocker locker( &_mutex );
+
+    _zyppThreadLogger.logStream() << fromUTF8( message ) << endl;
+}
+
 
 
 
 void ZyppLogLineWriter::writeOut( const std::string & formatted_msg )
 {
-    if ( ! formatted_msg.empty() )
+    if ( ! formatted_msg.empty() && _zyppLogger )
     {
-        Logger::defaultLogger()->logStream()
-            << fromUTF8( formatted_msg ) << endl;
+        _zyppLogger->logLine( formatted_msg );
     }
 }
 

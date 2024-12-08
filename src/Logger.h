@@ -240,6 +240,12 @@ public:
     static QString userName();
 
     /**
+     * Return the last used log directory. This is valid only if a Logger
+     * instance was already created before this call.
+     **/
+    static QString lastLogDir() { return _lastLogDir; }
+
+    /**
      * Rotate the logs in directory 'logDir' based on future log file
      * 'filename' (without path). Keep at most 'logRotateCount' old logs and
      * delete all other old logs.
@@ -297,6 +303,8 @@ protected:
 private:
 
     static Logger * _defaultLogger;
+    static QString  _lastLogDir;
+
     QFile	    _logFile;
     QTextStream	    _logStream;
     QFile	    _nullDevice;

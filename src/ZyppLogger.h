@@ -20,10 +20,13 @@
 
 
 #include <string>
+#include <QMutex>
 
 #include <zypp/base/Logger.h>
 #include <zypp/base/LogControl.h>
 
+
+class ZyppLogger;
 
 
 /**
@@ -31,7 +34,15 @@
  **/
 struct ZyppLogLineWriter: public zypp::base::LogControl::LineWriter
 {
+    ZyppLogLineWriter( ZyppLogger * zyppLogger )
+        : _zyppLogger( zyppLogger )
+        {}
+
     virtual void writeOut( const std::string & formated_msg );
+
+private:
+
+    ZyppLogger * _zyppLogger;
 };
 
 
@@ -61,10 +72,19 @@ public:
     ZyppLogger();
     ~ZyppLogger();
 
+    /**
+     * Write a single line to the zypp log file, protected by a mutex.
+     **/
+    void logLine( const std::string & message );
+
+
 private:
 
     boost::shared_ptr<ZyppLogLineWriter>    _lineWriter;
     boost::shared_ptr<ZyppLogLineFormatter> _lineFormatter;
+
+    QMutex _mutex;
+    Logger _zyppThreadLogger;
 };
 
 #endif // ZyppLogger_h

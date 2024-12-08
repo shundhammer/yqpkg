@@ -44,6 +44,7 @@ static void qt_logger( QtMsgType msgType,
 
 
 Logger * Logger::_defaultLogger = 0;
+QString  Logger::_lastLogDir;
 
 
 Logger::Logger( const QString &filename ):
@@ -70,6 +71,7 @@ Logger::Logger( const QString & rawLogDir,
     QString filename = expandVariables( rawFilename );
 
     logDir = createLogDir( logDir );
+    _lastLogDir = logDir;
 
     if ( doRotate )
 	logRotate( logDir, filename, logRotateCount );
@@ -82,7 +84,7 @@ Logger::~Logger()
 {
     if ( _logFile.isOpen() )
     {
-	logInfo() << "-- Log End --\n" << endl;
+	// logInfo() << "-- Log End --\n" << endl;
 	_logFile.close();
     }
 
