@@ -121,6 +121,7 @@ void PkgCommitPage::fakeCommit()
 void PkgCommitPage::realCommit()
 {
     logInfo() << "Starting package transactions" << endl;
+    processEvents();
 
     zypp::getZYpp()->commit( commitPolicy() );
 
@@ -244,7 +245,7 @@ void PkgCommitPage::writeSettings()
 
 void PkgCommitPage::processEvents()
 {
-    // This is just an alias for now, but it might change in the future.
-    QCoreApplication::processEvents();
+    QCoreApplication::processEvents( QEventLoop::AllEvents,
+                                     500 ); //millisec
 }
 

@@ -61,10 +61,15 @@ PkgTaskListWidgetItem::PkgTaskListWidgetItem( const PkgTask & task,
     : QListWidgetItem( parent )
     , _task( task )
 {
-    QString prefix;
+    QString txt;
 
     if ( _task.action() == PkgRemove )
-        prefix = "- ";
+        txt = "- ";
 
-    setText( prefix + _task.name() );
+    txt += _task.name();
+    setText( txt );
+
+    if ( parent )
+        logDebug() << "New PkgTask item for " << parent->objectName()
+                   << ": " << txt << endl;
 }

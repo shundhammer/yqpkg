@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QList>
+#include <QMutex>
 
 
 /**
@@ -219,12 +220,20 @@ public:
      **/
     void clearAll();
 
+    /**
+     * Return the mutex for this object to protect access from different
+     * threads. Use a QMutexLocker to ensure it doesn't remain locked.
+     **/
+    QMutex & mutex() { return _mutex; }
+
 protected:
 
     PkgTaskList _todo;
     PkgTaskList _doing;
     PkgTaskList _done;
     PkgTaskList _failed;
+
+    QMutex      _mutex;
 };
 
 #endif // PkgTasks_h
