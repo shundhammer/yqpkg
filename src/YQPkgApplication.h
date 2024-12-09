@@ -19,6 +19,7 @@
 #define YQPkgApplication_h
 
 #include <QObject>
+#include <QFlags>
 #include <zypp/ZYpp.h>
 
 
@@ -32,10 +33,27 @@ class YQPkgSelector;
 class YQPkgRepoManager;
 class ZyppLogger;
 
-typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
 typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
+
+enum YQPkgAppOption
+{
+    OptNone       = 0,
+    OptReadOnly   = 0x01,
+
+    // For debugging
+
+    OptFakeRoot   = 0x100,
+    OptFakeCommit = 0x200
+};
+
+// See https://doc.qt.io/qt-5/qflags.html
+//
+// YQPkgAppOption  is just the enum,
+// YQPkgAppOptions are several enum values OR'ed together.
+Q_DECLARE_FLAGS( YQPkgAppOptions, YQPkgAppOption )
+Q_DECLARE_OPERATORS_FOR_FLAGS( YQPkgAppOptions )
 
 /**
  * Application class for yqpkg.
@@ -47,9 +65,11 @@ class YQPkgApplication: public QObject
 public:
 
     /**
-     * Constructor
+     * Constructor.
+     *
+     * 'optFlags' are flags OR'ed together.
      **/
-    YQPkgApplication();
+    YQPkgApplication( YQPkgAppOptions optFlags = OptNone );
 
     /**
      * Destructor
@@ -71,9 +91,28 @@ public:
     void run();
 
     /**
-     * Return 'true' if this program is running with root privileges.
+     * Return 'true' if this program is running with root privileges
+     * or if OptFakeRoot is set.
+     *
+     * To check the real privileges, use "geteuid() == 0" instead.
      **/
     static bool runningAsRoot();
+
+    /**
+     * Return 'true' if this program is running in read-only mode.
+     **/
+    static bool readOnlyMode() { return isOptionSet( OptReadOnly ); }
+
+    /**
+     * Return the whole option flags.
+     **/
+    static YQPkgAppOptions optFlags() { return _optFlags; }
+
+    /**
+     * Return 'true' if option 'opt' is set.
+     **/
+    static bool isOptionSet( YQPkgAppOption opt )
+        { return _optFlags.testFlag( opt ); }
 
     //
     // Access to some important member variables
@@ -203,12 +242,12 @@ protected:
     YQPkgSelector *     _pkgSel;
     PkgCommitPage *     _pkgCommitPage;
     SummaryPage *       _summaryPage;
-    YQPkgRepoManager  * _yqPkgRepoManager;
+    YQPkgRepoManager *  _yqPkgRepoManager;
     ZyppLogger *        _zyppLogger;
     PkgTasks *          _pkgTasks;
 
     static YQPkgApplication *   _instance;
-    static bool                 _fakeRoot;      // env YQPKG_FAKE_ROOT
+    static YQPkgAppOptions      _optFlags;
 };
 
 #endif // YQPkgApplication_h

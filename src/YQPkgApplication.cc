@@ -38,10 +38,10 @@
 
 
 YQPkgApplication * YQPkgApplication::_instance = 0;
-bool               YQPkgApplication::_fakeRoot = false;
+YQPkgAppOptions    YQPkgApplication::_optFlags( OptNone );
 
 
-YQPkgApplication::YQPkgApplication()
+YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
     : QObject()
     , _mainWin(0)
     , _workflow(0)
@@ -52,14 +52,18 @@ YQPkgApplication::YQPkgApplication()
     , _zyppLogger(0)
     , _pkgTasks(0)
 {
-    _instance = this;
     logDebug() << "Creating YQPkgApplication" << endl;
 
-    if ( getenv( "YQPKG_FAKE_ROOT" ) )
+    _instance = this;
+    _optFlags = optFlags;
+
+    if ( ! runningAsRoot() )
     {
-        logInfo() << "Faking root with environment variable YQPKG_FAKE_ROOT" << endl;
-        _fakeRoot = true;
+        logInfo() << "Not running as root - enforcing read-only mode" << endl;
+        _optFlags |= OptReadOnly;
     }
+
+    logDebug() << "_optFlags: 0x" << hex << _optFlags << dec << endl;
 
     createMainWin(); // Create this early to get early visual feedback
     logDebug() << "Creating YQPkgApplication done" << endl;
@@ -163,7 +167,13 @@ void YQPkgApplication::setWindowTitle( QWidget * window )
     if ( window )
     {
         QString windowTitle( "YQPkg" );
-        windowTitle += runningAsRoot() ? _( " [root]" ) : _( " (read-only)" );
+
+        if ( runningAsRoot() )
+            windowTitle += _( " [root]" );
+
+        if ( readOnlyMode() )
+            windowTitle += _( " (read-only)" );
+
         window->setWindowTitle( windowTitle );
     }
 }
@@ -311,7 +321,7 @@ void YQPkgApplication::createPkgTasks()
 
 bool YQPkgApplication::runningAsRoot()
 {
-    if ( _fakeRoot )
+    if ( isOptionSet( OptFakeRoot ) )
         return true;
 
     return geteuid() == 0;

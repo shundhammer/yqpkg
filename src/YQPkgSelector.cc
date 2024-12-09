@@ -633,7 +633,7 @@ YQPkgSelector::layoutButtons( QWidget *parent )
     CHECK_NEW( accept_button );
     layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-    accept_button->setEnabled( YQPkgApplication::runningAsRoot() );
+    accept_button->setEnabled( ! YQPkgApplication::readOnlyMode() );
 
     connect( accept_button, SIGNAL( clicked() ),
              this,          SLOT  ( accept()   ) );
@@ -681,8 +681,7 @@ YQPkgSelector::addMenus()
 
     _fileMenu->addAction( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
     action = _fileMenu->addAction( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
-    action->setEnabled( YQPkgApplication::runningAsRoot() );
-
+    action->setEnabled( ! YQPkgApplication::readOnlyMode() );
 
     if ( _pkgList )
     {

@@ -15,6 +15,8 @@
  */
 
 
+#include <unistd.h>             // geteuid()
+
 #include <zypp/ZYppFactory.h>
 
 #include "Logger.h"
@@ -176,7 +178,7 @@ void YQPkgRepoManager::findEnabledRepos()
 
 void YQPkgRepoManager::refreshRepos()
 {
-    if ( ! YQPkgApplication::runningAsRoot() )
+    if ( geteuid() != 0 )
     {
         logWarning() << "Skipping repos refresh for non-root user" << endl;
         return;
