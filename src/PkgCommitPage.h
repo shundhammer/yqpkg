@@ -19,6 +19,7 @@
 #define PkgCommitPage_h
 
 #include <QWidget>
+#include <zypp/ZYppCommitPolicy.h>
 
 
 // Generated with 'uic' from a Qt designer .ui form: pkg-commit.ui
@@ -174,10 +175,26 @@ protected slots:
 protected:
 
     /**
+     * The real package commit: Tell libzypp to start downloading and
+     * installing / updating / removing packages.
+     *
+     * See also the '--dry-run' and '--download-only' command line options.
+     **/
+    void realCommit();
+
+    /**
      * A visual fake for committing packages: Just moving the progress bar
      * ahead, not actually installing packages.
+     *
+     * Use the '--fake-commit' command line option to trigger this rather than
+     * the real commit.
      **/
     void fakeCommit();
+
+    /**
+     * Return a commit policy based on the app's options.
+     **/
+    zypp::ZYppCommitPolicy commitPolicy() const;
 
     /**
      * Fill the list widgets with content from the app's pkgTasks() lists.

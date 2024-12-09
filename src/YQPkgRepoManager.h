@@ -71,9 +71,14 @@ public:
     /**
      * Return the connection to zypp.
      * The first call will establish the connection.
+     *
+     * Once a connection exists, you can simply use
+     *
+     *   zypp::getZYpp()
+     *
+     * (notice the capital 'Y'!).
      **/
     zypp::ZYpp::Ptr zyppPtr();
-
 
     /**
      * Return the zypp repo manager. The first call will create it.

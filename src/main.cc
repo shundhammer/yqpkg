@@ -41,7 +41,9 @@ void usage()
 	 << "\n"
 	 << "Options:\n"
 	 << "\n"
-	 << "  -r | --read-only\n"
+	 << "  -r | --read-only (default for non-root users)\n"
+	 << "  -n | --dry-run\n"
+	 << "  -d | --download-only\n"
 	 << "  -h | --help \n"
 	 << "\n"
 	 << "Debugging options:\n"
@@ -87,10 +89,12 @@ parseCommandLineOptions( QStringList & argList )
 {
     YQPkgAppOptions optFlags( 0 );
 
-    if ( commandLineOption( "--read-only",  "-r", argList ) ) optFlags |= OptReadOnly;
-    if ( commandLineOption( "--fake-root",  ""  , argList ) ) optFlags |= OptFakeRoot;
-    if ( commandLineOption( "--fake-commit", "" , argList ) ) optFlags |= OptFakeCommit;
-    if ( commandLineOption( "--help",       "-h" ,argList ) ) usage(); // this will exit
+    if ( commandLineOption( "--read-only",     "-r", argList ) ) optFlags |= OptReadOnly;
+    if ( commandLineOption( "--dry-run",       "-n", argList ) ) optFlags |= OptDryRun;
+    if ( commandLineOption( "--download-only", "-d", argList ) ) optFlags |= OptDownloadOnly;
+    if ( commandLineOption( "--fake-root",     ""  , argList ) ) optFlags |= OptFakeRoot;
+    if ( commandLineOption( "--fake-commit",   "" ,  argList ) ) optFlags |= OptFakeCommit;
+    if ( commandLineOption( "--help",          "-h" ,argList ) ) usage(); // this will exit
 
     if ( ! argList.isEmpty() )
     {

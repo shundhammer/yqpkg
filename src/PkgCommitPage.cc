@@ -26,6 +26,7 @@
 #include "PkgTaskListWidget.h"
 #include "YQPkgApplication.h"
 #include "YQi18n.h"
+#include "YQZypp.h"
 #include "PkgCommitPage.h"
 
 
@@ -75,22 +76,11 @@ void PkgCommitPage::connectWidgets()
 void PkgCommitPage::commit()
 {
     populateLists();
-    fakeCommit();
-}
 
-
-void PkgCommitPage::fakeCommit()
-{
-    logInfo() << "Starting package transactions" << endl;
-
-    for ( int i=1; i <= 100; ++i )
-    {
-        usleep( 100 * 1000 ); // microseconds
-        _ui->totalProgressBar->setValue( i );
-        processEvents();
-    }
-
-    logInfo() << "Package transactions done" << endl;
+    if ( YQPkgApplication::isOptionSet( OptFakeCommit ) )
+        fakeCommit();
+    else
+        realCommit();
 }
 
 
@@ -110,6 +100,52 @@ void PkgCommitPage::populateLists()
 
     _ui->doingList->addTaskItems( pkgTasks->doing() );
     _ui->doneList->addTaskItems ( pkgTasks->done()  );
+}
+
+
+void PkgCommitPage::fakeCommit()
+{
+    logInfo() << "Simulating package transactions" << endl;
+
+    for ( int i=1; i <= 100; ++i )
+    {
+        usleep( 100 * 1000 ); // microseconds
+        _ui->totalProgressBar->setValue( i );
+        processEvents();
+    }
+
+    logInfo() << "Simulating transactions done" << endl;
+}
+
+
+void PkgCommitPage::realCommit()
+{
+    logInfo() << "Starting package transactions" << endl;
+
+    zypp::getZYpp()->commit( commitPolicy() );
+
+    logInfo() << "Package transactions done" << endl;
+}
+
+
+zypp::ZYppCommitPolicy
+PkgCommitPage::commitPolicy() const
+{
+    zypp::ZYppCommitPolicy policy;
+
+    if ( YQPkgApplication::isOptionSet( OptDryRun ) )
+    {
+        logInfo() << "dry run" << endl;
+        policy.dryRun( true );
+    }
+
+    if ( YQPkgApplication::isOptionSet( OptDownloadOnly ) )
+    {
+        logInfo() << "download only" << endl;
+        policy.downloadMode( zypp::DownloadOnly );
+    }
+
+    return policy;
 }
 
 
