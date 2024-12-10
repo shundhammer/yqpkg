@@ -164,6 +164,25 @@ signals:
     void next();
 
 
+public slots:
+
+    //
+    // PkgCommitCallback slots
+    //
+
+    void pkgDownloadStart();
+    void pkgDownloadProgress();
+    void pkgDownloadEnd();
+
+    void pkgInstallStart();
+    void pkgInstallProgress();
+    void pkgInstallEnd();
+
+    void pkgRemoveStart();
+    void pkgRemoveProgress();
+    void pkgRemoveEnd();
+
+
 protected slots:
 
     /**

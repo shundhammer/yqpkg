@@ -30,6 +30,7 @@ set( SOURCES
   Exception.cc
   FSize.cc
   MainWindow.cc
+  PkgCommitCallbacks.cc
   PkgCommitPage.cc
   PkgTasks.cc
   PkgTaskListWidget.cc

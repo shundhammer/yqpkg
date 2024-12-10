@@ -27,6 +27,7 @@
 #include "YQPkgApplication.h"
 #include "YQi18n.h"
 #include "YQZypp.h"
+#include "PkgCommitCallbacks.h"
 #include "PkgCommitPage.h"
 
 
@@ -49,6 +50,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     readSettings();
     reset();
     connectWidgets();
+    PkgCommitSignalForwarder::instance()->connectAll( this );
 
     _instance = this;
 }
@@ -58,6 +60,8 @@ PkgCommitPage::~PkgCommitPage()
 {
     writeSettings();
     delete _ui;
+    // PkgCommitSignalForwarder::instance()->deleteLater();
+
     _instance = 0;
 }
 
@@ -122,6 +126,10 @@ void PkgCommitPage::realCommit()
 {
     logInfo() << "Starting package transactions" << endl;
     processEvents();
+
+    // Create and install the callbacks.
+    // They are uninstalled when the 'callbacks' variable goes out of scope.
+    PkgCommitCallbacks callbacks;
 
     zypp::getZYpp()->commit( commitPolicy() );
 
@@ -249,3 +257,65 @@ void PkgCommitPage::processEvents()
                                      500 ); //millisec
 }
 
+
+//----------------------------------------------------------------------
+
+//
+// PkgCommitCallback slots
+//
+
+void PkgCommitPage::pkgDownloadStart()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgDownloadProgress()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgDownloadEnd()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgInstallStart()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgInstallProgress()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgInstallEnd()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgRemoveStart()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgRemoveProgress()
+{
+    logInfo() << endl;
+}
+
+
+void PkgCommitPage::pkgRemoveEnd()
+{
+    logInfo() << endl;
+}
+
+
+//----------------------------------------------------------------------
