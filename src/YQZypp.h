@@ -48,12 +48,14 @@ using zypp::ui::S_NoInst;
 
 typedef zypp::ui::Status			ZyppStatus;
 typedef zypp::ui::Selectable::Ptr		ZyppSel;
+typedef zypp::Resolvable::constPtr              ZyppRes;
 typedef zypp::ResObject::constPtr		ZyppObj;
 typedef zypp::Package::constPtr			ZyppPkg;
 typedef zypp::Pattern::constPtr			ZyppPattern;
 typedef zypp::Patch::constPtr			ZyppPatch;
 typedef zypp::Product::constPtr			ZyppProduct;
 typedef zypp::PoolItem       			ZyppPoolItem;
+
 
 typedef zypp::ResPoolProxy			ZyppPool;
 typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;

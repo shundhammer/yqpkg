@@ -25,10 +25,11 @@
 #include <zypp/Url.h>
 #include <zypp/ZYppCallbacks.h>
 
+#include "YQZypp.h"     // ZyppRes
+
 
 class PkgCommitSignalForwarder;
 
-using zypp::Resolvable;
 using zypp::Pathname;
 using zypp::Url;
 
@@ -77,34 +78,34 @@ signals:
     // signals:
     //
 
-    void pkgDownloadStart();
-    void pkgDownloadProgress();
-    void pkgDownloadEnd();
+    void pkgDownloadStart    ( ZyppRes zyppRes );
+    void pkgDownloadProgress ( ZyppRes zyppRes, int value );
+    void pkgDownloadEnd      ( ZyppRes zyppRes );
 
-    void pkgInstallStart();
-    void pkgInstallProgress();
-    void pkgInstallEnd();
+    void pkgInstallStart     ( ZyppRes zyppRes );
+    void pkgInstallProgress  ( ZyppRes zyppRes, int value );
+    void pkgInstallEnd       ( ZyppRes zyppRes );
 
-    void pkgRemoveStart();
-    void pkgRemoveProgress();
-    void pkgRemoveEnd();
+    void pkgRemoveStart      ( ZyppRes zyppRes );
+    void pkgRemoveProgress   ( ZyppRes zyppRes, int value );
+    void pkgRemoveEnd        ( ZyppRes zyppRes );
 
 
 public:
 
     // Use each one with  PkgCommitSignalForwarder::instance()->sendPkg...()
 
-    void sendPkgDownloadStart()     { emit pkgDownloadStart();    }
-    void sendPkgDownloadProgress()  { emit pkgDownloadProgress(); }
-    void sendPkgDownloadEnd()       { emit pkgDownloadEnd();      }
+    void sendPkgDownloadStart    ( ZyppRes zyppRes )             { emit pkgDownloadStart   ( zyppRes);         }
+    void sendPkgDownloadProgress ( ZyppRes zyppRes, int value )  { emit pkgDownloadProgress( zyppRes, value ); }
+    void sendPkgDownloadEnd      ( ZyppRes zyppRes )             { emit pkgDownloadEnd     ( zyppRes );        }
 
-    void sendPkgInstallStart()      { emit pkgInstallStart();     }
-    void sendPkgInstallProgress()   { emit pkgInstallProgress();  }
-    void sendPkgInstallEnd()        { emit pkgInstallEnd();       }
+    void sendPkgInstallStart     ( ZyppRes zyppRes )             { emit pkgInstallStart    ( zyppRes);         }
+    void sendPkgInstallProgress  ( ZyppRes zyppRes, int value )  { emit pkgInstallProgress ( zyppRes, value ); }
+    void sendPkgInstallEnd       ( ZyppRes zyppRes )             { emit pkgInstallEnd      ( zyppRes );        }
 
-    void sendPkgRemoveStart()       { emit pkgRemoveStart();      }
-    void sendPkgRemoveProgress()    { emit pkgRemoveProgress();   }
-    void sendPkgRemoveEnd()         { emit pkgRemoveEnd();        }
+    void sendPkgRemoveStart      ( ZyppRes zyppRes )             { emit pkgRemoveStart     ( zyppRes);         }
+    void sendPkgRemoveProgress   ( ZyppRes zyppRes, int value )  { emit pkgRemoveProgress  ( zyppRes, value ); }
+    void sendPkgRemoveEnd        ( ZyppRes zyppRes )             { emit pkgRemoveEnd       ( zyppRes );        }
 
 
     static PkgCommitSignalForwarder * _instance;
@@ -116,39 +117,42 @@ public:
 //
 // Libzypp callbacks; see /usr/include/zypp/ZYppCallbacks.h
 
+
+typedef zypp::repo::DownloadResolvableReport::Action  PkgDownloadAction;
+typedef zypp::repo::DownloadResolvableReport::Error   PkgDownloadError;
+
+
 struct PkgDownloadCallback:
     public zypp::callback::ReceiveReport<zypp::repo::DownloadResolvableReport>
 {
-    virtual void start( Resolvable::constPtr /*resolvable_ptr*/,
-                        const Url & /*url*/ )
+
+    virtual void start( ZyppRes zyppRes, const Url & /*url*/ )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgDownloadStart();
+            PkgCommitSignalForwarder::instance()->sendPkgDownloadStart( zyppRes );
         }
 
 
-    virtual bool progress( int /*value*/,
-                           Resolvable::constPtr /*resolvable_ptr*/)
+    virtual bool progress( int value, ZyppRes zyppRes)
         {
-            PkgCommitSignalForwarder::instance()->sendPkgDownloadProgress();
+            PkgCommitSignalForwarder::instance()->sendPkgDownloadProgress( zyppRes, value );
 
             return true; // Don't abort
         }
 
 
-    virtual void finish( Resolvable::constPtr resolvable,
-                         zypp::repo::DownloadResolvableReport::Error error,
+    virtual void finish( ZyppRes zyppRes,
+                         PkgDownloadError    error,
                          const std::string & reason )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgDownloadEnd();
+            PkgCommitSignalForwarder::instance()->sendPkgDownloadEnd( zyppRes );
         }
 
 
-    virtual zypp::repo::DownloadResolvableReport::Action
-    problem( Resolvable::constPtr /*resolvable_ptr*/,
-             zypp::repo::DownloadResolvableReport::Error /*error*/,
-             const std::string & /*description*/ )
+    virtual PkgDownloadAction problem( ZyppRes zyppRes,
+                                       PkgDownloadError  error,
+                                       const std::string description )
         {
-            return zypp::repo::DownloadResolvableReport::ABORT;
+            return PkgDownloadAction::ABORT;
         }
 
 
@@ -156,7 +160,7 @@ struct PkgDownloadCallback:
      * Hint that package is available in the local cache (no download needed).
      * This will be the only trigger for an already cached package.
      **/
-    virtual void infoInCache( Resolvable::constPtr res,
+    virtual void infoInCache( ZyppRes zyppRes,
                               const Pathname & /*localfile*/ )
         {}
 
@@ -166,7 +170,7 @@ struct PkgDownloadCallback:
     virtual void pkgGpgCheck( const UserData & userData_r = UserData() )
         {}
 
-    virtual void startDeltaDownload( const Pathname &  /*filename*/,
+    virtual void startDeltaDownload( const Pathname  & /*filename*/,
                                      const ByteCount & /*downloadSize*/ )
         {}
 
@@ -197,75 +201,81 @@ struct PkgDownloadCallback:
 }; // PkgDownloadCallback
 
 
+
+typedef zypp::target::rpm::InstallResolvableReport::Action  PkgInstallAction;
+typedef zypp::target::rpm::InstallResolvableReport::Error   PkgInstallError;
+
+
 struct PkgInstallCallback:
     public zypp::callback::ReceiveReport<zypp::target::rpm::InstallResolvableReport>
 {
-    virtual void start( Resolvable::constPtr /*resolvable*/ )
+    virtual void start( ZyppRes zyppRes )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgInstallStart();
+            PkgCommitSignalForwarder::instance()->sendPkgInstallStart( zyppRes );
         }
 
 
-    virtual bool progress( int /*value*/,
-                           Resolvable::constPtr /*resolvable*/)
+    virtual bool progress( int value, ZyppRes zyppRes )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgInstallProgress();
+            PkgCommitSignalForwarder::instance()->sendPkgInstallProgress( zyppRes, value );
 
             return true; // Don't abort
         }
 
 
-    virtual void finish( Resolvable::constPtr /*resolvable*/,
-                         zypp::target::rpm::InstallResolvableReport::Error /*error*/,
+    virtual void finish( ZyppRes zyppRes,
+                         PkgInstallError error,
                          const std::string & /*reason*/,
                          RpmLevel /*level*/ )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgInstallProgress();
+            PkgCommitSignalForwarder::instance()->sendPkgInstallEnd( zyppRes );
         }
 
 
-    virtual zypp::target::rpm::InstallResolvableReport::Action
-    problem( Resolvable::constPtr /*resolvable*/,
-             Error /*error*/,
-             const std::string & /*description*/,
-             RpmLevel /*level*/ )
+    virtual PkgInstallAction problem( ZyppRes zyppRes,
+                                      PkgInstallError error,
+                                      const std::string & /*description*/,
+                                      RpmLevel /*level*/ )
         {
-            return zypp::target::rpm::InstallResolvableReport::ABORT;
+            return PkgInstallAction::ABORT;
         }
 
 }; // PkgInstallCallback
 
 
+
+typedef zypp::target::rpm::RemoveResolvableReport::Action  PkgRemoveAction;
+typedef zypp::target::rpm::RemoveResolvableReport::Error   PkgRemoveError;
+
+
 struct PkgRemoveCallback:
     public zypp::callback::ReceiveReport<zypp::target::rpm::RemoveResolvableReport>
 {
-    virtual void start( Resolvable::constPtr /*resolvable*/ )
+    virtual void start( ZyppRes zyppRes )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgRemoveStart();
+            PkgCommitSignalForwarder::instance()->sendPkgRemoveStart( zyppRes );
         }
 
 
-    virtual bool progress( int /*value*/,
-                           Resolvable::constPtr /*resolvable*/)
+    virtual bool progress( int value, ZyppRes zyppRes )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgRemoveProgress();
+            PkgCommitSignalForwarder::instance()->sendPkgRemoveProgress( zyppRes, value );
 
             return true; // Don't abort
         }
 
 
-    virtual void finish( Resolvable::constPtr /*resolvable*/,
-                         zypp::target::rpm::RemoveResolvableReport::Error /*error*/,
+    virtual void finish( ZyppRes zyppRes,
+                         PkgRemoveError error,
                          const std::string & /*reason*/ )
         {
-            PkgCommitSignalForwarder::instance()->sendPkgRemoveEnd();
+            PkgCommitSignalForwarder::instance()->sendPkgRemoveEnd( zyppRes );
         }
 
 
-    virtual zypp::target::rpm::RemoveResolvableReport::Action
-    problem( Resolvable::constPtr /*resolvable*/,
-             zypp::target::rpm::RemoveResolvableReport::Error /*error*/,
-             const std::string & /*description*/ )
+    virtual PkgRemoveAction problem( ZyppRes zyppRes,
+                                     PkgRemoveError error,
+                                     const std::string & /*description*/ )
         {
             return zypp::target::rpm::RemoveResolvableReport::ABORT;
         }

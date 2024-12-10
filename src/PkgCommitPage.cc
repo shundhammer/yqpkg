@@ -264,55 +264,61 @@ void PkgCommitPage::processEvents()
 // PkgCommitCallback slots
 //
 
-void PkgCommitPage::pkgDownloadStart()
+void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }
 
 
-void PkgCommitPage::pkgDownloadProgress()
+void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int value )
+{
+    logInfo() << "Value: " << value << endl;
+    _ui->totalProgressBar->setValue( value );
+    processEvents();
+}
+
+
+void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }
 
 
-void PkgCommitPage::pkgDownloadEnd()
+void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }
 
 
-void PkgCommitPage::pkgInstallStart()
+void PkgCommitPage::pkgInstallProgress( ZyppRes zyppRes, int value )
+{
+    logInfo() << "Value: " << value << endl;
+    _ui->totalProgressBar->setValue( value );
+    processEvents();
+}
+
+
+void PkgCommitPage::pkgInstallEnd ( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }
 
 
-void PkgCommitPage::pkgInstallProgress()
+void PkgCommitPage::pkgRemoveStart( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }
 
 
-void PkgCommitPage::pkgInstallEnd()
+void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int value )
 {
-    logInfo() << endl;
+    logInfo() << "Value: " << value << endl;
+    _ui->totalProgressBar->setValue( value );
+    processEvents();
 }
 
 
-void PkgCommitPage::pkgRemoveStart()
-{
-    logInfo() << endl;
-}
-
-
-void PkgCommitPage::pkgRemoveProgress()
-{
-    logInfo() << endl;
-}
-
-
-void PkgCommitPage::pkgRemoveEnd()
+void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 {
     logInfo() << endl;
 }

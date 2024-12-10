@@ -55,32 +55,32 @@ PkgCommitSignalForwarder * PkgCommitSignalForwarder::instance()
 
 void PkgCommitSignalForwarder::connectAll( QObject * receiver )
 {
-    QObject::connect( instance(), SIGNAL( pkgDownloadStart()    ),
-                      receiver,   SLOT  ( pkgDownloadStart()    ) );
+    connect( instance(), SIGNAL( pkgDownloadStart    ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgDownloadStart    ( ZyppRes ) ) );
 
-    QObject::connect( instance(), SIGNAL( pkgDownloadProgress() ),
-                      receiver,   SLOT  ( pkgDownloadProgress() ) );
+    connect( instance(), SIGNAL( pkgDownloadProgress ( ZyppRes, int ) ),
+             receiver,   SLOT  ( pkgDownloadProgress ( ZyppRes, int ) ) );
 
-    QObject::connect( instance(), SIGNAL( pkgDownloadEnd()      ),
-                      receiver,   SLOT  ( pkgDownloadEnd()      ) );
-
-
-    QObject::connect( instance(), SIGNAL( pkgInstallStart()     ),
-                      receiver,   SLOT  ( pkgInstallStart()     ) );
-
-    QObject::connect( instance(), SIGNAL( pkgInstallProgress()  ),
-                      receiver,   SLOT  ( pkgInstallProgress()  ) );
-
-    QObject::connect( instance(), SIGNAL( pkgInstallEnd()       ),
-                      receiver,   SLOT  ( pkgInstallEnd()       ) );
+    connect( instance(), SIGNAL( pkgDownloadEnd      ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgDownloadEnd      ( ZyppRes ) ) );
 
 
-    QObject::connect( instance(), SIGNAL( pkgRemoveStart()      ),
-                      receiver,   SLOT  ( pkgRemoveStart()      ) );
+    connect( instance(), SIGNAL( pkgInstallStart     ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgInstallStart     ( ZyppRes ) ) );
 
-    QObject::connect( instance(), SIGNAL( pkgRemoveProgress()   ),
-                      receiver,   SLOT  ( pkgRemoveProgress()   ) );
+    connect( instance(), SIGNAL( pkgInstallProgress  ( ZyppRes, int ) ),
+             receiver,   SLOT  ( pkgInstallProgress  ( ZyppRes, int ) ) );
 
-    QObject::connect( instance(), SIGNAL( pkgRemoveEnd()        ),
-                      receiver,   SLOT  ( pkgRemoveEnd()        ) );
+    connect( instance(), SIGNAL( pkgInstallEnd       ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgInstallEnd       ( ZyppRes ) ) );
+
+
+    connect( instance(), SIGNAL( pkgRemoveStart      ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgRemoveStart      ( ZyppRes ) ) );
+
+    connect( instance(), SIGNAL( pkgRemoveProgress   ( ZyppRes, int ) ),
+             receiver,   SLOT  ( pkgRemoveProgress   ( ZyppRes, int ) ) );
+
+    connect( instance(), SIGNAL( pkgRemoveEnd        ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgRemoveEnd        ( ZyppRes ) ) );
 }

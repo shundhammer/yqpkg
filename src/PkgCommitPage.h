@@ -18,8 +18,11 @@
 #ifndef PkgCommitPage_h
 #define PkgCommitPage_h
 
+
 #include <QWidget>
 #include <zypp/ZYppCommitPolicy.h>
+
+#include "YQZypp.h"     // ZyppRes
 
 
 // Generated with 'uic' from a Qt designer .ui form: pkg-commit.ui
@@ -170,17 +173,17 @@ public slots:
     // PkgCommitCallback slots
     //
 
-    void pkgDownloadStart();
-    void pkgDownloadProgress();
-    void pkgDownloadEnd();
+    void pkgDownloadStart    ( ZyppRes zyppRes );
+    void pkgDownloadProgress ( ZyppRes zyppRes, int value );
+    void pkgDownloadEnd      ( ZyppRes zyppRes );
 
-    void pkgInstallStart();
-    void pkgInstallProgress();
-    void pkgInstallEnd();
+    void pkgInstallStart     ( ZyppRes zyppRes );
+    void pkgInstallProgress  ( ZyppRes zyppRes, int value );
+    void pkgInstallEnd       ( ZyppRes zyppRes );
 
-    void pkgRemoveStart();
-    void pkgRemoveProgress();
-    void pkgRemoveEnd();
+    void pkgRemoveStart      ( ZyppRes zyppRes );
+    void pkgRemoveProgress   ( ZyppRes zyppRes, int value );
+    void pkgRemoveEnd        ( ZyppRes zyppRes );
 
 
 protected slots:
