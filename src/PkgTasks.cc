@@ -28,7 +28,7 @@ bool PkgTask::operator==( const PkgTask & other ) const
         && ( _action    & other.action() )
         && ( _requester & other.requester() );
 
-    // Using bit-wise & to be able to use OR'ed values like
+    // Using bitwise & to be able to use OR'ed values like
     // PkgAdd,    i.e.  PkgInstall | PkgUpdate, or
     // PkgReqAll, i.e.  PkgReqUser | PkgReqDep.
 }
@@ -131,7 +131,7 @@ void PkgTasks::initFromZypp()
 
             task.setCompletedPercent( 0 );
 
-            if ( action | PkgAdd ) // PkgInstall | PkgUpdate
+            if ( action & PkgAdd ) // PkgInstall | PkgUpdate
             {
                 const ZyppObj candidate = selectable->candidateObj();
 
@@ -142,10 +142,10 @@ void PkgTasks::initFromZypp()
                     task.setDownloadedPercent( 0 );
                 }
             }
-            else if ( action | PkgRemove )
+            else if ( action & PkgRemove )
             {
                 task.setDownloadSize( 0.0 );
-                
+
                 const ZyppObj installed = selectable->installedObj();
 
                 if ( installed )

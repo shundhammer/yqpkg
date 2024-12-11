@@ -283,7 +283,7 @@ void PkgCommitPage::initProgressCosts()
 
     foreach ( PkgTask task, pkgTasks()->todo() )
     {
-        if ( ( task.action() | PkgAdd ) && task.downloadSize() > 0.0 )
+        if ( ( task.action() & PkgAdd ) && task.downloadSize() > 0.0 )
             totalDownloadSize += task.downloadSize();
 
         if ( task.installedSize() > 0.0 )
@@ -317,7 +317,7 @@ float PkgCommitPage::doingDownloadSizeSum()
 
     foreach ( PkgTask task, pkgTasks()->doing() )
     {
-        if ( ( task.action() | PkgAdd )    &&
+        if ( ( task.action() & PkgAdd )    &&
              task.downloadSize()      > 0  &&
              task.downloadedPercent() > 0 )
         {
