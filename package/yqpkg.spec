@@ -45,7 +45,7 @@ BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  %{libzypp_devel_version}
 
 Summary:        GUI abstraction library
-License:        GPL-2.1-only
+License:        GPL-2.0
 URL:            http://github.com/shundhammer/yqpkg
 Source:         %{name}-%{version}.tar.bz2
 

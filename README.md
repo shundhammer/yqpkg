@@ -11,7 +11,24 @@ GPL V2; see file LICENSE.
 
 ## Development Status
 
-Pre-alpha.
+Alpha.
+
+It is usable, and it has most of the key features.
+
+You can run it as root and as a normal user (read-only), you can select
+packages and patterns for installation / update / removal, it does dependency
+resolution; you can commit the changes, and packages or patterns are actually
+being installed / updated / removed, and you get a summary page from where you
+can go back to select more.
+
+Limitations:
+
+- No repo refresh yet. Use `sudo zypper ref` before program start.
+
+- No GPG key import from repos, no failed package GPG signature fail prompt.
+
+- No repo operations. You get the repo view, though, where you can view and
+  select packages by repo.
 
 For details and screenshots, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
 
