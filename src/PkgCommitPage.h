@@ -281,16 +281,9 @@ protected:
     float doingInstalledSizeSum();
 
     /**
-     * Calculate and return the current tasks cost, i.e. the weighted sums of
-     * the completed tasks and the tasks in the 'doing' list.
-     **/
-    float currentTasksCost();
-
-    /**
-     * Calculate and return the current progress percent based on the total and
-     * current tasks cost. Return -1 if a division by zero would happen,
-     * i.e. _totalTasksCost was not properly initialized (or there were no
-     * tasks at all).
+     * Calculate the current progress percent based on the weighted progress
+     * percent of number of completed tasks, completed download size, completed
+     * install size.
      **/
     int currentProgressPercent();
 
@@ -313,10 +306,13 @@ protected:
     PkgTasks *          _pkgTasks;
     bool                _showingDetails;
 
-    float               _totalTasksCost;
-    int                 _completedTasksCount;
+    float               _totalDownloadSize;
+    float               _totalInstalledSize;
+    int                 _totalTasksCount;
+
     float               _completedDownloadSize;
     float               _completedInstalledSize;
+    int                 _completedTasksCount;
 
     float               _pkgFixedCostWeight;     // 0.0 .. 1.0
     float               _pkgDownloadWeight;      // 0.0 .. 1.0
