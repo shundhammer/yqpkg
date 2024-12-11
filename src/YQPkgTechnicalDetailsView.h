@@ -57,8 +57,8 @@ protected:
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( ZyppSel	selectable,
-			 ZyppPkg 	pkg );
+    QString simpleTable( ZyppSel selectable,
+                         ZyppPkg pkg );
 
 
     /**
@@ -66,9 +66,9 @@ protected:
      * package instances: The installed instance and an alternate instance.
      * ( usually the candidate instance ).
      **/
-    QString complexTable( ZyppSel	selectable,
-			  ZyppPkg 	installedPkg,
-			  ZyppPkg 	candidatePkg );
+    QString complexTable( ZyppSel selectable,
+                          ZyppPkg installedPkg,
+                          ZyppPkg candidatePkg );
 
     /**
      * Returns a string containing HTML code for a package's authors list.
