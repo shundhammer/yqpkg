@@ -20,7 +20,7 @@ Name:           yqpkg
 
 # If you change the version here, don't forget ../VERSION.cmake !
 # To increase only the last number, use  rake version:bump
-Version:        0.5.0
+Version:        0.7.0
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
@@ -45,8 +45,8 @@ BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  %{libzypp_devel_version}
 
 Summary:        GUI abstraction library
-License:        LGPL-2.1-only OR LGPL-3.0-only
-URL:            http://github.com/libyui/
+License:        GPL-2.1-only
+URL:            http://github.com/shundhammer/yqpkg
 Source:         %{name}-%{version}.tar.bz2
 
 %description
