@@ -32,6 +32,7 @@
 
 class QAction;
 class QActionGroup;
+class PkgTasks;
 
 
 /**
@@ -157,6 +158,24 @@ protected:
      **/
     void writeSettings();
 
+    /**
+     * Get the package tasks from the application.
+     **/
+    PkgTasks * pkgTasks();
+
+    /**
+     * Return the text for a long summary.
+     * Show no more than 'listMaxItems' items of each list. -1 means 'unlimited'.
+     **/
+    QString longSummary( int listMaxItems = -1 );
+
+    /**
+     * Return the text lines of a task list, shortened to no more than
+     * 'listMaxItems' items. -1 means 'unlimited'.
+     **/
+    QStringList listSummary( const PkgTaskList & taskList,
+                             const QString       header,
+                             int                 listMaxItems = -1 );
 
     //
     // Data members
@@ -167,6 +186,7 @@ protected:
     QTimer              _countdownTimer;
     QTimer              _intervalTimer;
     QMenu *             _countdownMenu;
+    PkgTasks *          _pkgTasks;
 };
 
 

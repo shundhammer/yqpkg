@@ -20,10 +20,13 @@
 #include <QMenu>
 #include <QSettings>
 
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
 #include "MainWindow.h"
+#include "PkgTasks.h"
+#include "YQPkgApplication.h"
 #include "YQi18n.h"
+
 #include "SummaryPage.h"
 
 
@@ -32,6 +35,7 @@ SummaryPage::SummaryPage( QWidget * parent )
     , _ui( new Ui::SummaryPage ) // Use the Qt designer .ui form (XML)
     , _countdownSec( 30 )
     , _countdownMenu( 0 )
+    , _pkgTasks( 0 )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -94,18 +98,6 @@ void SummaryPage::reset()
 {
     stopCountdown(); // This also updates the countdown widgets
     _ui->contentTextEdit->clear();
-}
-
-
-void SummaryPage::updateSummary()
-{
-    QString text = _( "No package changes." );
-
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
-
-    _ui->contentTextEdit->setText( text );
 }
 
 
@@ -244,3 +236,94 @@ void SummaryPage::writeSettings()
     settings.endGroup();
 }
 
+
+PkgTasks * SummaryPage::pkgTasks()
+{
+    if ( ! _pkgTasks )
+        _pkgTasks =  YQPkgApplication::instance()->pkgTasks();
+
+    CHECK_PTR( _pkgTasks );
+
+    return _pkgTasks;
+}
+
+
+void SummaryPage::updateSummary()
+{
+    if ( YQPkgApplication::isOptionSet( OptFakeSummary ) )
+    {
+        // --fake-summary:  Move all remaining tasks from "todo" to "done".
+
+        pkgTasks()->done() << pkgTasks()->todo();
+        pkgTasks()->todo().clear();
+    }
+
+    const int listMaxItems = 7;
+    QString text = longSummary( listMaxItems );
+
+    _ui->contentTextEdit->setText( text );
+}
+
+
+QString SummaryPage::longSummary( int listMaxItems )
+{
+    PkgTaskList & failedPkg    = pkgTasks()->failed();
+    PkgTaskList & todoPkg      = pkgTasks()->failed();
+    PkgTaskList   removedPkg   = pkgTasks()->done().filtered( PkgRemove,  PkgReqAll );
+    PkgTaskList   installedPkg = pkgTasks()->done().filtered( PkgInstall, PkgReqAll );
+    PkgTaskList   updatedPkg   = pkgTasks()->done().filtered( PkgUpdate,  PkgReqAll );
+
+    if ( failedPkg.isEmpty()    &&
+         removedPkg.isEmpty()   &&
+         installedPkg.isEmpty() &&
+         updatedPkg.isEmpty()      )
+    {
+        return _( "No package changes." );
+    }
+
+    QStringList lines;
+
+    lines << listSummary( failedPkg,    _( "FAILED: %1"    ), listMaxItems );
+    lines << listSummary( removedPkg ,  _( "Removed: %1"   ), listMaxItems );
+    lines << listSummary( installedPkg, _( "Installed: %1" ), listMaxItems );
+    lines << listSummary( updatedPkg,   _( "Updated: %1"   ), listMaxItems );
+    lines << listSummary( todoPkg,      _( "To do: %1"     ), listMaxItems );
+
+    return lines.join( "\n" );
+}
+
+
+#define NEWLINE QString( "" )
+
+
+QStringList SummaryPage::listSummary( const PkgTaskList & taskList,
+                                      const QString       header,
+                                      int                 listMaxItems )
+{
+    QStringList lines;
+
+    if ( taskList.isEmpty() )
+        return lines;
+
+    int count = taskList.size();
+
+    if ( listMaxItems < 0 )
+        listMaxItems = count;
+
+    if ( header.contains( "%1" ) )
+         lines << header.arg( taskList.size() );
+    else
+        lines << header;
+
+    lines << NEWLINE;
+
+    for ( int i=0; i < listMaxItems && i < taskList.size(); i++ )
+        lines << QString( "  - %1" ).arg( taskList.at( i ).name() );
+
+    if ( taskList.size() > listMaxItems )
+        lines << QString( "  " ) + _( "(%1 more)" ).arg( taskList.size() - listMaxItems );
+
+    lines << NEWLINE;
+
+    return lines;
+}

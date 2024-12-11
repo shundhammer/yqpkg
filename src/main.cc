@@ -50,6 +50,7 @@ void usage()
 	 << "\n"
 	 << "  --fake-root\n"
 	 << "  --fake-commit\n"
+	 << "  --fake-summary\n"
 	 << "\n"
 	 << std::endl;
 
@@ -94,6 +95,7 @@ parseCommandLineOptions( QStringList & argList )
     if ( commandLineOption( "--download-only", "-d", argList ) ) optFlags |= OptDownloadOnly;
     if ( commandLineOption( "--fake-root",     ""  , argList ) ) optFlags |= OptFakeRoot;
     if ( commandLineOption( "--fake-commit",   "" ,  argList ) ) optFlags |= OptFakeCommit;
+    if ( commandLineOption( "--fake-summary",  "" ,  argList ) ) optFlags |= OptFakeSummary;
     if ( commandLineOption( "--help",          "-h" ,argList ) ) usage(); // this will exit
 
     if ( ! argList.isEmpty() )

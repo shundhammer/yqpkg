@@ -201,7 +201,7 @@ public:
     /**
      * Return the list of package tasks that are successfully done.
      **/
-    PkgTaskList & done()   { return _doing; }
+    PkgTaskList & done()   { return _done; }
 
     /**
      * Return the list of package tasks that failed.

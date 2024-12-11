@@ -47,7 +47,8 @@ enum YQPkgAppOption
     // For debugging
 
     OptFakeRoot     = 0x100,
-    OptFakeCommit   = 0x200
+    OptFakeCommit   = 0x200,
+    OptFakeSummary  = 0x400
 };
 
 // See https://doc.qt.io/qt-5/qflags.html
