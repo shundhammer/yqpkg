@@ -33,6 +33,9 @@
 #include "ui_pkg-commit-page.h"
 
 
+class PkgTasks;
+
+
 /**
  * Class for the "package commit" workflow step / page:
  *
@@ -255,12 +258,69 @@ protected:
      **/
     void writeSettings();
 
+    /**
+     * Get the package tasks from the application.
+     **/
+    PkgTasks * pkgTasks();
+
+    /**
+     * Initialize and calculate the values for the overall progress.
+     **/
+    void initProgressCosts();
+
+    /**
+     * Return the sum of all relevant download sizes in the 'doing' list with
+     * their current downloaded percentage taken into account.
+     **/
+    float doingDownloadSizeSum();
+
+    /**
+     * Return the sum of all installed sizes in the 'doing' list with their
+     * current completed percentage taken into account.
+     **/
+    float doingInstalledSizeSum();
+
+    /**
+     * Calculate and return the current tasks cost, i.e. the weighted sums of
+     * the completed tasks and the tasks in the 'doing' list.
+     **/
+    float currentTasksCost();
+
+    /**
+     * Calculate and return the current progress percent based on the total and
+     * current tasks cost. Return -1 if a division by zero would happen,
+     * i.e. _totalTasksCost was not properly initialized (or there were no
+     * tasks at all).
+     **/
+    int currentProgressPercent();
+
+    /**
+     * Calculate the total progress and update the total progress bar if the
+     * (integer) percent value is different from the old one.
+     *
+     * Return 'true' if there was a difference, 'false' if not. This return
+     * value can be used to determine if actively processing events is needed
+     * after this.
+     **/
+    bool updateTotalProgressBar();
+
+
     //
     // Data members
     //
 
-    Ui::PkgCommitPage *   _ui;
-    bool                  _showingDetails;
+    Ui::PkgCommitPage * _ui;
+    PkgTasks *          _pkgTasks;
+    bool                _showingDetails;
+
+    float               _totalTasksCost;
+    int                 _completedTasksCount;
+    float               _completedDownloadSize;
+    float               _completedInstalledSize;
+
+    float               _pkgFixedCostWeight;     // 0.0 .. 1.0
+    float               _pkgDownloadWeight;      // 0.0 .. 1.0
+    float               _pkgInstallRemoveWeight; // 0.0 .. 1.0
 
     static PkgCommitPage * _instance;
 };

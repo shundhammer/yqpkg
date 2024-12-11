@@ -16,6 +16,7 @@
 
 
 #include <unistd.h>             // usleep()
+#include <stdlib.h>             // abs()
 
 #include <QSettings>
 #include <QMessageBox>
@@ -37,6 +38,7 @@ PkgCommitPage * PkgCommitPage::_instance = 0;
 PkgCommitPage::PkgCommitPage( QWidget * parent )
     : QWidget( parent )
     , _ui( new Ui::PkgCommitPage ) // Use the Qt designer .ui form (XML)
+    , _pkgTasks( 0 )
     , _showingDetails( false )
 {
     CHECK_PTR( _ui );
@@ -80,6 +82,8 @@ void PkgCommitPage::connectWidgets()
 void PkgCommitPage::commit()
 {
     populateLists();
+    initProgressCosts();
+    _ui->totalProgressBar->setValue( 0 );
 
     if ( YQPkgApplication::isOptionSet( OptFakeCommit ) )
         fakeCommit();
@@ -94,16 +98,25 @@ void PkgCommitPage::populateLists()
     _ui->doingList->clear();
     _ui->doneList->clear();
 
-    PkgTasks * pkgTasks = YQPkgApplication::instance()->pkgTasks();
-
-    _ui->todoList->addTaskItems( pkgTasks->todo() );
+    _ui->todoList->addTaskItems( pkgTasks()->todo() );
 
     // The other lists are almost certainly empty anyway at this point, but
     // let's make sure, not make assumptions; this will be over very quickly if
     // they are actually empty.
 
-    _ui->doingList->addTaskItems( pkgTasks->doing() );
-    _ui->doneList->addTaskItems ( pkgTasks->done()  );
+    _ui->doingList->addTaskItems( pkgTasks()->doing() );
+    _ui->doneList->addTaskItems ( pkgTasks()->done()  );
+}
+
+
+PkgTasks * PkgCommitPage::pkgTasks()
+{
+    if ( ! _pkgTasks )
+        _pkgTasks =  YQPkgApplication::instance()->pkgTasks();
+
+    CHECK_PTR( _pkgTasks );
+
+    return _pkgTasks;
 }
 
 
@@ -255,6 +268,121 @@ void PkgCommitPage::processEvents()
 {
     QCoreApplication::processEvents( QEventLoop::AllEvents,
                                      500 ); //millisec
+}
+
+
+void PkgCommitPage::initProgressCosts()
+{
+    int   totalTasksCount        = pkgTasks()->todo().size();
+    float totalDownloadSize      = 0.0;
+    float totalInstalledSize     = 0.0;
+
+    _completedTasksCount    = 0;
+    _completedDownloadSize  = 0.0;
+    _completedInstalledSize = 0.0;
+
+    foreach ( PkgTask task, pkgTasks()->todo() )
+    {
+        if ( ( task.action() | PkgAdd ) && task.downloadSize() > 0.0 )
+            totalDownloadSize += task.downloadSize();
+
+        if ( task.installedSize() > 0.0 )
+            totalInstalledSize += task.installedSize();
+    }
+
+    // Weights for different sub-tasks of downloading and installing packages:
+    // There is a constant cost for doing anything with a package, no matter if
+    // it's installing or removing it: The 'handling' of the package.
+    //
+    // Of course a large part of the cost is the download, and another is the
+    // cost of actually installing or removing it, be it unpacking an RPM (for
+    // installing a package) or removing it (removing its file list entries).
+
+    _pkgFixedCostWeight     = 0.2;
+    _pkgDownloadWeight      = 0.6;
+    _pkgInstallRemoveWeight = 0.4;
+
+    _totalTasksCost =
+        totalTasksCount    * _pkgFixedCostWeight     +
+        totalDownloadSize  * _pkgDownloadWeight      +
+        totalInstalledSize * _pkgInstallRemoveWeight;
+
+    logDebug() << "Total tasks cost: " << _totalTasksCost << endl;
+}
+
+
+float PkgCommitPage::doingDownloadSizeSum()
+{
+    float sum = 0.0;
+
+    foreach ( PkgTask task, pkgTasks()->doing() )
+    {
+        if ( ( task.action() | PkgAdd )    &&
+             task.downloadSize()      > 0  &&
+             task.downloadedPercent() > 0 )
+        {
+            sum += task.downloadSize() * ( task.downloadedPercent() / 100.0 );
+        }
+    }
+
+    return sum;
+}
+
+
+float PkgCommitPage::doingInstalledSizeSum()
+{
+    float sum = 0.0;
+
+    foreach ( PkgTask task, pkgTasks()->doing() )
+    {
+        if ( task.installedSize() > 0 && task.completedPercent() > 0 )
+            sum += task.installedSize() * ( task.completedPercent() / 100.0 );
+    }
+
+    return sum;
+}
+
+
+float PkgCommitPage::currentTasksCost()
+{
+    // Intentionally not taking the fixed cost for tasks in 'doing' into
+    // account since they are not completed yet.
+
+    float cost = _completedTasksCount * _pkgFixedCostWeight +
+        ( _completedDownloadSize  + doingDownloadSizeSum()  ) * _pkgDownloadWeight +
+        ( _completedInstalledSize + doingInstalledSizeSum() ) * _pkgInstallRemoveWeight;
+
+    return cost;
+}
+
+
+int PkgCommitPage::currentProgressPercent()
+{
+    if ( qFuzzyCompare( (double) _totalTasksCost, 0.0 ) )
+    {
+        logError() << "_totalTasksCost is 0; preventing division by 0" << endl;
+        return -1;
+    }
+
+    float progress = currentTasksCost() / _totalTasksCost * 100.0;
+
+    return qBound( 0, (int) ( progress + 0.5 ), 100 );
+}
+
+
+bool PkgCommitPage::updateTotalProgressBar()
+{
+    bool didUpdate   = false;
+    int  oldProgress = _ui->totalProgressBar->value();
+    int  progress    = currentProgressPercent();
+
+    if ( progress >= 0 && oldProgress != progress )
+    {
+        _ui->totalProgressBar->setValue( progress );
+        didUpdate = true;
+    }
+
+    return didUpdate;
 }
 
 

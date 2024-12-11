@@ -24,9 +24,13 @@
 
 bool PkgTask::operator==( const PkgTask & other ) const
 {
-    return _name      == other.name()
-        && _action    == other.action()
-        && _requester == other.requester();
+    return _name       == other.name()
+        && ( _action    & other.action() )
+        && ( _requester & other.requester() );
+
+    // Using bit-wise & to be able to use OR'ed values like
+    // PkgAdd,    i.e.  PkgInstall | PkgUpdate, or
+    // PkgReqAll, i.e.  PkgReqUser | PkgReqDep.
 }
 
 
@@ -140,6 +144,8 @@ void PkgTasks::initFromZypp()
             }
             else if ( action | PkgRemove )
             {
+                task.setDownloadSize( 0.0 );
+                
                 const ZyppObj installed = selectable->installedObj();
 
                 if ( installed )

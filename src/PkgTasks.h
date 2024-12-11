@@ -32,16 +32,16 @@
  **/
 enum PkgTaskAction
 {
-    PkgNoAction    = 0,
+    PkgNoAction = 0,
 
-    PkgInstall     = 0x01,
-    PkgUpdate      = 0x02,
-    PkgRemove      = 0x04,
+    PkgInstall  = 0x01,
+    PkgUpdate   = 0x02,
+    PkgRemove   = 0x04,
 
     // Some OR'ed values
 
-    PkgAdd         = 0x03, // PkgInstall | PkgInstall
-    PkgAll         = 0x07  // PkgInstall | PkgInstall | PkgRemove
+    PkgAdd      = 0x03, // PkgInstall | PkgUpdate
+    PkgAll      = 0x07  // PkgInstall | PkgUpdate | PkgRemove
 };
 
 
@@ -170,7 +170,7 @@ public:
      * Return percent (0..100) to which this task is completed or -1 if
      * unknown.
      **/
-    int completed() const { return _completedPercent; }
+    int completedPercent() const { return _completedPercent; }
 
     /**
      * Set the completed percent (0..100).
