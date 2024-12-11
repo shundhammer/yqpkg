@@ -123,7 +123,30 @@ void PkgTasks::initFromZypp()
         if ( action != PkgNoAction )
         {
             QString name = fromUTF8( selectable->name() );
-            _todo.add( PkgTask( name, action, req ) );
+            PkgTask task = PkgTask( name, action, req );
+
+            task.setCompletedPercent( 0 );
+
+            if ( action | PkgAdd ) // PkgInstall | PkgUpdate
+            {
+                const ZyppObj candidate = selectable->candidateObj();
+
+                if ( candidate )
+                {
+                    task.setInstalledSize( candidate->installSize() );
+                    task.setDownloadSize ( candidate->downloadSize() );
+                    task.setDownloadedPercent( 0 );
+                }
+            }
+            else if ( action | PkgRemove )
+            {
+                const ZyppObj installed = selectable->installedObj();
+
+                if ( installed )
+                    task.setInstalledSize( installed->installSize() );
+            }
+
+            _todo.add( task );
         }
     }
 }

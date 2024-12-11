@@ -55,7 +55,7 @@ enum PkgTaskRequester
     PkgReqUser = 0x01, //
     PkgReqDep  = 0x02, // Dependencies
 
-    PkgReqAll  = 0x03 // PkgReqUser | PkgReqDep
+    PkgReqAll  = 0x03  // PkgReqUser | PkgReqDep
 };
 
 
@@ -68,6 +68,13 @@ enum PkgTaskRequester
  * Notice that this class intentionally does not keep track of the package
  * version or architecture, or if the task is already done, still to do, or if
  * there were errors.
+ *
+ * It can be used to store some numeric values like the download or the
+ * installed size (in bytes) or the downloaded or completed percent, but those
+ * fields are just for convenience during the package commit stage.
+ *
+ * The status of each task is implicit by what list it is in: todo, doing,
+ * done, failed.
  **/
 class PkgTask
 {
@@ -82,6 +89,10 @@ public:
         : _name( pkgName )
         , _action( pkgAction )
         , _requester( requester )
+        , _downloadSize ( -1.0 )
+        , _installedSize( -1.0 )
+        , _downloadedPercent( -1 )
+        , _completedPercent( -1 )
         {}
 
     /**
@@ -116,8 +127,62 @@ public:
     bool byDependency() const { return _requester | PkgReqDep; }
 
     /**
+     * Return the download size in bytes or -1.0 (< 0.0) if unknown.
+     * This is irrelevant for actions like PkgRemove.
+     *
+     * This uses 'float' for ease of handling and to avoid overflows. The value
+     * does not need to be exact to the byte level, just a rough value to
+     * calculate the total progress percent.
+     **/
+    float downloadSize() const { return _downloadSize; }
+
+    /**
+     * Set the download size in bytes.
+     **/
+    void setDownloadSize( float value ) { _downloadSize = value; }
+
+    /**
+     * Return the installed size in bytes or -1.0 (< 0.0) if unknown.
+     *
+     * This uses 'float' for ease of handling and to avoid overflows. The value
+     * does not need to be exact to the byte level, just a rough value to
+     * calculate the total progress percent.
+     **/
+    float installedSize() const { return _installedSize; }
+
+    /**
+     * Set the installed size in bytes.
+     **/
+    void setInstalledSize( float value ) { _installedSize = value; }
+
+    /**
+     * Return the downloaded percent (0..100) or -1 if unknown.
+     * This is not relevant if this is a package remove action.
+     **/
+    int downloadedPercent() const { return _downloadedPercent; }
+
+    /**
+     * Set the downloaded percent (0..100).
+     **/
+    void setDownloadedPercent( int value ) { _downloadedPercent = value; }
+
+    /**
+     * Return percent (0..100) to which this task is completed or -1 if
+     * unknown.
+     **/
+    int completed() const { return _completedPercent; }
+
+    /**
+     * Set the completed percent (0..100).
+     **/
+    void setCompletedPercent( int value ) { _completedPercent = value; }
+
+    /**
      * Comparison operator, needed by some QList operations like 'indexOf()' or
      * 'contains()'.
+     *
+     * Only name, action and requester are compared, not fields like download
+     * or installed size (or percent).
      **/
     bool operator==( const PkgTask & other ) const;
 
@@ -127,6 +192,11 @@ protected:
     QString          _name;
     PkgTaskAction    _action;
     PkgTaskRequester _requester;
+
+    float            _downloadSize;       // Bytes
+    float            _installedSize;      // Bytes
+    int              _downloadedPercent;  // 0..100 or -1 for unknown
+    int              _completedPercent;   // 0..100 or -1 for unknown
 };
 
 
