@@ -266,13 +266,17 @@ void PkgCommitPage::processEvents()
 
 void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
 void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int value )
 {
-    logInfo() << "Value: " << value << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << ": " << value << "%" << endl;
     _ui->totalProgressBar->setValue( value );
     processEvents();
 }
@@ -280,39 +284,55 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int value )
 
 void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
 void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
 void PkgCommitPage::pkgInstallProgress( ZyppRes zyppRes, int value )
 {
-    logInfo() << "Value: " << value << endl;
-    _ui->totalProgressBar->setValue( value );
-    processEvents();
+    CHECK_PTR( zyppRes );
+    // logInfo() << zyppRes->name() << ": " << value << "%" << endl;
+
+    if ( value <= 3 || value >= 98 || ( value % 5  == 0 ) )
+    {
+        logInfo() << zyppRes->name() << ": " << value << "%" << endl;
+        _ui->totalProgressBar->setValue( value );
+        processEvents();
+    }
 }
 
 
 void PkgCommitPage::pkgInstallEnd ( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
 void PkgCommitPage::pkgRemoveStart( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
 void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int value )
 {
-    logInfo() << "Value: " << value << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << ": " << value << "%" << endl;
     _ui->totalProgressBar->setValue( value );
     processEvents();
 }
@@ -320,7 +340,9 @@ void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int value )
 
 void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 {
-    logInfo() << endl;
+    CHECK_PTR( zyppRes );
+
+    logInfo() << zyppRes->name() << endl;
 }
 
 
