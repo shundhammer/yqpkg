@@ -15,11 +15,24 @@ Alpha.
 
 It is usable, and it has most of the key features.
 
-You can run it as root and as a normal user (read-only), you can select
-packages and patterns for installation / update / removal, it does dependency
-resolution; you can commit the changes, and packages or patterns are actually
-being installed / updated / removed, and you get a summary page from where you
-can go back to select more.
+- You can run it as root with all functions, and as a normal user in read-only mode.
+
+- You can select packages and patterns for installation / update / removal.
+
+- It does dependency resolution.
+
+- You can commit the changes, and packages or patterns are actually
+being installed / updated / removed.
+
+- You get a plain moving progress bar on the _commit_ page while the
+  transactions are performed.
+
+- You can switch details on or off on the _commit_ page.
+
+- You get a summary page from where you can go back to select more.
+
+- There is a configurable countdown on the summary page to close program
+  automatically. And a "Stop" button to halt the countdown, of course.
 
 Limitations:
 
@@ -31,6 +44,15 @@ Limitations:
   select packages by repo.
 
 For details and screenshots, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
+
+
+### Caveat
+
+**_There be dragons._** And bugs.
+
+Nothing bad should happen, but don't use it on a critical production system for now.
+
+_You've been warned._
 
 
 ## Building
@@ -71,11 +93,6 @@ yqpkg
 ```
 
 (it's now in `/usr/bin/yqpkg`)
-
-
-## TO DO
-
-_TO DO: More information_
 
 
 ## Reference
