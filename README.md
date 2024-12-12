@@ -31,12 +31,12 @@ being installed / updated / removed.
 
 - You get a summary page from where you can go back to select more.
 
-- There is a configurable countdown on the summary page to close program
+- There is a configurable countdown on the summary page to close the program
   automatically. And a "Stop" button to halt the countdown, of course.
 
 Limitations:
 
-- No repo refresh yet. Use `sudo zypper ref` before program start.
+- No repo refresh yet. If needed, use `sudo zypper ref` before program start.
 
 - No GPG key import from repos, no failed package GPG signature fail prompt.
 
