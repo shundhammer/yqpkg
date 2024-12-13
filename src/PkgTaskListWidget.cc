@@ -22,19 +22,19 @@
 
 void PkgTaskListWidget::addTaskItems( const PkgTaskList & taskList )
 {
-    foreach ( const PkgTask & task, taskList )
+    foreach ( PkgTask * task, taskList )
         addTaskItem( task );
 }
 
 
-void PkgTaskListWidget::addTaskItem( const PkgTask & task )
+void PkgTaskListWidget::addTaskItem( PkgTask * task )
 {
     PkgTaskListWidgetItem * item = new PkgTaskListWidgetItem( task, this );
     CHECK_NEW( item );
 }
 
 
-void PkgTaskListWidget::removeTaskItem( const PkgTask & task )
+void PkgTaskListWidget::removeTaskItem( PkgTask * task )
 {
     for ( int row=0; row < count(); ++row )
     {
@@ -56,20 +56,24 @@ void PkgTaskListWidget::removeTaskItem( const PkgTask & task )
 
 
 
-PkgTaskListWidgetItem::PkgTaskListWidgetItem( const PkgTask & task,
-                                              QListWidget *   parent )
+PkgTaskListWidgetItem::PkgTaskListWidgetItem( PkgTask *     task,
+                                              QListWidget * parent )
     : QListWidgetItem( parent )
     , _task( task )
 {
     QString txt;
 
-    if ( _task.action() == PkgRemove )
+    if ( _task->action() == PkgRemove )
         txt = "- ";
 
-    txt += _task.name();
+    txt += _task->name();
     setText( txt );
 
+#if 0
     if ( parent )
+    {
         logDebug() << "New PkgTask item for " << parent->objectName()
                    << ": " << txt << endl;
+    }
+#endif
 }

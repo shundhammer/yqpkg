@@ -83,6 +83,9 @@ YQPkgApplication::~YQPkgApplication()
     if ( _summaryPage )
         delete _summaryPage;
 
+    if ( _pkgTasks )
+        delete _pkgTasks;
+
     if ( _workflow )
         delete _workflow;
 

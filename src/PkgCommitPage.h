@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <zypp/ZYppCommitPolicy.h>
 
+#include "utf8.h"
+#include "Logger.h"
 #include "YQZypp.h"     // ZyppRes
 
 
@@ -320,6 +322,10 @@ protected:
 
     static PkgCommitPage * _instance;
 };
+
+
+QTextStream & operator<<( QTextStream & str, ZyppRes zyppRes );
+
 
 
 #endif  // PkgCommitPage_h

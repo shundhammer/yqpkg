@@ -282,13 +282,13 @@ void PkgCommitPage::initProgressCosts()
     _completedInstalledSize = 0.0;
     _completedTasksCount    = 0;
 
-    foreach ( PkgTask task, pkgTasks()->todo() )
+    foreach ( PkgTask * task, pkgTasks()->todo() )
     {
-        if ( ( task.action() & PkgAdd ) && task.downloadSize() > 0.0 )
-            _totalDownloadSize += task.downloadSize();
+        if ( ( task->action() & PkgAdd ) && task->downloadSize() > 0.0 )
+            _totalDownloadSize += task->downloadSize();
 
-        if ( task.installedSize() > 0.0 )
-            _totalInstalledSize += task.installedSize();
+        if ( task->installedSize() > 0.0 )
+            _totalInstalledSize += task->installedSize();
     }
 
     logDebug() << "total download size: "  << _totalDownloadSize  << endl;
@@ -313,13 +313,13 @@ float PkgCommitPage::doingDownloadSizeSum()
 {
     float sum = 0.0;
 
-    foreach ( PkgTask task, pkgTasks()->doing() )
+    foreach ( PkgTask * task, pkgTasks()->doing() )
     {
-        if ( ( task.action() & PkgAdd )    &&
-             task.downloadSize()      > 0  &&
-             task.downloadedPercent() > 0 )
+        if ( ( task->action() & PkgAdd )    &&
+             task->downloadSize()      > 0  &&
+             task->downloadedPercent() > 0 )
         {
-            sum += task.downloadSize() * ( task.downloadedPercent() / 100.0 );
+            sum += task->downloadSize() * ( task->downloadedPercent() / 100.0 );
         }
     }
 
@@ -331,10 +331,10 @@ float PkgCommitPage::doingInstalledSizeSum()
 {
     float sum = 0.0;
 
-    foreach ( PkgTask task, pkgTasks()->doing() )
+    foreach ( PkgTask * task, pkgTasks()->doing() )
     {
-        if ( task.installedSize() > 0 && task.completedPercent() > 0 )
-            sum += task.installedSize() * ( task.completedPercent() / 100.0 );
+        if ( task->installedSize() > 0 && task->completedPercent() > 0 )
+            sum += task->installedSize() * ( task->completedPercent() / 100.0 );
     }
 
     return sum;
@@ -431,32 +431,25 @@ bool PkgCommitPage::updateTotalProgressBar()
 void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->todo().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-
-    // Locate the task in the todo list
-
-    int taskIndex = pkgTasks()->todo().indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in todo" << endl;
+        logError() << "Can't find task for " << zyppRes << " in todo" << endl;
         return;
     }
 
+    logInfo() << task->name() << endl;
+
     // Move the task from the todo list to the doing list
 
-    PkgTask task = pkgTasks()->todo().takeAt( taskIndex );
-    task.setDownloadedPercent( 0 ); // Just to make sure
-    pkgTasks()->doing().add( task );
+    PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->doing() );
+    task->setDownloadedPercent( 0 ); // Just to make sure
 
     // Move the task from the todo list widget to the doing list widget
 
     _ui->todoList->removeTaskItem( task );
     _ui->doingList->addTaskItem( task );
-
     processEvents(); // Update the UI
 }
 
@@ -464,27 +457,19 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
 void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << ": " << percent << "%" << endl;
-
-
-    // Locate the task in the doing list
-
-    PkgTaskList & taskList = pkgTasks()->doing();
-    int taskIndex = taskList.indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
-    PkgTask & task = taskList[ taskIndex ];
+    logInfo() << task->name() << ": " << percent << "%" << endl;
 
-    if ( percent != task.downloadedPercent() )
+    if ( percent != task->downloadedPercent() ) // only if there really was a change
     {
-        task.setDownloadedPercent( percent );
+        task->setDownloadedPercent( percent );
 
         // Update the UI
 
@@ -497,24 +482,17 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
 void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-
-    // Locate the task in the doing list
-
-    PkgTaskList & taskList = pkgTasks()->doing();
-    int taskIndex = taskList.indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
-    PkgTask & task = taskList[ taskIndex ];
-    task.setDownloadedPercent( 100 ); // Just making sure
+    logInfo() << task->name() << endl;
+
+    task->setDownloadedPercent( 100 );
 
     // Important: Not adding the download size to _completedDownloadSize just
     // yet, or it would be counted twice while the task is still in the doing
@@ -526,59 +504,47 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-    // Check if the task is already in the doing list
-
-    int taskIndex = pkgTasks()->doing().indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 ) // No, it's not yet in doing - move it there
+    if ( ! task ) // No, it's not yet in doing - move it there
     {
-        taskIndex = pkgTasks()->todo().indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
+        task = pkgTasks()->todo().find( zyppRes );
 
-        if ( taskIndex < 0 )
+        if ( ! task )
         {
-            logError() << "Can't find task for " << name
+            logError() << "Can't find task for " << zyppRes
                        << " in either doing or todo" << endl;
             return;
         }
 
         // Move the task from the todo list to the doing list
+        PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->doing() );
 
-        PkgTask task = pkgTasks()->todo().takeAt( taskIndex );
-        task.setCompletedPercent( 0 ); // Just to make sure
-        pkgTasks()->doing().add( task );
+        task->setCompletedPercent( 0 ); // Just to make sure
 
         // Move the task from the todo list widget to the doing list widget
 
         _ui->todoList->removeTaskItem( task );
         _ui->doingList->addTaskItem( task );
-
-        // Update the UI
-
-        processEvents();
-
+        processEvents(); // Update the UI
 
         // No
         //
-        //  _completedDownloadSize += task.downloadSize()
+        //  _completedDownloadSize += task->downloadSize()
         //
         // here while the task is in the doing list, otherwise it would be
         // summed up twice!
     }
-    else // The task already was in doing (no download needed)
+    else // The task already was in doing (no (more) download needed)
     {
-        PkgTask & task = pkgTasks()->doing()[ taskIndex ];
-        task.setDownloadedPercent( 100 ); // The download is complete for sure
-        task.setCompletedPercent( 0 );  // But the task itself isn't completed
+        task->setDownloadedPercent( 100 ); // The download is complete for sure
+        task->setCompletedPercent( 0 );    // But the task itself isn't completed
 
         // Not sure if this warrants a forced UI update with processEvents()
 
         // No
         //
-        //  _completedDownloadSize += task.downloadSize()
+        //  _completedDownloadSize += task->downloadSize()
         //
         // here while the task is in the doing list, otherwise it would be
         // summed up twice!
@@ -589,27 +555,19 @@ void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 void PkgCommitPage::pkgInstallProgress( ZyppRes zyppRes, int percent )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << ": " << percent << "%" << endl;
-
-
-    // Locate the task in the doing list
-
-    PkgTaskList & taskList = pkgTasks()->doing();
-    int taskIndex = taskList.indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
-    PkgTask & task = taskList[ taskIndex ];
+    logInfo() << task->name() << ": " << percent << "%" << endl;
 
-    if ( percent != task.completedPercent() )
+    if ( percent != task->completedPercent() )
     {
-        task.setCompletedPercent( percent );
+        task->setCompletedPercent( percent );
 
         // Update the UI
 
@@ -622,26 +580,23 @@ void PkgCommitPage::pkgInstallProgress( ZyppRes zyppRes, int percent )
 void PkgCommitPage::pkgInstallEnd ( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-    // Locate the task in the doing list
-
-    int taskIndex = pkgTasks()->doing().indexOf( PkgTask( name, PkgAdd, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
+    logInfo() << task->name() << endl;
+
+
     // Move the task from the doing list to the done list
 
-    PkgTask task = pkgTasks()->doing().takeAt( taskIndex );
-    task.setDownloadedPercent( 100 );
-    task.setCompletedPercent( 100 ); // Just to make sure
-    pkgTasks()->done().add( task );
+    PkgTasks::moveTask( task, pkgTasks()->doing(), pkgTasks()->done() );
+    task->setDownloadedPercent( 100 );
+    task->setCompletedPercent( 100 ); // Just to make sure
+
 
     // Move the task from the doing list widget to the done list widget
 
@@ -653,11 +608,11 @@ void PkgCommitPage::pkgInstallEnd ( ZyppRes zyppRes )
 
     ++_completedTasksCount;
 
-    if ( task.installedSize() > 0 )
-        _completedInstalledSize += task.installedSize();
+    if ( task->installedSize() > 0 )
+        _completedInstalledSize += task->installedSize();
 
-    if ( task.downloadSize() > 0 )
-        _completedDownloadSize += task.downloadSize();
+    if ( task->downloadSize() > 0 )
+        _completedDownloadSize += task->downloadSize();
 
 
     // Update the UI
@@ -670,62 +625,47 @@ void PkgCommitPage::pkgInstallEnd ( ZyppRes zyppRes )
 void PkgCommitPage::pkgRemoveStart( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->todo().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-
-    // Locate the task in the todo list
-
-    int taskIndex = pkgTasks()->todo().indexOf( PkgTask( name, PkgRemove, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in todo" << endl;
+        logError() << "Can't find task for " << zyppRes << " in todo" << endl;
         return;
     }
 
+    logInfo() << task->name() << endl;
+
+
     // Move the task from the todo list to the doing list
 
-    PkgTask task = pkgTasks()->todo().takeAt( taskIndex );
-    task.setCompletedPercent( 0 ); // Just to make sure
-    pkgTasks()->doing().add( task );
+    PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->doing() );
+    task->setDownloadedPercent( 0 ); // Just to make sure
+
 
     // Move the task from the todo list widget to the doing list widget
 
     _ui->todoList->removeTaskItem( task );
     _ui->doingList->addTaskItem( task );
-
-    // Update the UI
-
-    processEvents();
+    processEvents(); // Update the UI
 }
 
 
 void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int percent )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << ": " << percent << "%" << endl;
-
-
-    // Locate the task in the doing list
-
-    PkgTaskList & taskList = pkgTasks()->doing();
-    int taskIndex = taskList.indexOf( PkgTask( name, PkgRemove, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
-    PkgTask & task = taskList[ taskIndex ];
+    logInfo() << task->name() << ": " << percent << "%" << endl;
 
-    if ( percent != task.completedPercent() )
+    if ( percent != task->completedPercent() )
     {
-        task.setCompletedPercent( percent );
+        task->setCompletedPercent( percent );
 
         // Update the UI
 
@@ -738,37 +678,37 @@ void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int percent )
 void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
-    QString name = fromUTF8( zyppRes->name() );
-    logInfo() << name << endl;
-
-    // Locate the task in the doing list
-
-    int taskIndex = pkgTasks()->doing().indexOf( PkgTask( name, PkgRemove, PkgReqAll ) );
-
-    if ( taskIndex < 0 )
+    if ( ! task )
     {
-        logError() << "Can't find task for " << name << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
         return;
     }
 
+    logInfo() << task->name() << endl;
+
+
     // Move the task from the doing list to the done list
 
-    PkgTask task = pkgTasks()->doing().takeAt( taskIndex );
-    task.setCompletedPercent( 100 ); // Just to make sure
-    pkgTasks()->done().add( task );
+    PkgTasks::moveTask( task, pkgTasks()->doing(), pkgTasks()->done() );
+    task->setDownloadedPercent( 100 );
+    task->setCompletedPercent( 100 ); // Just to make sure
+
 
     // Move the task from the doing list widget to the done list widget
 
     _ui->doingList->removeTaskItem( task );
     _ui->doneList->addTaskItem( task );
 
+
     // Update the internal bookkeeping sums
 
     ++_completedTasksCount;
 
-    if ( task.installedSize() > 0 )
-        _completedInstalledSize += task.installedSize();
+    if ( task->installedSize() > 0 )
+        _completedInstalledSize += task->installedSize();
+
 
     // Update the UI
 
@@ -778,3 +718,14 @@ void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 
 
 //----------------------------------------------------------------------
+
+
+QTextStream & operator<<( QTextStream & str, ZyppRes zyppRes )
+{
+    if ( zyppRes )
+        str << fromUTF8( zyppRes->name() );
+    else
+        str << "<NULL ZyppRes>";
+
+    return str;
+}

@@ -23,6 +23,9 @@
 #include <QList>
 #include <QMutex>
 
+#include "YQZypp.h"     // ZyppRes
+
+
 
 /**
  * Types of actions for a packate task.
@@ -178,13 +181,21 @@ public:
     void setCompletedPercent( int value ) { _completedPercent = value; }
 
     /**
-     * Comparison operator, needed by some QList operations like 'indexOf()' or
-     * 'contains()'.
-     *
-     * Only name, action and requester are compared, not fields like download
-     * or installed size (or percent).
+     * Return 'true' if this action matches the specified name, action and
+     * requester. If 'name' is empyt, don't check the name, just action and
+     * requester.
      **/
-    bool operator==( const PkgTask & other ) const;
+    bool matches( const QString &  name,
+                  PkgTaskAction    action    = PkgAll,
+                  PkgTaskRequester requester = PkgReqAll ) const;
+
+    /**
+     * Return 'true' if this action matches the other action's name, action and
+     * requester. If the 'name' field of 'other' is empyt, don't check the
+     * name, just action and requester.
+     **/
+    bool matches( PkgTask *       other ) const;
+    bool matches( const PkgTask & other ) const;
 
 
 protected:
@@ -202,36 +213,74 @@ protected:
 
 /**
  * A list of package tasks.
- *
- * Notice that the tasks are stored in the list directly and not as pointers.
  **/
-class PkgTaskList: public QList<PkgTask>
+class PkgTaskList: public QList<PkgTask *>
 {
 public:
 
-    PkgTaskList()
-        : QList<PkgTask>()
-        {}
+    /**
+     * Constructor.
+     **/
+    PkgTaskList( const QString & listName );
 
     /**
-     * Add a task to this list unless that same task is already in the list
-     * (with the same package name, action and requester).
+     * Destructor.
      **/
-    void add( const PkgTask & task );
+    virtual ~PkgTaskList();
 
-    // To find a task, use indexOf( const PkgTask & ).
-    // To take it out of the list, use indexOf() and then takeAt( index ).
+    /**
+     * Find the first action that matches the specified name, action and
+     * requester. If 'name' is empty, only action and requester are checked.
+     *
+     * Return the task if found, 0 if not found.
+     **/
+    PkgTask * find( const QString &  name,
+                    PkgTaskAction    action    = PkgAll,
+                    PkgTaskRequester requester = PkgReqAll ) const;
+
+    /**
+     * Find the first action that matches the specified name, action and
+     * requester of 'filter'. If 'filter.name()' is empty, only action and
+     * requester are checked.
+     *
+     * Return the task if found, 0 if not found.
+     **/
+    PkgTask * find( const PkgTask & filter ) const;
+
+    /**
+     * Find the first task where the name matches the name of the 'zyppRes'
+     * Zypp resolvable.
+
+     * Return the task if found, 0 if not found.
+     **/
+    PkgTask * find( ZyppRes zyppRes ) const;
 
     /**
      * Return a new list from origList filtered by action and requester.
-     *
-     * Remember that both PkgTaskAction and PkgTaskRequester support OR'ed values.
+     * Ownership of the tasks remains with the original list - do not delete them!
      **/
     PkgTaskList filtered( PkgTaskAction    action,
-                          PkgTaskRequester requester = PkgReqAll ) const;
+                          PkgTaskRequester requester = PkgReqAll );
 
+    /**
+     * Return the list name ("todo", "doing", "done", "failed" for debugging.
+     **/
+    QString name() const { return _name; }
+
+
+private:
+
+#if 0
+    // Disable copy ctor and assignment operator
+
+    PkgTaskList( const PkgTaskList & );
+    PkgTaskList operator=( const PkgTaskList & );
+#endif
+
+protected:
+
+    QString _name;
 };
-
 
 
 /**
@@ -242,15 +291,14 @@ public:
  * for the lists all return a non-const reference so the application can use
  * package list (and QList) functions directly.
  *
- * Some convenience functions are provided.
+ * Some convenience methods are provided.
  **/
 class PkgTasks
 {
 public:
-    /**
-     * Constructor.
-     **/
-    PkgTasks() {}
+
+    PkgTasks();
+    virtual ~PkgTasks();
 
     /**
      * Initialize the lists from zypp: Clear all lists, then iterate over all
@@ -281,14 +329,19 @@ public:
     /**
      * Move a task from one list to another.
      **/
-    void moveTask( const PkgTask & task,
-                   PkgTaskList &   fromList,
-                   PkgTaskList &   toList );
+    static void moveTask( PkgTask *      task,
+                          PkgTaskList &  fromList,
+                          PkgTaskList &  toList );
 
     /**
-     * Clear all lists.
+     * Clear all lists, i.e. delete each task and clear all lists.
      **/
     void clearAll();
+
+    /**
+     * Delete each task in 'list' and clear the list.
+     **/
+    void nuke( PkgTaskList & list );
 
     /**
      * Return the mutex for this object to protect access from different

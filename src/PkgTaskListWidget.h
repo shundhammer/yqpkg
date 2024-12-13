@@ -46,12 +46,12 @@ public:
     /**
      * Add an item for a single task.
      **/
-    void addTaskItem( const PkgTask & task );
+    void addTaskItem( PkgTask * task );
 
     /**
      * Remove an item for a task.
      **/
-    void removeTaskItem( const PkgTask & task );
+    void removeTaskItem( PkgTask * task );
 };
 
 
@@ -59,14 +59,14 @@ class PkgTaskListWidgetItem: public QListWidgetItem
 {
 public:
 
-    PkgTaskListWidgetItem( const PkgTask & task,
-                           QListWidget *   parent = 0 );
+    PkgTaskListWidgetItem( PkgTask *     task,
+                           QListWidget * parent = 0 );
 
-    const PkgTask & task() const { return _task; }
+    PkgTask * task() const { return _task; }
 
 protected:
 
-    PkgTask _task;
+    PkgTask * _task;
 };
 
 

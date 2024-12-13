@@ -318,7 +318,7 @@ QStringList SummaryPage::listSummary( const PkgTaskList & taskList,
     lines << NEWLINE;
 
     for ( int i=0; i < listMaxItems && i < taskList.size(); i++ )
-        lines << QString( "  - %1" ).arg( taskList.at( i ).name() );
+        lines << QString( "  - %1" ).arg( taskList.at( i )->name() );
 
     if ( taskList.size() > listMaxItems )
         lines << QString( "  " ) + _( "(%1 more)" ).arg( taskList.size() - listMaxItems );
