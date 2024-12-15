@@ -83,7 +83,7 @@ void PkgCommitPage::connectWidgets()
 void PkgCommitPage::commit()
 {
     populateLists();
-    initProgressCosts();
+    initProgressData();
     _ui->totalProgressBar->setValue( 0 );
 
     if ( YQPkgApplication::isOptionSet( OptFakeCommit ) )
@@ -272,7 +272,7 @@ void PkgCommitPage::processEvents()
 }
 
 
-void PkgCommitPage::initProgressCosts()
+void PkgCommitPage::initProgressData()
 {
     _totalDownloadSize      = 0.0;
     _totalInstalledSize     = 0.0;
@@ -301,11 +301,16 @@ void PkgCommitPage::initProgressCosts()
     //
     // Of course a large part of the cost is the download, and another is the
     // cost of actually installing or removing it, be it unpacking an RPM (for
-    // installing a package) or removing it (removing its file list entries).
+    // installing a package) or removing it (removing every item of its file
+    // list).
 
-    _pkgDownloadWeight      = 0.55;
+    _pkgDownloadWeight      = 0.60;
     _pkgInstallRemoveWeight = 0.30;
-    _pkgFixedCostWeight     = 0.15;
+    _pkgFixedCostWeight     = 0.10;
+
+    logDebug() << "pkgDownloadWeight:      " << _pkgDownloadWeight      << endl;
+    logDebug() << "pkgInstallRemoveWeight: " << _pkgInstallRemoveWeight << endl;
+    logDebug() << "pkgFixedCostWeight:     " << _pkgFixedCostWeight     << endl;
 }
 
 
@@ -346,60 +351,44 @@ int PkgCommitPage::currentProgressPercent()
     float downloadPercent  = 0.0;
     float installedPercent = 0.0;
     float tasksPercent     = 0.0;
-    float usedWeight       = 0.0;
 
-    if ( _totalDownloadSize > 0 ) // Prevent division by zero
+    if ( _totalDownloadSize > 0 )  // Prevent division by zero
     {
         float downloadSize = _completedDownloadSize  + doingDownloadSizeSum();
         float percent      = 100.0 * downloadSize / _totalDownloadSize;
         downloadPercent    = percent * _pkgDownloadWeight;
-        usedWeight        += _pkgDownloadWeight;
 
-        logDebug() << "DL %:   "  << downloadPercent
-                   << " weight: " << _pkgDownloadWeight
-                   << " raw %: "  << percent
-                   << endl;
+        logVerbose() << "Download %:   "  << downloadPercent
+                     << " weight: "       << _pkgDownloadWeight
+                     << " raw %: "        << percent
+                     << endl;
     }
 
-    if ( _totalInstalledSize > 0 )
+    if ( _totalInstalledSize > 0 )  // Prevent division by zero
     {
         float installedSize = _completedInstalledSize + doingInstalledSizeSum();
         float percent       = 100.0 * installedSize / _totalInstalledSize;
         installedPercent    = percent * _pkgInstallRemoveWeight;
-        usedWeight         += _pkgInstallRemoveWeight;
 
-        logDebug() << "Inst %: "  << installedPercent
-                   << " weight: " << _pkgInstallRemoveWeight
-                   << " raw %: "  << percent
-                   << endl;
+        logVerbose() << "Installed %: "  << installedPercent
+                     << " weight: "      << _pkgInstallRemoveWeight
+                     << " raw %: "       << percent
+                     << endl;
     }
 
-    if ( _totalTasksCount > 0 )
+    if ( _totalTasksCount > 0 )  // Prevent division by zero
     {
         float percent       = 100.0 * _completedTasksCount / (float) _totalTasksCount;
         float tasksPercent  = percent * _pkgFixedCostWeight;
-        usedWeight         += _pkgFixedCostWeight;
 
-        logDebug() << "Task %: "  << tasksPercent
-                   << " weight: " << _pkgFixedCostWeight
-                   << " raw %: "  << percent
-                   << endl;
+        logVerbose() << "Tasks %: " << tasksPercent
+                     << " weight: " << _pkgFixedCostWeight
+                     << " raw %: "  << percent
+                     << endl;
     }
 
-    if ( qFuzzyCompare( usedWeight, (float) 0.0 ) )
-        return 0;
-
     float progress   = tasksPercent + downloadPercent + installedPercent;
-    logDebug() << "Initial progress: " << progress << endl;
-
-    float totalWeight = _pkgFixedCostWeight + _pkgDownloadWeight + _pkgInstallRemoveWeight;
-    progress *= totalWeight / usedWeight;
-
-    logDebug() << "Final progress: "  << progress
-               << " total weight: "   << totalWeight
-               << " used weight: "    << usedWeight
-               << " scaling factor: " << totalWeight / usedWeight
-               << endl;
+    logVerbose() << "Progress: " << progress << endl;
 
     return qBound( 0, (int) ( progress + 0.5 ), 100 );
 }

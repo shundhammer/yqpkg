@@ -268,7 +268,7 @@ protected:
     /**
      * Initialize and calculate the values for the overall progress.
      **/
-    void initProgressCosts();
+    void initProgressData();
 
     /**
      * Return the sum of all relevant download sizes in the 'doing' list with
