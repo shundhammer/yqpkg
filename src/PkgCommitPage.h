@@ -299,6 +299,25 @@ protected:
      **/
     bool updateTotalProgressBar();
 
+    /**
+     * The common part of pkgInstallStart() and pkgRemoveStart() /
+     * ...progress(), ...End().
+     *
+     * 'action' is one of PkgInstall or PkgRemove,
+     * 'caller' is the calling function (__FUNCTION__) for logging.
+     **/
+    void pkgInstallRemoveStart    ( ZyppRes       zyppRes,
+                                    PkgTaskAction action,
+                                    const char *  caller );
+
+    void pkgInstallRemoveProgress( ZyppRes       zyppRes,
+                                   int           percent,
+                                   PkgTaskAction action,
+                                   const char *  caller );
+
+    void pkgInstallRemoveEnd     ( ZyppRes       zyppRes,
+                                   PkgTaskAction action,
+                                   const char *  caller );
 
     //
     // Data members
