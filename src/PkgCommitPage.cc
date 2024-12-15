@@ -32,7 +32,7 @@
 #include "PkgCommitCallbacks.h"
 #include "PkgCommitPage.h"
 
-#define VERBOSE_PROGRESS        1
+#define VERBOSE_PROGRESS        0
 #define VERBOSE_TRANSACT        1
 
 
@@ -488,6 +488,14 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
 
 void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
 {
+    // Avoid unnecessary expensive progress updates:
+    //
+    // There is nothing to report for 0%, and pkgDownloadEnd() will take care
+    // of 100%.
+
+    if ( percent < 1 || percent > 99 )
+        return;
+
     CHECK_PTR( zyppRes );
     PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
@@ -498,7 +506,7 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
     }
 
 #if VERBOSE_PROGRESS
-    logVerbose() << task << ": " << percent << "%" << endl;
+    logVerbose() << task << ": downloaded " << percent << "%" << endl;
 #endif
 
     if ( percent != task->downloadedPercent() ) // only if there really was a change
@@ -587,7 +595,6 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
                                     const char *  caller )
 {
     CHECK_PTR( zyppRes );
-
     PkgTask * task = 0;
 
     if ( action & PkgAdd ) // PkgInstall | PkgUpdate
@@ -623,7 +630,7 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
     }
 
 #if VERBOSE_TRANSACT
-    logVerbose() << caller << "(): " << task << endl;
+    logVerbose() << task << endl;
 #endif
 
     task->setDownloadedPercent( 100 ); // The download is complete for sure
@@ -645,7 +652,6 @@ void PkgCommitPage::pkgActionProgress( ZyppRes       zyppRes,
                                        const char *  caller )
 {
     Q_UNUSED( action );
-    CHECK_PTR( zyppRes );
 
     // Avoid an unreasonable number of expensive progress updates:
     //
@@ -657,9 +663,10 @@ void PkgCommitPage::pkgActionProgress( ZyppRes       zyppRes,
     // And since we have one single progress bar for the total progress,
     // reporting 0% for a package would not make any sense either.
 
-    if ( percent % 5 != 0 || percent == 0 || percent == 100 )
+    if ( percent % 5 != 0 || percent <= 0 || percent >= 100 )
         return;
 
+    CHECK_PTR( zyppRes );
     PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
     if ( ! task )
@@ -671,8 +678,7 @@ void PkgCommitPage::pkgActionProgress( ZyppRes       zyppRes,
     }
 
 #if VERBOSE_PROGRESS
-    logVerbose() << caller << "(): " << task
-                 << ": " << percent << "%" << endl;
+    logVerbose() << task << ": " << percent << "%" << endl;
 #endif
 
     if ( percent != task->completedPercent() )
@@ -704,7 +710,7 @@ void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
     }
 
 #if VERBOSE_TRANSACT
-    logVerbose() << caller << "(): " << task << endl;
+    logVerbose() << task << endl;
 #endif
 
 
