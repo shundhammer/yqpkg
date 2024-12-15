@@ -24,9 +24,11 @@
 #include <QTextStream>
 #include <QMutex>
 
+#include <zypp/ByteCount.h>
 #include "YQZypp.h"     // ZyppRes
 
 
+using zypp::ByteCount;
 
 /**
  * Types of actions for a packate task.
@@ -133,31 +135,23 @@ public:
     /**
      * Return the download size in bytes or -1.0 (< 0.0) if unknown.
      * This is irrelevant for actions like PkgRemove.
-     *
-     * This uses 'float' for ease of handling and to avoid overflows. The value
-     * does not need to be exact to the byte level, just a rough value to
-     * calculate the total progress percent.
      **/
-    float downloadSize() const { return _downloadSize; }
+    ByteCount downloadSize() const { return _downloadSize; }
 
     /**
      * Set the download size in bytes.
      **/
-    void setDownloadSize( float value ) { _downloadSize = value; }
+    void setDownloadSize( ByteCount value ) { _downloadSize = value; }
 
     /**
      * Return the installed size in bytes or -1.0 (< 0.0) if unknown.
-     *
-     * This uses 'float' for ease of handling and to avoid overflows. The value
-     * does not need to be exact to the byte level, just a rough value to
-     * calculate the total progress percent.
      **/
-    float installedSize() const { return _installedSize; }
+    ByteCount installedSize() const { return _installedSize; }
 
     /**
      * Set the installed size in bytes.
      **/
-    void setInstalledSize( float value ) { _installedSize = value; }
+    void setInstalledSize( ByteCount value ) { _installedSize = value; }
 
     /**
      * Return the downloaded percent (0..100) or -1 if unknown.
@@ -215,8 +209,8 @@ protected:
     PkgTaskAction    _action;
     PkgTaskRequester _requester;
 
-    float            _downloadSize;       // Bytes
-    float            _installedSize;      // Bytes
+    ByteCount        _downloadSize;
+    ByteCount        _installedSize;
     int              _downloadedPercent;  // 0..100 or -1 for unknown
     int              _completedPercent;   // 0..100 or -1 for unknown
 };

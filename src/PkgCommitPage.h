@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <zypp/ZYppCommitPolicy.h>
+#include <zypp/ByteCount.h>
 
 #include "utf8.h"
 #include "Logger.h"
@@ -36,6 +37,7 @@
 
 
 class PkgTasks;
+using zypp::ByteCount;
 
 
 /**
@@ -274,13 +276,13 @@ protected:
      * Return the sum of all relevant download sizes in the 'doing' list with
      * their current downloaded percentage taken into account.
      **/
-    float doingDownloadSizeSum();
+    ByteCount doingDownloadSizeSum();
 
     /**
      * Return the sum of all installed sizes in the 'doing' list with their
      * current completed percentage taken into account.
      **/
-    float doingInstalledSizeSum();
+    ByteCount doingInstalledSizeSum();
 
     /**
      * Calculate the current progress percent based on the weighted progress
@@ -327,12 +329,12 @@ protected:
     PkgTasks *          _pkgTasks;
     bool                _showingDetails;
 
-    float               _totalDownloadSize;
-    float               _totalInstalledSize;
+    ByteCount           _totalDownloadSize;
+    ByteCount           _totalInstalledSize;
     int                 _totalTasksCount;
 
-    float               _completedDownloadSize;
-    float               _completedInstalledSize;
+    ByteCount           _completedDownloadSize;
+    ByteCount           _completedInstalledSize;
     int                 _completedTasksCount;
 
     float               _pkgFixedCostWeight; // 0.0 .. 1.0

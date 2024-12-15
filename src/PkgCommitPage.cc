@@ -277,26 +277,26 @@ void PkgCommitPage::processEvents()
 
 void PkgCommitPage::initProgressData()
 {
-    _totalDownloadSize      = 0.0;
-    _totalInstalledSize     = 0.0;
+    _totalDownloadSize      = 0;
+    _totalInstalledSize     = 0;
     _totalTasksCount        = pkgTasks()->todo().size();
 
-    _completedDownloadSize  = 0.0;
-    _completedInstalledSize = 0.0;
+    _completedDownloadSize  = 0;
+    _completedInstalledSize = 0;
     _completedTasksCount    = 0;
 
     foreach ( PkgTask * task, pkgTasks()->todo() )
     {
-        if ( ( task->action() & PkgAdd ) && task->downloadSize() > 0.0 )
+        if ( ( task->action() & PkgAdd ) && task->downloadSize() > 0 )
             _totalDownloadSize += task->downloadSize();
 
-        if ( task->installedSize() > 0.0 )
+        if ( task->installedSize() > 0 )
             _totalInstalledSize += task->installedSize();
     }
 
-    logDebug() << "total download size: "  << _totalDownloadSize  << endl;
-    logDebug() << "total installed size: " << _totalInstalledSize << endl;
-    logDebug() << "total tasks: "          << _totalTasksCount    << endl;
+    logDebug() << "total download size:  " << _totalDownloadSize.asString()  << endl;
+    logDebug() << "total installed size: " << _totalInstalledSize.asString() << endl;
+    logDebug() << "total tasks: "          << _totalTasksCount << endl;
 
     // Weights for different sub-tasks of downloading and installing packages:
     // There is a constant cost for doing anything with a package, no matter if
@@ -317,9 +317,9 @@ void PkgCommitPage::initProgressData()
 }
 
 
-float PkgCommitPage::doingDownloadSizeSum()
+ByteCount PkgCommitPage::doingDownloadSizeSum()
 {
-    float sum = 0.0;
+    ByteCount sum(0);
 
     foreach ( PkgTask * task, pkgTasks()->doing() )
     {
@@ -335,9 +335,9 @@ float PkgCommitPage::doingDownloadSizeSum()
 }
 
 
-float PkgCommitPage::doingInstalledSizeSum()
+ByteCount PkgCommitPage::doingInstalledSizeSum()
 {
-    float sum = 0.0;
+    ByteCount sum(0);
 
     foreach ( PkgTask * task, pkgTasks()->doing() )
     {
@@ -360,10 +360,10 @@ int PkgCommitPage::currentProgressPercent()
     // Download %
     //
 
-    if ( _totalDownloadSize > 0.0 )
+    if ( _totalDownloadSize > 0 )
     {
-        float downloadSize = _completedDownloadSize  + doingDownloadSizeSum();
-        percent = 100.0 * downloadSize / _totalDownloadSize;
+        ByteCount downloadSize = _completedDownloadSize  + doingDownloadSizeSum();
+        percent = ( 100.0 * downloadSize ) / _totalDownloadSize;
     }
     else // no download needed?
     {
@@ -386,9 +386,9 @@ int PkgCommitPage::currentProgressPercent()
 
     if ( _totalInstalledSize > 0 )  // Prevent division by zero
     {
-        float installedSize = _completedInstalledSize + doingInstalledSizeSum();
-        percent             = 100.0 * installedSize / _totalInstalledSize;
-        installedPercent    = percent * _pkgActionWeight;
+        ByteCount installedSize = _completedInstalledSize + doingInstalledSizeSum();
+        percent          = ( 100.0 * installedSize ) / _totalInstalledSize;
+        installedPercent = percent * _pkgActionWeight;
 
 #if VERBOSE_PROGRESS
 
@@ -406,7 +406,7 @@ int PkgCommitPage::currentProgressPercent()
 
     if ( _totalTasksCount > 0 )  // Prevent division by zero
     {
-        percent      = 100.0 * _completedTasksCount / (float) _totalTasksCount;
+        percent      = ( 100.0 * _completedTasksCount ) / _totalTasksCount;
         tasksPercent = percent * _pkgFixedCostWeight;
 
 #if VERBOSE_PROGRESS
