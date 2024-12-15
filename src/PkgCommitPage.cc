@@ -32,6 +32,9 @@
 #include "PkgCommitCallbacks.h"
 #include "PkgCommitPage.h"
 
+#define VERBOSE_PROGRESS        1
+#define VERBOSE_TRANSACT        1
+
 
 PkgCommitPage * PkgCommitPage::_instance = 0;
 
@@ -304,13 +307,13 @@ void PkgCommitPage::initProgressData()
     // installing a package) or removing it (removing every item of its file
     // list).
 
-    _pkgDownloadWeight      = 0.60;
-    _pkgInstallRemoveWeight = 0.30;
-    _pkgFixedCostWeight     = 0.10;
+    _pkgDownloadWeight  = 0.60;
+    _pkgActionWeight    = 0.30;
+    _pkgFixedCostWeight = 0.10;
 
-    logDebug() << "pkgDownloadWeight:      " << _pkgDownloadWeight      << endl;
-    logDebug() << "pkgInstallRemoveWeight: " << _pkgInstallRemoveWeight << endl;
-    logDebug() << "pkgFixedCostWeight:     " << _pkgFixedCostWeight     << endl;
+    logDebug() << "pkgDownloadWeight:  " << _pkgDownloadWeight  << endl;
+    logDebug() << "pkgActionWeight:    " << _pkgActionWeight    << endl;
+    logDebug() << "pkgFixedCostWeight: " << _pkgFixedCostWeight << endl;
 }
 
 
@@ -351,44 +354,80 @@ int PkgCommitPage::currentProgressPercent()
     float downloadPercent  = 0.0;
     float installedPercent = 0.0;
     float tasksPercent     = 0.0;
+    float percent          = 0.0;
 
-    if ( _totalDownloadSize > 0 )  // Prevent division by zero
+    //
+    // Download %
+    //
+
+    if ( _totalDownloadSize > 0.0 )
     {
         float downloadSize = _completedDownloadSize  + doingDownloadSizeSum();
-        float percent      = 100.0 * downloadSize / _totalDownloadSize;
-        downloadPercent    = percent * _pkgDownloadWeight;
-
-        logVerbose() << "Download %:   "  << downloadPercent
-                     << " weight: "       << _pkgDownloadWeight
-                     << " raw %: "        << percent
-                     << endl;
+        percent = 100.0 * downloadSize / _totalDownloadSize;
     }
+    else // no download needed?
+    {
+        percent = 100.0; // download is 100% completed
+    }
+
+    downloadPercent = percent * _pkgDownloadWeight;
+
+#if VERBOSE_PROGRESS
+
+    logVerbose() << "Download  %: "  << downloadPercent
+                 << "  weight: "     << _pkgDownloadWeight
+                 << "  raw %: "      << percent
+                 << endl;
+#endif
+
+    //
+    // Installed / removed size %
+    //
 
     if ( _totalInstalledSize > 0 )  // Prevent division by zero
     {
         float installedSize = _completedInstalledSize + doingInstalledSizeSum();
-        float percent       = 100.0 * installedSize / _totalInstalledSize;
-        installedPercent    = percent * _pkgInstallRemoveWeight;
+        percent             = 100.0 * installedSize / _totalInstalledSize;
+        installedPercent    = percent * _pkgActionWeight;
 
-        logVerbose() << "Installed %: "  << installedPercent
-                     << " weight: "      << _pkgInstallRemoveWeight
-                     << " raw %: "       << percent
+#if VERBOSE_PROGRESS
+
+        logVerbose() << "Installed %: " << installedPercent
+                     << "  weight: "    << _pkgActionWeight
+                     << "  raw %: "     << percent
                      << endl;
+#endif
     }
+
+
+    //
+    // Number of tasks %
+    //
 
     if ( _totalTasksCount > 0 )  // Prevent division by zero
     {
-        float percent       = 100.0 * _completedTasksCount / (float) _totalTasksCount;
-        float tasksPercent  = percent * _pkgFixedCostWeight;
+        percent      = 100.0 * _completedTasksCount / (float) _totalTasksCount;
+        tasksPercent = percent * _pkgFixedCostWeight;
 
-        logVerbose() << "Tasks %: " << tasksPercent
-                     << " weight: " << _pkgFixedCostWeight
-                     << " raw %: "  << percent
+#if VERBOSE_PROGRESS
+
+        logVerbose() << "Tasks     %: " << tasksPercent
+                     << "  weight: "    << _pkgFixedCostWeight
+                     << "  raw %: "     << percent
                      << endl;
+#endif
     }
 
+
+    //
+    // Total progress
+    //
+
     float progress   = tasksPercent + downloadPercent + installedPercent;
-    logVerbose() << "Progress: " << progress << endl;
+
+#if VERBOSE_PROGRESS
+    logVerbose() << "Progress: " << progress << "%" << endl;
+#endif
 
     return qBound( 0, (int) ( progress + 0.5 ), 100 );
 }
@@ -400,9 +439,11 @@ bool PkgCommitPage::updateTotalProgressBar()
     int  oldProgress = _ui->totalProgressBar->value();
     int  progress    = currentProgressPercent();
 
-    if ( progress >= 0 && oldProgress != progress )
+    if ( progress >= 0 && progress != oldProgress )
     {
-        logDebug() << "Updating with " << progress << "%" << endl;
+#if VERBOSE_PROGRESS
+        logVerbose() << "Updating with " << progress << "%" << endl;
+#endif
         _ui->totalProgressBar->setValue( progress );
         didUpdate = true;
     }
@@ -428,7 +469,9 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
         return;
     }
 
-    logInfo() << task->name() << endl;
+#if VERBOSE_TRANSACT
+    logVerbose() << task << endl;
+#endif
 
     // Move the task from the todo list to the doing list
 
@@ -454,7 +497,9 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
         return;
     }
 
-    logInfo() << task->name() << ": " << percent << "%" << endl;
+#if VERBOSE_PROGRESS
+    logVerbose() << task << ": " << percent << "%" << endl;
+#endif
 
     if ( percent != task->downloadedPercent() ) // only if there really was a change
     {
@@ -462,7 +507,7 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
 
         // Update the UI
 
-        if ( updateTotalProgressBar() ) // This is a bit expensive
+        if ( updateTotalProgressBar() ) // This is somewhat expensive
             processEvents();
     }
 }
@@ -479,7 +524,9 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
         return;
     }
 
-    logInfo() << task->name() << endl;
+#if VERBOSE_TRANSACT
+    logVerbose() << task << endl;
+#endif
 
     task->setDownloadedPercent( 100 );
 
@@ -495,19 +542,19 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 
 void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 {
-    pkgInstallRemoveStart( zyppRes, PkgInstall, __FUNCTION__ );
+    pkgActionStart( zyppRes, PkgInstall, __FUNCTION__ );
 }
 
 
 void PkgCommitPage::pkgInstallProgress( ZyppRes zyppRes, int percent )
 {
-    pkgInstallRemoveProgress( zyppRes, percent, PkgInstall, __FUNCTION__ );
+    pkgActionProgress( zyppRes, percent, PkgInstall, __FUNCTION__ );
 }
 
 
 void PkgCommitPage::pkgInstallEnd( ZyppRes zyppRes )
 {
-    pkgInstallRemoveEnd( zyppRes, PkgInstall, __FUNCTION__ );
+    pkgActionEnd( zyppRes, PkgInstall, __FUNCTION__ );
 }
 
 
@@ -516,28 +563,28 @@ void PkgCommitPage::pkgInstallEnd( ZyppRes zyppRes )
 
 void PkgCommitPage::pkgRemoveStart( ZyppRes zyppRes )
 {
-    pkgInstallRemoveStart( zyppRes, PkgRemove, __FUNCTION__ );
+    pkgActionStart( zyppRes, PkgRemove, __FUNCTION__ );
 }
 
 
 void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int percent )
 {
-    pkgInstallRemoveProgress( zyppRes, percent, PkgRemove, __FUNCTION__ );
+    pkgActionProgress( zyppRes, percent, PkgRemove, __FUNCTION__ );
 }
 
 
 void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 {
-    pkgInstallRemoveEnd( zyppRes, PkgRemove, __FUNCTION__ );
+    pkgActionEnd( zyppRes, PkgRemove, __FUNCTION__ );
 }
 
 
 //----------------------------------------------------------------------
 
 
-void PkgCommitPage::pkgInstallRemoveStart( ZyppRes       zyppRes,
-                                           PkgTaskAction action,
-                                           const char *  caller )
+void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
+                                    PkgTaskAction action,
+                                    const char *  caller )
 {
     CHECK_PTR( zyppRes );
 
@@ -547,9 +594,9 @@ void PkgCommitPage::pkgInstallRemoveStart( ZyppRes       zyppRes,
     {
         // Maybe the task already is in doing.
         //
-        // That would be the normal case if it needed to be downloaded first,
-        // so the download callbacks would already have moved it from todo to
-        // doing.
+        // That would be the normal case if it had to be downloaded first, so
+        // the download callbacks would already have moved it from the todo
+        // list to the doing list.
 
         task = pkgTasks()->doing().find( zyppRes );
     }
@@ -575,7 +622,9 @@ void PkgCommitPage::pkgInstallRemoveStart( ZyppRes       zyppRes,
         _ui->doingList->addTaskItem( task );
     }
 
-    logVerbose() << caller << "(): " << task->name() << endl;
+#if VERBOSE_TRANSACT
+    logVerbose() << caller << "(): " << task << endl;
+#endif
 
     task->setDownloadedPercent( 100 ); // The download is complete for sure
     task->setCompletedPercent( 0 );    // But the task itself isn't completed
@@ -590,13 +639,26 @@ void PkgCommitPage::pkgInstallRemoveStart( ZyppRes       zyppRes,
 }
 
 
-void PkgCommitPage::pkgInstallRemoveProgress( ZyppRes       zyppRes,
-                                              int           percent,
-                                              PkgTaskAction action,
-                                              const char *  caller )
+void PkgCommitPage::pkgActionProgress( ZyppRes       zyppRes,
+                                       int           percent,
+                                       PkgTaskAction action,
+                                       const char *  caller )
 {
     Q_UNUSED( action );
     CHECK_PTR( zyppRes );
+
+    // Avoid an unreasonable number of expensive progress updates:
+    //
+    // Every 5% (i.e. 20 times per package) is more than enough, and libzypp
+    // tends to send bogus 100% progress reports e.g. for PkgRemove.
+    // pkgActionEnd() will take care of a finished package anyway, no need to
+    // bother with 100% here.
+    //
+    // And since we have one single progress bar for the total progress,
+    // reporting 0% for a package would not make any sense either.
+
+    if ( percent % 5 != 0 || percent == 0 || percent == 100 )
+        return;
 
     PkgTask * task = pkgTasks()->doing().find( zyppRes );
 
@@ -608,8 +670,10 @@ void PkgCommitPage::pkgInstallRemoveProgress( ZyppRes       zyppRes,
         return;
     }
 
-    logVerbose() << caller << "(): " << task->name()
+#if VERBOSE_PROGRESS
+    logVerbose() << caller << "(): " << task
                  << ": " << percent << "%" << endl;
+#endif
 
     if ( percent != task->completedPercent() )
     {
@@ -617,15 +681,15 @@ void PkgCommitPage::pkgInstallRemoveProgress( ZyppRes       zyppRes,
 
         // Update the UI
 
-        if ( updateTotalProgressBar() ) // This is a bit expensive
+        if ( updateTotalProgressBar() ) // This is somewhat expensive
             processEvents();
     }
 }
 
 
-void PkgCommitPage::pkgInstallRemoveEnd( ZyppRes       zyppRes,
-                                         PkgTaskAction action,
-                                         const char *  caller )
+void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
+                                  PkgTaskAction action,
+                                  const char *  caller )
 {
     CHECK_PTR( zyppRes );
 
@@ -639,7 +703,9 @@ void PkgCommitPage::pkgInstallRemoveEnd( ZyppRes       zyppRes,
         return;
     }
 
-    logVerbose() << caller << "(): " << task->name() << endl;
+#if VERBOSE_TRANSACT
+    logVerbose() << caller << "(): " << task << endl;
+#endif
 
 
     // Move the task from the doing list to the done list

@@ -61,6 +61,50 @@ bool PkgTask::matches( const PkgTask & other ) const
 }
 
 
+QString PkgTask::actionToString( PkgTaskAction action )
+{
+    if ( action & PkgInstall   )  return "PkgInstall";
+    if ( action & PkgUpdate    )  return "PkgUpdate";
+    if ( action & PkgRemove    )  return "PkgRemove";
+    if ( action & PkgAdd       )  return "PkgAdd";
+    if ( action & PkgAll       )  return "PkgAll";
+    if ( action == PkgNoAction )  return "PkgNoAction";
+
+    return QString( "0x%1" ).arg( (int) action, 16 );
+}
+
+
+//----------------------------------------------------------------------
+
+
+
+QTextStream & operator<<( QTextStream & str, const PkgTask & task )
+{
+    str << "<" << task.actionToString()
+        << " " << task.name()
+        << ">";
+
+    return str;
+}
+
+
+QTextStream & operator<<( QTextStream & str, PkgTask * task )
+{
+    if ( task )
+    {
+        str << "<" << task->actionToString()
+            << " " << task->name()
+            << ">";
+    }
+    else
+    {
+        str << "<NULL PkgTask>";
+    }
+
+    return str;
+}
+
+
 //----------------------------------------------------------------------
 
 
@@ -262,6 +306,7 @@ void PkgTasks::initFromZypp()
                     task->setInstalledSize( installed->installSize() );
             }
 
+            logInfo() << "New task " << task << endl;
             _todo.append( task );
         }
     }

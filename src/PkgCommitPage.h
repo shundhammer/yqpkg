@@ -306,18 +306,18 @@ protected:
      * 'action' is one of PkgInstall or PkgRemove,
      * 'caller' is the calling function (__FUNCTION__) for logging.
      **/
-    void pkgInstallRemoveStart    ( ZyppRes       zyppRes,
-                                    PkgTaskAction action,
-                                    const char *  caller );
+    void pkgActionStart   ( ZyppRes       zyppRes,
+                            PkgTaskAction action,
+                            const char *  caller );
 
-    void pkgInstallRemoveProgress( ZyppRes       zyppRes,
-                                   int           percent,
-                                   PkgTaskAction action,
-                                   const char *  caller );
+    void pkgActionProgress( ZyppRes       zyppRes,
+                            int           percent,
+                            PkgTaskAction action,
+                            const char *  caller );
 
-    void pkgInstallRemoveEnd     ( ZyppRes       zyppRes,
-                                   PkgTaskAction action,
-                                   const char *  caller );
+    void pkgActionEnd     ( ZyppRes       zyppRes,
+                            PkgTaskAction action,
+                            const char *  caller );
 
     //
     // Data members
@@ -335,9 +335,9 @@ protected:
     float               _completedInstalledSize;
     int                 _completedTasksCount;
 
-    float               _pkgFixedCostWeight;     // 0.0 .. 1.0
-    float               _pkgDownloadWeight;      // 0.0 .. 1.0
-    float               _pkgInstallRemoveWeight; // 0.0 .. 1.0
+    float               _pkgFixedCostWeight; // 0.0 .. 1.0
+    float               _pkgDownloadWeight;  // 0.0 .. 1.0
+    float               _pkgActionWeight;    // 0.0 .. 1.0
 
     static PkgCommitPage * _instance;
 };

@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QList>
+#include <QTextStream>
 #include <QMutex>
 
 #include "YQZypp.h"     // ZyppRes
@@ -197,6 +198,16 @@ public:
     bool matches( PkgTask *       other ) const;
     bool matches( const PkgTask & other ) const;
 
+    /**
+     * Convert this task's action to string.
+     **/
+    QString actionToString() const { return actionToString( _action ); }
+
+    /**
+     * Convert an action to string.
+     **/
+    static QString actionToString( PkgTaskAction action );
+
 
 protected:
 
@@ -358,5 +369,10 @@ protected:
 
     QMutex      _mutex;
 };
+
+
+QTextStream & operator<<( QTextStream & str, const PkgTask & task );
+QTextStream & operator<<( QTextStream & str, PkgTask *       task );
+
 
 #endif // PkgTasks_h
