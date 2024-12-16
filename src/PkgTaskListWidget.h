@@ -22,6 +22,8 @@
 #include <QListWidget>
 #include "PkgTasks.h"
 
+class PkgTaskListWidgetItem;
+
 
 /**
  * A QListWidget specialized for PkgTasks.
@@ -44,14 +46,22 @@ public:
     void addTaskItems( const PkgTaskList & taskList );
 
     /**
-     * Add an item for a single task.
+     * Add an item for a single task and return it.
      **/
-    void addTaskItem( PkgTask * task );
+    PkgTaskListWidgetItem * addTaskItem( PkgTask * task );
 
     /**
      * Remove an item for a task.
      **/
     void removeTaskItem( PkgTask * task );
+
+    /**
+     * Find the list widget item for a task and return it.
+     * Return 0 if not found.
+     *
+     * Ownership of the item remains with the list widget.
+     **/
+    PkgTaskListWidgetItem * findTaskItem( PkgTask * task ) const;
 };
 
 

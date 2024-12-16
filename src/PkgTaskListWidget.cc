@@ -27,14 +27,18 @@ void PkgTaskListWidget::addTaskItems( const PkgTaskList & taskList )
 }
 
 
-void PkgTaskListWidget::addTaskItem( PkgTask * task )
+PkgTaskListWidgetItem *
+PkgTaskListWidget::addTaskItem( PkgTask * task )
 {
     PkgTaskListWidgetItem * item = new PkgTaskListWidgetItem( task, this );
     CHECK_NEW( item );
+
+    return item;
 }
 
 
-void PkgTaskListWidget::removeTaskItem( PkgTask * task )
+PkgTaskListWidgetItem *
+PkgTaskListWidget::findTaskItem( PkgTask * task ) const
 {
     for ( int row=0; row < count(); ++row )
     {
@@ -42,14 +46,25 @@ void PkgTaskListWidget::removeTaskItem( PkgTask * task )
             dynamic_cast<PkgTaskListWidgetItem *>( item( row ) );
 
         if ( it && it->task() == task )
-        {
-            // This is actually the officially documented way to remove an item
-            // from a QListWidget: Just delete it. It removes itself from its
-            // parent QListView in its destructor. There is no call like
-            // 'deleteItem()' or 'removeItem()'.
+            return it;
+    }
 
-            delete it;
-        }
+    return 0;
+}
+
+
+void PkgTaskListWidget::removeTaskItem( PkgTask * task )
+{
+    PkgTaskListWidgetItem * item = findTaskItem( task );
+
+    if ( item )
+    {
+        // This is actually the officially documented way to remove an item
+        // from a QListWidget: Just delete it. It removes itself from its
+        // parent QListView in its destructor. There is no call like
+        // 'deleteItem()' or 'removeItem()'.
+
+        delete item;
     }
 }
 

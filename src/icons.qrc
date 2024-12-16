@@ -4,6 +4,9 @@
     <file alias="arrow-down">icons/arrow-down.svg</file>
     <file alias="arrow-left">icons/arrow-left.svg</file>
     <file alias="arrow-right">icons/arrow-right.svg</file>
+    <file alias="download">icons/download.svg</file>
+    <file alias="download-ongoing">icons/download-ongoing.svg</file>
+    <file alias="download-done">icons/download-done.svg</file>
     <file alias="hamburger">icons/hamburger.svg</file>
     <file alias="package-remove-auto">icons/package-remove-auto.svg</file>
     <file alias="package-upgrade-auto">icons/package-upgrade-auto.svg</file>

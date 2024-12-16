@@ -236,6 +236,11 @@ protected:
     void connectWidgets();
 
     /**
+     * Load the icons for this page.
+     **/
+    void loadIcons();
+
+    /**
      * Ask the user for confirmation if the package transactions should really
      * be cancelled. Return 'true' if the user confirms, 'false' if not.
      **/
@@ -340,6 +345,9 @@ protected:
     float               _pkgFixedCostWeight; // 0.0 .. 1.0
     float               _pkgDownloadWeight;  // 0.0 .. 1.0
     float               _pkgActionWeight;    // 0.0 .. 1.0
+
+    QPixmap             _downloadOngoingIcon;
+    QPixmap             _downloadDoneIcon;
 
     static PkgCommitPage * _instance;
 };

@@ -54,6 +54,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     // carefully when using Qt designer.
 
     readSettings();
+    loadIcons();
     reset();
     connectWidgets();
     PkgCommitSignalForwarder::instance()->connectAll( this );
@@ -128,8 +129,17 @@ void PkgCommitPage::fakeCommit()
 {
     logInfo() << "Simulating package transactions" << endl;
 
+    QListWidgetItem * item = _ui->todoList->count() > 0 ?
+        _ui->todoList->item( 0 ) : 0;
+
     for ( int i=1; i <= 100; ++i )
     {
+        if ( i == 20 && item )
+            item->setIcon( _downloadOngoingIcon );
+
+        if ( i == 60 && item )
+            item->setIcon( _downloadDoneIcon );
+
         usleep( 100 * 1000 ); // microseconds
         _ui->totalProgressBar->setValue( i );
         processEvents();
@@ -191,6 +201,22 @@ void PkgCommitPage::reset()
 
     _ui->detailsFrame->setVisible( _showingDetails );
     updateDetailsButton();
+}
+
+
+void PkgCommitPage::loadIcons()
+{
+    // Both download icons need to be double-wide (not just 22x22) to have
+    // enough space for the checkmark for the "download done" icon,
+    // and to keep the text aligned also for the "download ongoing" icon.
+    //
+    // This is also the difference between "download-ongoing.svg" and
+    // "download.svg" (22x22).
+
+    QSize iconSize( 40, 22 );
+
+    _downloadOngoingIcon = QIcon( ":/download-ongoing" ).pixmap( iconSize );
+    _downloadDoneIcon    = QIcon( ":/download-done"    ).pixmap( iconSize );
 }
 
 
@@ -481,7 +507,9 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
     // Move the task from the todo list widget to the doing list widget
 
     _ui->todoList->removeTaskItem( task );
-    _ui->doingList->addTaskItem( task );
+    PkgTaskListWidgetItem * item = _ui->doingList->addTaskItem( task );
+    item->setIcon( _downloadOngoingIcon );
+
     processEvents(); // Update the UI
 }
 
@@ -537,6 +565,13 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 #endif
 
     task->setDownloadedPercent( 100 );
+    PkgTaskListWidgetItem * item = _ui->doingList->findTaskItem( task );
+
+    if ( item )
+    {
+        item->setIcon( _downloadDoneIcon );
+        processEvents();
+    }
 
     // Important: Not adding the download size to _completedDownloadSize just
     // yet, or it would be counted twice while the task is still in the doing
