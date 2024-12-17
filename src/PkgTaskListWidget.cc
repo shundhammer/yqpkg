@@ -71,11 +71,15 @@ void PkgTaskListWidget::removeTaskItem( PkgTask * task )
 
 
 
-PkgTaskListWidgetItem::PkgTaskListWidgetItem( PkgTask *     task,
-                                              QListWidget * parent )
+PkgTaskListWidgetItem::PkgTaskListWidgetItem( PkgTask *           task,
+                                              PkgTaskListWidget * parent )
     : QListWidgetItem( parent )
     , _task( task )
+    , _serial( 0 )
 {
+    if ( parent )
+        _serial = parent->nextSerial();
+
     QString txt;
 
     if ( _task->action() == PkgRemove )
@@ -92,3 +96,36 @@ PkgTaskListWidgetItem::PkgTaskListWidgetItem( PkgTask *     task,
     }
 #endif
 }
+
+
+bool PkgTaskListWidgetItem::operator<( const QListWidgetItem & otherListWidgetItem ) const
+{
+    const PkgTaskListWidgetItem * other =
+        dynamic_cast<const PkgTaskListWidgetItem *> (&otherListWidgetItem);
+
+    if ( other && sortByInsertionSequence() )
+    {
+        return ( this->serial() < other->serial() );
+    }
+    else
+    {
+        return QListWidgetItem::operator<( otherListWidgetItem );
+    }
+}
+
+
+
+bool PkgTaskListWidgetItem::sortByInsertionSequence() const
+{
+    if ( ! listWidget() )
+        return false;
+
+    PkgTaskListWidget * parentPkgTaskListWidget =
+        dynamic_cast<PkgTaskListWidget *> ( listWidget() );
+
+    if ( parentPkgTaskListWidget )
+	return parentPkgTaskListWidget->sortByInsertionSequence();
+    else
+        return false;
+}
+

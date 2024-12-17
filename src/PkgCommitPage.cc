@@ -53,6 +53,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     // form (an XML file) that was generated with Qt designer, so choose them
     // carefully when using Qt designer.
 
+    _ui->todoList->setSortByInsertionSequence( false );
     readSettings();
     loadIcons();
     reset();
