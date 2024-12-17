@@ -38,6 +38,7 @@ public:
         : QListWidget( parent )
         , _nextSerial( 0 )
         , _sortByInsertionSequence( true )
+        , _autoScrollToLast( true )
         {}
 
     virtual ~PkgTaskListWidget() {}
@@ -83,11 +84,23 @@ public:
      **/
     int nextSerial() { return _nextSerial++; }
 
+    /**
+     * Return 'true' if the list should be scrolled to the last item when an
+     * item is added.
+     **/
+    bool autoScrollToLast() const { return _autoScrollToLast; }
+
+    /**
+     * Set automatically scrolling to the last item when an item is added.
+     **/
+    void setAutoScrollToLast( bool val ) { _autoScrollToLast = val; }
+
 
 protected:
 
     int  _nextSerial;
     bool _sortByInsertionSequence;
+    bool _autoScrollToLast;
 };
 
 

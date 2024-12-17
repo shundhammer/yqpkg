@@ -33,6 +33,9 @@ PkgTaskListWidget::addTaskItem( PkgTask * task )
     PkgTaskListWidgetItem * item = new PkgTaskListWidgetItem( task, this );
     CHECK_NEW( item );
 
+    if ( _autoScrollToLast )
+        scrollToItem( item, QAbstractItemView::PositionAtBottom );
+
     return item;
 }
 

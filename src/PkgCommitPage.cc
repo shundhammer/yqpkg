@@ -54,6 +54,8 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     // carefully when using Qt designer.
 
     _ui->todoList->setSortByInsertionSequence( false );
+    _ui->todoList->setAutoScrollToLast( false );
+
     readSettings();
     loadIcons();
     reset();
