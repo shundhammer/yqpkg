@@ -344,38 +344,6 @@ void PkgCommitPage::initProgressData()
 }
 
 
-ByteCount PkgCommitPage::doingDownloadSizeSum()
-{
-    ByteCount sum(0);
-
-    foreach ( PkgTask * task, pkgTasks()->doing() )
-    {
-        if ( ( task->action() & PkgAdd )    &&
-             task->downloadSize()      > 0  &&
-             task->downloadedPercent() > 0 )
-        {
-            sum += task->downloadSize() * ( task->downloadedPercent() / 100.0 );
-        }
-    }
-
-    return sum;
-}
-
-
-ByteCount PkgCommitPage::doingInstalledSizeSum()
-{
-    ByteCount sum(0);
-
-    foreach ( PkgTask * task, pkgTasks()->doing() )
-    {
-        if ( task->installedSize() > 0 && task->completedPercent() > 0 )
-            sum += task->installedSize() * ( task->completedPercent() / 100.0 );
-    }
-
-    return sum;
-}
-
-
 int PkgCommitPage::currentProgressPercent()
 {
     float downloadPercent  = 0.0;
@@ -389,7 +357,9 @@ int PkgCommitPage::currentProgressPercent()
 
     if ( _totalDownloadSize > 0 )
     {
-        ByteCount downloadSize = _completedDownloadSize  + doingDownloadSizeSum();
+        ByteCount downloadSize = _completedDownloadSize
+            + pkgTasks()->downloads().downloadSizeSum();
+
         percent = ( 100.0 * downloadSize ) / _totalDownloadSize;
     }
     else // no download needed?
@@ -413,7 +383,9 @@ int PkgCommitPage::currentProgressPercent()
 
     if ( _totalInstalledSize > 0 )  // Prevent division by zero
     {
-        ByteCount installedSize = _completedInstalledSize + doingInstalledSizeSum();
+        ByteCount installedSize = _completedInstalledSize
+            + pkgTasks()->doing().installedSizeSum();
+
         percent          = ( 100.0 * installedSize ) / _totalInstalledSize;
         installedPercent = percent * _pkgActionWeight;
 
@@ -500,15 +472,15 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
     logVerbose() << task << endl;
 #endif
 
-    // Move the task from the todo list to the doing list
+    // Move the task from the todo list to the downloads list
 
-    PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->doing() );
+    PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->downloads() );
     task->setDownloadedPercent( 0 ); // Just to make sure
 
-    // Move the task from the todo list widget to the doing list widget
+    // Move the task from the todo list widget to the downloads list widget
 
     _ui->todoList->removeTaskItem( task );
-    PkgTaskListWidgetItem * item = _ui->doingList->addTaskItem( task );
+    PkgTaskListWidgetItem * item = _ui->downloadsList->addTaskItem( task );
     item->setIcon( _downloadOngoingIcon );
 
     processEvents(); // Update the UI
@@ -526,11 +498,11 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
         return;
 
     CHECK_PTR( zyppRes );
-    PkgTask * task = pkgTasks()->doing().find( zyppRes );
+    PkgTask * task = pkgTasks()->downloads().find( zyppRes );
 
     if ( ! task )
     {
-        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in downloads" << endl;
         return;
     }
 
@@ -553,11 +525,11 @@ void PkgCommitPage::pkgDownloadProgress( ZyppRes zyppRes, int percent )
 void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 {
     CHECK_PTR( zyppRes );
-    PkgTask * task = pkgTasks()->doing().find( zyppRes );
+    PkgTask * task = pkgTasks()->downloads().find( zyppRes );
 
     if ( ! task )
     {
-        logError() << "Can't find task for " << zyppRes << " in doing" << endl;
+        logError() << "Can't find task for " << zyppRes << " in downloads" << endl;
         return;
     }
 
@@ -566,7 +538,7 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 #endif
 
     task->setDownloadedPercent( 100 );
-    PkgTaskListWidgetItem * item = _ui->doingList->findTaskItem( task );
+    PkgTaskListWidgetItem * item = _ui->downloadsList->findTaskItem( task );
 
     if ( item )
     {
@@ -635,16 +607,21 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
 
     if ( action & PkgAdd ) // PkgInstall | PkgUpdate
     {
-        // Maybe the task already is in doing.
-        //
-        // That would be the normal case if it had to be downloaded first, so
-        // the download callbacks would already have moved it from the todo
-        // list to the doing list.
+        task = pkgTasks()->downloads().find( zyppRes );
 
-        task = pkgTasks()->doing().find( zyppRes );
+        if ( task )
+        {
+            // Move the task from the downloads list to the doing list
+            PkgTasks::moveTask( task, pkgTasks()->downloads(), pkgTasks()->doing() );
+
+            // Move the task from the downloads list widget to the doing list widget
+
+            _ui->downloadsList->removeTaskItem( task );
+            _ui->doingList->addTaskItem( task );
+        }
     }
 
-    if ( ! task ) // PkgRemove or no download needed (cached).
+    if ( ! task ) // PkgRemove or no download needed
     {
         task = pkgTasks()->todo().find( zyppRes );
 
@@ -652,7 +629,7 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
         {
             logError() << caller << "(): "
                        << "Can't find task for " << zyppRes
-                       << " in either doing or todo" << endl;
+                       << " in either downloads or todo" << endl;
             return;
         }
 

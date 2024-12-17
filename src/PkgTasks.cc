@@ -182,14 +182,49 @@ PkgTaskList::filtered( PkgTaskAction    filterAction,
 }
 
 
+ByteCount
+PkgTaskList::downloadSizeSum() const
+{
+    ByteCount sum(0);
+
+    foreach( const PkgTask * task, *this )
+    {
+        if ( ( task->action() & PkgAdd )    &&
+             task->downloadSize()      > 0  &&
+             task->downloadedPercent() > 0 )
+        {
+            sum += task->downloadSize() * ( task->downloadedPercent() / 100.0 );
+        }
+    }
+
+    return sum;
+}
+
+
+ByteCount
+PkgTaskList::installedSizeSum() const
+{
+    ByteCount sum(0);
+
+    foreach( const PkgTask * task, *this )
+    {
+        if ( task->installedSize() > 0 && task->completedPercent() > 0 )
+            sum += task->installedSize() * ( task->completedPercent() / 100.0 );
+    }
+
+    return sum;
+}
+
+
 //----------------------------------------------------------------------
 
 
 PkgTasks::PkgTasks()
-    : _todo  ( "todo" )
-    , _doing ( "doing" )
-    , _done  ( "done" )
-    , _failed( "failed" )
+    : _todo     ( "todo"      )
+    , _downloads( "downloads" )
+    , _doing    ( "doing"     )
+    , _done     ( "done"      )
+    , _failed   ( "failed"    )
 {
     logDebug() << endl;
 }
@@ -205,10 +240,11 @@ PkgTasks::~PkgTasks()
 
 void PkgTasks::clearAll()
 {
-    nuke( _todo   );
-    nuke( _doing  );
-    nuke( _done   );
-    nuke( _failed );
+    nuke( _todo      );
+    nuke( _downloads );
+    nuke( _doing     );
+    nuke( _done      );
+    nuke( _failed    );
 }
 
 

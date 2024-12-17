@@ -258,7 +258,7 @@ void SummaryPage::updateSummary()
         pkgTasks()->todo().clear();
     }
 
-    const int listMaxItems = 7;
+    const int listMaxItems = 12;
     QString text = longSummary( listMaxItems );
 
     _ui->contentTextEdit->setText( text );

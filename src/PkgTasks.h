@@ -31,7 +31,7 @@
 using zypp::ByteCount;
 
 /**
- * Types of actions for a packate task.
+ * Types of actions for a package task.
  *
  * Notice the absence of static package states like "don't install", "keep",
  * "taboo", "protected": Those are not tasks; there is nothing to do for them.
@@ -80,7 +80,7 @@ enum PkgTaskRequester
  * fields are just for convenience during the package commit stage.
  *
  * The status of each task is implicit by what list it is in: todo, doing,
- * done, failed.
+ * downloads, done, failed.
  **/
 class PkgTask
 {
@@ -268,6 +268,20 @@ public:
                           PkgTaskRequester requester = PkgReqAll );
 
     /**
+     * Calculate and return the sum of all download sizes for PkgAdd tasks
+     * (PkgInstall | PkgUpdate), taking 'downloadedPercent()' of each task into
+     * account.
+     **/
+    ByteCount downloadSizeSum() const;
+
+    /**
+     * Calculate and return the sum of all installed sizes for all tasks in
+     * this list, taking 'completedPercent()' of each task into account.
+     **/
+    ByteCount installedSizeSum() const;
+
+
+    /**
      * Return the list name ("todo", "doing", "done", "failed" for debugging.
      **/
     QString name() const { return _name; }
@@ -317,6 +331,12 @@ public:
     PkgTaskList & todo()   { return _todo; }
 
     /**
+     * Return the list of package tasks that are currently being downloaded or
+     * downloaded, but not in doing yet.
+     **/
+    PkgTaskList & downloads()  { return _downloads; }
+
+    /**
      * Return the list of package tasks that are currently being done.
      **/
     PkgTaskList & doing()  { return _doing; }
@@ -357,6 +377,7 @@ public:
 protected:
 
     PkgTaskList _todo;
+    PkgTaskList _downloads;
     PkgTaskList _doing;
     PkgTaskList _done;
     PkgTaskList _failed;

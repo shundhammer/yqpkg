@@ -278,18 +278,6 @@ protected:
     void initProgressData();
 
     /**
-     * Return the sum of all relevant download sizes in the 'doing' list with
-     * their current downloaded percentage taken into account.
-     **/
-    ByteCount doingDownloadSizeSum();
-
-    /**
-     * Return the sum of all installed sizes in the 'doing' list with their
-     * current completed percentage taken into account.
-     **/
-    ByteCount doingInstalledSizeSum();
-
-    /**
      * Calculate the current progress percent based on the weighted progress
      * percent of number of completed tasks, completed download size, completed
      * install size.
