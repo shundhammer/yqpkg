@@ -440,7 +440,7 @@ bool PkgCommitPage::updateTotalProgressBar()
     int  oldProgress = _ui->totalProgressBar->value();
     int  progress    = currentProgressPercent();
 
-    if ( progress >= 0 && progress != oldProgress )
+    if ( progress >= 0 && progress > oldProgress )
     {
 #if VERBOSE_PROGRESS
         logVerbose() << "Updating with " << progress << "%" << endl;
@@ -550,7 +550,7 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
 
     // Important: Not adding the download size to _completedDownloadSize just
     // yet, or it would be counted twice while the task is still in the doing
-    // list. That has to wait until it is moved from the doing list to the done
+    // list. That has to wait until it is moved to the doing list.
     // list.
 }
 
@@ -620,6 +620,12 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
 
             _ui->downloadsList->removeTaskItem( task );
             _ui->doingList->addTaskItem( task );
+
+            // Update the bookkeeping sums.
+            // We already know that the task was in the downloads list.
+
+            if ( task->downloadSize() > 0 )
+                _completedDownloadSize += task->downloadSize();
         }
     }
 
@@ -749,8 +755,8 @@ void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
     if ( task->installedSize() > 0 )
         _completedInstalledSize += task->installedSize();
 
-    if ( task->downloadSize() > 0 && ( action & PkgAdd ) )
-        _completedDownloadSize += task->downloadSize();
+    // The task's download size has already be added to _completeDownloadSize
+    // when the task was moved from the downloads list to the doing list.
 
 
     // Update the UI
