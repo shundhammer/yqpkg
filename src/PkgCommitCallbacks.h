@@ -171,7 +171,6 @@ public:
     //
 
     bool       _doAbort;
-    bool       _replyReady;
     ErrorReply _reply;
 
     static PkgCommitSignalForwarder * _instance;
