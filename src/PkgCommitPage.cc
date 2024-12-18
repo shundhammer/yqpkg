@@ -18,9 +18,13 @@
 #include <unistd.h>             // usleep()
 #include <stdlib.h>             // abs()
 
+#include <zypp/target/TargetException.h>
+
 #include <QSettings>
+#include <QTimer>
 #include <QMessageBox>
 
+#include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "PkgTasks.h"
@@ -78,7 +82,6 @@ PkgCommitPage::~PkgCommitPage()
 
 void PkgCommitPage::connectWidgets()
 {
-
     connect( _ui->detailsButton, SIGNAL( clicked()       ),
              this,               SLOT  ( toggleDetails() ) );
 
@@ -92,6 +95,7 @@ void PkgCommitPage::commit()
     populateLists();
     initProgressData();
     _ui->totalProgressBar->setValue( 0 );
+    PkgCommitSignalForwarder::instance()->reset();
 
     if ( YQPkgApplication::isOptionSet( OptFakeCommit ) )
         fakeCommit();
@@ -137,6 +141,9 @@ void PkgCommitPage::fakeCommit()
 
     for ( int i=1; i <= 100; ++i )
     {
+        if ( PkgCommitSignalForwarder::instance()->doAbort() )
+            return;
+
         if ( i == 20 && item )
             item->setIcon( _downloadOngoingIcon );
 
@@ -154,16 +161,26 @@ void PkgCommitPage::fakeCommit()
 
 void PkgCommitPage::realCommit()
 {
-    logInfo() << "Starting package transactions" << endl;
     processEvents();
 
     // Create and install the callbacks.
     // They are uninstalled when the 'callbacks' variable goes out of scope.
     PkgCommitCallbacks callbacks;
+    PkgCommitSignalForwarder::instance()->reset();
 
-    zypp::getZYpp()->commit( commitPolicy() );
+    try
+    {
+        logInfo() << "Starting package transactions" << endl;
 
-    logInfo() << "Package transactions done" << endl;
+        zypp::getZYpp()->commit( commitPolicy() );
+
+        logInfo() << "Package transactions done" << endl;
+    }
+    catch ( const zypp::target::TargetAbortedException & ex )
+    {
+        logInfo() << "libzypp aborted as requested" << endl;
+    }
+
 }
 
 
@@ -242,15 +259,31 @@ void PkgCommitPage::updateDetailsButton()
 
 void PkgCommitPage::cancelCommit()
 {
-    if ( askForCancelCommitConfirmation() )
-        emit next();
+    bool confirm = askForCancelCommitConfirmation();
+
+    if ( confirm )
+    {
+        logInfo() << "Aborting commit. Notifying libzypp..." << endl;
+        emit abortCommit();
+
+        // Wait for libzypp to return from its commit() so it can shut down
+        // properly.
+    }
 }
 
 
 void PkgCommitPage::wmClose()
 {
-    if ( askForCancelCommitConfirmation() )
-        YQPkgApplication::instance()->quit();
+    bool confirm = askForCancelCommitConfirmation();
+
+    if ( confirm )
+    {
+        logInfo() << "Aborting commit. Notifying libzypp..." << endl;
+        emit abortCommit();
+
+        QTimer::singleShot( 500, // millisec
+                            YQPkgApplication::instance(), SLOT( quit() ) );
+    }
 }
 
 
@@ -267,7 +300,9 @@ bool PkgCommitPage::askForCancelCommitConfirmation()
                                        _( "&Yes" ), _( "&No" ), "",
                                        0,   // defaultButtonNumber (from 0)
                                        1 ); // escapeButtonNumber
-    return result == 0;  // button #0 (Yes)
+    bool reallyCancel = ( result == 0 );  // button #0 (Yes)
+
+    return reallyCancel;
 }
 
 

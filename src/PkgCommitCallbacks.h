@@ -51,6 +51,7 @@ protected:
      **/
     PkgCommitSignalForwarder()
         : QObject()
+        , _doAbort( false )
         {}
 
 public:
@@ -69,6 +70,17 @@ public:
      * Connect all signals to slots with the same name in 'receiver'.
      **/
     void connectAll( QObject * receiver );
+
+    /**
+     * Return 'true' if 'abortCommit()' has been received since the last
+     * 'reset()'
+     **/
+    bool doAbort() const { return _doAbort; }
+
+    /**
+     * Reset the internal status, including the _doAbort flag.
+     **/
+    void reset();
 
 
 signals:
@@ -91,6 +103,11 @@ signals:
     void pkgRemoveEnd        ( ZyppRes zyppRes );
 
 
+public slots:
+
+    void abortCommit() { _doAbort = true; }
+
+
 public:
 
     // Use each one with  PkgCommitSignalForwarder::instance()->sendPkg...()
@@ -107,6 +124,12 @@ public:
     void sendPkgRemoveProgress   ( ZyppRes zyppRes, int value )  { emit pkgRemoveProgress  ( zyppRes, value ); }
     void sendPkgRemoveEnd        ( ZyppRes zyppRes )             { emit pkgRemoveEnd       ( zyppRes );        }
 
+
+    //
+    // Data members
+    //
+
+    bool _doAbort;
 
     static PkgCommitSignalForwarder * _instance;
 };
@@ -136,7 +159,7 @@ struct PkgDownloadCallback:
         {
             PkgCommitSignalForwarder::instance()->sendPkgDownloadProgress( zyppRes, value );
 
-            return true; // Don't abort
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
         }
 
 
@@ -176,7 +199,7 @@ struct PkgDownloadCallback:
 
     virtual bool progressDeltaDownload( int /*value*/ )
         {
-            return true; // Don't abort
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
         }
 
     virtual void problemDeltaDownload( const std::string & /*description*/ )
@@ -219,7 +242,7 @@ struct PkgInstallCallback:
         {
             PkgCommitSignalForwarder::instance()->sendPkgInstallProgress( zyppRes, value );
 
-            return true; // Don't abort
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
         }
 
 
@@ -261,7 +284,7 @@ struct PkgRemoveCallback:
         {
             PkgCommitSignalForwarder::instance()->sendPkgRemoveProgress( zyppRes, value );
 
-            return true; // Don't abort
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
         }
 
 

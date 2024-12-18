@@ -173,6 +173,12 @@ signals:
      **/
     void next();
 
+    /**
+     * Emitted when the user clicks the "Cancel" button below the total
+     * progress bar and confirms the "Really cancel" pop-up.
+     **/
+    void abortCommit();
+
 
 public slots:
 

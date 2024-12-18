@@ -53,6 +53,12 @@ PkgCommitSignalForwarder * PkgCommitSignalForwarder::instance()
 }
 
 
+void PkgCommitSignalForwarder::reset()
+{
+    _doAbort = false;
+}
+
+
 void PkgCommitSignalForwarder::connectAll( QObject * receiver )
 {
     connect( instance(), SIGNAL( pkgDownloadStart    ( ZyppRes ) ),
@@ -83,4 +89,7 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
 
     connect( instance(), SIGNAL( pkgRemoveEnd        ( ZyppRes ) ),
              receiver,   SLOT  ( pkgRemoveEnd        ( ZyppRes ) ) );
+
+    connect( receiver,   SIGNAL( abortCommit() ),
+             this,       SLOT  ( abortCommit() ) );
 }
