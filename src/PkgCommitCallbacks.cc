@@ -70,6 +70,12 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
     connect( instance(), SIGNAL( pkgDownloadEnd      ( ZyppRes ) ),
              receiver,   SLOT  ( pkgDownloadEnd      ( ZyppRes ) ) );
 
+    connect( instance(), SIGNAL( pkgCachedNotify     ( ZyppRes ) ),
+             receiver,   SLOT  ( pkgCachedNotify     ( ZyppRes ) ) );
+
+    connect( instance(), SIGNAL( pkgDownloadError    ( ZyppRes, const QString & ) ),
+             receiver,   SLOT  ( pkgDownloadError    ( ZyppRes, const QString & ) ) );
+
 
     connect( instance(), SIGNAL( pkgInstallStart     ( ZyppRes ) ),
              receiver,   SLOT  ( pkgInstallStart     ( ZyppRes ) ) );
@@ -80,6 +86,9 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
     connect( instance(), SIGNAL( pkgInstallEnd       ( ZyppRes ) ),
              receiver,   SLOT  ( pkgInstallEnd       ( ZyppRes ) ) );
 
+    connect( instance(), SIGNAL( pkgInstallError     ( ZyppRes, const QString & ) ),
+             receiver,   SLOT  ( pkgInstallError     ( ZyppRes, const QString & ) ) );
+
 
     connect( instance(), SIGNAL( pkgRemoveStart      ( ZyppRes ) ),
              receiver,   SLOT  ( pkgRemoveStart      ( ZyppRes ) ) );
@@ -89,6 +98,10 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
 
     connect( instance(), SIGNAL( pkgRemoveEnd        ( ZyppRes ) ),
              receiver,   SLOT  ( pkgRemoveEnd        ( ZyppRes ) ) );
+
+    connect( instance(), SIGNAL( pkgRemoveError      ( ZyppRes, const QString & ) ),
+             receiver,   SLOT  ( pkgRemoveError      ( ZyppRes, const QString & ) ) );
+
 
     connect( receiver,   SIGNAL( abortCommit() ),
              this,       SLOT  ( abortCommit() ) );

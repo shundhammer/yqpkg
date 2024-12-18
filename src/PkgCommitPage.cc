@@ -281,6 +281,9 @@ void PkgCommitPage::wmClose()
         logInfo() << "Aborting commit. Notifying libzypp..." << endl;
         emit abortCommit();
 
+        // Give libzypp some time to shut down properly: Execute yqapp->quit()
+        // only after returning to event loop after some time has passed.
+
         QTimer::singleShot( 500, // millisec
                             YQPkgApplication::instance(), SLOT( quit() ) );
     }
@@ -300,9 +303,8 @@ bool PkgCommitPage::askForCancelCommitConfirmation()
                                        _( "&Yes" ), _( "&No" ), "",
                                        0,   // defaultButtonNumber (from 0)
                                        1 ); // escapeButtonNumber
-    bool reallyCancel = ( result == 0 );  // button #0 (Yes)
 
-    return reallyCancel;
+    return result == 0;  // button #0 (Yes)
 }
 
 
@@ -586,7 +588,49 @@ void PkgCommitPage::pkgDownloadEnd( ZyppRes zyppRes )
     // Important: Not adding the download size to _completedDownloadSize just
     // yet, or it would be counted twice while the task is still in the doing
     // list. That has to wait until it is moved to the doing list.
-    // list.
+}
+
+
+void PkgCommitPage::pkgCachedNotify( ZyppRes zyppRes )
+{
+    CHECK_PTR( zyppRes );
+    PkgTask * task = pkgTasks()->todo().find( zyppRes );
+
+    if ( ! task )
+    {
+        logError() << "Can't find task for " << zyppRes << " in todo" << endl;
+        return;
+    }
+
+#if VERBOSE_TRANSACT
+    logVerbose() << task << endl;
+#endif
+
+    // Move the task from the todo list to the downloads list
+
+    PkgTasks::moveTask( task, pkgTasks()->todo(), pkgTasks()->downloads() );
+    task->setDownloadedPercent( 100 );
+
+    // Move the task from the todo list widget to the downloads list widget
+
+    _ui->todoList->removeTaskItem( task );
+    PkgTaskListWidgetItem * item = _ui->downloadsList->addTaskItem( task );
+    item->setIcon( _downloadDoneIcon );
+
+    processEvents(); // Update the UI
+
+
+    // Important: Not adding the download size to _completedDownloadSize just
+    // yet, or it would be counted twice while the task is still in the doing
+    // list. That has to wait until it is moved to the doing list.
+}
+
+
+void PkgCommitPage::pkgDownloadError( ZyppRes zyppRes, const QString & errorMsg )
+{
+    pkgActionError( zyppRes, errorMsg,
+                    _( "Error while downloading package %1:" ),
+                    __FUNCTION__ );
 }
 
 
@@ -611,6 +655,14 @@ void PkgCommitPage::pkgInstallEnd( ZyppRes zyppRes )
 }
 
 
+void PkgCommitPage::pkgInstallError( ZyppRes zyppRes, const QString & errorMsg )
+{
+    pkgActionError( zyppRes, errorMsg,
+                    _( "Error installing package %1:" ),
+                    __FUNCTION__ );
+}
+
+
 //----------------------------------------------------------------------
 
 
@@ -629,6 +681,14 @@ void PkgCommitPage::pkgRemoveProgress( ZyppRes zyppRes, int percent )
 void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 {
     pkgActionEnd( zyppRes, PkgRemove, __FUNCTION__ );
+}
+
+
+void PkgCommitPage::pkgRemoveError( ZyppRes zyppRes, const QString & errorMsg )
+{
+    pkgActionError( zyppRes, errorMsg,
+                    _( "Error installing package %1:" ),
+                    __FUNCTION__ );
 }
 
 
@@ -798,6 +858,46 @@ void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
 
     updateTotalProgressBar(); // This may or may not be needed
     processEvents();          // But this is needed for sure
+}
+
+
+void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
+                                    const QString & errorMsg,
+                                    const QString & msgHeader,
+                                    const char *    caller     )
+{
+    CHECK_PTR( zyppRes );
+
+    logError() << caller << "(): " << zyppRes << ": " << errorMsg << endl;
+
+    QString msg;
+
+    if ( msgHeader.contains( "%1" ) )
+    {
+        msg = msgHeader.arg( fromUTF8( zyppRes->name() ) );
+        msg += "\n\n";
+    }
+
+    msg += errorMsg;
+
+    int result = QMessageBox::warning( this, // parent widget
+                                       "",   // Window title
+                                       msg,
+                                       _( "&Abort" ), _( "&Retry" ), _( "&Ignore" ),
+                                       0,   // defaultButtonNumber (from 0)
+                                       1 ); // escapeButtonNumber
+
+    // Using the PkgCommitSignalForwarder::setReply() kludge since we can't
+    // simply return a value from a Qt slot. But this only works with direct Qt
+    // signal / slot connections: When the signal is emitted, the connected
+    // slots are called immediately one after the other, and control flow only
+    // returns to the emitter when the last one returns.
+    //
+    // That makes it safe to open the pop-up warning dialog and wait until the
+    // user clicks on an answer button, and to set the reply before we return
+    // here. None of this would work with multiple Qt threads.
+
+    PkgCommitSignalForwarder::instance()->setReply( (ErrorReply) result );
 }
 
 

@@ -25,6 +25,7 @@
 #include <zypp/Url.h>
 #include <zypp/ZYppCallbacks.h>
 
+#include "utf8.h"
 #include "YQZypp.h"     // ZyppRes
 
 
@@ -32,6 +33,13 @@ class PkgCommitSignalForwarder;
 
 using zypp::Pathname;
 using zypp::Url;
+
+enum ErrorReply
+{
+    AbortReply,
+    RetryReply,
+    IgnoreReply
+};
 
 
 /**
@@ -78,6 +86,24 @@ public:
     bool doAbort() const { return _doAbort; }
 
     /**
+     * Return the latest reply to an error.
+     **/
+    ErrorReply reply() const { return _reply; }
+
+    /**
+     * Reply to an error.
+     *
+     * Since Qt signals cannot return a value, this kludge is used to achieve a
+     * similar effect: Before the connected slot returns, it should call this
+     * to set a reply (in this case one of Abort / Retry / Ignore).
+     *
+     * Of course, this only works with direct signal / slot connections,
+     * i.e. in the same thread. See also QObject::connect() and
+     * Qt::ConnectionType.
+     **/
+    void setReply( ErrorReply val ) { _reply = val; }
+
+    /**
      * Reset the internal status, including the _doAbort flag.
      **/
     void reset();
@@ -94,13 +120,19 @@ signals:
     void pkgDownloadProgress ( ZyppRes zyppRes, int value );
     void pkgDownloadEnd      ( ZyppRes zyppRes );
 
+    void pkgCachedNotify     ( ZyppRes zyppRes );
+    void pkgDownloadError    ( ZyppRes zyppRes, const QString & msg );
+
+
     void pkgInstallStart     ( ZyppRes zyppRes );
     void pkgInstallProgress  ( ZyppRes zyppRes, int value );
     void pkgInstallEnd       ( ZyppRes zyppRes );
+    void pkgInstallError     ( ZyppRes zyppRes, const QString & msg );
 
     void pkgRemoveStart      ( ZyppRes zyppRes );
     void pkgRemoveProgress   ( ZyppRes zyppRes, int value );
     void pkgRemoveEnd        ( ZyppRes zyppRes );
+    void pkgRemoveError      ( ZyppRes zyppRes, const QString & msg );
 
 
 public slots:
@@ -116,20 +148,31 @@ public:
     void sendPkgDownloadProgress ( ZyppRes zyppRes, int value )  { emit pkgDownloadProgress( zyppRes, value ); }
     void sendPkgDownloadEnd      ( ZyppRes zyppRes )             { emit pkgDownloadEnd     ( zyppRes );        }
 
+    void sendPkgCachedNotify     ( ZyppRes zyppRes )             { emit pkgCachedNotify    ( zyppRes );        }
+    void sendPkgDownloadError    ( ZyppRes zyppRes,
+                                   const QString & msg )         { emit pkgDownloadError   ( zyppRes, msg );   }
+
+
     void sendPkgInstallStart     ( ZyppRes zyppRes )             { emit pkgInstallStart    ( zyppRes);         }
     void sendPkgInstallProgress  ( ZyppRes zyppRes, int value )  { emit pkgInstallProgress ( zyppRes, value ); }
     void sendPkgInstallEnd       ( ZyppRes zyppRes )             { emit pkgInstallEnd      ( zyppRes );        }
+    void sendPkgInstallError     ( ZyppRes zyppRes,
+                                   const QString & msg )         { emit pkgInstallError    ( zyppRes, msg );   }
 
     void sendPkgRemoveStart      ( ZyppRes zyppRes )             { emit pkgRemoveStart     ( zyppRes);         }
     void sendPkgRemoveProgress   ( ZyppRes zyppRes, int value )  { emit pkgRemoveProgress  ( zyppRes, value ); }
     void sendPkgRemoveEnd        ( ZyppRes zyppRes )             { emit pkgRemoveEnd       ( zyppRes );        }
+    void sendPkgRemoveError      ( ZyppRes zyppRes,
+                                   const QString & msg )         { emit pkgRemoveError     ( zyppRes, msg );   }
 
 
     //
     // Data members
     //
 
-    bool _doAbort;
+    bool       _doAbort;
+    bool       _replyReady;
+    ErrorReply _reply;
 
     static PkgCommitSignalForwarder * _instance;
 };
@@ -175,7 +218,15 @@ struct PkgDownloadCallback:
                                        PkgDownloadError  error,
                                        const std::string description )
         {
-            return PkgDownloadAction::ABORT;
+            PkgCommitSignalForwarder::instance()->setReply( AbortReply );
+            PkgCommitSignalForwarder::instance()->sendPkgDownloadError( zyppRes, fromUTF8( description ) );
+
+            switch ( PkgCommitSignalForwarder::instance()->reply() )
+            {
+                case IgnoreReply: return PkgDownloadAction::IGNORE;
+                case RetryReply:  return PkgDownloadAction::RETRY;
+                default:          return PkgDownloadAction::ABORT;
+            }
         }
 
 
@@ -185,7 +236,10 @@ struct PkgDownloadCallback:
      **/
     virtual void infoInCache( ZyppRes zyppRes,
                               const Pathname & /*localfile*/ )
-        {}
+        {
+            PkgCommitSignalForwarder::instance()->sendPkgCachedNotify( zyppRes );
+        }
+
 
 #if 0
     // FIXME: TO DO later (much later...)
@@ -257,10 +311,18 @@ struct PkgInstallCallback:
 
     virtual PkgInstallAction problem( ZyppRes zyppRes,
                                       PkgInstallError error,
-                                      const std::string & /*description*/,
+                                      const std::string & description,
                                       RpmLevel /*level*/ )
         {
-            return PkgInstallAction::ABORT;
+            PkgCommitSignalForwarder::instance()->setReply( AbortReply );
+            PkgCommitSignalForwarder::instance()->sendPkgInstallError( zyppRes, fromUTF8( description ) );
+
+            switch ( PkgCommitSignalForwarder::instance()->reply() )
+            {
+                case IgnoreReply: return PkgInstallAction::IGNORE;
+                case RetryReply:  return PkgInstallAction::RETRY;
+                default:          return PkgInstallAction::ABORT;
+            }
         }
 
 }; // PkgInstallCallback
@@ -298,9 +360,17 @@ struct PkgRemoveCallback:
 
     virtual PkgRemoveAction problem( ZyppRes zyppRes,
                                      PkgRemoveError error,
-                                     const std::string & /*description*/ )
+                                     const std::string & description )
         {
-            return zypp::target::rpm::RemoveResolvableReport::ABORT;
+            PkgCommitSignalForwarder::instance()->setReply( AbortReply );
+            PkgCommitSignalForwarder::instance()->sendPkgRemoveError( zyppRes, fromUTF8( description ) );
+
+            switch ( PkgCommitSignalForwarder::instance()->reply() )
+            {
+                case IgnoreReply: return PkgRemoveAction::IGNORE;
+                case RetryReply:  return PkgRemoveAction::RETRY;
+                default:          return PkgRemoveAction::ABORT;
+            }
         }
 
 }; // PkgRemoveCallback

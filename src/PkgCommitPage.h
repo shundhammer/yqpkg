@@ -190,13 +190,19 @@ public slots:
     void pkgDownloadProgress ( ZyppRes zyppRes, int value );
     void pkgDownloadEnd      ( ZyppRes zyppRes );
 
+    void pkgCachedNotify     ( ZyppRes zyppRes );
+    void pkgDownloadError    ( ZyppRes zyppRes, const QString & msg );
+
+
     void pkgInstallStart     ( ZyppRes zyppRes );
     void pkgInstallProgress  ( ZyppRes zyppRes, int value );
     void pkgInstallEnd       ( ZyppRes zyppRes );
+    void pkgInstallError     ( ZyppRes zyppRes, const QString & msg );
 
     void pkgRemoveStart      ( ZyppRes zyppRes );
     void pkgRemoveProgress   ( ZyppRes zyppRes, int value );
     void pkgRemoveEnd        ( ZyppRes zyppRes );
+    void pkgRemoveError      ( ZyppRes zyppRes, const QString & msg );
 
 
 protected slots:
@@ -302,23 +308,28 @@ protected:
 
     /**
      * The common part of pkgInstallStart() and pkgRemoveStart() /
-     * ...progress(), ...End().
+     * ...progress(), ...End(), ...Error().
      *
      * 'action' is one of PkgInstall or PkgRemove,
      * 'caller' is the calling function (__FUNCTION__) for logging.
      **/
-    void pkgActionStart   ( ZyppRes       zyppRes,
-                            PkgTaskAction action,
-                            const char *  caller );
+    void pkgActionStart   ( ZyppRes         zyppRes,
+                            PkgTaskAction   action,
+                            const char *    caller );
 
-    void pkgActionProgress( ZyppRes       zyppRes,
-                            int           percent,
-                            PkgTaskAction action,
-                            const char *  caller );
+    void pkgActionProgress( ZyppRes         zyppRes,
+                            int             percent,
+                            PkgTaskAction   action,
+                            const char *    caller );
 
-    void pkgActionEnd     ( ZyppRes       zyppRes,
-                            PkgTaskAction action,
-                            const char *  caller );
+    void pkgActionEnd     ( ZyppRes         zyppRes,
+                            PkgTaskAction   action,
+                            const char *    caller );
+
+    void pkgActionError   ( ZyppRes         zyppRes,
+                            const QString & errorMsg,
+                            const QString & msgHeader,
+                            const char *    caller );
 
     //
     // Data members
