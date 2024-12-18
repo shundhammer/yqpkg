@@ -107,6 +107,7 @@ void PkgCommitPage::commit()
 void PkgCommitPage::populateLists()
 {
     _ui->todoList->clear();
+    _ui->downloadsList->clear();
     _ui->doingList->clear();
     _ui->doneList->clear();
 
@@ -216,6 +217,7 @@ void PkgCommitPage::reset()
     _ui->totalProgressBar->setValue( 0 );
 
     _ui->todoList->clear();
+    _ui->downloadsList->clear();
     _ui->doingList->clear();
     _ui->doneList->clear();
 
