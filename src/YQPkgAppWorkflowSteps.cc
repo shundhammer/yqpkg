@@ -189,6 +189,18 @@ YQPkgSelStep::page()
 }
 
 
+void YQPkgSelStep::activate( bool goingForward )
+{
+    YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+
+    // Reset not only if 'goingForward' is false: We get here from the summary
+    // page with a 'gotoStep( "pkgSel")' call directly, and in that case
+    // 'goingForward' is true.
+
+    _app->pkgSel()->reset();
+}
+
+
 //----------------------------------------------------------------------
 
 

@@ -460,31 +460,41 @@ YQPkgSelector::layoutRightPane( QWidget *parent )
 
 
 void
-YQPkgSelector::layoutPkgList( QWidget *parent )
+YQPkgSelector::layoutPkgList( QWidget * parent )
 {
-    // this is made visible when activating the repository
-    // filter
-    QWidget *_notificationsContainer = new QWidget(parent);
-    QVBoxLayout *layout = new QVBoxLayout(_notificationsContainer);
+#if 1
+    // FIXME: This doesn't belong here; it has nothing to do with
+    // the PACKAGE LIST as the function name implies.
+    // Move this out to a separate function!
 
-    _repoUpgradingLabel = new QLabel(_notificationsContainer);
-    _repoUpgradingLabel->setTextFormat(Qt::RichText);
-    _repoUpgradingLabel->setWordWrap(true);
-    _repoUpgradingLabel->setVisible(false);
 
-    _repoUpgradeLabel = new QLabel(_notificationsContainer);
-    _repoUpgradeLabel->setTextFormat(Qt::RichText);
-    _repoUpgradeLabel->setWordWrap(true);
-    _repoUpgradeLabel->setVisible(false);
-    _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel");
+    // This is made visible when activating the repository filter
 
-    layout->addWidget(_repoUpgradingLabel);
-    layout->addWidget(_repoUpgradeLabel);
+    QWidget *_notificationsContainer = new QWidget( parent );
+    QVBoxLayout * layout = new QVBoxLayout( _notificationsContainer );
 
-    // if the user clicks on a link on the label, we have to check
+    _repoUpgradingLabel = new QLabel( _notificationsContainer );
+    _repoUpgradingLabel->setTextFormat( Qt::RichText );
+    _repoUpgradingLabel->setWordWrap( true );
+    _repoUpgradingLabel->setVisible( false );
+
+    _repoUpgradeLabel = new QLabel( _notificationsContainer );
+    _repoUpgradeLabel->setTextFormat( Qt::RichText );
+    _repoUpgradeLabel->setWordWrap( true );
+    _repoUpgradeLabel->setVisible( false );
+    _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel" );
+
+    layout->addWidget( _repoUpgradingLabel );
+    layout->addWidget( _repoUpgradeLabel   );
+
+
+    // If the user clicks on a link on the label, we have to check
     // which repository upgrade job to add or remove, for that
     // we will encode the links as repoupgradeadd://alias and
     // repoupgraderemove:://alias
+
+    // FIXME: Those slot names are ridiculously long. WTF?!
+
     connect( _repoUpgradeLabel, SIGNAL( linkActivated                  ( QString ) ),
              this,              SLOT  ( slotRepoUpgradeLabelLinkClicked( QString ) ) );
 
@@ -492,20 +502,23 @@ YQPkgSelector::layoutPkgList( QWidget *parent )
             this,                SLOT  ( slotRepoUpgradeLabelLinkClicked( QString ) ) );
 
     updateRepositoryUpgradeLabel();
+#endif
 
     _pkgList= new YQPkgList( parent );
     CHECK_NEW( _pkgList );
 
     connect( _pkgList,  SIGNAL( statusChanged()           ),
              this,      SLOT  ( autoResolveDependencies() ) );
+
+    connect( this,      SIGNAL( resetNotify()  ),
+             _pkgList,  SLOT  ( resetContent() ) );
 }
 
 
 void
-YQPkgSelector::layoutDetailsViews( QWidget *parent )
+YQPkgSelector::layoutDetailsViews( QWidget * parent )
 {
     bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
-
 
     _detailsViews = new QTabWidget( parent );
     CHECK_NEW( _detailsViews );

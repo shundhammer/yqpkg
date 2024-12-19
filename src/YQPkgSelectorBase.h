@@ -69,6 +69,12 @@ protected:
 public slots:
 
     /**
+     * Reset all content in connected views.
+     * See also signal 'resetNotify()'.
+     **/
+    void reset();
+
+    /**
      * Resolve dependencies (unconditionally) for all resolvables.
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
@@ -127,6 +133,15 @@ public slots:
 
 
 signals:
+
+    /**
+     * Notification to reset all content, for example because we just went back
+     * in the workflow after a package commit, and now the new states of the
+     * packages need to be displayed; what was 'install' before the package
+     * commit is now 'installed', which is different. Connected views should
+     * use this to reload their content.
+     **/
+    void resetNotify();
 
     /**
      * Emitted when package resolving is started.

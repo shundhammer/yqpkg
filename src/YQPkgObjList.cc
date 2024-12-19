@@ -188,6 +188,39 @@ YQPkgObjList::clear()
 }
 
 
+void
+YQPkgObjList::resetContent()
+{
+    logDebug() << endl;
+
+    busyCursor();
+    QTreeWidgetItemIterator it( this );
+
+    while ( *it )
+    {
+        YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (*it);
+
+        if ( item )
+        {
+            logVerbose() << "Updating " << item->text( nameCol() ) << endl;
+            item->updateStatus();
+            item->updateData();
+        }
+
+	++it;
+    }
+
+#if 0
+    emit updateItemStates();
+    emit updatePackages();
+
+    normalCursor();
+    emit statusChanged();
+#endif
+    normalCursor();
+}
+
+
 QPixmap
 YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 {
@@ -978,9 +1011,11 @@ YQPkgObjListItem::init()
 	    }
 
 	    if ( _installedIsNewer )
-		setForeground( versionCol(), Qt::red);
+		setForeground( versionCol(), Qt::red );
 	    else if ( _candidateIsNewer )
-		setForeground( versionCol(), Qt::blue);
+		setForeground( versionCol(), Qt::blue );
+            else
+		setForeground( versionCol(), Qt::black );
 	}
     }
     else // separate columns for installed and available versions
@@ -992,9 +1027,11 @@ YQPkgObjListItem::init()
 		setText( instVersionCol(), installed->edition() );
 
 		if ( _installedIsNewer )
-		    setForeground( instVersionCol(), Qt::red);
+		    setForeground( instVersionCol(), Qt::red );
 		else if ( _candidateIsNewer )
-		    setForeground( instVersionCol(), Qt::blue);
+		    setForeground( instVersionCol(), Qt::blue );
+                else
+                    setForeground( versionCol(), Qt::black );
 	    }
 	}
 
@@ -1013,6 +1050,8 @@ YQPkgObjListItem::init()
 		    setForeground( versionCol(), Qt::red);
 		else if ( _candidateIsNewer )
 		    setForeground( versionCol(), Qt::blue);
+                else
+                    setForeground( versionCol(), Qt::black );
 	    }
 	}
     }

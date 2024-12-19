@@ -63,21 +63,17 @@ protected:
 
 public:
 
-    // make it public
-    QTreeWidgetItem * itemFromIndex ( const QModelIndex & index ) const
-    { return QY2ListView::itemFromIndex(index); }
-
     // Column numbers
 
-    int iconCol()     const { return _iconCol; }
-    int statusCol()		const	{ return _statusCol;		}
-    int nameCol()		const	{ return _nameCol;		}
-    int summaryCol()		const	{ return _summaryCol;		}
-    int sizeCol()		const	{ return _sizeCol;		}
-    int versionCol()		const	{ return _versionCol;		}
-    int instVersionCol()	const	{ return _instVersionCol;	}
-    int brokenIconCol()		const	{ return _brokenIconCol;	}
-    int satisfiedIconCol()	const	{ return _satisfiedIconCol;	}
+    int iconCol()          const { return _iconCol;          }
+    int statusCol()        const { return _statusCol;        }
+    int nameCol()          const { return _nameCol;          }
+    int summaryCol()       const { return _summaryCol;       }
+    int sizeCol()          const { return _sizeCol;          }
+    int versionCol()       const { return _versionCol;       }
+    int instVersionCol()   const { return _instVersionCol;   }
+    int brokenIconCol()    const { return _brokenIconCol;    }
+    int satisfiedIconCol() const { return _satisfiedIconCol; }
 
     /**
      * Return whether or not items in this list are generally editable,
@@ -96,9 +92,9 @@ public:
      * Sets the currently selected item's status.
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
-    void setCurrentStatus( ZyppStatus	newStatus,
-			   bool		selectNextItem = false,
-			   bool		ifNewerOnly = false );
+    void setCurrentStatus( ZyppStatus newStatus,
+                           bool       selectNextItem = false,
+                           bool       ifNewerOnly    = false );
 
 
     /**
@@ -119,12 +115,12 @@ public:
     /**
      * Returns the suitable icon for a zypp::ResObject status - the regular
      * icon if 'enabled' is 'true' or the insensitive icon if 'enabled' is
-     * 'false.	'bySelection' is relevant only for auto-states: This uses the
+     * 'false.  'bySelection' is relevant only for auto-states: This uses the
      * icon for 'auto-by-selection" rather than the default auto-icon.
      **/
     virtual QPixmap statusIcon( ZyppStatus status,
-				bool		enabled	    = true,
-				bool		bySelection = false );
+                                bool       enabled     = true,
+                                bool       bySelection = false );
 
     /**
      * Returns a short (one line) descriptive text for a zypp::ResObject status.
@@ -156,6 +152,12 @@ public:
      **/
     void exclude( YQPkgObjListItem * item, bool exclude );
 
+    /**
+     * Make the inherited QTreeWidget::itemFromIndex() method public
+     **/
+    QTreeWidgetItem * itemFromIndex ( const QModelIndex & index ) const
+        { return QY2ListView::itemFromIndex(index); }
+
 
 public slots:
 
@@ -171,30 +173,35 @@ public slots:
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
-    void addPkgObjItem( ZyppSel	selectable,
-			ZyppObj zyppObj = 0 );
+    void addPkgObjItem( ZyppSel selectable,
+                        ZyppObj zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
      * size.
      **/
     void addPassiveItem( const QString & name,
-			 const QString & summary = QString(),
-			 FSize		 size	 = -1 );
+                         const QString & summary = QString(),
+                         FSize           size    = -1 );
 
     /**
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
-    virtual void pkgObjClicked( int		button,
-				QTreeWidgetItem * item,
-				int		col,
-				const QPoint &	pos );
+    virtual void pkgObjClicked( int               button,
+                                QTreeWidgetItem * item,
+                                int               col,
+                                const QPoint &    pos );
 
     /**
      * Reimplemented from QY2ListView:
      * Emit currentItemChanged() signal after clearing the list.
      **/
     virtual void clear();
+
+    /**
+     * Reset all content: Update the status and content for each item
+     **/
+    virtual void resetContent();
 
     /**
      * Update the internal actions for the currently selected item ( if any ).
@@ -240,23 +247,23 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( S_Install	); }
-    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst		); }
-    void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled	); }
-    void setCurrentDelete()	   { setCurrentStatus( S_Del		); }
-    void setCurrentUpdate()	   { setCurrentStatus( S_Update, false, true ); }
-    void setCurrentUpdateForce()   { setCurrentStatus( S_Update		); }
-    void setCurrentTaboo()	   { setCurrentStatus( S_Taboo		); }
-    void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
+    void setCurrentInstall()       { setCurrentStatus( S_Install        ); }
+    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst         ); }
+    void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled  ); }
+    void setCurrentDelete()        { setCurrentStatus( S_Del            ); }
+    void setCurrentUpdate()        { setCurrentStatus( S_Update, false, true ); }
+    void setCurrentUpdateForce()   { setCurrentStatus( S_Update         ); }
+    void setCurrentTaboo()         { setCurrentStatus( S_Taboo          ); }
+    void setCurrentProtected()     { setCurrentStatus( S_Protected      ); }
 
-    void setListInstall()	   { setAllItemStatus( S_Install	); }
-    void setListDontInstall()	   { setAllItemStatus( S_NoInst		); }
-    void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
-    void setListDelete()	   { setAllItemStatus( S_Del		); }
-    void setListUpdate()	   { setAllItemStatus( S_Update		); }
-    void setListUpdateForce()	   { setAllItemStatus( S_Update, true	); }
-    void setListTaboo()		   { setAllItemStatus( S_Taboo		); }
-    void setListProtected()	   { setAllItemStatus( S_Protected	); }
+    void setListInstall()          { setAllItemStatus( S_Install        ); }
+    void setListDontInstall()      { setAllItemStatus( S_NoInst         ); }
+    void setListKeepInstalled()    { setAllItemStatus( S_KeepInstalled  ); }
+    void setListDelete()           { setAllItemStatus( S_Del            ); }
+    void setListUpdate()           { setAllItemStatus( S_Update         ); }
+    void setListUpdateForce()      { setAllItemStatus( S_Update, true   ); }
+    void setListTaboo()            { setAllItemStatus( S_Taboo          ); }
+    void setListProtected()        { setAllItemStatus( S_Protected      ); }
 
 
 protected slots:
@@ -343,62 +350,62 @@ protected:
      * retrieve the corresponding status icons (both sensitive and insensitive)
      * and text.  'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( ZyppStatus	status,
-			    const QString &	key	= QString(),
-			    bool		enabled = false );
+    QAction * createAction( ZyppStatus      status,
+                            const QString & key     = QString(),
+                            bool            enabled = false );
 
     /**
      * Low-level: Create an action.
      * 'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( const QString &	text,
-			    const QPixmap &	icon		= QPixmap(),
-			    const QPixmap &	insensitiveIcon	= QPixmap(),
-			    const QString &	key		= QString(),
-			    bool		enabled		= false );
+    QAction * createAction( const QString & text,
+                            const QPixmap & icon            = QPixmap(),
+                            const QPixmap & insensitiveIcon = QPixmap(),
+                            const QString & key             = QString(),
+                            bool            enabled         = false );
 
     // Data members
 
-    int		_iconCol;
-    int		_statusCol;
-    int		_nameCol;
-    int		_summaryCol;
-    int		_sizeCol;
-    int		_versionCol;
-    int		_instVersionCol;
-    int		_brokenIconCol;
-    int		_satisfiedIconCol;
-    bool	_editable;
-    bool        _debug;
-    int		_excludedItemsCount;
+    int  _iconCol;
+    int  _statusCol;
+    int  _nameCol;
+    int  _summaryCol;
+    int  _sizeCol;
+    int  _versionCol;
+    int  _instVersionCol;
+    int  _brokenIconCol;
+    int  _satisfiedIconCol;
+    bool _editable;
+    bool _debug;
+    int  _excludedItemsCount;
 
     typedef list<ExcludeRule *> ExcludeRuleList;
 
-    ExcludeRuleList	_excludeRules;
+    ExcludeRuleList     _excludeRules;
 
-    QMenu *	_installedContextMenu;
-    QMenu *	_notInstalledContextMenu;
+    QMenu *     _installedContextMenu;
+    QMenu *     _notInstalledContextMenu;
 
 
 public:
 
-    QAction *		actionSetCurrentInstall;
-    QAction *		actionSetCurrentDontInstall;
-    QAction *		actionSetCurrentKeepInstalled;
-    QAction *		actionSetCurrentDelete;
-    QAction *		actionSetCurrentUpdate;
-    QAction *		actionSetCurrentUpdateForce;
-    QAction *		actionSetCurrentTaboo;
-    QAction *		actionSetCurrentProtected;
+    QAction * actionSetCurrentInstall;
+    QAction * actionSetCurrentDontInstall;
+    QAction * actionSetCurrentKeepInstalled;
+    QAction * actionSetCurrentDelete;
+    QAction * actionSetCurrentUpdate;
+    QAction * actionSetCurrentUpdateForce;
+    QAction * actionSetCurrentTaboo;
+    QAction * actionSetCurrentProtected;
 
-    QAction *		actionSetListInstall;
-    QAction *		actionSetListDontInstall;
-    QAction *		actionSetListKeepInstalled;
-    QAction *		actionSetListDelete;
-    QAction *		actionSetListUpdate;
-    QAction *		actionSetListUpdateForce;
-    QAction *		actionSetListTaboo;
-    QAction *		actionSetListProtected;
+    QAction * actionSetListInstall;
+    QAction * actionSetListDontInstall;
+    QAction * actionSetListKeepInstalled;
+    QAction * actionSetListDelete;
+    QAction * actionSetListUpdate;
+    QAction * actionSetListUpdateForce;
+    QAction * actionSetListTaboo;
+    QAction * actionSetListProtected;
 };
 
 
@@ -413,25 +420,27 @@ public:
      * one object of 'selectable'.  If it is 0, selectable->theObject() will be
      * used.
      **/
-    YQPkgObjListItem( YQPkgObjList *	pkgObjList,
-		      ZyppSel		selectable,
-		      ZyppObj		zyppObj = 0 );
+    YQPkgObjListItem( YQPkgObjList * pkgObjList,
+                      ZyppSel        selectable,
+                      ZyppObj        zyppObj = 0 );
 
     /**
      * Constructor for root items: Creates a YQPkgObjList item that does not
      * correspond to a ZYPP selectable. You need to overload _AND RUN_ init
      * yourself then.
      **/
-    YQPkgObjListItem( YQPkgObjList *	pkgObjList );
+    YQPkgObjListItem( YQPkgObjList * pkgObjList );
+
 
 protected:
+
     /**
      * Constructor for non-root items.
      **/
-    YQPkgObjListItem( YQPkgObjList *	pkgObjList,
-		      QY2ListViewItem * parent,
-		      ZyppSel		selectable,
-		      ZyppObj		zyppObj = 0 );
+    YQPkgObjListItem( YQPkgObjList *    pkgObjList,
+                      QY2ListViewItem * parent,
+                      ZyppSel           selectable,
+                      ZyppObj           zyppObj = 0 );
 
 public:
 
@@ -595,24 +604,24 @@ public:
 
     // Handle Debug isBroken and isSatisfied flags
 
-    bool debugIsBroken()    const		{ return _debugIsBroken;		}
-    bool debugIsSatisfied() const		{ return _debugIsSatisfied;		}
-    void setDebugIsBroken   ( bool val = true )	{ _debugIsBroken = val;			}
-    void setDebugIsSatisfied( bool val = true ) { _debugIsSatisfied = val;		}
-    void toggleDebugIsBroken()			{ _debugIsBroken = ! _debugIsBroken;	}
-    void toggleDebugIsSatisfied()		{ _debugIsSatisfied = ! _debugIsSatisfied; }
+    bool debugIsBroken()    const               { return _debugIsBroken;    }
+    bool debugIsSatisfied() const               { return _debugIsSatisfied; }
+    void setDebugIsBroken   ( bool val = true ) { _debugIsBroken    = val;                 }
+    void setDebugIsSatisfied( bool val = true ) { _debugIsSatisfied = val;                 }
+    void toggleDebugIsBroken()                  { _debugIsBroken    = ! _debugIsBroken;    }
+    void toggleDebugIsSatisfied()               { _debugIsSatisfied = ! _debugIsSatisfied; }
 
 
     // Columns
 
-    int statusCol()		const	{ return _pkgObjList->statusCol();	}
-    int nameCol()		const	{ return _pkgObjList->nameCol();	}
-    int summaryCol()		const	{ return _pkgObjList->summaryCol();	}
-    int sizeCol()		const	{ return _pkgObjList->sizeCol();	}
-    int versionCol()		const	{ return _pkgObjList->versionCol();	}
-    int instVersionCol()	const	{ return _pkgObjList->instVersionCol(); }
-    int brokenIconCol()		const	{ return _pkgObjList->brokenIconCol();	}
-    int satisfiedIconCol()	const	{ return _pkgObjList->satisfiedIconCol(); }
+    int statusCol()        const { return _pkgObjList->statusCol();        }
+    int nameCol()          const { return _pkgObjList->nameCol();          }
+    int summaryCol()       const { return _pkgObjList->summaryCol();       }
+    int sizeCol()          const { return _pkgObjList->sizeCol();          }
+    int versionCol()       const { return _pkgObjList->versionCol();       }
+    int instVersionCol()   const { return _pkgObjList->instVersionCol();   }
+    int brokenIconCol()    const { return _pkgObjList->brokenIconCol();    }
+    int satisfiedIconCol() const { return _pkgObjList->satisfiedIconCol(); }
 
 
 protected:
@@ -646,15 +655,15 @@ protected:
      **/
     void setText( int column, const string text );
 
- public:
+public:
     /**
      * Re-declare ordinary setText() method so the compiler doesn't get
      * confused which one to use.
      **/
     void setText( int column, const QString & text )
-	  { QTreeWidgetItem::setText( column, text ); }
+        { QTreeWidgetItem::setText( column, text ); }
 
- protected:
+protected:
     /**
      * Set a column text via Edition.
      **/
@@ -665,16 +674,16 @@ protected:
     // Data members
     //
 
-    YQPkgObjList *	_pkgObjList;
-    ZyppSel		_selectable;
-    ZyppObj		_zyppObj;
-    bool		_editable:1;
-    bool		_candidateIsNewer:1;
-    bool		_installedIsNewer:1;
+    YQPkgObjList * _pkgObjList;
+    ZyppSel        _selectable;
+    ZyppObj        _zyppObj;
+    bool           _editable:1;
+    bool           _candidateIsNewer:1;
+    bool           _installedIsNewer:1;
 
-    bool		_debugIsBroken:1;
-    bool		_debugIsSatisfied:1;
-    bool		_excluded:1;
+    bool           _debugIsBroken:1;
+    bool           _debugIsSatisfied:1;
+    bool           _excluded:1;
 };
 
 
@@ -691,9 +700,9 @@ public:
      * The parent YQPkgObjList will assume ownership of this exclude rule
      * and destroy it when the parent is destroyed.
      **/
-    ExcludeRule( YQPkgObjList *		parent,
-		 const QRegExp &	regexp,
-		 int			column = 0 );
+    ExcludeRule( YQPkgObjList *  parent,
+                 const QRegExp & regexp,
+                 int             column = 0 );
 
 
     // Intentionally omitting virtual destructor:
@@ -748,10 +757,10 @@ public:
 
 private:
 
-    YQPkgObjList *	_parent;
-    QRegExp		_regexp;
-    int			_column;
-    bool		_enabled;
+    YQPkgObjList * _parent;
+    QRegExp        _regexp;
+    int            _column;
+    bool           _enabled;
 };
 
 

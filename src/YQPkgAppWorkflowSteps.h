@@ -169,6 +169,11 @@ protected:
      * so it is not deleted.
      **/
     virtual QWidget * page() override;
+
+    /**
+     * Reset the package selector when needed.
+     **/
+    virtual void activate( bool goingForward ) override;
 };
 
 

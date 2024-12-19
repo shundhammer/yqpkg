@@ -38,14 +38,11 @@
 
 #include "YQPkgSelectorBase.h"
 
-
-using std::max;
 using std::string;
 
 
-
 YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent,
-                            long      modeFlags )
+                                      long      modeFlags )
     : QFrame( parent )
     , _modeFlags( modeFlags )
 {
@@ -60,14 +57,24 @@ YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent,
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     Q_CHECK_PTR( _pkgConflictDialog );
 
+#if 1
+    // FIXME: Move this out to a separate function
+    // and change those insane variable names to something reasonable.
+    // This code is ugly.
+
     QString label = _( "Reset &Ignored Dependency Conflicts" );
     _actionResetIgnoredDependencyProblems = new QAction( label, this);
     Q_CHECK_PTR( _actionResetIgnoredDependencyProblems );
 
     _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
 
+    // FIXME: Use a normal Qt connect(), not this obfuscated C++ contest winner.
+    // The logger is logging connect() problems to stderr now, so there is no reason
+    // for this ugliness.
+
     connect( _actionResetIgnoredDependencyProblems, &QAction::triggered,
              this,                                  &YQPkgSelectorBase::resetIgnoredDependencyProblems );
+#endif
 
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
@@ -83,8 +90,15 @@ YQPkgSelectorBase::~YQPkgSelectorBase()
 }
 
 
-int
-YQPkgSelectorBase::resolveDependencies()
+void YQPkgSelectorBase::reset()
+{
+    logDebug() << "Sending resetNotify()" << endl;
+
+    emit resetNotify();
+}
+
+
+int YQPkgSelectorBase::resolveDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
@@ -105,8 +119,7 @@ YQPkgSelectorBase::resolveDependencies()
 }
 
 
-int
-YQPkgSelectorBase::verifySystem()
+int YQPkgSelectorBase::verifySystem()
 {
     if ( ! _pkgConflictDialog )
     {
@@ -130,8 +143,7 @@ YQPkgSelectorBase::verifySystem()
 }
 
 
-int
-YQPkgSelectorBase::checkDiskUsage()
+int YQPkgSelectorBase::checkDiskUsage()
 {
     if ( ! _diskUsageList )
     {
@@ -156,9 +168,7 @@ YQPkgSelectorBase::checkDiskUsage()
 }
 
 
-
-void
-YQPkgSelectorBase::showAutoPkgList()
+void YQPkgSelectorBase::showAutoPkgList()
 {
     resolveDependencies();
 
@@ -179,8 +189,7 @@ YQPkgSelectorBase::showAutoPkgList()
 }
 
 
-bool
-YQPkgSelectorBase::pendingChanges()
+bool YQPkgSelectorBase::pendingChanges()
 {
     bool changes =
         zyppPool().diffState<zypp::Package  >() ||
@@ -203,8 +212,7 @@ YQPkgSelectorBase::pendingChanges()
 }
 
 
-void
-YQPkgSelectorBase::reject()
+void YQPkgSelectorBase::reject()
 {
     bool changes = pendingChanges();
     bool confirm = false;
@@ -248,8 +256,7 @@ YQPkgSelectorBase::reject()
 }
 
 
-void
-YQPkgSelectorBase::accept()
+void YQPkgSelectorBase::accept()
 {
     bool confirmedAllLicenses;
 
@@ -335,8 +342,7 @@ YQPkgSelectorBase::accept()
 }
 
 
-bool
-YQPkgSelectorBase::showPendingLicenseAgreements()
+bool YQPkgSelectorBase::showPendingLicenseAgreements()
 {
     logInfo() << "Showing all pending license agreements" << endl;
 
@@ -351,8 +357,7 @@ YQPkgSelectorBase::showPendingLicenseAgreements()
 }
 
 
-bool
-YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
+bool YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
     bool allConfirmed = true;
 
@@ -383,7 +388,7 @@ YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoo
                         else
                         {
                             logInfo() << "Resolvable " << sel->name()
-                                           << "'s  license is already confirmed" << endl;
+                                      << "'s  license is already confirmed" << endl;
                         }
                     }
                 }
@@ -398,8 +403,7 @@ YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoo
 }
 
 
-void
-YQPkgSelectorBase::notImplemented()
+void YQPkgSelectorBase::notImplemented()
 {
     QMessageBox::information( this, "",
                               _( "Not implemented yet. Sorry." ),
@@ -407,15 +411,13 @@ YQPkgSelectorBase::notImplemented()
 }
 
 
-void
-YQPkgSelectorBase::resetIgnoredDependencyProblems()
+void YQPkgSelectorBase::resetIgnoredDependencyProblems()
 {
     YQPkgConflictDialog::resetIgnoredDependencyProblems();
 }
 
 
-void
-YQPkgSelectorBase::closeEvent( QCloseEvent * event )
+void YQPkgSelectorBase::closeEvent( QCloseEvent * event )
 {
     logInfo() << "Caught WM_CLOSE" << endl;
 
@@ -424,8 +426,7 @@ YQPkgSelectorBase::closeEvent( QCloseEvent * event )
 }
 
 
-void
-YQPkgSelectorBase::keyPressEvent( QKeyEvent * event )
+void YQPkgSelectorBase::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
