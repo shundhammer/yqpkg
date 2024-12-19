@@ -262,7 +262,7 @@ void SummaryPage::updateSummary()
     else
     {
         int byUserMax = pkgTasks()->done().size() <= 30 ? 30 : 12;
-        int byDepMax  = 12;
+        int byDepMax  = 10;
 
         text = longSummary( byUserMax, byDepMax );
     }
@@ -326,8 +326,11 @@ QStringList SummaryPage::listSummary( PkgTaskList     taskList,
     taskList.sort();
     int count = taskList.size();
 
-    if ( listMaxItems < 0 )     // unlimited listMaxItems?
-        listMaxItems = count;   // show all list items
+    if ( listMaxItems < 0                // unlimited listMaxItems?
+         || count - listMaxItems <= 3 )  // or just barely above the limit?
+    {
+        listMaxItems = count;            // show all list items
+    }
 
 
     // Add the list header
