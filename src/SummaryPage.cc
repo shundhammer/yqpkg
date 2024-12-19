@@ -298,14 +298,14 @@ QString SummaryPage::longSummary( int byUserMax, int byDepMax )
 
     QStringList lines;
 
-    lines << listSummary( failedPkg,       _( "FAILED: %1" ), qMax( byUserMax, 30 ) );
-    lines << listSummary( removedByUser,   _( "Removed by user: %1"           ), byUserMax );
-    lines << listSummary( removedByDep,    _( "Removed by dependencies: %1"   ), byDepMax  );
-    lines << listSummary( installedByUser, _( "Installed by user: %1"         ), byUserMax );
-    lines << listSummary( installedByDep,  _( "Installed by dependencies: %1" ), byDepMax  );
-    lines << listSummary( updatedByUser,   _( "Updated by user: %1"           ), byUserMax );
-    lines << listSummary( updatedByDep,    _( "Updated by dependencies: %1"   ), byDepMax  );
-    lines << listSummary( todoPkg,         _( "To do: %1"                     ), byDepMax  );
+    lines << listSummary( failedPkg,       _( "FAILED: %1" ), qBound( 30, byUserMax, 100 ) );
+    lines << listSummary( removedByUser,   _( "Packages removed by user: %1"                   ), byUserMax );
+    lines << listSummary( removedByDep,    _( "Packages removed because of dependencies: %1"   ), byDepMax  );
+    lines << listSummary( installedByUser, _( "Packages installed by user: %1"                 ), byUserMax );
+    lines << listSummary( installedByDep,  _( "Packages installed because of dependencies: %1" ), byDepMax  );
+    lines << listSummary( updatedByUser,   _( "Packages updated by user: %1"                   ), byUserMax );
+    lines << listSummary( updatedByDep,    _( "Packages updated because of dependencies: %1"   ), byDepMax  );
+    lines << listSummary( todoPkg,         _( "To do: %1"                                      ), byDepMax  );
 
     return lines.join( "\n" );
 }

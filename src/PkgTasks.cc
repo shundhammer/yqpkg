@@ -79,7 +79,6 @@ QString PkgTask::actionToString( PkgTaskAction action )
 //----------------------------------------------------------------------
 
 
-
 QTextStream & operator<<( QTextStream & str, const PkgTask & task )
 {
     str << "<" << task.actionToString()
@@ -218,9 +217,21 @@ PkgTaskList::installedSizeSum() const
 }
 
 
+struct PkgTaskCompare
+{
+    bool operator() ( PkgTask * a, PkgTask * b )
+        { return a->name() < b->name(); }
+};
+
+
 void PkgTaskList::sort()
 {
-    std::sort( begin(), end() );
+    PkgTaskCompare compareFunctor;
+
+    // We need a functor here; an PkgTask::operator<( PkgTask * other ) is
+    // ignored, std::sort() just compares the pointer values (!) in that case.
+
+    std::sort( begin(), end(), compareFunctor );
 }
 
 

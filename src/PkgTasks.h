@@ -203,15 +203,6 @@ public:
     static QString actionToString( PkgTaskAction action );
 
 
-    // '<' operator for sorting
-
-    bool operator<( const PkgTask & other ) const
-        { return _name < other.name(); }
-
-    bool operator<( PkgTask * other ) const
-        { return _name < other->name(); }
-
-
 protected:
 
     QString          _name;
