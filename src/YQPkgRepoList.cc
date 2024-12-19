@@ -33,11 +33,7 @@
 
 #define TIME_FILTER     0
 
-
 using std::string;
-using std::list;
-using std::set;
-using std::vector;
 
 
 YQPkgRepoList::YQPkgRepoList( QWidget * parent )
@@ -45,30 +41,48 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 {
     // logVerbose() << "Creating repository list" << endl;
 
-    _nameCol	= -1;
-    _urlCol	= -1;
+    _nameCol = -1;
+    _urlCol  = -1;
 
     int numCol = 0;
 
     QStringList headers;
 
     // Column headers for repository list
-    headers <<  _( "Name");	_nameCol	= numCol++;
-    // headers << _( "URL");	_urlCol		= numCol++;
+
+    headers <<  _( "Name");	_nameCol = numCol++;
+    // headers << _( "URL");	_urlCol	 = numCol++;
 
     setHeaderLabels( headers );
     header()->setSectionResizeMode( _nameCol, QHeaderView::Stretch );
 
-    //setAllColumnsShowFocus( true );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse
+    // setAllColumnsShowFocus( true );
+
+    // allow multi-selection with Ctrl-mouse
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, 	SIGNAL( itemSelectionChanged() ),
-	     this, 	SLOT  ( filterIfVisible()) );
-    setIconSize(QSize(32,32));
+	     this, 	SLOT  ( filterIfVisible()      ) );
+
+    setIconSize( QSize( 32, 32 ) );
+
     fillList();
     setSortingEnabled( true );
     sortByColumn( nameCol(), Qt::AscendingOrder );
+
+#if 0
+    // This is counterproductive because it will always select the first repo
+    // in the list which is always '@System', the installed system and all its
+    // packages, which is always HUGE (~ 3000 packages on a moderate TW
+    // installation), so it will always take a long time; even if the user just
+    // switched to the repo view to select a DIFFERENT repo.
+    //
+    // So, in this case, let's simply NOT select something, but wait for the
+    // user instead to click on a repo. If that is still '@System', so be it,
+    // so there is waiting time until that list is filled with ~3000 packages;
+    // but then the user did it intentionally.
     selectSomething();
+#endif
 
     // logVerbose() << "Creating repository list done" << endl;
 }
@@ -80,8 +94,7 @@ YQPkgRepoList::~YQPkgRepoList()
 }
 
 
-void
-YQPkgRepoList::fillList()
+void YQPkgRepoList::fillList()
 {
     clear();
     // logVerbose() << "Filling repository list" << endl;
@@ -97,24 +110,24 @@ YQPkgRepoList::fillList()
 }
 
 
-int
-YQPkgRepoList::countEnabledRepositories()
+int YQPkgRepoList::countEnabledRepositories()
 {
     return zyppPool().knownRepositoriesSize();
 }
 
 
-void
-YQPkgRepoList::filterIfVisible()
+void YQPkgRepoList::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
 }
 
 
-void
-YQPkgRepoList::filter()
+void YQPkgRepoList::filter()
 {
+    if ( ! selection() )
+        return;
+
     emit filterStart();
 
 #if TIME_FILTER
@@ -131,12 +144,12 @@ YQPkgRepoList::filter()
     QTreeWidgetItem * item;
 
     QList<QTreeWidgetItem *> items = selectedItems();
-    QListIterator<QTreeWidgetItem *> it(items);
+    QListIterator<QTreeWidgetItem *> it( items );
 
     while ( it.hasNext() )
     {
-      item = it.next();
-      YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
+        item = it.next();
+        YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
 
         if ( repoItem )
         {
@@ -164,8 +177,7 @@ YQPkgRepoList::filter()
 }
 
 
-void
-YQPkgRepoList::addRepo( ZyppRepo repo )
+void YQPkgRepoList::addRepo( ZyppRepo repo )
 {
     new YQPkgRepoListItem( this, repo );
 }
@@ -183,8 +195,10 @@ YQPkgRepoList::selection() const
 }
 
 
-YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
-				      ZyppRepo		repo	)
+
+
+YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList * repoList,
+				      ZyppRepo        repo     )
     : QY2ListViewItem( repoList )
     , _repoList( repoList )
     , _zyppRepo( repo )
@@ -198,19 +212,18 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         }
     }
 
-    std::string infoToolTip;
+    string infoToolTip;
     infoToolTip += ("<b>" + repo.info().name() + "</b>");
 
     ZyppProduct product = singleProduct( _zyppRepo );
+
     if ( product )
-    {
         infoToolTip += ("<p>" + product->summary() + "</p>");
-    }
 
     if ( ! repo.info().baseUrlsEmpty() )
     {
-        zypp::RepoInfo::urls_const_iterator it;
         infoToolTip += "<ul>";
+        zypp::RepoInfo::urls_const_iterator it;
 
         for ( it = repo.info().baseUrlsBegin();
               it != repo.info().baseUrlsEnd();
@@ -218,34 +231,35 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         {
             infoToolTip += ("<li>" + (*it).asString() + "</li>");
         }
+
         infoToolTip += "</ul>";
-     }
-    setToolTip( nameCol(), fromUTF8(infoToolTip) );
+    }
+
+    setToolTip( nameCol(), fromUTF8( infoToolTip ) );
 
     QString iconPath;
     QString iconName = "applications-internet";
 
     if ( ! repo.info().baseUrlsEmpty() )
     {
-        zypp::Url repoUrl = *repo.info().baseUrlsBegin();
+        zypp::Url zyppRepoUrl = *repo.info().baseUrlsBegin();
+        QString repoUrl       = zyppRepoUrl.asString().c_str();
 
         if ( urlCol() >= 0 )
         {
-            setText( urlCol(), repoUrl.asString().c_str() );
+            setText( urlCol(), repoUrl );
         }
 
-        if (QString(repoUrl.asString().c_str()).contains("KDE") )
-            iconName = "kde";
-        if (QString(repoUrl.asString().c_str()).contains("GNOME") )
-            iconName = "gnome";
-        if (QString(repoUrl.asString().c_str()).contains("update") )
-            iconName = "applications-utilities";
-        if (QString(repoUrl.asString().c_str()).contains("home:") )
-            iconName = "preferences-desktop";
+        if      ( repoUrl.contains( "KDE"    ) )  iconName = "kde";
+        else if ( repoUrl.contains( "GNOME"  ) )  iconName = "gnome";
+        else if ( repoUrl.contains( "update" ) )  iconName = "applications-utilities";
+        else if ( repoUrl.contains( "home:"  ) )  iconName = "preferences-desktop";
     }
 
     if ( repo.isSystemRepo() )
         iconName = "preferences-system";
+
+    // The icon is always in color 0, no matter if that's nameCol() or whatever.
 
     setIcon( 0, QY2IconLoader::loadIcon( iconName ) );
 }
@@ -260,14 +274,15 @@ YQPkgRepoListItem::~YQPkgRepoListItem()
 ZyppProduct
 YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 {
-    return YQPkgFilters::singleProductFilter([&](const zypp::PoolItem& item) {
-        // filter the products from the requested repository
-        return item.resolvable()->repoInfo().alias() == zyppRepo.info().alias();
-    });
+    return YQPkgFilters::singleProductFilter( [&](const zypp::PoolItem & item )
+        {
+            // filter the products from the requested repository
+            return item.resolvable()->repoInfo().alias() == zyppRepo.info().alias();
+        } );
 }
 
-bool
-YQPkgRepoListItem::operator< ( const QTreeWidgetItem & other ) const
+
+bool YQPkgRepoListItem::operator< ( const QTreeWidgetItem & other ) const
 {
     const YQPkgRepoListItem * otherItem = dynamic_cast<const YQPkgRepoListItem *>(&other);
 

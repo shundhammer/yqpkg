@@ -20,18 +20,19 @@
 
 #include <zypp/Repository.h>
 #include <zypp/Product.h>
-#include "QY2ListView.h"
 
+#include "QY2ListView.h"
 #include "YQZypp.h"
 
 
 class YQPkgRepoListItem;
 
-typedef zypp::Repository	ZyppRepo;
+typedef zypp::Repository ZyppRepo;
 
 
 /**
- * Display a list of libzypp repositories.
+ * Class to show a list of libzypp repositories and let the user select one to
+ * fill the package list on the right.
  **/
 class YQPkgRepoList : public QY2ListView
 {
@@ -81,8 +82,8 @@ public:
 
     // Column numbers
 
-    int nameCol()	const	{ return _nameCol;	}
-    int urlCol()	const	{ return _urlCol;	}
+    int nameCol() const { return _nameCol; }
+    int urlCol()  const { return _urlCol;  }
 
 
     /**
@@ -103,15 +104,15 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective repository
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective repository
      **/
-    void filterNearMatch( ZyppSel	selectable,
-			  ZyppPkg	pkg );
+    void filterNearMatch( ZyppSel selectable,
+                          ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -133,9 +134,8 @@ private:
     // Data members
     //
 
-    int	_nameCol;
-    int	_urlCol;
-
+    int _nameCol;
+    int _urlCol;
 };
 
 
@@ -147,7 +147,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRepoListItem( YQPkgRepoList *parentList, ZyppRepo repo );
+    YQPkgRepoListItem( YQPkgRepoList * parentList, ZyppRepo repo );
 
     /**
      * Destructor
@@ -173,16 +173,17 @@ public:
 
     // Columns
 
-    int nameCol()	const	{ return _repoList->nameCol();	}
-    int urlCol()	const 	{ return _repoList->urlCol(); 	}
+    int nameCol() const { return _repoList->nameCol(); }
+    int urlCol()  const { return _repoList->urlCol();  }
 
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator<( const QTreeWidgetItem & other ) const;
+
 protected:
 
     // Data members
 
-    YQPkgRepoList *		_repoList;
-    ZyppRepo			_zyppRepo;
+    YQPkgRepoList * _repoList;
+    ZyppRepo        _zyppRepo;
 };
 
 
