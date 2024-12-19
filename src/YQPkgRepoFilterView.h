@@ -40,7 +40,7 @@ public:
     virtual ~YQPkgRepoFilterView();
 
     /**
-     * Current selected repository, or if nothing is selected
+     * Current selected repository, or 0 if nothing is selected
      */
     zypp::Repository selectedRepo() const;
 
@@ -51,8 +51,8 @@ protected:
     virtual void primaryFilterIfVisible();
 
     // Data members
-    // list of services, owned by the parent widget
-    YQPkgRepoList *		_repoList;
+
+    YQPkgRepoList * _repoList;
 };
 
 

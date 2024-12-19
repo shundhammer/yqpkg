@@ -36,7 +36,8 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
 {
     _repoList = new YQPkgRepoList( this );
     CHECK_NEW( _repoList );
-    init(_repoList);
+
+    init( _repoList) ;
 }
 
 
@@ -48,9 +49,11 @@ YQPkgRepoFilterView::~YQPkgRepoFilterView()
 ZyppRepo
 YQPkgRepoFilterView::selectedRepo() const
 {
-    YQPkgRepoListItem *selection = _repoList->selection();
+    YQPkgRepoListItem * selection = _repoList->selection();
+
     if ( selection && selection->zyppRepo() )
         return selection->zyppRepo();
+
     return zypp::Repository::noRepository;
 }
 
@@ -59,6 +62,7 @@ void YQPkgRepoFilterView::primaryFilter()
 {
     _repoList->filter();
 }
+
 
 void YQPkgRepoFilterView::primaryFilterIfVisible()
 {
