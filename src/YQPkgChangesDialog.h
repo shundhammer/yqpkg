@@ -74,7 +74,7 @@ public:
      * Set the current filter.
      *
      * This will change the combo box current selected filter and update the
-     * list
+     * list.
      **/
     void setFilter( Filters f );
 
@@ -82,7 +82,7 @@ public:
      * Set the current filter.
      *
      * This will change the combo box current selected filter and update the
-     * list
+     * list.
      **/
     void setFilter( const QRegExp & regexp, Filters flt );
 
@@ -131,7 +131,7 @@ public:
      *
      * Reimplemented from QWidget to limit the dialog to the screen dimensions.
      **/
-    virtual QSize sizeHint () const;
+    virtual QSize sizeHint() const;
 
 
 protected slots:
@@ -202,9 +202,9 @@ class YQPkgUnsupportedPackagesDialog : public YQPkgChangesDialog
 {
 public:
     /**
-     * Constructor: Creates a changes dialog with text 'message' on
-     * top, a list packages with an "auto" status that is not set via selections
-     * and one ( default ) or two buttons.
+     * Constructor: Creates a changes dialog with text 'message' on top, a list
+     * packages with an "auto" status that is not set via selections and one
+     * (default) or two buttons.
      *
      * Not meant for public use. Applications should use the static
      * 'showChangesDialog' method instead.
@@ -217,30 +217,31 @@ public:
                                     const QString & acceptButtonLabel,
                                     const QString & rejectButtonLabel = QString() );
 
-  /**
-   * Static convenience method: Post a changes dialog with text 'message', a
-   * list of changed packages and one (default) or two buttons.
-   *
-   * Returns 'true' if the user accepted (i.e. clicked the 'accept' button) and
-   * 'false' if the user rejected (i.e. clicked the 'reject' button or the
-   * window manager close button).
-   *
-   * If the list is empty (i.e., there are no packages with an "auto" status ),
-   * the dialog is not shown at all (and returns 'true') - unless
-   * 'showIfListEmpty' is 'true'.
-   **/
-  static bool showUnsupportedPackagesDialog( QWidget *       parent,
-                                             const QString & message,
-                                             const QString & acceptButtonLabel,
-                                             const QString & rejectButtonLabel = QString(),
-                                             Filters         flt = FilterAutomatic,
-                                             Options         opt = OptionAutoAcceptIfEmpty );
+    /**
+     * Static convenience method: Post a changes dialog with text 'message', a
+     * list of changed packages and one (default) or two buttons.
+     *
+     * Returns 'true' if the user accepted (i.e. clicked the 'accept' button)
+     * and 'false' if the user rejected (i.e. clicked the 'reject' button or
+     * the window manager close button).
+     *
+     * If the list is empty (i.e., there are no packages with an "auto"
+     * status), the dialog is not shown at all (and returns 'true') - unless
+     * 'showIfListEmpty' is 'true'.
+     **/
+    static bool showUnsupportedPackagesDialog( QWidget *       parent,
+                                               const QString & message,
+                                               const QString & acceptButtonLabel,
+                                               const QString & rejectButtonLabel = QString(),
+                                               Filters         flt = FilterAutomatic,
+                                               Options         opt = OptionAutoAcceptIfEmpty );
 protected:
 
-  /**
-   * leave supported packages out.
-   **/
-  virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
+    /**
+     * Reimplemented fro YQPkgChangesDialog:
+     * Leave supported packages out.
+     **/
+    virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg ) override;
 
 };
 

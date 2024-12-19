@@ -39,10 +39,10 @@
 using std::set;
 using std::string;
 
-YQPkgChangesDialog::YQPkgChangesDialog( QWidget *               parent,
-                                        const QString &         message,
-                                        const QString &         acceptButtonLabel,
-                                        const QString &         rejectButtonLabel )
+YQPkgChangesDialog::YQPkgChangesDialog( QWidget *       parent,
+                                        const QString & message,
+                                        const QString & acceptButtonLabel,
+                                        const QString & rejectButtonLabel )
     : QDialog( parent )
     , _filter(0)
 {
@@ -55,7 +55,8 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *               parent,
     // Limit dialog size to available screen size
     setMaximumSize( QGuiApplication::primaryScreen()->availableSize() );
 
-    // Layout for the dialog ( can't simply insert a QVBox )
+
+    // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );

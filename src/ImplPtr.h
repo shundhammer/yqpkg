@@ -53,7 +53,7 @@ public:
 #if defined( BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS ) || defined( BOOST_NO_CXX11_NULLPTR )
     operator unspecified_bool_type() const { return _impl; }
 #else
-    explicit operator bool () const { return _impl.get() != 0; }
+    explicit operator bool() const { return _impl.get() != 0; }
 #endif
 
     const _Impl & operator*()  const { return *_impl; }

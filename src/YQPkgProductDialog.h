@@ -45,7 +45,7 @@ public:
      *
      * Reimplemented from QWidget to limit the dialog to the screen dimensions.
      **/
-    virtual QSize sizeHint () const;
+    virtual QSize sizeHint() const;
 
     /**
      * Delayed initialization after the dialog is fully created.
