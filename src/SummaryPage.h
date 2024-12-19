@@ -164,18 +164,27 @@ protected:
     PkgTasks * pkgTasks();
 
     /**
-     * Return the text for a long summary.
-     * Show no more than 'listMaxItems' items of each list. -1 means 'unlimited'.
+     * Fake the summary (--fake-summary command line option):
+     * Move all tasks from the 'todo' list to the 'done' list.
      **/
-    QString longSummary( int listMaxItems = -1 );
+    void fakeDoneList();
+
+    /**
+     * Return the text for a long summary.
+     *
+     * Show up to 'byUserMax' items for tasks requested by the user,
+     * 'byDepMax' for tasks added by dependencies.
+     * -1 means 'unlimited' in both cases.
+     **/
+    QString longSummary( int byUserMax, int byDepMax );
 
     /**
      * Return the text lines of a task list, shortened to no more than
      * 'listMaxItems' items. -1 means 'unlimited'.
      **/
-    QStringList listSummary( const PkgTaskList & taskList,
-                             const QString       header,
-                             int                 listMaxItems = -1 );
+    QStringList listSummary( PkgTaskList     taskList,
+                             const QString & header,
+                             int             listMaxItems = -1 );
 
     //
     // Data members

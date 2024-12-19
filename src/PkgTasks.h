@@ -203,6 +203,15 @@ public:
     static QString actionToString( PkgTaskAction action );
 
 
+    // '<' operator for sorting
+
+    bool operator<( const PkgTask & other ) const
+        { return _name < other.name(); }
+
+    bool operator<( PkgTask * other ) const
+        { return _name < other->name(); }
+
+
 protected:
 
     QString          _name;
@@ -262,7 +271,9 @@ public:
 
     /**
      * Return a new list from origList filtered by action and requester.
-     * Ownership of the tasks remains with the original list - do not delete them!
+     *
+     * Ownership of the tasks remains with the original list - do not delete
+     * them!
      **/
     PkgTaskList filtered( PkgTaskAction    action,
                           PkgTaskRequester requester = PkgReqAll );
@@ -280,21 +291,16 @@ public:
      **/
     ByteCount installedSizeSum() const;
 
+    /**
+     * Sort the list.
+     **/
+    void sort();
 
     /**
      * Return the list name ("todo", "doing", "done", "failed" for debugging.
      **/
     QString name() const { return _name; }
 
-
-private:
-
-#if 0
-    // Disable copy ctor and assignment operator
-
-    PkgTaskList( const PkgTaskList & );
-    PkgTaskList operator=( const PkgTaskList & );
-#endif
 
 protected:
 

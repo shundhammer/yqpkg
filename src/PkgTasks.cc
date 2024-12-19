@@ -15,6 +15,8 @@
  */
 
 
+#include <algorithm>    // std::sort()
+
 #include "Logger.h"
 #include "Exception.h"
 #include "utf8.h"
@@ -213,6 +215,12 @@ PkgTaskList::installedSizeSum() const
     }
 
     return sum;
+}
+
+
+void PkgTaskList::sort()
+{
+    std::sort( begin(), end() );
 }
 
 

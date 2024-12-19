@@ -26,7 +26,6 @@
 #include "PkgTasks.h"
 #include "YQPkgApplication.h"
 #include "YQi18n.h"
-
 #include "SummaryPage.h"
 
 
@@ -251,43 +250,62 @@ PkgTasks * SummaryPage::pkgTasks()
 void SummaryPage::updateSummary()
 {
     if ( YQPkgApplication::isOptionSet( OptFakeSummary ) )
+        fakeDoneList();
+
+    QString text;
+
+    if ( pkgTasks()->done().isEmpty() &&
+         pkgTasks()->failed().isEmpty()  )
     {
-        // --fake-summary:  Move all remaining tasks from "todo" to "done".
-
-        pkgTasks()->done() << pkgTasks()->todo();
-        pkgTasks()->todo().clear();
+        text = _( "No package changes." );
     }
+    else
+    {
+        int byUserMax = pkgTasks()->done().size() <= 30 ? 30 : 12;
+        int byDepMax  = 12;
 
-    const int listMaxItems = 12;
-    QString text = longSummary( listMaxItems );
+        text = longSummary( byUserMax, byDepMax );
+    }
 
     _ui->contentTextEdit->setText( text );
 }
 
 
-QString SummaryPage::longSummary( int listMaxItems )
+void SummaryPage::fakeDoneList()
 {
-    PkgTaskList & failedPkg    = pkgTasks()->failed();
-    PkgTaskList & todoPkg      = pkgTasks()->failed();
-    PkgTaskList   removedPkg   = pkgTasks()->done().filtered( PkgRemove,  PkgReqAll );
-    PkgTaskList   installedPkg = pkgTasks()->done().filtered( PkgInstall, PkgReqAll );
-    PkgTaskList   updatedPkg   = pkgTasks()->done().filtered( PkgUpdate,  PkgReqAll );
+    // --fake-summary:  Move all remaining tasks from "todo" to "done".
 
-    if ( failedPkg.isEmpty()    &&
-         removedPkg.isEmpty()   &&
-         installedPkg.isEmpty() &&
-         updatedPkg.isEmpty()      )
-    {
-        return _( "No package changes." );
-    }
+    pkgTasks()->done() << pkgTasks()->todo();
+    pkgTasks()->todo().clear();
+}
+
+
+QString SummaryPage::longSummary( int byUserMax, int byDepMax )
+{
+    PkgTaskList & doneList  = pkgTasks()->done();
+    PkgTaskList & failedPkg = pkgTasks()->failed();
+    PkgTaskList & todoPkg   = pkgTasks()->todo();
+    doneList.sort();
+
+    PkgTaskList   removedByUser   = doneList.filtered( PkgRemove,  PkgReqUser );
+    PkgTaskList   removedByDep    = doneList.filtered( PkgRemove,  PkgReqDep  );
+
+    PkgTaskList   installedByUser = doneList.filtered( PkgInstall, PkgReqUser );
+    PkgTaskList   installedByDep  = doneList.filtered( PkgInstall, PkgReqDep  );
+
+    PkgTaskList   updatedByUser   = doneList.filtered( PkgUpdate,  PkgReqUser );
+    PkgTaskList   updatedByDep    = doneList.filtered( PkgUpdate,  PkgReqDep  );
 
     QStringList lines;
 
-    lines << listSummary( failedPkg,    _( "FAILED: %1"    ), listMaxItems );
-    lines << listSummary( removedPkg ,  _( "Removed: %1"   ), listMaxItems );
-    lines << listSummary( installedPkg, _( "Installed: %1" ), listMaxItems );
-    lines << listSummary( updatedPkg,   _( "Updated: %1"   ), listMaxItems );
-    lines << listSummary( todoPkg,      _( "To do: %1"     ), listMaxItems );
+    lines << listSummary( failedPkg,       _( "FAILED: %1" ), qMax( byUserMax, 30 ) );
+    lines << listSummary( removedByUser,   _( "Removed by user: %1"           ), byUserMax );
+    lines << listSummary( removedByDep,    _( "Removed by dependencies: %1"   ), byDepMax  );
+    lines << listSummary( installedByUser, _( "Installed by user: %1"         ), byUserMax );
+    lines << listSummary( installedByDep,  _( "Installed by dependencies: %1" ), byDepMax  );
+    lines << listSummary( updatedByUser,   _( "Updated by user: %1"           ), byUserMax );
+    lines << listSummary( updatedByDep,    _( "Updated by dependencies: %1"   ), byDepMax  );
+    lines << listSummary( todoPkg,         _( "To do: %1"                     ), byDepMax  );
 
     return lines.join( "\n" );
 }
@@ -296,29 +314,41 @@ QString SummaryPage::longSummary( int listMaxItems )
 #define NEWLINE QString( "" )
 
 
-QStringList SummaryPage::listSummary( const PkgTaskList & taskList,
-                                      const QString       header,
-                                      int                 listMaxItems )
+QStringList SummaryPage::listSummary( PkgTaskList     taskList,
+                                      const QString & header,
+                                      int             listMaxItems )
 {
     QStringList lines;
 
     if ( taskList.isEmpty() )
         return lines;
 
+    taskList.sort();
     int count = taskList.size();
 
-    if ( listMaxItems < 0 )
-        listMaxItems = count;
+    if ( listMaxItems < 0 )     // unlimited listMaxItems?
+        listMaxItems = count;   // show all list items
 
-    if ( header.contains( "%1" ) )
-         lines << header.arg( taskList.size() );
+
+    // Add the list header
+
+    if ( header.contains( "%1" ) )              // %1 placeholder in the header?
+        lines << header.arg( taskList.size() ); // replace with number of items
     else
-        lines << header;
+        lines << header;  // otherwise take the header as it is
 
     lines << NEWLINE;
 
+
+    // Add the first listMaxItems items
+
     for ( int i=0; i < listMaxItems && i < taskList.size(); i++ )
+    {
         lines << QString( "  - %1" ).arg( taskList.at( i )->name() );
+    }
+
+
+    // Add "(xy more)" if we didn't add all list items
 
     if ( taskList.size() > listMaxItems )
         lines << QString( "  " ) + _( "(%1 more)" ).arg( taskList.size() - listMaxItems );
