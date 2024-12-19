@@ -40,8 +40,8 @@ using std::list;
 using std::string;
 
 
-#define VERBOSE_EXCLUDE_RULES	0
-#define EXTRA_SOLVE_COLLECTIONS	0
+#define VERBOSE_EXCLUDE_RULES	 0
+#define EXTRA_SOLVE_COLLECTIONS	 0
 
 
 YQPkgObjList::YQPkgObjList( QWidget * parent )
@@ -79,6 +79,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _sizeCol		= -42;
     _brokenIconCol	= -42;
     _satisfiedIconCol	= -42;
+
     _excludedItemsCount = 0;
     _debug		= false;
 
@@ -731,6 +732,7 @@ YQPkgObjList::applyExcludeRules()
 	// Advance iterator now so it remains valid even if there are changes
 	// to the QListView, e.g., if the current item is excluded and thus
 	// removed from the QListView
+
 	++listView_it;
 
 	applyExcludeRules( current_item );
@@ -743,7 +745,7 @@ YQPkgObjList::logExcludeStatistics()
 {
     if ( _excludedItemsCount > 0 )
     {
-	logInfo() << _excludedItemsCount << " packages excluded" << endl;
+	logVerbose() << _excludedItemsCount << " packages excluded" << endl;
 
 	for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
 	      rule_it != _excludeRules.end();
@@ -753,9 +755,9 @@ YQPkgObjList::logExcludeStatistics()
 
 	    if ( rule->isEnabled() )
 	    {
-		logInfo() << "Active exclude rule: \""
-			       << rule->regexp().pattern() << "\""
-			       << endl;
+		logDebug() << "Active exclude rule: \""
+                           << rule->regexp().pattern() << "\""
+                           << endl;
 	    }
 	}
     }
@@ -1583,7 +1585,8 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
 
 void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
 {
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
+    YQPkgObjListItem * item =
+        dynamic_cast<YQPkgObjListItem *> ( currentItem() );
 
     if ( item && editable() && item->editable() )
     {
