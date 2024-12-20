@@ -583,16 +583,6 @@ public:
     void setExcluded( bool exclude = true );
 
 
-    // Handle Debug isBroken and isSatisfied flags
-
-    bool debugIsBroken()    const               { return _debugIsBroken;    }
-    bool debugIsSatisfied() const               { return _debugIsSatisfied; }
-    void setDebugIsBroken   ( bool val = true ) { _debugIsBroken    = val;                 }
-    void setDebugIsSatisfied( bool val = true ) { _debugIsSatisfied = val;                 }
-    void toggleDebugIsBroken()                  { _debugIsBroken    = ! _debugIsBroken;    }
-    void toggleDebugIsSatisfied()               { _debugIsSatisfied = ! _debugIsSatisfied; }
-
-
     // Columns
 
     int statusCol()        const { return _pkgObjList->statusCol();        }
@@ -659,9 +649,6 @@ protected:
     bool           _editable:1;
     bool           _candidateIsNewer:1;
     bool           _installedIsNewer:1;
-
-    bool           _debugIsBroken:1;
-    bool           _debugIsSatisfied:1;
     bool           _excluded:1;
 };
 

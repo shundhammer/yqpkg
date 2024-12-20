@@ -33,8 +33,10 @@ using std::set;
 
 YQPkgLangList::YQPkgLangList( QWidget * parent )
     : YQPkgObjList( parent )
-//FIXME "base class works with zypp::Resolvable, but zypp::Locale isn't one any longer!"
 {
+    // FIXME: The base class works with zypp::Resolvable, but zypp::Locale
+    // isn't one any longer!
+
     // logVerbose() << "Creating language list" << endl;
 
     int numCol = 0;
@@ -199,10 +201,9 @@ YQPkgLangListItem::applyChanges()
 void
 YQPkgLangListItem::init()
 {
-//FIXME this is utterly broken - see bug #370233
+    // FIXME this is utterly broken - see bug #370233
     // DO NOT CALL PARENT CLASS
-    _debugIsBroken	= false;
-    _debugIsSatisfied	= false;
+
     _candidateIsNewer	= false;
     _installedIsNewer 	= false;
 
