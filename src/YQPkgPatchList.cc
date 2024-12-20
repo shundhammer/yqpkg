@@ -34,6 +34,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define ENABLE_DELETING_PATCHES 1
 #define VERBOSE_PATCHES         0
 
 
@@ -52,37 +53,22 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     QStringList headers;
 
-    headers << "";			_statusCol	= numCol++;
-    //headers <<  _( "Patch"	);	_nameCol	= numCol++;
-    headers << _( "Summary" 	);	_summaryCol	= numCol++;
-    //headers << _( "Category"	);	_categoryCol	= numCol++;
-    _categoryCol = -1;
-    //headers << _( "Size"	);	_sizeCol	= numCol++;
-    //headers << _( "Version"	);	_versionCol	= numCol++;
-
-    // Can use the same colum for "broken" and "satisfied":
-    // Both states are mutually exclusive
-
-    _satisfiedIconCol	= -42;
-    _brokenIconCol	= -42;
+    headers << "";             _statusCol  = numCol++;
+    headers << _( "Summary" ); _summaryCol = numCol++;
 
     setHeaderLabels(headers);
-    setIndentation(0);
-
-    header()->setSectionResizeMode(_statusCol, QHeaderView::ResizeToContents);
-    //header()->setSectionResizeMode(_versionCol, QHeaderView::ResizeToContents);
-    //header()->setSectionResizeMode(_categoryCol, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(_summaryCol, QHeaderView::Stretch);
-
-
+    setIndentation( 0 );
     setAllColumnsShowFocus( true );
-    //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
-
-    connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem* ) ),
-	     this,	SLOT  ( filter()				    ) );
-
-    //sortItems( categoryCol(), Qt::AscendingOrder );
     setSortingEnabled( true );
+
+    header()->setSectionResizeMode( _statusCol,  QHeaderView::ResizeToContents );
+    header()->setSectionResizeMode( _summaryCol, QHeaderView::Stretch          );
+
+
+    connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *,
+                                               QTreeWidgetItem* ) ),
+             this, SLOT  ( filter() ) );
+
 
     fillList();
 
@@ -104,8 +90,10 @@ YQPkgPatchList::polish()
     // Only now send currentItemChanged() signal so attached details views also
     // display something if their showDetailsIfVisible() slot is connected to
     // currentItemChanged() signals.
+
     selectSomething();
 }
+
 
 YQPkgPatchCategoryItem *
 YQPkgPatchList::category( YQPkgPatchCategory category )
@@ -132,6 +120,7 @@ YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
     _filterCriteria = filterCriteria;
 }
 
+
 void
 YQPkgPatchList::fillList()
 {
@@ -144,10 +133,10 @@ YQPkgPatchList::fillList()
     // logDebug() << "Filling patch list" << endl;
 
     for ( ZyppPoolIterator it = zyppPatchesBegin();
-	  it != zyppPatchesEnd();
-	  ++it )
+          it != zyppPatchesEnd();
+          ++it )
     {
-        ZyppSel	  selectable = *it;
+        ZyppSel   selectable = *it;
         ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
         if ( zyppPatch )
@@ -156,52 +145,55 @@ YQPkgPatchList::fillList()
 
             switch ( _filterCriteria )
             {
-            case RelevantPatches:	// needed + broken + satisfied (but not installed)
+                case RelevantPatches:   // needed + broken + satisfied (but not installed)
 
-                // only shows patches relevant to the system
-                if ( selectable->hasCandidateObj() &&
-                     selectable->candidateObj().isRelevant() )
-                {
-                    // and only those that are needed
-                    if ( ! selectable->candidateObj().isSatisfied() ||
-                          // may be it is satisfied because is preselected
-                          selectable->candidateObj().status().isToBeInstalled() )
-                        displayPatch = true;
+                    // only shows patches relevant to the system
+                    if ( selectable->hasCandidateObj() &&
+                         selectable->candidateObj().isRelevant() )
+                    {
+                        // and only those that are needed
+                        if ( ! selectable->candidateObj().isSatisfied() ||
+                             // maybe it's satisfied because it's preselected
+                             selectable->candidateObj().status().isToBeInstalled() )
+                        {
+                            displayPatch = true;
+                        }
+#if 0
+                        else
+                            logDebug() << "Patch " << zyppPatch->ident()
+                                       << " is already satisfied"
+                                       << endl;
+#endif
+
+                    }
 #if 0
                     else
                         logDebug() << "Patch " << zyppPatch->ident()
-                                   << " is already satisfied"
+                                   << " is not relevant to the system"
                                    << endl;
 #endif
+                    break;
 
-                }
-#if 0
-                else
-                    logDebug() << "Patch " << zyppPatch->ident()
-                               << " is not relevant to the system"
-                               << endl;
-#endif
-                break;
-            case RelevantAndInstalledPatches:	// patches we dont need
+                case RelevantAndInstalledPatches:       // patches we dont need
 
-                // only shows patches relevant to the system
-                if ( ( selectable->hasCandidateObj() ) &&
-                     ( ! selectable->candidateObj().isRelevant()
-                       || ( selectable->candidateObj().isSatisfied() &&
-                            ! selectable->candidateObj().status().isToBeInstalled() ) ) )
-                {
-                    // now we show satisfied patches too
+                    // only shows patches relevant to the system
+                    if ( ( selectable->hasCandidateObj() ) &&
+                         ( ! selectable->candidateObj().isRelevant()
+                           || ( selectable->candidateObj().isSatisfied() &&
+                                ! selectable->candidateObj().status().isToBeInstalled() ) ) )
+                    {
+                        // now we show satisfied patches too
+                        displayPatch = true;
+                    }
+                    break;
+
+                case AllPatches:
                     displayPatch = true;
-                }
-                break;
-            case AllPatches:
-                displayPatch = true;
-                break;
+                    break;
 
-                // Intentionally omitting "default" so the compiler
-                // can catch unhandled enum values
-            default:
-                logDebug() << "unknown patch filter" << endl;
+                default:
+                    logDebug() << "unknown patch filter" << endl;
+                    break;
 
             }
 
@@ -225,9 +217,7 @@ YQPkgPatchList::fillList()
     logDebug() << "Patch list filled" << endl;
 #endif
 
-    resizeColumnToContents(_statusCol);
-    //resizeColumnToContents(_nameCol);
-    //resizeColumnToContents(_categoryCol);
+    resizeColumnToContents( _statusCol );
 }
 
 
@@ -246,7 +236,7 @@ void
 YQPkgPatchList::filterIfVisible()
 {
     if ( isVisible() )
-	filter();
+        filter();
 }
 
 
@@ -271,6 +261,7 @@ YQPkgPatchList::filter()
                   ++it )
             {
                 ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
                 if ( zyppPkg )
                 {
                     emit filterMatch( *it, zyppPkg );
@@ -282,17 +273,17 @@ YQPkgPatchList::filter()
             logInfo() << "patch is bogus" << endl;
         }
 
-  }
-  else
-      logWarning() << "selection empty" << endl;
+    }
+    else
+        logWarning() << "selection empty" << endl;
 
-  emit filterFinished();
+    emit filterFinished();
 }
 
 
 void
-YQPkgPatchList::addPatchItem( ZyppSel	selectable,
-			      ZyppPatch zyppPatch )
+YQPkgPatchList::addPatchItem( ZyppSel   selectable,
+                              ZyppPatch zyppPatch )
 {
     if ( ! selectable || ! zyppPatch )
     {
@@ -300,19 +291,14 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
         return;
     }
 
-    YQPkgPatchCategory ncat = YQPkgPatchCategoryItem::patchCategory(zyppPatch->category());
-
-    YQPkgPatchCategoryItem * cat = category(ncat);
-    YQPkgPatchListItem * item = 0;
+    YQPkgPatchCategory       ncat = YQPkgPatchCategoryItem::patchCategory( zyppPatch->category() );
+    YQPkgPatchCategoryItem * cat  = category( ncat );
+    YQPkgPatchListItem *     item = 0;
 
     if ( cat )
-    {
         item = new YQPkgPatchListItem( this, cat, selectable, zyppPatch );
-    }
     else
-    {
         item = new YQPkgPatchListItem( this, selectable, zyppPatch );
-    }
 
     if (item)
         applyExcludeRules( item );
@@ -325,10 +311,7 @@ YQPkgPatchList::selection() const
 {
     QTreeWidgetItem * item = currentItem();
 
-    if ( ! item )
-        return 0;
-
-    return dynamic_cast<YQPkgPatchListItem *> (item);
+    return item ? dynamic_cast<YQPkgPatchListItem *> (item) : 0;
 }
 
 
@@ -339,9 +322,9 @@ YQPkgPatchList::createNotInstalledContextMenu()
     _notInstalledContextMenu = new QMenu( this );
     Q_CHECK_PTR( _notInstalledContextMenu );
 
-    _notInstalledContextMenu->addAction(actionSetCurrentInstall);
-    _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
-    _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
+    _notInstalledContextMenu->addAction( actionSetCurrentInstall     );
+    _notInstalledContextMenu->addAction( actionSetCurrentDontInstall );
+    _notInstalledContextMenu->addAction( actionSetCurrentTaboo       );
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -353,15 +336,15 @@ YQPkgPatchList::createInstalledContextMenu()
     _installedContextMenu = new QMenu( this );
     Q_CHECK_PTR( _installedContextMenu );
 
-    _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
+    _installedContextMenu->addAction( actionSetCurrentKeepInstalled );
 
 #if ENABLE_DELETING_PATCHES
-    _installedContextMenu->addAction(actionSetCurrentDelete);
+    _installedContextMenu->addAction( actionSetCurrentDelete );
 #endif
 
-    _installedContextMenu->addAction(actionSetCurrentUpdate);
-    _installedContextMenu->addAction(actionSetCurrentUpdateForce);
-    _installedContextMenu->addAction(actionSetCurrentProtected);
+    _installedContextMenu->addAction( actionSetCurrentUpdate      );
+    _installedContextMenu->addAction( actionSetCurrentUpdateForce );
+    _installedContextMenu->addAction( actionSetCurrentProtected   );
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -373,20 +356,20 @@ YQPkgPatchList::addAllInListSubMenu( QMenu * menu )
     QMenu * submenu = new QMenu( menu );
     Q_CHECK_PTR( submenu );
 
-    submenu->addAction(actionSetListInstall);
-    submenu->addAction(actionSetListDontInstall);
-    submenu->addAction(actionSetListKeepInstalled);
+    submenu->addAction( actionSetListInstall       );
+    submenu->addAction( actionSetListDontInstall   );
+    submenu->addAction( actionSetListKeepInstalled );
 
 #if ENABLE_DELETING_PATCHES
-    submenu->addAction(actionSetListDelete);
+    submenu->addAction( actionSetListDelete );
 #endif
 
-    submenu->addAction(actionSetListUpdate);
-    submenu->addAction(actionSetListUpdateForce);
-    submenu->addAction(actionSetListTaboo);
-    submenu->addAction(actionSetListProtected);
+    submenu->addAction( actionSetListUpdate      );
+    submenu->addAction( actionSetListUpdateForce );
+    submenu->addAction( actionSetListTaboo       );
+    submenu->addAction( actionSetListProtected   );
 
-    QAction *action = menu->addMenu(submenu);
+    QAction *action = menu->addMenu( submenu );
     action->setText(_( "&All in This List" ));
 
     return submenu;
@@ -399,21 +382,21 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
     if ( event )
     {
 #if ! ENABLE_DELETING_PATCHES
-	if ( event->ascii() == '-' )
-	{
-	    QTreeWidgetItem * selectedListViewItem = currentItem();
+        if ( event->ascii() == '-' )
+        {
+            QTreeWidgetItem * selectedListViewItem = currentItem();
 
-	    if ( selectedListViewItem )
-	    {
-		YQPkgPatchListItem * item = dynamic_cast<YQPkgPatchListItem *> (selectedListViewItem);
+            if ( selectedListViewItem )
+            {
+                YQPkgPatchListItem * item = dynamic_cast<YQPkgPatchListItem *> (selectedListViewItem);
 
-		if ( item && item->selectable()->hasInstalledObj() )
-		{
-		    logWarning() << "Deleting patches is not supported" << endl;
-		    return;
-		}
-	    }
-	}
+                if ( item && item->selectable()->hasInstalledObj() )
+                {
+                    logWarning() << "Deleting patches is not supported" << endl;
+                    return;
+                }
+            }
+        }
 #endif
     }
 
@@ -421,11 +404,16 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 }
 
 
-YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
-                                        YQPkgPatchCategoryItem *	parentCategory,
-                                        ZyppSel			selectable,
-                                        ZyppPatch		zyppPatch )
-    : YQPkgObjListItem( patchList, parentCategory, selectable, zyppPatch )
+
+
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *         patchList,
+                                        YQPkgPatchCategoryItem * parentCategory,
+                                        ZyppSel                  selectable,
+                                        ZyppPatch                zyppPatch )
+    : YQPkgObjListItem( patchList,
+                        parentCategory,
+                        selectable,
+                        zyppPatch )
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
@@ -433,23 +421,27 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
     init();
 }
 
-YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
-					ZyppSel			selectable,
-					ZyppPatch		zyppPatch )
-    : YQPkgObjListItem( patchList, selectable, zyppPatch )
+
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * patchList,
+                                        ZyppSel          selectable,
+                                        ZyppPatch        zyppPatch )
+    : YQPkgObjListItem( patchList,
+                        selectable,
+                        zyppPatch )
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
     init();
 
 }
+
 
 void YQPkgPatchListItem::init()
 {
     setStatusIcon();
 
     if ( summaryCol() > -1 && _zyppPatch->summary().empty() )
-        setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
+        setText( summaryCol(), _zyppPatch->name() ); // use name as fallback
 }
 
 
@@ -463,7 +455,7 @@ YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-    if ( status() == S_Del )	// Can't delete patches
+    if ( status() == S_Del )    // Can't delete patches
         setStatus( S_KeepInstalled );
 }
 
@@ -475,24 +467,24 @@ YQPkgPatchListItem::toolTip( int col )
 
     if ( col == statusCol() )
     {
-	text = YQPkgObjListItem::toolTip( col );
+        text = YQPkgObjListItem::toolTip( col );
     }
     else
     {
-	if (  ( col == brokenIconCol()	  && isBroken()	   ) ||
-	      ( col == satisfiedIconCol() && isSatisfied() )   )
-	{
-	    text = YQPkgObjListItem::toolTip( col );
-	}
-	else
-	{
-	    text = fromUTF8( zyppPatch()->category() );
+        if (  ( col == brokenIconCol()    && isBroken()    ) ||
+              ( col == satisfiedIconCol() && isSatisfied() )   )
+        {
+            text = YQPkgObjListItem::toolTip( col );
+        }
+        else
+        {
+            text = fromUTF8( zyppPatch()->category() );
 
-	    if ( ! text.isEmpty() )
-		text += "\n";
+            if ( ! text.isEmpty() )
+                text += "\n";
 
-	    text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
-	}
+            text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
+        }
     }
 
     return text;
@@ -506,22 +498,25 @@ YQPkgPatchListItem::applyChanges()
 }
 
 
-bool YQPkgPatchListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
+bool YQPkgPatchListItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
 {
-    const YQPkgPatchListItem * other = dynamic_cast<const YQPkgPatchListItem *> (&otherListViewItem);
+    const YQPkgPatchListItem * other =
+        dynamic_cast<const YQPkgPatchListItem *> (&otherListViewItem);
+
     if ( other )
     {
-        return ( this->text(_patchList->summaryCol()) < other->text( _patchList->summaryCol()) );
+        return ( text(_patchList->summaryCol() ) < other->text( _patchList->summaryCol() ) );
     }
+
     return YQPkgObjListItem::operator<( otherListViewItem );
 }
 
+
 YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
-                                                YQPkgPatchList *	patchList )
+                                                YQPkgPatchList *   patchList )
     : QY2ListViewItem( patchList )
     , _patchList( patchList )
 {
-
     _category = category;
 
     if ( _patchList->summaryCol() > -1 )
@@ -532,8 +527,10 @@ YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
 
     QFont categoryFont = font( _patchList->summaryCol() );
     categoryFont.setBold(true);
+
     QFontMetrics metrics( categoryFont );
-    categoryFont.setPixelSize(int (metrics.height() * 1.05));
+    categoryFont.setPixelSize( int ( metrics.height() * 1.05 ) );
+
     setFont( _patchList->summaryCol(), categoryFont );
 }
 
@@ -546,18 +543,19 @@ YQPkgPatchCategoryItem::patchCategory( const string & category )
 
 
 YQPkgPatchCategory
-YQPkgPatchCategoryItem::patchCategory( QString category )
+YQPkgPatchCategoryItem::patchCategory( const QString & cat )
 {
-    category = category.toLower();
+    QString category = category.toLower();
 
-    if ( category == "yast"		) return YQPkgYaSTPatch;
-    if ( category == "security"		) return YQPkgSecurityPatch;
-    if ( category == "recommended"	) return YQPkgRecommendedPatch;
-    if ( category == "optional"		) return YQPkgOptionalPatch;
-    if ( category == "document"		) return YQPkgDocumentPatch;
+    if ( category == "yast"        ) return YQPkgYaSTPatch;
+    if ( category == "security"    ) return YQPkgSecurityPatch;
+    if ( category == "recommended" ) return YQPkgRecommendedPatch;
+    if ( category == "optional"    ) return YQPkgOptionalPatch;
+    if ( category == "document"    ) return YQPkgDocumentPatch;
 
     logWarning() << "Unknown patch category \"" << category << "\"" << endl;
-    return YQPkgUnknownPatchCategory;
+
+    return YQPkgOptionalPatch;
 }
 
 
@@ -566,13 +564,12 @@ YQPkgPatchCategoryItem::asString( YQPkgPatchCategory category )
 {
     switch ( category )
     {
-	// Translators: These are patch categories
-	case YQPkgYaSTPatch:		return _( "YaST"	);
-	case YQPkgSecurityPatch:	return _( "security"	);
-	case YQPkgRecommendedPatch:	return _( "recommended" );
-	case YQPkgOptionalPatch:	return _( "optional"	);
-	case YQPkgDocumentPatch:	return _( "document"	);
-	case YQPkgUnknownPatchCategory: return "";
+        // Translators: These are patch categories
+        case YQPkgYaSTPatch:            return _( "YaST"        );
+        case YQPkgSecurityPatch:        return _( "security"    );
+        case YQPkgRecommendedPatch:     return _( "recommended" );
+        case YQPkgOptionalPatch:        return _( "optional"    );
+        case YQPkgDocumentPatch:        return _( "document"    );
     }
 
     return "";
@@ -584,18 +581,12 @@ YQPkgPatchCategoryItem::~YQPkgPatchCategoryItem()
     // NOP
 }
 
+
 void
 YQPkgPatchCategoryItem::addPatch( ZyppPatch patch )
 {
     if ( ! _firstPatch )
-    {
         _firstPatch = patch;
-    }
-    else
-    {
-        //if ( _firstPatch->order().compare( pattern->order() ) < 0 )
-        //    _firstPatch = pattern;
-    }
 }
 
 
@@ -614,16 +605,15 @@ YQPkgPatchCategoryItem::setTreeIcon()
              isExpanded() ?
              YQIconPool::arrowDown() :
              YQIconPool::arrowRight()   );
-
 }
 
 
-bool YQPkgPatchCategoryItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
+bool YQPkgPatchCategoryItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
 {
-    const YQPkgPatchCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatchCategoryItem *>(&otherListViewItem);
+    const YQPkgPatchCategoryItem * otherCategoryItem =
+        dynamic_cast<const YQPkgPatchCategoryItem *>( &otherListViewItem );
 
     return category() > otherCategoryItem->category();
-    return QTreeWidgetItem::operator<( otherListViewItem );
 }
 
 

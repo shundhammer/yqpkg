@@ -24,24 +24,21 @@
 #include <QEvent>
 #include <QMenu>
 
-#define ENABLE_DELETING_PATCHES	1
 
 using std::string;
 
 class YQPkgPatchListItem;
 class YQPkgPatchCategoryItem;
 
-enum YQPkgPatchCategory	// This is also the sort order
+
+enum YQPkgPatchCategory // This is also the sort order
 {
     YQPkgYaSTPatch,
     YQPkgSecurityPatch,
     YQPkgRecommendedPatch,
     YQPkgOptionalPatch,
     YQPkgDocumentPatch,
-
-    YQPkgUnknownPatchCategory = 9999
 };
-
 
 
 /**
@@ -66,9 +63,9 @@ public:
 
     enum FilterCriteria
     {
-        RelevantPatches,		// needed (or broken)
-        RelevantAndInstalledPatches,	// unneeded
-        AllPatches			// all
+        RelevantPatches,                // needed (or broken)
+        RelevantAndInstalledPatches,    // unneeded
+        AllPatches                      // all
     };
 
 
@@ -94,7 +91,7 @@ public slots:
      * QListView).
      **/
     void addPatchItem( ZyppSel   selectable,
-		       ZyppPatch zyppPatch );
+                       ZyppPatch zyppPatch );
 
     /**
      * Fill the patch list according to filterCriteria().
@@ -126,11 +123,6 @@ public:
     YQPkgPatchListItem * selection() const;
 
     /**
-     * Returns the column for the patch category
-     **/
-    int categoryCol() const { return _categoryCol; }
-
-    /**
      * Add a submenu "All in this list..." to 'menu'.
      * Returns the newly created submenu.
      *
@@ -157,16 +149,16 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted during filtering for non-pkg items:
      * pre-script, post-script, files
      **/
-    void filterMatch( const QString & 	name,
-		      const QString & 	summary,
-		      FSize 		size );
+    void filterMatch( const QString & name,
+                      const QString & summary,
+                      FSize           size );
 
     /**
      * Emitted when filtering is finished.
@@ -175,7 +167,7 @@ signals:
 
 
 protected:
-   /**
+    /**
      * returns or creates a category item for a defined category
      */
     YQPkgPatchCategoryItem * category( YQPkgPatchCategory category );
@@ -205,8 +197,7 @@ protected:
 
     // Data members
 
-    int			_categoryCol;
-    FilterCriteria	_filterCriteria;
+    FilterCriteria _filterCriteria;
     QMap<YQPkgPatchCategory, YQPkgPatchCategoryItem*> _categories;
 };
 
@@ -216,23 +207,23 @@ class YQPkgPatchListItem: public YQPkgObjListItem
 {
 public:
 
-      /**
+    /**
      * Constructor. Creates a YQPkgPatchList item that corresponds to
      * zyppPatch.
      **/
-    YQPkgPatchListItem( YQPkgPatchList * 	patchList,
-			   ZyppSel		selectable,
-			   ZyppPatch 		zyppPatch );
+    YQPkgPatchListItem( YQPkgPatchList * patchList,
+                        ZyppSel          selectable,
+                        ZyppPatch        zyppPatch );
 
 
     /**
      * Constructor. Creates a YQPkgPatchList item that corresponds to
      * zyppPatch.
      **/
-    YQPkgPatchListItem( YQPkgPatchList * 	patchList,
-                        YQPkgPatchCategoryItem *	parentCategory,
-                        ZyppSel		selectable,
-                        ZyppPatch 		zyppPatch );
+    YQPkgPatchListItem( YQPkgPatchList *         patchList,
+                        YQPkgPatchCategoryItem * parentCategory,
+                        ZyppSel                  selectable,
+                        ZyppPatch                zyppPatch );
 
     /**
      * Destructor
@@ -265,9 +256,8 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _patchList->statusCol();	}
-    int summaryCol()	const	{ return _patchList->summaryCol();	}
-    int categoryCol()	const	{ return _patchList->categoryCol();	}
+    int statusCol()     const   { return _patchList->statusCol();       }
+    int summaryCol()    const   { return _patchList->summaryCol();      }
 
     /**
      * Returns the category of this patch (security, recommended, ...).
@@ -287,9 +277,9 @@ protected:
 
     // Data members
 
-    YQPkgPatchList *	_patchList;
-    ZyppPatch		_zyppPatch;
-    YQPkgPatchCategory	_patchCategory;
+    YQPkgPatchList *   _patchList;
+    ZyppPatch          _zyppPatch;
+    YQPkgPatchCategory _patchCategory;
 };
 
 class YQPkgPatchCategoryItem: public QY2ListViewItem
@@ -299,7 +289,8 @@ public:
     /**
      * Constructor
      **/
-    YQPkgPatchCategoryItem( YQPkgPatchCategory category, YQPkgPatchList *	patternList );
+    YQPkgPatchCategoryItem( YQPkgPatchCategory category,
+                            YQPkgPatchList *   patternList );
 
     /**
      * Destructor
@@ -312,7 +303,8 @@ public:
     ZyppPatch firstPatch() const { return _firstPatch; }
 
     /**
-     * Add a pattern to this category. This method sets firstPatch() if necessary.
+     * Add a pattern to this category. This method sets firstPatch() if
+     * necessary.
      **/
     void addPatch( ZyppPatch patch );
 
@@ -324,15 +316,15 @@ public:
     /*
      * Open or close this subtree
      *
-     * Reimplemented from QListViewItem to force categories open at all times
+     * Reimplemented from QListViewItem to force categories open at all times.
      **/
     virtual void setExpanded( bool open );
 
     /**
      * Maps a string patch category to the corresponding enum.
      **/
-    static YQPkgPatchCategory patchCategory( QString category );
-    static YQPkgPatchCategory patchCategory( const string & category );
+    static YQPkgPatchCategory patchCategory( const QString & category );
+    static YQPkgPatchCategory patchCategory( const string  & category );
     /**
      * Converts a patch category to a user-readable (translated) string.
      **/
@@ -362,8 +354,8 @@ protected:
     //
 
     YQPkgPatchCategory _category;
-    YQPkgPatchList *	_patchList;
-    ZyppPatch		_firstPatch;
+    YQPkgPatchList *   _patchList;
+    ZyppPatch          _firstPatch;
 };
 
 

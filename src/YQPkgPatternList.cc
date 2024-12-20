@@ -72,12 +72,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     if ( getenv( "Y2_SHOW_INVISIBLE_PATTERNS" ) )
         _showInvisiblePatterns = true;
 
-    // Can use the same colum for "broken" and "satisfied":
-    // Both states are mutually exclusive
-
-    _satisfiedIconCol	= -42;
-    _brokenIconCol	= -42;
-
     setSortingEnabled( true );
     sortByColumn( summaryCol(), Qt::AscendingOrder );
 
