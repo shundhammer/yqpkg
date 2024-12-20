@@ -91,8 +91,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -118,7 +118,7 @@ public:
      * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangListItem( YQPkgLangList *	    pkgSelList,
+    YQPkgLangListItem( YQPkgLangList *      pkgSelList,
                        const zypp::Locale & lang );
 
     /**
@@ -129,14 +129,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Locale zyppLang() const	{ return _zyppLang; }
+    zypp::Locale zyppLang() const { return _zyppLang; }
 
-    /// overloaded
-    virtual void init();
 
     // Columns
 
-    int statusCol()	const	{ return _langList->statusCol(); }
+    int statusCol()     const   { return _langList->statusCol(); }
 
     /**
      * override this two as we don't have a real selectable and
@@ -165,6 +163,8 @@ public:
 
 protected:
 
+    void init();
+
     /**
      * Propagate status changes in this list to other lists:
      * Have the solver transact all languages.
@@ -176,8 +176,8 @@ protected:
 
     // Data members
 
-    YQPkgLangList *	_langList;
-    zypp::Locale	_zyppLang;
+    YQPkgLangList * _langList;
+    zypp::Locale    _zyppLang;
 };
 
 
