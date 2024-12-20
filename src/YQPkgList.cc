@@ -41,7 +41,7 @@
 YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    resetOptimalColumnWidths();
+    resetBestColWidths();
 
     int numCol = 0;
     QStringList headers;
@@ -131,7 +131,7 @@ YQPkgList::addPkgItem( ZyppSel  selectable,
     YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
     Q_CHECK_PTR( item );
 
-    updateOptimalColumnWidths( selectable, zyppPkg );
+    updateBestColWidths( selectable, zyppPkg );
     optimizeColumnWidths();
 
     item->setDimmed( dimmed );
@@ -162,20 +162,20 @@ YQPkgList::sizeHint() const
 
 
 void
-YQPkgList::resetOptimalColumnWidths()
+YQPkgList::resetBestColWidths()
 {
-    _optimalColWidth_statusIcon  = 0;
-    _optimalColWidth_name        = 0;
-    _optimalColWidth_summary     = 0;
-    _optimalColWidth_version     = 0;
-    _optimalColWidth_instVersion = 0;
-    _optimalColWidth_size        = 0;
+    _bestStatusColWidth      = 0;
+    _bestNameColWidth        = 0;
+    _bestSummaryColWidth     = 0;
+    _bestVersionColWidth     = 0;
+    _bestInstVersionColWidth = 0;
+    _bestSizeColWidth        = 0;
 }
 
 
 void
-YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
-                                      ZyppPkg zyppPkg )
+YQPkgList::updateBestColWidths( ZyppSel selectable,
+                                ZyppPkg zyppPkg )
 {
     QFontMetrics  fontMetrics( font() );
     QString       colText;
@@ -185,7 +185,7 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
 
     // Status icon
 
-    _optimalColWidth_statusIcon = STATUS_COL_WIDTH;
+    _bestStatusColWidth = STATUS_COL_WIDTH;
 
 
     // Name
@@ -193,8 +193,8 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
     colText  = fromUTF8( zyppPkg->name().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-    if ( colWidth > _optimalColWidth_name )
-        _optimalColWidth_name = colWidth;
+    if ( colWidth > _bestNameColWidth )
+        _bestNameColWidth = colWidth;
 
 
     // Summary
@@ -202,8 +202,8 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
     colText  = fromUTF8( zyppPkg->summary().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-    if ( colWidth > _optimalColWidth_summary )
-        _optimalColWidth_summary = colWidth;
+    if ( colWidth > _bestSummaryColWidth )
+        _bestSummaryColWidth = colWidth;
 
 
     // Version(s)
@@ -224,8 +224,8 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
 
         colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-        if (colWidth > _optimalColWidth_version)
-            _optimalColWidth_version = colWidth;
+        if (colWidth > _bestVersionColWidth)
+            _bestVersionColWidth = colWidth;
     }
     else // separate columns for both versions
     {
@@ -234,8 +234,8 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
             colText = fromUTF8( candidate->edition().c_str() );
             colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-            if (colWidth > _optimalColWidth_version)
-                _optimalColWidth_version = colWidth;
+            if (colWidth > _bestVersionColWidth)
+                _bestVersionColWidth = colWidth;
         }
 
         if ( installed )
@@ -243,8 +243,8 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
             colText = fromUTF8( installed->edition().c_str() );
             colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-            if (colWidth > _optimalColWidth_instVersion)
-                _optimalColWidth_instVersion = colWidth;
+            if (colWidth > _bestInstVersionColWidth)
+                _bestInstVersionColWidth = colWidth;
         }
     }
 
@@ -254,27 +254,27 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
     colText  = fromUTF8( zyppPkg->installSize().asString().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-    if ( colWidth > _optimalColWidth_size )
-        _optimalColWidth_size = colWidth;
+    if ( colWidth > _bestSizeColWidth )
+        _bestSizeColWidth = colWidth;
 
     //
     // Regardless of all the above voodoo, set some reasonable min and max widths.
     //
 
-    _optimalColWidth_name    = qBound( 120, _optimalColWidth_name,    280 );
-    _optimalColWidth_summary = qBound( 350, _optimalColWidth_summary, 500 );
+    _bestNameColWidth    = qBound( 120, _bestNameColWidth,    280 );
+    _bestSummaryColWidth = qBound( 350, _bestSummaryColWidth, 500 );
 
     if ( instVersionCol() == versionCol() )     // combined column for both versions
     {
-        _optimalColWidth_version = qBound( 120, _optimalColWidth_version, 280 );
+        _bestVersionColWidth = qBound( 120, _bestVersionColWidth, 280 );
     }
     else // two columns
     {
-        _optimalColWidth_version     = qBound( 120, _optimalColWidth_version,     200 );
-        _optimalColWidth_instVersion = qBound( 120, _optimalColWidth_instVersion, 200 );
+        _bestVersionColWidth     = qBound( 120, _bestVersionColWidth,     200 );
+        _bestInstVersionColWidth = qBound( 120, _bestInstVersionColWidth, 200 );
     }
 
-    _optimalColWidth_size = qBound( 100, _optimalColWidth_size, 150 );
+    _bestSizeColWidth = qBound( 100, _bestSizeColWidth, 150 );
 }
 
 
@@ -284,24 +284,24 @@ YQPkgList::optimizeColumnWidths()
     // FIXME: Refactor this. Same reason as above.
 
     int visibleSpace       = 0;
-    int optimalWidthsSum   = 0; // Sum of all optimal (sized-to-content-) column width values
-    int numOptCol          = 4; // Nr. of columns for distribution of remaining space
-    int statusIconColWidth = _optimalColWidth_statusIcon;
+    int bestWidthsSum      = 0; 
+    int colCount           = 4;  // Number of columns: name, summary, version, size
+    int statusIconColWidth = _bestStatusColWidth;
 
-    if (statusIconColWidth == 0)
+    if ( statusIconColWidth == 0 )
         statusIconColWidth = STATUS_COL_WIDTH;
 
-    optimalWidthsSum =
-        _optimalColWidth_statusIcon
-        + _optimalColWidth_name
-        + _optimalColWidth_summary
-        + _optimalColWidth_version
-        + _optimalColWidth_size;
+    bestWidthsSum =
+        _bestStatusColWidth
+        + _bestNameColWidth
+        + _bestSummaryColWidth
+        + _bestVersionColWidth
+        + _bestSizeColWidth;
 
-    if ( instVersionCol() != versionCol() )
+    if ( instVersionCol() != versionCol() ) // Separate version columns?
     {
-        optimalWidthsSum += _optimalColWidth_instVersion;
-        numOptCol++;
+        bestWidthsSum += _bestInstVersionColWidth;
+        colCount++;
     }
 
 
@@ -312,46 +312,46 @@ YQPkgList::optimizeColumnWidths()
     if (visibleSpace < 0)
         return;
 
-    if ( optimalWidthsSum >= visibleSpace )
+    if ( bestWidthsSum >= visibleSpace )
     // There is not enough visible space to show all cloumns with optimal widths
     {
         // Only reduce width of the "summary"-column beyond optimal width
         // if this is not enough, we will get a horizontal scroll bar
 
-        int reducedSummaryWidth = visibleSpace - optimalWidthsSum + _optimalColWidth_summary;
+        int reducedSummaryWidth = visibleSpace - bestWidthsSum + _bestSummaryColWidth;
         reducedSummaryWidth = qMax( reducedSummaryWidth, 400 );
 
         // Set new column widths
 
         setColumnWidth( statusCol(),  statusIconColWidth       );
-        setColumnWidth( nameCol(),    _optimalColWidth_name    );
+        setColumnWidth( nameCol(),    _bestNameColWidth    );
         setColumnWidth( summaryCol(), reducedSummaryWidth      );
-        setColumnWidth( versionCol(), _optimalColWidth_version );
+        setColumnWidth( versionCol(), _bestVersionColWidth );
 
         if ( instVersionCol() != versionCol() )
-            setColumnWidth( instVersionCol(), _optimalColWidth_instVersion );
+            setColumnWidth( instVersionCol(), _bestInstVersionColWidth );
 
-        setColumnWidth( sizeCol(), _optimalColWidth_size);
+        setColumnWidth( sizeCol(), _bestSizeColWidth );
     }
     else // There is enough visible space
     {
         // Distribute remaining visible space to all columns (except the satusicon-column):
         // Calculate additional column widths:
 
-        int addSpace  = ( visibleSpace - optimalWidthsSum ) / numOptCol;
-        int addSpaceR = ( visibleSpace - optimalWidthsSum ) % numOptCol;
+        int addSpace  = ( visibleSpace - bestWidthsSum ) / colCount;
+        int addSpaceR = ( visibleSpace - bestWidthsSum ) % colCount;
 
         // Set new column widths
 
         setColumnWidth( statusCol(),  statusIconColWidth                  );
-        setColumnWidth( nameCol(),    _optimalColWidth_name    + addSpace );
-        setColumnWidth( summaryCol(), _optimalColWidth_summary + addSpace );
-        setColumnWidth( versionCol(), _optimalColWidth_version + addSpace );
+        setColumnWidth( nameCol(),    _bestNameColWidth    + addSpace );
+        setColumnWidth( summaryCol(), _bestSummaryColWidth + addSpace );
+        setColumnWidth( versionCol(), _bestVersionColWidth + addSpace );
 
         if ( instVersionCol() != versionCol() )
-            setColumnWidth( instVersionCol(), _optimalColWidth_instVersion + addSpace );
+            setColumnWidth( instVersionCol(), _bestInstVersionColWidth + addSpace );
 
-        setColumnWidth( sizeCol(), _optimalColWidth_size + addSpace + addSpaceR );
+        setColumnWidth( sizeCol(), _bestSizeColWidth + addSpace + addSpaceR );
     }
 }
 
@@ -360,7 +360,7 @@ void
 YQPkgList::clear()
 {
     YQPkgObjList::clear();
-    resetOptimalColumnWidths();
+    resetBestColWidths();
     optimizeColumnWidths();
 }
 
@@ -375,7 +375,7 @@ YQPkgList::resort()
 
 
 void
-YQPkgList::resizeEvent(QResizeEvent *event)
+YQPkgList::resizeEvent( QResizeEvent * event )
 {
     if (event->size().width() != event->oldSize().width())
         optimizeColumnWidths();
@@ -593,8 +593,8 @@ YQPkgListItem::toolTip( int col )
                 // if both versions are the same, e.g., both "1.2.3-42", "1.2.3-42"
                 QString relation = _( "same" );
 
-                if ( _candidateIsNewer )        relation = _( "newer" );
-                if ( _installedIsNewer )        relation = _( "older" );
+                if ( _candidateIsNewer ) relation = _( "newer" );
+                if ( _installedIsNewer ) relation = _( "older" );
 
                 // Translators: %1 is the version, %2 is one of "newer", "older", "same"
                 text += _( "Available Version: %1 (%2)" ).arg( candidate ).arg( relation );

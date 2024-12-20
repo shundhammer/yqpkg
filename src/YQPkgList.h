@@ -119,9 +119,9 @@ public slots:
     // to ZyppPkg if required.  This saves duplicating a lot of code.
 
     /**
-     * Clears the tree-widgets content, resets the optimal column width values
+     * Clear the widget and reinitialize internal state.
      *
-     * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
+     * Reimplemented from QPkgObjList.
      **/
     virtual void clear() override;
 
@@ -152,7 +152,7 @@ protected:
      * Resets the optimal column width values.
      * Needed for empty list.
      **/
-    void resetOptimalColumnWidths();
+    void resetBestColWidths();
 
     /**
      * Set and save optimal column widths depending on content only.
@@ -160,8 +160,8 @@ protected:
      * There is currently no way to get the optimal widths without setting
      * them, so we have to do it.
      **/
-    void updateOptimalColumnWidths( ZyppSel selectable,
-                                    ZyppPkg zyppPkg );
+    void updateBestColWidths( ZyppSel selectable,
+                              ZyppPkg zyppPkg );
 
     /**
      * Optimizes the column widths depending on content and the available
@@ -180,12 +180,12 @@ protected:
     // Data members
     //
 
-    int _optimalColWidth_statusIcon;
-    int _optimalColWidth_name;
-    int _optimalColWidth_summary;
-    int _optimalColWidth_version;
-    int _optimalColWidth_instVersion;
-    int _optimalColWidth_size;
+    int _bestStatusColWidth;
+    int _bestNameColWidth;
+    int _bestSummaryColWidth;
+    int _bestVersionColWidth;
+    int _bestInstVersionColWidth;
+    int _bestSizeColWidth;
 };
 
 
