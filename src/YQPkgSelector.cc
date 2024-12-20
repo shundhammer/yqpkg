@@ -366,6 +366,7 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     // Languages view
     //
 
+#if 0
     _langList = new YQPkgLangList( parent );
     CHECK_NEW( _langList );
 
@@ -377,6 +378,7 @@ YQPkgSelector::layoutFilters( QWidget * parent )
 
     connect( this,              SIGNAL( refresh()                       ),
              _langList,         SLOT  ( updateItemStates()              ) );
+#endif
 
 
     //

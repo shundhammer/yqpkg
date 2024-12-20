@@ -31,7 +31,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     // FIXME: The base class works with zypp::Resolvable, but zypp::Locale
     // isn't one any longer!
 
-    // logVerbose() << "Creating language list" << endl;
+    logVerbose() << "Creating language list" << endl;
 
     int numCol = 0;
 
@@ -43,7 +43,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     QString langheader = _( "Language"); _summaryCol = numCol++;
 
     QStringList headers;
-    headers <<  "";         _statusCol = numCol++;
+    headers <<  "";         _statusCol  = numCol++;
     headers << codeHeader;  _nameCol    = numCol++;
     headers << langheader;  _summaryCol = numCol++;
 
@@ -53,11 +53,11 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     header()->setSectionResizeMode( _summaryCol, QHeaderView::Stretch );
 
     setAllColumnsShowFocus( true );
-    setSortingEnabled( true );
     header()->setSortIndicatorShown( true );
     header()->setSectionsClickable( true );
 
-    sortByColumn( nameCol(), Qt::AscendingOrder ); // Column "Code"
+    // setSortingEnabled( true );
+    // sortByColumn( nameCol(), Qt::AscendingOrder ); // Column "Code"
 
     connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *,
                                                QTreeWidgetItem * ) ),
@@ -67,7 +67,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     selectSomething();
     resizeColumnToContents(_statusCol);
 
-    // logVerbose() << "Creating language list done" << endl;
+    logVerbose() << "Creating language list done" << endl;
 }
 
 
