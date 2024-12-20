@@ -81,22 +81,22 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgItem	( ZyppSel	selectable,
-			  ZyppPkg	zyppPkg	);
+    void addPkgItem( ZyppSel selectable,
+                     ZyppPkg zyppPkg );
 
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
      * rather than normal black).
      **/
-    void addPkgItemDimmed( ZyppSel	selectable,
-			   ZyppPkg 	zyppPkg );
+    void addPkgItemDimmed( ZyppSel selectable,
+                           ZyppPkg zyppPkg );
 
     /**
      * Add a pkg to the list
      **/
-    void addPkgItem	( ZyppSel	selectable,
-			  ZyppPkg	zyppPkg,
-			  bool 		dimmed );
+    void addPkgItem( ZyppSel selectable,
+                     ZyppPkg zyppPkg,
+                     bool    dimmed );
 
 
     /**
@@ -114,16 +114,16 @@ public slots:
 
 
     // No separate currentItemChanged( ZyppPkg ) signal:
-    // Use YQPkgObjList::currentItemChanged( ZyppObj ) instead
-    // and dynamic_cast to ZyppPkg if required.
-    // This saves duplicating a lot of code.
+    //
+    // Use YQPkgObjList::currentItemChanged( ZyppObj ) instead and dynamic_cast
+    // to ZyppPkg if required.  This saves duplicating a lot of code.
 
     /**
      * Clears the tree-widgets content, resets the optimal column width values
      *
      * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
      **/
-    void clear();
+    virtual void clear() override;
 
     /**
      * Sort the tree widget again according to the column selected and
@@ -155,13 +155,16 @@ protected:
     void resetOptimalColumnWidthValues();
 
     /**
-     * Set and save optimal column widths depending on content only
-     * There is currently no way to get the optimal widths without setting them, so we have to do it.
+     * Set and save optimal column widths depending on content only.
+     *
+     * There is currently no way to get the optimal widths without setting
+     * them, so we have to do it.
      **/
     void updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg);
 
     /**
-     * Optimizes the column widths depending on content and the available horizontal space.
+     * Optimizes the column widths depending on content and the available
+     * horizontal space.
      **/
     void optimizeColumnWidths();
 
@@ -176,15 +179,12 @@ protected:
     // Data members
     //
 
-    // Optimal (sized-to-content) column widths
-
     int _optimalColWidth_statusIcon;
     int _optimalColWidth_name;
     int _optimalColWidth_summary;
     int _optimalColWidth_version;
     int _optimalColWidth_instVersion;
     int _optimalColWidth_size;
-
 };
 
 
@@ -197,9 +197,9 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgListItem( YQPkgList *	pkgList,
-		   ZyppSel	selectable,
-		   ZyppPkg 	zyppPkg );
+    YQPkgListItem( YQPkgList *  pkgList,
+                   ZyppSel      selectable,
+                   ZyppPkg      zyppPkg );
 
     /**
      * Destructor
@@ -246,9 +246,9 @@ public:
 
 protected:
 
-    YQPkgList *	_pkgList;
+    YQPkgList * _pkgList;
     ZyppPkg     _zyppPkg;
-    bool	_dimmed;
+    bool        _dimmed;
 };
 
 
