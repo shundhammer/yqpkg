@@ -190,7 +190,7 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
 
     // Name
 
-    colText = fromUTF8( zyppPkg->name().c_str() );
+    colText  = fromUTF8( zyppPkg->name().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
     if ( colWidth > _optimalColWidth_name )
@@ -199,7 +199,7 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
 
     // Summary
 
-    colText = fromUTF8( zyppPkg->summary().c_str() );
+    colText  = fromUTF8( zyppPkg->summary().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
     if ( colWidth > _optimalColWidth_summary )
@@ -254,7 +254,7 @@ YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
     colText  = fromUTF8( zyppPkg->installSize().asString().c_str() );
     colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-    if (colWidth > _optimalColWidth_size)
+    if ( colWidth > _optimalColWidth_size )
         _optimalColWidth_size = colWidth;
 
     //
