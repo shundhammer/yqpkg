@@ -40,7 +40,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     QString codeHeader = _( "Code" );
 
     // Full (human readable) language / country name like "German (Austria)"
-    QString langheader = _( "Language"); _summaryCol = numCol++;
+    QString langheader = _( "Language");
 
     QStringList headers;
     headers <<  "";         _statusCol  = numCol++;
@@ -49,7 +49,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
 
     setHeaderLabels( headers );
 
-    header()->setSectionResizeMode( _nameCol, QHeaderView::ResizeToContents );
+    header()->setSectionResizeMode( _nameCol,    QHeaderView::ResizeToContents );
     header()->setSectionResizeMode( _summaryCol, QHeaderView::Stretch );
 
     setAllColumnsShowFocus( true );

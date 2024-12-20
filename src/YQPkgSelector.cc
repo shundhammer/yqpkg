@@ -366,19 +366,17 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     // Languages view
     //
 
-#if 0
     _langList = new YQPkgLangList( parent );
     CHECK_NEW( _langList );
 
     _filters->addPage( _( "&Languages" ), _langList, "languages" );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 
-    connect( _langList,         SIGNAL( statusChanged()                 ),
-             this,              SLOT  ( autoResolveDependencies()       ) );
+    connect( _langList, SIGNAL( statusChanged()           ),
+             this,      SLOT  ( autoResolveDependencies() ) );
 
-    connect( this,              SIGNAL( refresh()                       ),
-             _langList,         SLOT  ( updateItemStates()              ) );
-#endif
+    connect( this,      SIGNAL( refresh()                 ),
+             _langList, SLOT  ( updateItemStates()        ) );
 
 
     //
