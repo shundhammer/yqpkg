@@ -152,7 +152,7 @@ protected:
      * Resets the optimal column width values.
      * Needed for empty list.
      **/
-    void resetOptimalColumnWidthValues();
+    void resetOptimalColumnWidths();
 
     /**
      * Set and save optimal column widths depending on content only.
@@ -160,7 +160,8 @@ protected:
      * There is currently no way to get the optimal widths without setting
      * them, so we have to do it.
      **/
-    void updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg);
+    void updateOptimalColumnWidths( ZyppSel selectable,
+                                    ZyppPkg zyppPkg );
 
     /**
      * Optimizes the column widths depending on content and the available

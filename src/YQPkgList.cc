@@ -41,7 +41,7 @@
 YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    resetOptimalColumnWidthValues();
+    resetOptimalColumnWidths();
 
     int numCol = 0;
     QStringList headers;
@@ -131,7 +131,7 @@ YQPkgList::addPkgItem( ZyppSel  selectable,
     YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
     Q_CHECK_PTR( item );
 
-    updateOptimalColumnWidthValues( selectable, zyppPkg );
+    updateOptimalColumnWidths( selectable, zyppPkg );
     optimizeColumnWidths();
 
     item->setDimmed( dimmed );
@@ -162,7 +162,7 @@ YQPkgList::sizeHint() const
 
 
 void
-YQPkgList::resetOptimalColumnWidthValues()
+YQPkgList::resetOptimalColumnWidths()
 {
     _optimalColWidth_statusIcon  = 0;
     _optimalColWidth_name        = 0;
@@ -174,77 +174,107 @@ YQPkgList::resetOptimalColumnWidthValues()
 
 
 void
-YQPkgList::updateOptimalColumnWidthValues( ZyppSel selectable,
-                                           ZyppPkg zyppPkg )
+YQPkgList::updateOptimalColumnWidths( ZyppSel selectable,
+                                      ZyppPkg zyppPkg )
 {
-    // FIXME: Refactor this. This is voodoo code that doesn't even work; Every
-    // time I open the package selector, the summary is cut off after a few
-    // characters, and the versions column has a grotesque width because of
-    // completely insane KDE package versions.
-    //
-    // -- HuHa 2024-12-20
-
-    QString       qstr;
-    int           qstr_width = 0;
-    QFontMetrics  fm( this->font() );
+    QFontMetrics  fontMetrics( font() );
+    QString       colText;
+    int           colWidth  = 0;
     const ZyppObj candidate = selectable->candidateObj();
     const ZyppObj installed = selectable->installedObj();
 
-    // Status icon:
+    // Status icon
+
     _optimalColWidth_statusIcon = STATUS_COL_WIDTH;
 
-    // Name:
-    qstr = QString::fromUtf8( zyppPkg->name().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
-    if (qstr_width > _optimalColWidth_name)
-        _optimalColWidth_name = qBound( 120, qstr_width, 300 );
 
-    // Summary:
-    qstr = QString::fromUtf8( zyppPkg->summary().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
+    // Name
 
-    if (qstr_width > _optimalColWidth_summary)
-        _optimalColWidth_summary = qBound( 350,  qstr_width, 500 );
+    colText = fromUTF8( zyppPkg->name().c_str() );
+    colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
 
-    // Version(s):
-    if ( instVersionCol() == versionCol() )     // combined column, version string
+    if ( colWidth > _optimalColWidth_name )
+        _optimalColWidth_name = colWidth;
+
+
+    // Summary
+
+    colText = fromUTF8( zyppPkg->summary().c_str() );
+    colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
+
+    if ( colWidth > _optimalColWidth_summary )
+        _optimalColWidth_summary = colWidth;
+
+
+    // Version(s)
+
+    if ( instVersionCol() == versionCol() )     // combined column for both versions
     {
         if (installed)
-            qstr = QString::fromUtf8( installed->edition().c_str() );
+            colText = fromUTF8( installed->edition().c_str() );
         else
-            qstr.clear();
-        if (candidate && (!installed || (candidate->edition() != installed->edition())))
+            colText.clear();
+
+        if ( candidate && ( ! installed || ( candidate->edition() != installed->edition() ) ) )
         {
             if (installed)
-                qstr += " ";
-            qstr += "(" + QString::fromUtf8( candidate->edition().c_str() ) + ")";
+                colText += " ";
+            colText += "(" + fromUTF8( candidate->edition().c_str() ) + ")";
         }
-        qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
-        if (qstr_width > _optimalColWidth_version)
-            _optimalColWidth_version = qBound( 150, qstr_width, 300 );
+
+        colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
+
+        if (colWidth > _optimalColWidth_version)
+            _optimalColWidth_version = colWidth;
     }
-    else        // separate columns, version strings
+    else // separate columns for both versions
     {
-        if (candidate)
+        if ( candidate )
         {
-            qstr = QString::fromUtf8( candidate->edition().c_str() );
-            qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
-            if (qstr_width > _optimalColWidth_version)
-                _optimalColWidth_version = qBound( 120, qstr_width, 200 );
+            colText = fromUTF8( candidate->edition().c_str() );
+            colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
+
+            if (colWidth > _optimalColWidth_version)
+                _optimalColWidth_version = colWidth;
         }
-        if (installed)
+
+        if ( installed )
         {
-            qstr = QString::fromUtf8( installed->edition().c_str() );
-            qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
-            if (qstr_width > _optimalColWidth_instVersion)
-                _optimalColWidth_instVersion = qBound( 120, qstr_width, 200 );
+            colText = fromUTF8( installed->edition().c_str() );
+            colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
+
+            if (colWidth > _optimalColWidth_instVersion)
+                _optimalColWidth_instVersion = colWidth;
         }
     }
-    // Size:
-    qstr = QString::fromUtf8( zyppPkg->installSize().asString().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
-    if (qstr_width > _optimalColWidth_size)
-        _optimalColWidth_size = qBound( 120, qstr_width, 200 );
+
+
+    // Size
+
+    colText  = fromUTF8( zyppPkg->installSize().asString().c_str() );
+    colWidth = fontMetrics.boundingRect( colText ).width() + ( STATUS_ICON_SIZE / 2 );
+
+    if (colWidth > _optimalColWidth_size)
+        _optimalColWidth_size = colWidth;
+
+    //
+    // Regardless of all the above voodoo, set some reasonable min and max widths.
+    //
+
+    _optimalColWidth_name    = qBound( 120, _optimalColWidth_name,    280 );
+    _optimalColWidth_summary = qBound( 350, _optimalColWidth_summary, 500 );
+
+    if ( instVersionCol() == versionCol() )     // combined column for both versions
+    {
+        _optimalColWidth_version = qBound( 120, _optimalColWidth_version, 280 );
+    }
+    else // two columns
+    {
+        _optimalColWidth_version     = qBound( 120, _optimalColWidth_version,     200 );
+        _optimalColWidth_instVersion = qBound( 120, _optimalColWidth_instVersion, 200 );
+    }
+
+    _optimalColWidth_size = qBound( 100, _optimalColWidth_size, 150 );
 }
 
 
@@ -277,7 +307,7 @@ YQPkgList::optimizeColumnWidths()
 
     // Check if we have less visible space than we need
 
-    visibleSpace = this->viewport()->width() - MAGIC_MISSING_WIDTH;
+    visibleSpace = viewport()->width() - MAGIC_MISSING_WIDTH;
 
     if (visibleSpace < 0)
         return;
@@ -289,41 +319,39 @@ YQPkgList::optimizeColumnWidths()
         // if this is not enough, we will get a horizontal scroll bar
 
         int reducedSummaryWidth = visibleSpace - optimalWidthsSum + _optimalColWidth_summary;
-
-        if (reducedSummaryWidth < 100)
-            reducedSummaryWidth = 100;
+        reducedSummaryWidth = qMax( reducedSummaryWidth, 400 );
 
         // Set new column widths
 
-        this->setColumnWidth( statusCol(),  statusIconColWidth );
-        this->setColumnWidth( nameCol(),    _optimalColWidth_name );
-        this->setColumnWidth( summaryCol(), reducedSummaryWidth);
-        this->setColumnWidth( versionCol(), _optimalColWidth_version );
+        setColumnWidth( statusCol(),  statusIconColWidth       );
+        setColumnWidth( nameCol(),    _optimalColWidth_name    );
+        setColumnWidth( summaryCol(), reducedSummaryWidth      );
+        setColumnWidth( versionCol(), _optimalColWidth_version );
 
         if ( instVersionCol() != versionCol() )
-            this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion );
+            setColumnWidth( instVersionCol(), _optimalColWidth_instVersion );
 
-        this->setColumnWidth( sizeCol(), _optimalColWidth_size);
+        setColumnWidth( sizeCol(), _optimalColWidth_size);
     }
     else // There is enough visible space
     {
         // Distribute remaining visible space to all columns (except the satusicon-column):
         // Calculate additional column widths:
 
-        int addSpace = (visibleSpace - optimalWidthsSum) / numOptCol;
-        int addSpaceR = (visibleSpace - optimalWidthsSum) % numOptCol;
+        int addSpace  = ( visibleSpace - optimalWidthsSum ) / numOptCol;
+        int addSpaceR = ( visibleSpace - optimalWidthsSum ) % numOptCol;
 
         // Set new column widths
 
-        this->setColumnWidth( statusCol(),  statusIconColWidth );
-        this->setColumnWidth( nameCol(),    _optimalColWidth_name    + addSpace );
-        this->setColumnWidth( summaryCol(), _optimalColWidth_summary + addSpace );
-        this->setColumnWidth( versionCol(), _optimalColWidth_version + addSpace );
+        setColumnWidth( statusCol(),  statusIconColWidth                  );
+        setColumnWidth( nameCol(),    _optimalColWidth_name    + addSpace );
+        setColumnWidth( summaryCol(), _optimalColWidth_summary + addSpace );
+        setColumnWidth( versionCol(), _optimalColWidth_version + addSpace );
 
         if ( instVersionCol() != versionCol() )
-            this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion + addSpace );
+            setColumnWidth( instVersionCol(), _optimalColWidth_instVersion + addSpace );
 
-        this->setColumnWidth( sizeCol(), _optimalColWidth_size + addSpace + addSpaceR );
+        setColumnWidth( sizeCol(), _optimalColWidth_size + addSpace + addSpaceR );
     }
 }
 
@@ -332,7 +360,7 @@ void
 YQPkgList::clear()
 {
     YQPkgObjList::clear();
-    resetOptimalColumnWidthValues();
+    resetOptimalColumnWidths();
     optimizeColumnWidths();
 }
 
