@@ -192,32 +192,7 @@ void
 YQPkgObjList::resetContent()
 {
     logDebug() << endl;
-
-    busyCursor();
-    QTreeWidgetItemIterator it( this );
-
-    while ( *it )
-    {
-        YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (*it);
-
-        if ( item )
-        {
-            logVerbose() << "Updating " << item->text( nameCol() ) << endl;
-            item->updateStatus();
-            item->updateData();
-        }
-
-	++it;
-    }
-
-#if 0
-    emit updateItemStates();
-    emit updatePackages();
-
-    normalCursor();
-    emit statusChanged();
-#endif
-    normalCursor();
+    clear();
 }
 
 
