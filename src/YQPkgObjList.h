@@ -65,15 +65,13 @@ public:
 
     // Column numbers
 
-    int iconCol()          const { return _iconCol;          }
-    int statusCol()        const { return _statusCol;        }
-    int nameCol()          const { return _nameCol;          }
-    int summaryCol()       const { return _summaryCol;       }
-    int sizeCol()          const { return _sizeCol;          }
-    int versionCol()       const { return _versionCol;       }
-    int instVersionCol()   const { return _instVersionCol;   }
-    int brokenIconCol()    const { return _brokenIconCol;    }
-    int satisfiedIconCol() const { return _satisfiedIconCol; }
+    int iconCol()        const { return _iconCol;        }
+    int statusCol()      const { return _statusCol;      }
+    int nameCol()        const { return _nameCol;        }
+    int summaryCol()     const { return _summaryCol;     }
+    int sizeCol()        const { return _sizeCol;        }
+    int versionCol()     const { return _versionCol;     }
+    int instVersionCol() const { return _instVersionCol; }
 
     /**
      * Return whether or not items in this list are generally editable,
@@ -373,8 +371,6 @@ protected:
     int  _sizeCol;
     int  _versionCol;
     int  _instVersionCol;
-    int  _brokenIconCol;
-    int  _satisfiedIconCol;
     bool _editable;
     bool _debug;
     int  _excludedItemsCount;
@@ -520,21 +516,6 @@ public:
     bool installedIsNewer() const { return _installedIsNewer; }
 
     /**
-     * Check if this item is satisfied, even though it is not installed.
-     * This is useful for package collections, e.g., patterns and patches:
-     * 'true' is returned if all requirements are fulfilled, but the object
-     * itself is not installed.
-     **/
-    bool isSatisfied() const;
-
-    /**
-     * Check if this item is "broken": If it is installed, but any of its
-     * dependencies are no longer satisfied.
-     * This is useful for package collections, e.g., patterns and patches.
-     **/
-    bool isBroken() const;
-
-    /**
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
@@ -620,8 +601,6 @@ public:
     int sizeCol()          const { return _pkgObjList->sizeCol();          }
     int versionCol()       const { return _pkgObjList->versionCol();       }
     int instVersionCol()   const { return _pkgObjList->instVersionCol();   }
-    int brokenIconCol()    const { return _pkgObjList->brokenIconCol();    }
-    int satisfiedIconCol() const { return _pkgObjList->satisfiedIconCol(); }
 
 
 protected:

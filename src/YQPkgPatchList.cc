@@ -471,20 +471,12 @@ YQPkgPatchListItem::toolTip( int col )
     }
     else
     {
-        if (  ( col == brokenIconCol()    && isBroken()    ) ||
-              ( col == satisfiedIconCol() && isSatisfied() )   )
-        {
-            text = YQPkgObjListItem::toolTip( col );
-        }
-        else
-        {
-            text = fromUTF8( zyppPatch()->category() );
+        text = fromUTF8( zyppPatch()->category() );
 
-            if ( ! text.isEmpty() )
-                text += "\n";
+        if ( ! text.isEmpty() )
+            text += "\n";
 
-            text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
-        }
+        text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
     }
 
     return text;

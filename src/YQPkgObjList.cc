@@ -77,8 +77,6 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _instVersionCol	= -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
-    _brokenIconCol	= -42;
-    _satisfiedIconCol	= -42;
 
     _excludedItemsCount = 0;
     _debug		= false;
@@ -1124,86 +1122,6 @@ YQPkgObjListItem::setStatusIcon()
 	bool enabled = editable() && _pkgObjList->editable();
         setIcon( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
-
-
-    if ( brokenIconCol() >= 0 )
-    {
-	// Reset this icon now - it might be the same column as satisfiedIconCol()
-        setIcon( brokenIconCol(), QPixmap() );
-    }
-
-    if ( satisfiedIconCol() >= 0 )
-    {
-	// Set special icon for zyppObjs that are not marked as installed,
-	// but satisfied anyway (e.g. for patches or patterns where the user
-	// selected all required packages manually)
-
-        setIcon( satisfiedIconCol(), isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
-    }
-
-    if ( brokenIconCol() >= 0 )
-    {
-	// Set special icon for zyppObjs that are installed, but broken
-	// (dependencies no longer satisfied, e.g. for patches or patterns)
-
-	if ( isBroken() )
-	{
-            setIcon( brokenIconCol(), YQIconPool::warningSign() );
-
-	    logWarning() << "Broken object: " << _selectable->theObj()->name()
-			 << " - " << _selectable->theObj()->summary()
-			 << endl;
-	}
-    }
-}
-
-
-bool
-YQPkgObjListItem::isSatisfied() const
-{
-    if ( _debugIsSatisfied )
-	return true;
-
-    if ( _selectable->hasInstalledObj() )
-	return false;
-
-    return _selectable->candidateObj().isSatisfied();
-}
-
-
-bool YQPkgObjListItem::isBroken() const
-{
-    if ( _debugIsBroken )
-	return true;
-
-    if ( ! _selectable->hasInstalledObj() )
-	return false;		// can't be broken if not installed
-
-    switch ( status() )
-    {
-	case S_KeepInstalled:
-	case S_Protected:
-
-	    return _selectable->installedObj().isBroken();
-
-	case S_Update:		// will be fixed by updating
-	case S_AutoUpdate:
-	case S_Del:		// will no longer be relevant after deleting
-	case S_AutoDel:
-
-	    return false;
-
-	case S_NoInst:		// should not happen - no installed obj
-	case S_Install:
-	case S_AutoInstall:
-	case S_Taboo:
-
-	    logError() << "Expected uninstalled zyppObj" << endl;
-	    return false;
-    }
-
-    logError() << "Should never get here" << endl;
-    return false;
 }
 
 
@@ -1434,24 +1352,6 @@ YQPkgObjListItem::toolTip( int col )
 	}
 
 	return tip;
-    }
-
-    if ( col == brokenIconCol() )
-    {
-	if ( isBroken() )
-	    // Translators: tool tip for patches / patterns that are installed,
-	    // but whose dependencies are broken (no longer satisfied)
-	    return _( "Dependencies broken" );
-    }
-
-    // don't use "else if" here, it might be the same colum as another one!
-
-    if ( col == satisfiedIconCol() )
-    {
-	if ( isSatisfied() )
-	    // Translators: tool tip for patches / patterns that are not installed,
-	    // but whose dependencies are satisfied
-	    return _( "All dependencies satisfied" );
     }
 
     return QString();
