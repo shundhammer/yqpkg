@@ -46,7 +46,6 @@ YQPkgList::YQPkgList( QWidget * parent )
     int numCol = 0;
     QStringList headers;
     QString     versionHeaderText;
-    QString     instVersionHeaderText;
 
 
     headers <<  "";                _statusCol  = numCol++;
@@ -63,7 +62,7 @@ YQPkgList::YQPkgList( QWidget * parent )
         versionHeaderText = _( "Avail. Ver." );
         headers << versionHeaderText;     _versionCol     = numCol++;
 
-        instVersionHeaderText = _( "Inst. Ver."  );
+        QString instVersionHeaderText = _( "Inst. Ver."  );
         headers << instVersionHeaderText; _instVersionCol = numCol++;
 #endif
     }
