@@ -336,16 +336,16 @@ YQPkgSelector::layoutFilters( QWidget * parent )
         CHECK_NEW( _patternList );
         _filters->addPage( _( "Patter&ns" ), _patternList, "patterns" );
 
-        connect( _patternList,          SIGNAL( statusChanged()                 ),
-                 this,                  SLOT  ( autoResolveDependencies()       ) );
+        connect( _patternList,          SIGNAL( statusChanged()           ),
+                 this,                  SLOT  ( autoResolveDependencies() ) );
 
-        connect( this,                  SIGNAL( refresh()                       ),
-                 _patternList,          SLOT  ( updateItemStates()              ) );
+        connect( this,                  SIGNAL( refresh()                 ),
+                 _patternList,          SLOT  ( updateItemStates()        ) );
 
         if ( _pkgConflictDialog )
         {
-            connect( _pkgConflictDialog, SIGNAL( updatePackages()               ),
-                     _patternList,       SLOT  ( updateItemStates()             ) );
+            connect( _pkgConflictDialog, SIGNAL( updatePackages()         ),
+                     _patternList,       SLOT  ( updateItemStates()       ) );
         }
     }
 
@@ -358,8 +358,8 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     CHECK_NEW( _pkgClassFilterView );
     _filters->addPage( _( "Package &Classification" ), _pkgClassFilterView, "package_classification" );
 
-    connect( this,                      SIGNAL( loadData() ),
-             _pkgClassFilterView,       SLOT  ( filter()   ) );
+    connect( this,                SIGNAL( loadData() ),
+             _pkgClassFilterView, SLOT  ( filter()   ) );
 
 
     //
