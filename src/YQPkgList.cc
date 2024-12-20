@@ -32,8 +32,10 @@
 
 
 #define SINGLE_VERSION_COL      1
+
 #define STATUS_ICON_SIZE        16
 #define STATUS_COL_WIDTH        28
+#define MAGIC_MISSING_WIDTH     15
 
 
 YQPkgList::YQPkgList( QWidget * parent )
@@ -275,7 +277,7 @@ YQPkgList::optimizeColumnWidths()
 
     // Check if we have less visible space than we need
 
-    visibleSpace = this->viewport()->width();
+    visibleSpace = this->viewport()->width() - MAGIC_MISSING_WIDTH;
 
     if (visibleSpace < 0)
         return;
