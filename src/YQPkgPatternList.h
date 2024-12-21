@@ -45,7 +45,9 @@ public:
      * Set 'autoFilter' to 'false' if there is no need to do (expensive)
      * filtering because the 'filterMatch' signal is not connected anyway.
      **/
-    YQPkgPatternList( QWidget * parent, bool autoFill = true, bool autoFilter = true );
+    YQPkgPatternList( QWidget * parent,
+                      bool      autoFill   = true,
+                      bool      autoFilter = true );
 
     /**
      * Destructor
@@ -92,8 +94,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPatternItem( ZyppSel	selectable,
-			 ZyppPattern 	pattern );
+    void addPatternItem( ZyppSel     selectable,
+                         ZyppPattern pattern );
 
     /**
      * Fill the pattern list.
@@ -106,10 +108,10 @@ public slots:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void pkgObjClicked( int		button,
-				QTreeWidgetItem * item,
-				int		col,
-				const QPoint &	pos );
+    virtual void pkgObjClicked( int                button,
+                                QTreeWidgetItem * item,
+                                int                col,
+                                const QPoint &     pos );
 
     /**
      * Select the first selectable list entry that is not a pattern category.
@@ -138,8 +140,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -175,17 +177,17 @@ public:
     /**
      * Constructor for root items
      **/
-    YQPkgPatternListItem( YQPkgPatternList * 		patternList,
-			  ZyppSel			selectable,
-			  ZyppPattern 			zyppPattern );
+    YQPkgPatternListItem( YQPkgPatternList * patternList,
+                          ZyppSel            selectable,
+                          ZyppPattern        zyppPattern );
 
     /**
      * Constructor for items that belong to a category
      **/
-    YQPkgPatternListItem( YQPkgPatternList *		patternList,
-			  YQPkgPatternCategoryItem *	parentCategory,
-			  ZyppSel			selectable,
-			  ZyppPattern			zyppPattern );
+    YQPkgPatternListItem( YQPkgPatternList *         patternList,
+                          YQPkgPatternCategoryItem * parentCategory,
+                          ZyppSel                    selectable,
+                          ZyppPattern                zyppPattern );
 
     /**
      * Destructor
@@ -210,16 +212,15 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _patternList->statusCol();	}
-    int summaryCol()	const	{ return _patternList->summaryCol();	}
-    int orderCol()      const   { return _patternList->orderCol();      }
+    int statusCol()  const { return _patternList->statusCol();  }
+    int summaryCol() const { return _patternList->summaryCol(); }
+    int orderCol()   const { return _patternList->orderCol();   }
 
-    int totalPackages() const { return _total; }
+    int totalPackages()     const { return _total;     }
     int installedPackages() const { return _installed; }
 
-    // setters for installed and total packages values
-    void setTotalPackages(int v) { _total = v; }
-    void setInstalledPackages(int v) { _installed = v; }
+    void setTotalPackages    ( int value ) { _total     = value; }
+    void setInstalledPackages( int value ) { _installed = value; }
 
     /**
      * resets the tooltip with the current available information
@@ -244,8 +245,8 @@ protected:
 
     // Data members
 
-    YQPkgPatternList *	_patternList;
-    ZyppPattern		_zyppPattern;
+    YQPkgPatternList * _patternList;
+    ZyppPattern        _zyppPattern;
 
 
     // Cached values
@@ -263,8 +264,8 @@ public:
     /**
      * Constructor
      **/
-    YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
-			      const QString &		category	);
+    YQPkgPatternCategoryItem( YQPkgPatternList * patternList,
+                              const QString &    category     );
 
     /**
      * Destructor
@@ -310,8 +311,8 @@ protected:
     // Data members
     //
 
-    YQPkgPatternList *	_patternList;
-    ZyppPattern		_firstPattern;
+    YQPkgPatternList *  _patternList;
+    ZyppPattern         _firstPattern;
 };
 
 
