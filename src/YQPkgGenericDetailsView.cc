@@ -45,9 +45,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     QString css;
     css = "table.stats"
         "{text-align: center;"
-        "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif ;"
         "font-weight: normal;"
-        "font-size: small;"
         "width: 100%;"
         ""
         "border: 1px;"
@@ -66,7 +64,6 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "padding: 4px;"
         "text-align: left;"
         "border-bottom: 2px; solid;"
-        "font-size: small;"
         "font-weight: bold;} "
         "p.note"
         "{color: grey;"
