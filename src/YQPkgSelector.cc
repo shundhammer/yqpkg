@@ -332,15 +332,16 @@ YQPkgSelector::layoutFilters( QWidget * parent )
 
     if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
     {
-        _patternList = new YQPkgPatternList( parent, true );
+        _patternList = new YQPkgPatternList( parent );
         CHECK_NEW( _patternList );
+
         _filters->addPage( _( "Patter&ns" ), _patternList, "patterns" );
 
-        connect( _patternList,          SIGNAL( statusChanged()           ),
-                 this,                  SLOT  ( autoResolveDependencies() ) );
+        connect( _patternList, SIGNAL( statusChanged()           ),
+                 this,         SLOT  ( autoResolveDependencies() ) );
 
-        connect( this,                  SIGNAL( refresh()                 ),
-                 _patternList,          SLOT  ( updateItemStates()        ) );
+        connect( this,         SIGNAL( refresh()                 ),
+                 _patternList, SLOT  ( updateItemStates()        ) );
 
         if ( _pkgConflictDialog )
         {
