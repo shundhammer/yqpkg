@@ -86,6 +86,15 @@ Right now, you use YaST sw_single. What if there is no YaST anymore? That's
 where this project comes in.
 
 
+## Is this an Official SUSE Project?
+
+Not yet. It started as a one-man project during the SUSE Hack Week in 11/2024,
+and it's been a mixture of private Open Source project and a SUSE-sponsored one
+at the same time.
+
+Hopefully SUSE will recognize the importance of this and keep sponsoring it.
+
+
 ## Building
 
 ```
