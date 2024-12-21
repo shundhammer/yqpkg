@@ -537,7 +537,7 @@ YQPkgPatchCategoryItem::patchCategory( const string & category )
 YQPkgPatchCategory
 YQPkgPatchCategoryItem::patchCategory( const QString & cat )
 {
-    QString category = category.toLower();
+    QString category = cat.toLower();
 
     if ( category == "yast"        ) return YQPkgYaSTPatch;
     if ( category == "security"    ) return YQPkgSecurityPatch;
