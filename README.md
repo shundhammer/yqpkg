@@ -55,6 +55,37 @@ Nothing bad should happen, but don't use it on a critical production system for 
 _You've been warned._
 
 
+## The Name: YQPkg
+
+YQPkg is just a working title. Suggestions for a better one are welcome; see the
+[naming suggestions issue](https://github.com/shundhammer/yqpkg/issues/19).
+
+
+## Motivation: Why?
+
+_Explained in greater detail at the Hack Week 11/2024
+[YQPkg project page](https://hackweek.opensuse.org/24/projects/yqpkg-bringing-the-single-package-selection-back-to-life)_
+
+YaST will be phased out soon in favor of Agama and Cockpit, and then there will
+be a huge gap between low-level `zypper in` and high-level application
+installers of the desktop environments; those know and promote their own
+desktop's video post-production software, but what about other packages?
+
+How do you browse through all the existing packages of a large distro like
+Tumbleweed or Leap? How do you find software about some specific topic?
+
+How do you install a different kernel version from a specific repo when your
+new laptop doesn't want to suspend?
+
+How do you help a friend who asks you what software openSUSE has to offer for
+his HAM radio or his music band?
+
+How do you find language-specific packages for your native Estonian?
+
+Right now, you use YaST sw_single. What if there is no YaST anymore? That's
+where this project comes in.
+
+
 ## Building
 
 ```
