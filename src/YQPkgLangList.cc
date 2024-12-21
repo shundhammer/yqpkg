@@ -56,8 +56,8 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     header()->setSortIndicatorShown( true );
     header()->setSectionsClickable( true );
 
-    // setSortingEnabled( true );
-    // sortByColumn( nameCol(), Qt::AscendingOrder ); // Column "Code"
+    setSortingEnabled( true );
+    sortByColumn( nameCol(), Qt::AscendingOrder ); // Column "Code"
 
     connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *,
                                                QTreeWidgetItem * ) ),
