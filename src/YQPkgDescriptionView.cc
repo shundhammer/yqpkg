@@ -260,7 +260,7 @@ QMap<QString, QString>
 YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
 {
     QMap<QString, QString> desktopEntries;
-    QString name, genericName;
+    QString name;
 
     QSettings file( fileName, QSettings::IniFormat );
     file.setIniCodec( "UTF-8");

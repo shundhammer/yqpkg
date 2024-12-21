@@ -58,7 +58,7 @@ public:
         FilterAll =       0x1 | 0x2
     };
 
-    Q_DECLARE_FLAGS( Filters, Filter );
+    Q_DECLARE_FLAGS( Filters, Filter )
 
 
     enum Option
@@ -67,7 +67,7 @@ public:
         OptionAutoAcceptIfEmpty
     };
 
-    Q_DECLARE_FLAGS( Options, Option );
+    Q_DECLARE_FLAGS( Options, Option )
 
 
     /**

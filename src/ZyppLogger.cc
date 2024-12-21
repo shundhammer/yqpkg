@@ -99,8 +99,6 @@ ZyppLogLineFormatter::format( const std::string &          log_group,
         default:                        severity = "<Verbose>";   break;
     }
 
-    QString file( src_file );  // const char *
-
     // Sample log lines:
     //   2024-12-06 18:24:59.016 [973] <Debug>   MainWindow.cc:89 showPage():  Showing first page
     //   2024-12-06 18:24:59.018 [973] <Debug>   [zypp-foo] foo_bar.cc:89 zyppify():    zyppifying...

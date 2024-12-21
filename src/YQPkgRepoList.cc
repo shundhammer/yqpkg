@@ -237,7 +237,6 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList * repoList,
 
     setToolTip( nameCol(), fromUTF8( infoToolTip ) );
 
-    QString iconPath;
     QString iconName = "applications-internet";
 
     if ( ! repo.info().baseUrlsEmpty() )
