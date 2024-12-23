@@ -33,7 +33,6 @@ BuildRequires:  gcc-c++
 # FIXME: Is this still needed?
 BuildRequires:  gcc-fortran
 
-BuildRequires:  libboost_test-devel
 BuildRequires:  pkg-config
 
 BuildRequires:  pkgconfig(Qt5Core)
