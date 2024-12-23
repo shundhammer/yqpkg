@@ -41,10 +41,8 @@
 #include "YQPkgConflictDialog.h"
 
 
-#define SOLVING_TIMER           0
-
-#define SPACING                 6       // between subwidgets
-#define MARGIN                  4       // around the widget
+#define SPACING  6       // between subwidgets
+#define MARGIN   4       // around the widget
 
 
 // The busy dialog ("Checking Dependencies") will only be shown if solving
@@ -186,7 +184,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     QPixmap pixmap( 3 * size.width(), 3 * size.height() );
 
     // Clear the pixmap with the widget's normal background color.
-    //FIXME pixmap.fill( _busyPopup->paletteBackgroundColor() );
+    // FIXME pixmap.fill( _busyPopup->paletteBackgroundColor() );
 
     // Render the text - aligned top and left because otherwise it will of
     // course be centered inside the pixmap which is usually much larger than
@@ -230,24 +228,11 @@ int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
     prepareSolving();
-
-#if SOLVING_TIMER
-    logDebug() << "Solving..." << endl;
-    QElapsedTimer solveTime;
-    solveTime.start();
-#endif
-
-    // Solve.
+    logInfo() << "Resolving dependencies..." << endl;
 
     bool success = zypp::getZYpp()->resolver()->resolvePool();
 
-#if SOLVING_TIMER
-    _totalSolveTime += solveTime.elapsed() / 1000.0;
-
-    logDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
-               << " s - average: "  << " s" << averageSolveTime()
-               << endl;
-#endif
+    logDebug() << "Resolving dependencies done." << endl;
 
     return processSolverResult( success );
 }
@@ -257,14 +242,40 @@ int
 YQPkgConflictDialog::verifySystem()
 {
     prepareSolving();
+    logInfo() << "Verifying all system dependencies..." << endl;
 
-    logDebug() << "Verifying system..." << endl;
-    QElapsedTimer solveTime;
-    solveTime.start();
+    bool success = zypp::getZYpp()->resolver()->verifySystem();
 
-    bool success = zypp::getZYpp()->resolver()->verifySystem(); // considerNewHardware
+    logDebug() << "System dependencies verified." << endl;
 
-    logDebug() << "System verified in " << solveTime.elapsed() / 1000.0 << " s" << endl;
+    return processSolverResult( success );
+}
+
+
+int
+YQPkgConflictDialog::doPackageUpdate()
+{
+    prepareSolving();
+    logInfo() << "Starting a global package update ('zypper up' counterpart)..." << endl;
+
+    bool success = true;
+    zypp::getZYpp()->resolver()->doUpdate(); // No return value, assume success.
+
+    logDebug() << "Package update done." << endl;
+
+    return processSolverResult( success );
+}
+
+
+int
+YQPkgConflictDialog::doDistUpgrade()
+{
+    prepareSolving();
+    logInfo() << "Starting a dist upgrade ('zypper dup' counterpart)" << endl;
+
+    bool success = zypp::getZYpp()->resolver()->doUpgrade();
+
+    logDebug() << "Dist upgrade done." << endl;
 
     return processSolverResult( success );
 }
@@ -286,7 +297,6 @@ YQPkgConflictDialog::prepareSolving()
 
         _conflictList->applyResolutions();
     }
-
 
     // Initialize for next round of solving.
     _conflictList->clear();

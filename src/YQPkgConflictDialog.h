@@ -100,6 +100,24 @@ public slots:
      **/
     int verifySystem();
 
+    /**
+     * Update all installed packages that can be updated without a problem.
+     * This is the counterpart to 'zypper up'.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+    int doPackageUpdate();
+
+    /**
+     * Do a distribution upgrade: Upgrade all installed packages that can be
+     * updated without a problem, taking package splits etc. into account.
+     *
+     * This is the counterpart to 'zypper dup'.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+    int doDistUpgrade();
+
 
 #if FIXME_SOLVER_TEST_CASE
     /**
