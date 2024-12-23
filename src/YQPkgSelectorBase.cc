@@ -329,7 +329,8 @@ void YQPkgSelectorBase::accept()
 
     YQPkgApplication::instance()->pkgTasks()->initFromZypp();
 
-    if ( pendingChanges() )
+    if ( ! YQPkgApplication::instance()->pkgTasks()->todo().isEmpty()
+         || pendingChanges() )
     {
         logInfo() << "Closing PackageSelector with 'commit'" << endl;
         emit commit();

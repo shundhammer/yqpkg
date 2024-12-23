@@ -202,6 +202,8 @@ PkgCommitPage::commitPolicy() const
         policy.downloadMode( zypp::DownloadOnly );
     }
 
+    policy.allowDowngrade( true );
+
     return policy;
 }
 
