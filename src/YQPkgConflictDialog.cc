@@ -43,15 +43,15 @@
 
 #define SOLVING_TIMER           0
 
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING                 6       // between subwidgets
+#define MARGIN                  4       // around the widget
 
 
 // The busy dialog ("Checking Dependencies") will only be shown if solving
 // (on average) takes longer than this many seconds. The first one will be
 // shown in any case.
 
-#define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
+#define SUPPRESS_BUSY_DIALOG_SECONDS    1.5
 
 
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
@@ -59,8 +59,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 {
     setStyleSheet( QString() );
 
-    _solveCount		= 0;
-    _totalSolveTime	= 0.0;
+    _solveCount         = 0;
+    _totalSolveTime     = 0.0;
 
 
     // Set the dialog title.
@@ -95,7 +95,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     layout->addSpacing( 2 );
 
     connect( _conflictList, SIGNAL( updatePackages() ),
-	     this,	    SIGNAL( updatePackages() ) );
+             this,          SIGNAL( updatePackages() ) );
 
 
     // Button box
@@ -116,7 +116,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     button->setDefault( true );
 
     connect( button, SIGNAL( clicked()               ),
-	     this,   SLOT  ( solveAndShowConflicts() ) );
+             this,   SLOT  ( solveAndShowConflicts() ) );
 
 
 #if 0
@@ -136,7 +136,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     button->setMenu( _expertMenu );
 
     _expertMenu->addAction( _( "&Save This List to a File..." ),
-			     _conflictList, SLOT( askSaveToFile() ) );
+                             _conflictList, SLOT( askSaveToFile() ) );
 #endif
 
 
@@ -149,7 +149,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->addStretch();
 
     connect( button, SIGNAL( clicked() ),
-	     this,   SLOT  ( reject()  ) );
+             this,   SLOT  ( reject()  ) );
 
 
 
@@ -245,8 +245,8 @@ YQPkgConflictDialog::solveAndShowConflicts()
     _totalSolveTime += solveTime.elapsed() / 1000.0;
 
     logDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
-	       << " s - average: "  << " s" << averageSolveTime()
-	       << endl;
+               << " s - average: "  << " s" << averageSolveTime()
+               << endl;
 #endif
 
     return processSolverResult( success );
@@ -278,13 +278,13 @@ YQPkgConflictDialog::prepareSolving()
 
     if ( isVisible() )
     {
-	// This is not only the starting point for all the dependency solving
-	// magic, it is also used internally when clicking the "OK - Try again"
-	// button. Thus, before doing anything else, check if the conflict list
-	// still contains anything, and if so, apply any conflict resolutions
-	// the user selected - but only if this dialog is already visible.
+        // This is not only the starting point for all the dependency solving
+        // magic, it is also used internally when clicking the "OK - Try again"
+        // button. Thus, before doing anything else, check if the conflict list
+        // still contains anything, and if so, apply any conflict resolutions
+        // the user selected - but only if this dialog is already visible.
 
-	_conflictList->applyResolutions();
+        _conflictList->applyResolutions();
     }
 
 
@@ -293,17 +293,17 @@ YQPkgConflictDialog::prepareSolving()
 
     if ( _solveCount++ == 0 || averageSolveTime() > SUPPRESS_BUSY_DIALOG_SECONDS )
     {
-	_busyPopup->show();
+        _busyPopup->show();
 
-	// No _busyPopup->repaint() - that doesn't help anyway: Qt doesn't do
-	// any actual painting until the window is mapped. We just rely on the
-	// background pixmap we provided in the constructor.
+        // No _busyPopup->repaint() - that doesn't help anyway: Qt doesn't do
+        // any actual painting until the window is mapped. We just rely on the
+        // background pixmap we provided in the constructor.
 
         // Make sure show() gets processed - usually, a window manager catches
         // the show() (XMap) events, positions and maybe resizes the window and
         // only then sends off an event that makes the window appear. This
         // event needs to be processed.
-	qApp->processEvents();
+        qApp->processEvents();
     }
 }
 
@@ -312,7 +312,7 @@ int
 YQPkgConflictDialog::processSolverResult( bool success )
 {
     if ( _busyPopup->isVisible() )
-	_busyPopup->hide();
+        _busyPopup->hide();
 
     // Package states may have changed: The solver may have set packages to
     // autoInstall or autoUpdate. Make those changes known.
@@ -321,29 +321,29 @@ YQPkgConflictDialog::processSolverResult( bool success )
     normalCursor();
     int result = QDialog::Accepted;
 
-    if ( success )	// Solving went without any complaints?
+    if ( success )      // Solving went without any complaints?
     {
-	result = QDialog::Accepted;
+        result = QDialog::Accepted;
 
-	if ( isVisible() )
-	    accept();	// Pop down the dialog.
+        if ( isVisible() )
+            accept();   // Pop down the dialog.
     }
-    else		// There were solving problems.
+    else                // There were solving problems.
     {
-	logDebug() << "Dependency conflict!" << endl;
-	busyCursor();
+        logDebug() << "Dependency conflict!" << endl;
+        busyCursor();
 
-	_conflictList->fill( zypp::getZYpp()->resolver()->problems() );
-	normalCursor();
+        _conflictList->fill( zypp::getZYpp()->resolver()->problems() );
+        normalCursor();
 
-	if ( ! isVisible() )
-	{
-	    // Pop up the dialog and run a local event loop.
-	    result = exec();
-	}
+        if ( ! isVisible() )
+        {
+            // Pop up the dialog and run a local event loop.
+            result = exec();
+        }
     }
 
-    return result;	// QDialog::Accepted or QDialog::Rejected
+    return result;      // QDialog::Accepted or QDialog::Rejected
 }
 
 
@@ -358,7 +358,7 @@ double
 YQPkgConflictDialog::averageSolveTime() const
 {
     if ( _solveCount < 1 )
-	return 0.0;
+        return 0.0;
 
     return _totalSolveTime / _solveCount;
 }
@@ -374,17 +374,17 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     QString heading = QString( "<h2>%1</h2>" ).arg( _( "Create Dependency Resolver Test Case" ) );
 
     QString msg =
-	_( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver. "
-	   "The logs will be stored in directory <br><tt>%1</tt></p>" ).arg( testCaseDir );
+        _( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver. "
+           "The logs will be stored in directory <br><tt>%1</tt></p>" ).arg( testCaseDir );
 
-    int button_no = QMessageBox::information( 0,			// parent
-					      _( "Solver Test Case" ),	// caption
-					      heading + msg,
-					      _( "C&ontinue" ),		// button #0
-					      _( "&Cancel" ) );		// button #1
+    int button_no = QMessageBox::information( 0,                        // parent
+                                              _( "Solver Test Case" ),  // caption
+                                              heading + msg,
+                                              _( "C&ontinue" ),         // button #0
+                                              _( "&Cancel" ) );         // button #1
 
-    if ( button_no == 1 )	// Cancel
-	return;
+    if ( button_no == 1 )       // Cancel
+        return;
 
     logInfo() << "Generating solver test case START" << endl;
     bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable( testCaseDir ) );
@@ -392,30 +392,30 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 
     if ( success )
     {
-	msg =
-	    _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
-	       "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
-	button_no = QMessageBox::question( 0,				// parent
-					   _( "Success" ),		// caption
-					   msg,
-					   QMessageBox::Yes    | QMessageBox::Default,
-					   QMessageBox::No,
-					   QMessageBox::Cancel | QMessageBox::Escape );
+        msg =
+            _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
+               "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
+        button_no = QMessageBox::question( 0,                           // parent
+                                           _( "Success" ),              // caption
+                                           msg,
+                                           QMessageBox::Yes    | QMessageBox::Default,
+                                           QMessageBox::No,
+                                           QMessageBox::Cancel | QMessageBox::Escape );
 
-	if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
+        if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
         {
-	    // YQUI::ui()->askSaveLogs();
+            // YQUI::ui()->askSaveLogs();
         }
     }
     else // no success
     {
-	QMessageBox::warning( 0,					// parent
-			      _( "Error" ),				// caption
-			      _( "<p><b>Error</b> creating dependency resolver test case</p>"
-				 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
-			      QMessageBox::Ok | QMessageBox::Default,
-			      QMessageBox::NoButton,
-			      QMessageBox::NoButton );
+        QMessageBox::warning( 0,                                        // parent
+                              _( "Error" ),                             // caption
+                              _( "<p><b>Error</b> creating dependency resolver test case</p>"
+                                 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
+                              QMessageBox::Ok | QMessageBox::Default,
+                              QMessageBox::NoButton,
+                              QMessageBox::NoButton );
     }
 }
 

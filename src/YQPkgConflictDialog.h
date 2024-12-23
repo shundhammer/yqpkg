@@ -18,6 +18,7 @@
 #ifndef YQPkgConflictDialog_h
 #define YQPkgConflictDialog_h
 
+
 #include <QDialog>
 #include <QMenu>
 #include <QLabel>
@@ -142,12 +143,12 @@ protected:
     // Data members
     //
 
-    YQPkgConflictList *	_conflictList;
-    QMenu *	_expertMenu;
-    QLabel *		_busyPopup;
+    YQPkgConflictList * _conflictList;
+    QMenu *     _expertMenu;
+    QLabel *            _busyPopup;
 
-    double		_totalSolveTime;
-    int			_solveCount;
+    double              _totalSolveTime;
+    int                 _solveCount;
 };
 
 
