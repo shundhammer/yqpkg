@@ -52,6 +52,20 @@ public:
      **/
     virtual ~YQPkgUpdatesFilterView();
 
+    /**
+     * Return the preferred size of this widget.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual QSize sizeHint() const override;
+
+    /**
+     * Return the preferred size of this widget.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual QSize minimumSizeHint() const override;
+
 
 public slots:
 

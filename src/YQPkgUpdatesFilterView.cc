@@ -58,7 +58,7 @@ YQPkgUpdatesFilterView::connectWidgets()
              this,                     SLOT  ( doPackageUpdate() ) );
 
     connect( _ui->distUpgradeButton,   SIGNAL( clicked()         ),
-             this,                     SLOT  ( doPackageUpdate() ) );
+             this,                     SLOT  ( doDistUpgrade()   ) );
 
     connect( _ui->refreshListButton,   SIGNAL( clicked()         ),
              this,                     SLOT  ( refreshList()     ) );
@@ -120,4 +120,19 @@ YQPkgUpdatesFilterView::filter()
     emit filterFinished();
 }
 
+
+QSize
+YQPkgUpdatesFilterView::minimumSizeHint() const
+{
+    QSize size( _ui->distUpgradeButton->sizeHint() );
+    size.setWidth( size.width() * 1.6 );
+
+    return size;
+}
+
+QSize
+YQPkgUpdatesFilterView::sizeHint() const
+{
+    return minimumSizeHint();
+}
 
