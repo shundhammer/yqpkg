@@ -255,7 +255,7 @@ public:
     /**
      * Find the first task where the name matches the name of the 'zyppRes'
      * Zypp resolvable.
-
+     *
      * Return the task if found, 0 if not found.
      **/
     PkgTask * find( ZyppRes zyppRes ) const;

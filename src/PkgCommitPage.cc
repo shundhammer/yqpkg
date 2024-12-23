@@ -48,6 +48,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     , _ui( new Ui::PkgCommitPage ) // Use the Qt designer .ui form (XML)
     , _pkgTasks( 0 )
     , _showingDetails( false )
+    , _startedInstallingPkg( false )
 {
     CHECK_PTR( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -94,6 +95,7 @@ void PkgCommitPage::commit()
 {
     populateLists();
     initProgressData();
+    _startedInstallingPkg = false;
     _ui->totalProgressBar->setValue( 0 );
     PkgCommitSignalForwarder::instance()->reset();
 
@@ -643,6 +645,25 @@ void PkgCommitPage::pkgDownloadError( ZyppRes zyppRes, const QString & errorMsg 
 
 void PkgCommitPage::pkgInstallStart( ZyppRes zyppRes )
 {
+    // While packages are being downloaded, the list always scrolls to the
+    // bottom, so the list appears to scroll like a text terminal as new output
+    // appears.
+    //
+    // But when we are installing the first package, the downloads phase is
+    // probably over, so scroll the downloads list widget to the top so the
+    // user can now see the packages that are probably installed next and how
+    // they move from the downloads list to the doing list.
+    //
+    // But only do that once: The user might choose to scroll the list
+    // manually, and we don't want to fight the user's actions every few
+    // seconds.
+
+    if ( ! _startedInstallingPkg )
+    {
+        _startedInstallingPkg = true;
+        _ui->downloadsList->scrollToTop();
+    }
+
     pkgActionStart( zyppRes, PkgInstall, __FUNCTION__ );
 }
 

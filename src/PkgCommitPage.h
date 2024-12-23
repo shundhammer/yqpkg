@@ -338,6 +338,7 @@ protected:
     Ui::PkgCommitPage * _ui;
     PkgTasks *          _pkgTasks;
     bool                _showingDetails;
+    bool                _startedInstallingPkg;
 
     ByteCount           _totalDownloadSize;
     ByteCount           _totalInstalledSize;
