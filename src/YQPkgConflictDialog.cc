@@ -79,16 +79,18 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // Layout for the dialog (can't simply insert a QVbox)
 
     QVBoxLayout * layout = new QVBoxLayout();
+    Q_CHECK_PTR( layout );
+
     setLayout(layout);
     layout->setMargin(MARGIN);
     layout->setSpacing(SPACING);
 
-    Q_CHECK_PTR( layout );
 
     // Conflict list
 
     _conflictList = new YQPkgConflictList( this );
     Q_CHECK_PTR( _conflictList );
+
     layout->addWidget( _conflictList );
     layout->addSpacing( 2 );
 
@@ -99,6 +101,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // Button box
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
+
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addLayout( buttonBox );
@@ -107,11 +110,12 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // "OK" button
 
     QPushButton * button = new QPushButton( _( "&OK -- Try Again" ), this);
-    buttonBox->addWidget(button);
     Q_CHECK_PTR( button );
+
+    buttonBox->addWidget(button);
     button->setDefault( true );
 
-    connect( button, SIGNAL( clicked() ),
+    connect( button, SIGNAL( clicked()               ),
 	     this,   SLOT  ( solveAndShowConflicts() ) );
 
 
@@ -119,15 +123,16 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // "Expert" menu button
 
     button = new QPushButton( _( "&Expert" ), this );
-    buttonBox->addWidget(button);
-
     Q_CHECK_PTR( button );
+
+    buttonBox->addWidget(button);
 
 
     // "Expert" menu
 
     _expertMenu = new QMenu( button );
     Q_CHECK_PTR( _expertMenu );
+
     button->setMenu( _expertMenu );
 
     _expertMenu->addAction( _( "&Save This List to a File..." ),
@@ -138,12 +143,14 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // "Cancel" button
 
     button = new QPushButton( _( "&Cancel" ), this);
-    buttonBox->addWidget(button);
     Q_CHECK_PTR( button );
+
+    buttonBox->addWidget(button);
+    buttonBox->addStretch();
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( reject()  ) );
-    buttonBox->addStretch();
+
 
 
     // Busy popup
