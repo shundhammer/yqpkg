@@ -95,6 +95,17 @@ at the same time.
 Hopefully SUSE will recognize the importance of this and keep sponsoring it.
 
 
+## Build Requirements
+
+You need at least a C++ and Qt5 development environment plus CMake and
+libzypp-devel.
+
+```
+sudo zypper install -t pattern devel_C_C++ devel_qt5
+sudo zypper install cmake libzypp-devel
+```
+
+
 ## Building
 
 ```
