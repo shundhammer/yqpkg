@@ -28,6 +28,7 @@ class PMManager;
 class QPushButton;
 class QMenu;
 class QLabel;
+class YQPkgConflictDialog;
 
 
 /**
@@ -50,6 +51,21 @@ public:
      * Destructor.
      **/
     virtual ~YQPkgConflictDialog();
+
+    /**
+     * Return the first instance of this class or 0 if there is none.
+     *
+     * This is not a singleton class, but in normal applications exactly one
+     * instance is created by a high-level object such as YQPkgSelector, and
+     * that instance is kept until the package selection process is over.
+     *
+     * Use this to access high-level methods such as
+     *   - solveAndShowConflicts()
+     *   - verifySystem()
+     *   - doPackageUpdate()
+     *   - doDistUpgrade()
+     **/
+    static YQPkgConflictDialog * instance() { return _instance; }
 
     /**
      * Reimplemented from QWidget:
@@ -167,6 +183,8 @@ protected:
 
     double              _totalSolveTime;
     int                 _solveCount;
+
+    static YQPkgConflictDialog * _instance;
 };
 
 

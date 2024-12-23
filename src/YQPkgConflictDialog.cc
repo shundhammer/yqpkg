@@ -52,9 +52,15 @@
 #define SUPPRESS_BUSY_DIALOG_SECONDS    1.5
 
 
+YQPkgConflictDialog * YQPkgConflictDialog::_instance = 0;
+
+
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )
 {
+    if ( ! _instance )
+        _instance = this;
+
     setStyleSheet( QString() );
 
     _solveCount         = 0;
@@ -214,6 +220,9 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 YQPkgConflictDialog::~YQPkgConflictDialog()
 {
     WindowSettings::write( this, "PkgConflictDialog" );
+
+    if ( _instance == this )
+        _instance = 0;
 }
 
 

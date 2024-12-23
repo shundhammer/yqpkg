@@ -73,6 +73,7 @@
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
+#include "YQPkgUpdatesFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
@@ -135,6 +136,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _searchFilterView           = 0;
     _statusFilterView           = 0;
     _updateProblemFilterView    = 0;
+    _updatesFilterView          = 0;
     _excludeDevelPkgs           = 0;
     _excludeDebugInfoPkgs       = 0;
 
@@ -163,9 +165,9 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         // Add a number of default tabs in the desired order
         //
 
-        if ( _searchFilterView ) _filters->showPage( _searchFilterView );
-        if ( _repoFilterView   ) _filters->showPage( _repoFilterView );
-        if ( _patternList      ) _filters->showPage( _patternList );
+        if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
+        if ( _updatesFilterView ) _filters->showPage( _updatesFilterView );
+        if ( _patternList       ) _filters->showPage( _patternList       );
     }
 
 
@@ -349,6 +351,18 @@ YQPkgSelector::layoutFilters( QWidget * parent )
                      _patternList,       SLOT  ( updateItemStates()       ) );
         }
     }
+
+
+    //
+    // Updates view
+    //
+
+    _updatesFilterView = new YQPkgUpdatesFilterView( parent );
+    CHECK_NEW( _updatesFilterView );
+    _filters->addPage( _( "Updates" ), _updatesFilterView, "updates" );
+
+    connect( this,               SIGNAL( loadData() ),
+             _updatesFilterView, SLOT  ( filter()   ) );
 
 
     //
@@ -984,8 +998,8 @@ YQPkgSelector::connectFilter( QWidget * filter,
 
     if ( hasUpdateSignal && _filters->diskUsageList() )
     {
-        connect( filter,                SIGNAL( updatePackages()   ),
-                 pkgList,               SLOT  ( updateItemStates() ) );
+        connect( filter,  SIGNAL( updatePackages()   ),
+                 pkgList, SLOT  ( updateItemStates() ) );
 
         if ( _filters->diskUsageList() )
         {
@@ -1003,6 +1017,7 @@ YQPkgSelector::makeConnections()
     connectFilter( _updateProblemFilterView,    _pkgList, false );
 #endif
     connectFilter( _patternList,                _pkgList );
+    connectFilter( _updatesFilterView,          _pkgList, false );
     connectFilter( _langList,                   _pkgList );
     connectFilter( _repoFilterView,             _pkgList, false );
     connectFilter( _serviceFilterView,          _pkgList, false );

@@ -80,6 +80,7 @@ set( SOURCES
   YQPkgStatusFilterView.cc
   YQPkgTechnicalDetailsView.cc
   YQPkgTextDialog.cc
+  YQPkgUpdatesFilterView.cc
   YQPkgVersionsView.cc
 
   YQIconPool.cc
@@ -109,6 +110,7 @@ set( QRC_FILES icons.qrc ) # Compiled-in resources: icons
 set( UI_FILES
      pkg-commit-page.ui
      summary-page.ui
+     updates-filter-view.ui
    )
 
 # Putting it all together

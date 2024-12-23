@@ -55,6 +55,7 @@ class YQPkgServiceFilterView;
 class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
+class YQPkgUpdatesFilterView;
 class YQPkgVersionsView;
 
 class YQPkgSelector : public YQPkgSelectorBase
@@ -377,6 +378,7 @@ protected:
     QAction *				_autoDependenciesAction;
     QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
+
     YQPkgFilterTab *			_filters;
     YQPkgChangeLogView *		_pkgChangeLogView;
     YQPkgDependenciesView *		_pkgDependenciesView;
@@ -395,6 +397,7 @@ protected:
     YQPkgStatusFilterView *		_statusFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
+    YQPkgUpdatesFilterView *            _updatesFilterView;
     YQPkgVersionsView *			_pkgVersionsView;
     YQPkgPatchFilterView *		_patchFilterView;
     YQPkgPatchList *			_patchList;
