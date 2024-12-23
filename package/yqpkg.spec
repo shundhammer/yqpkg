@@ -39,31 +39,16 @@ BuildRequires:  pkg-config
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  %{libzypp_devel_version}
 
-Summary:        GUI abstraction library
+Summary:        Standalone graphical package management based on libzypp
 License:        GPL-2.0
 URL:            http://github.com/shundhammer/yqpkg
 Source:         %{name}-%{version}.tar.bz2
 
+
 %description
-This is the user interface engine that provides the abstraction from
-graphical user interfaces (Qt, Gtk) and text based user interfaces
-(ncurses).
-
-Originally developed for YaST, it can also be used independently of
-YaST for generic (C++) applications. This package has very few
-dependencies.
-
-
-%package -n %{bin_name}
-Summary:        yqpkg - Package selector as a standalone Qt program
-
-
-%description -n %{bin_name}
 This is the (formerly YaST) Qt package selector as a standalone program
 without any YaST dependencies, just Qt and libzypp.
 
