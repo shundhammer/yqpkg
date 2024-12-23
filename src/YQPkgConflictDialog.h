@@ -144,7 +144,7 @@ protected:
     //
 
     YQPkgConflictList * _conflictList;
-    QMenu *     _expertMenu;
+    QMenu *             _expertMenu;
     QLabel *            _busyPopup;
 
     double              _totalSolveTime;
