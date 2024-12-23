@@ -136,7 +136,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     button->setMenu( _expertMenu );
 
     _expertMenu->addAction( _( "&Save This List to a File..." ),
-                             _conflictList, SLOT( askSaveToFile() ) );
+                            _conflictList, SLOT( askSaveToFile() ) );
 #endif
 
 
@@ -395,12 +395,12 @@ YQPkgConflictDialog::askCreateSolverTestCase()
         msg =
             _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
                "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
-        button_no = QMessageBox::question( 0,                           // parent
-                                           _( "Success" ),              // caption
-                                           msg,
-                                           QMessageBox::Yes    | QMessageBox::Default,
-                                           QMessageBox::No,
-                                           QMessageBox::Cancel | QMessageBox::Escape );
+            button_no = QMessageBox::question( 0,                           // parent
+                                               _( "Success" ),              // caption
+                                               msg,
+                                               QMessageBox::Yes    | QMessageBox::Default,
+                                               QMessageBox::No,
+                                               QMessageBox::Cancel | QMessageBox::Escape );
 
         if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
         {
