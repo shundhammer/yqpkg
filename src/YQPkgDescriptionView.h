@@ -39,7 +39,8 @@ public:
     /**
      * Constructor
      **/
-    YQPkgDescriptionView( QWidget * parent, bool showSupportability = true );
+    YQPkgDescriptionView( QWidget * parent,
+                          bool      showSupportability = true );
 
     /**
      * Destructor

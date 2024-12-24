@@ -40,7 +40,7 @@
 #endif
 
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
-#define DESKTOPFILEDIR          "\\/share\\/applications\\/.*\\.desktop$"       // RegExp
+#define DESKTOP_FILE_DIR        "\\/share\\/applications\\/.*\\.desktop$"       // RegExp
 
 
 using std::list;
@@ -49,11 +49,11 @@ using namespace zypp;
 
 
 
-YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent, bool showSupportability )
+YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent,
+                                            bool      showSupportability )
     : YQPkgGenericDetailsView( parent )
     , _showSupportability ( showSupportability )
 {
-    //FIXME setMimeSourceFactory( 0 );
     initLang();
 }
 
@@ -87,7 +87,8 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     html_text += ( "<p>" + description + "</p>");
 
     // if the object is a patch, show the problem references too
-    Patch::constPtr patch = asKind<Patch>(selectable->theObj());
+    Patch::constPtr patch = asKind<Patch>( selectable->theObj() );
+
     if ( patch )
     {
         html_text += "<p>";
@@ -95,43 +96,44 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
         html_text += "</p>";
         html_text +=  "<ul>";
 
-        for ( Patch::ReferenceIterator rit = patch->referencesBegin();
-              rit != patch->referencesEnd();
-              ++rit )
+        for ( Patch::ReferenceIterator it = patch->referencesBegin();
+              it != patch->referencesEnd();
+              ++it )
         {
-            html_text +=  QString( "<li>%1 (%2) : %3</li>" )
-                .arg( rit.id().c_str() )
-                .arg( rit.type().c_str() )
-                .arg( rit.title().c_str() );
+            html_text +=  QString( "<li>%1 (%2): %3</li>" )
+                .arg( it.id().c_str() )
+                .arg( it.type().c_str() )
+                .arg( it.title().c_str() );
         }
+
         html_text += "</ul>";
     }
 
-    // if it is a package, show the support information
-    Package::constPtr package = asKind<Package>(selectable->theObj());
+    // If it is a package, show the support information
+
+    Package::constPtr package = asKind<Package>( selectable->theObj() );
+
     if ( _showSupportability && package )
     {
         html_text += "<p>";
         // Translators: %1 contains the support level like "Level 3", "unsupported" or "unknown"
-        html_text += _("Supportability: %1").arg( fromUTF8(asUserString(package->vendorSupport()).c_str() ));
+        html_text += _("Supportability: %1").arg( fromUTF8( asUserString( package->vendorSupport() ).c_str() ) );
         html_text += "</p>";
     }
 
     // show application names and icons from desktop files if available
+
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
+
     if ( installed )
     {
-        // ma@: It might be worth passing Package::FileList directly
-        // instead of copying _all_ filenames into a list first.
-        // Package::FileList is a query, so it does not eat much memory.
-        zypp::Package::FileList f( installed->filelist() );
-        std::list<std::string> tmp( f.begin(), f.end() );
+        zypp::Package::FileList fileList( installed->filelist() );
+        std::list<std::string> tmp( fileList.begin(), fileList.end() );
         html_text += applicationIconList( tmp );
     }
 
     html_text += htmlEnd();
     setHtml( html_text );
-    //FIXME ensureVisible( 0, 0 );      // Otherwise hyperlinks will be centered
 }
 
 
@@ -171,9 +173,6 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
             else
                 html_text += " " + line;
         }
-
-
-
 
         ++it;
     }
@@ -236,10 +235,11 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
             QByteArray byteArray;
             QBuffer buffer(&byteArray);
             pixmap.save(&buffer, "PNG");
+
             html += "<tr><td valign='middle' align='center'>";
             html += QString("<td><img src=\"data:image/png;base64,") + byteArray.toBase64() + QString( "\">" );
             html += "</td><td valign='middle' align='left'>";
-            html += "<b>" + desktopEntries["Name"] + "</b>";
+            html += "<b>" + desktopEntries[ "Name" ] + "</b>";
             html += "</td></tr>";
         }
     }
@@ -264,6 +264,7 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
 
     QSettings file( fileName, QSettings::IniFormat );
     file.setIniCodec( "UTF-8");
+
     file.beginGroup( "Desktop Entry" );
     desktopEntries["Icon"] = file.value( "Icon" ).toString();
     desktopEntries["Exec"] = file.value( "Exec" ).toString();
@@ -287,7 +288,8 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
     }
     if ( name.isEmpty() )
         name= file.value( QString( "Name" ) ).toString() ;
-    desktopEntries["Name"] = name;
+
+    desktopEntries[ "Name" ] = name;
 
     file.endGroup();
 
@@ -301,11 +303,12 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
     QStringList desktopFiles;
 
     for ( list<string>::const_iterator it = fileList.begin();
-            it != fileList.end(); ++it )
+            it != fileList.end();
+          ++it )
     {
         QString line = fromUTF8( *it );
 
-        if ( line.contains( QRegExp( DESKTOPFILEDIR ) ) )
+        if ( line.contains( QRegExp( DESKTOP_FILE_DIR ) ) )
             desktopFiles << line;
     }
 
@@ -328,5 +331,3 @@ void YQPkgDescriptionView::initLang()
         _lang.replace( QRegExp( "_.*$" ), "" ); // remove _DE etc.
     }
 }
-
-
