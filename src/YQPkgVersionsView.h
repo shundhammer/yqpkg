@@ -18,18 +18,17 @@
 #ifndef YQPkgVersionsView_h
 #define YQPkgVersionsView_h
 
+
 #include <QScrollArea>
 #include <QRadioButton>
 #include <QCheckBox>
-#include <QButtonGroup>
-#include <QBoxLayout>
-#include <QLabel>
-#include <QList>
 
 #include "YQZypp.h"
 
 
 class QTabWidget;
+class QVBoxLayout;
+class QButtonGroup;
 class YQPkgMultiVersion;
 class YQPkgVersion;
 
@@ -110,9 +109,6 @@ public slots:
      **/
     void showDetailsIfVisible( ZyppSel selectable );
 
-    // slot clear() inherited from QListView
-
-
     /**
      * Show data for the current package.
      **/
@@ -166,11 +162,11 @@ protected:
 
     // Data members
 
-    QTabWidget	*	_parentTab;
-    ZyppSel		_selectable;
-    bool		_isMixedMultiVersion;
-    QButtonGroup *	_buttonGroup;
-    QVBoxLayout	*	_layout;
+    QTabWidget  *  _parentTab;
+    ZyppSel        _selectable;
+    bool           _isMixedMultiVersion;
+    QButtonGroup * _buttonGroup;
+    QVBoxLayout *  _layout;
 };
 
 
@@ -182,9 +178,9 @@ public:
      * Constructor. Creates a YQPkgVersion item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgVersion( QWidget *	parent,
-		  ZyppSel	selectable,
-		  ZyppObj	zyppObj );
+    YQPkgVersion( QWidget * parent,
+                  ZyppSel   selectable,
+                  ZyppObj   zyppObj );
 
     /**
      * Destructor
@@ -214,8 +210,8 @@ protected:
 
     // Data members
 
-    ZyppSel	_selectable;
-    ZyppObj	_zyppObj;
+    ZyppSel _selectable;
+    ZyppObj _zyppObj;
 };
 
 
@@ -230,8 +226,8 @@ public:
      * Constructor.
      **/
     YQPkgMultiVersion( YQPkgVersionsView * parent,
-		       ZyppSel		   selectable,
-		       ZyppPoolItem	   zyppPoolItem );
+                       ZyppSel             selectable,
+                       ZyppPoolItem        zyppPoolItem );
 
     /**
      * Destructor
@@ -262,6 +258,7 @@ signals:
 
 
 protected slots:
+
     void slotIconClicked();
 
 
@@ -273,6 +270,7 @@ protected:
     void cycleStatus();
 
     void setStatus( ZyppStatus newStatus );
+
     QPixmap statusIcon( ZyppStatus status );
 
     //
@@ -280,11 +278,9 @@ protected:
     //
 
     YQPkgVersionsView * _parent;
-    ZyppSel		_selectable;
-    ZyppPoolItem	_zyppPoolItem;
+    ZyppSel             _selectable;
+    ZyppPoolItem        _zyppPoolItem;
 };
-
-
 
 
 #endif // ifndef YQPkgVersionsView_h
