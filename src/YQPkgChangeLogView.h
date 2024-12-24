@@ -46,9 +46,10 @@ public:
     virtual ~YQPkgChangeLogView();
 
     /**
-     * Show details for the specified package:
-     * In this case the package description.
-     * Overwritten from YQPkgGenericDetailsView.
+     * Show details for the specified package,
+     * in this case the package description.
+     *
+     * Reimplemented from YQPkgGenericDetailsView.
      **/
     virtual void showDetails( ZyppSel selectable );
 
@@ -60,12 +61,11 @@ protected:
     QString changeLogTable( const zypp::Changelog & changeLog ) const;
 
     /**
-     * Format an info message about not displayed changes.
-     * @param  missing Number of missing entris
-     * @param  pkg     Package name (with version)
-     * @return         Translated message
+     * Format an info message about not displayed changes
+     * and return the ranslated message.
      */
-    QString notDisplayedChanges(int missing, const std::string &pkg);
+    QString omittedEntries( int                 omittedCount,
+                            const std::string & pkgName );
 };
 
 

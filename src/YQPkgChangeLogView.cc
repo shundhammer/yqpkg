@@ -16,19 +16,14 @@
 
 
 #include "Logger.h"
-
+#include "YQPkgChangeLogView.h"
 #include "YQi18n.h"
 #include "utf8.h"
-
-#include <QRegExp>
-
-#include "YQPkgChangeLogView.h"
 #include "YQPkgDescriptionDialog.h"
 
 
-// how many change log entries should be displayed at most,
-// displaying huge changes takes too much time (bsc#1044777)
-static const int MAX_DISPLAYED_CHANGES = 512;
+static const int MAX_ENTRIES = 512;
+
 
 YQPkgChangeLogView::YQPkgChangeLogView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
@@ -53,7 +48,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    logDebug() << "Generating changelog..." << endl;
+    // logVerbose() << "Generating changelog..." << endl;
 
     QString html = htmlStart();
     html += htmlHeading( selectable, false );
@@ -64,65 +59,65 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
     {
         html += changeLogTable( installed->changelog() );
 
-        int not_displayed = installed->changelog().size() - MAX_DISPLAYED_CHANGES;
-        if (not_displayed > 0)
+        int omittedCount = installed->changelog().size() - MAX_ENTRIES;
+
+        if ( omittedCount > 0)
         {
-            logWarning() << "Changelog size limit reached, ignoring last "
-                << not_displayed << " items" << endl;
-            html.append("<p class='note'>"
-                + notDisplayedChanges(not_displayed, installed->name() + "-" + installed->edition().asString())
-                + "</p>");
+            html.append( "<p class='note'>"
+                         + omittedEntries( omittedCount, installed->name() )
+                         + "</p>" );
         }
     }
     else
     {
 	html += "<p><i>" + _( "Information only available for installed packages." ) + "</i></p>";
     }
-    html += htmlEnd();
 
-    logDebug() << "Changelog HTML size: " << html.size() << endl;
+    html += htmlEnd();
     setHtml( html );
-    logDebug() << "Changes displayed" << endl;
 }
 
 
 
 QString YQPkgChangeLogView::changeLogTable( const zypp::Changelog & changeLog ) const
 {
-    logDebug() << "Changelog size: " << changeLog.size() << " entries" << endl;
-    QString html;
+    // logVerbose () << "Changelog size: " << changeLog.size() << " entries" << endl;
 
-    int index = 0;
+    QString html;
+    int count = 0;
+
     for ( zypp::Changelog::const_iterator it = changeLog.begin();
 	  it != changeLog.end();
 	  ++it )
     {
 	QString changes = htmlEscape( fromUTF8( (*it).text() ) );
-	changes.replace( "\n", "<br>" );
+	changes.replace( "\n", "<br>"  );
 	changes.replace( " ", "&nbsp;" );
 
-	html += row(
-		    cell( (*it).date()   ) +
-		    cell( (*it).author() ) +
-		    "<td valign='top'>" + changes + "</td>" // cell() calls htmlEscape() !
-		    );
+	html += row( cell( (*it).date()   ) +   // cell() calls htmlEscape()!
+                     cell( (*it).author() ) +
+                     "<td valign='top'>" + changes + "</td>"
+                     );
 
-    if (++index == MAX_DISPLAYED_CHANGES)
-        break;
+        if ( ++count == MAX_ENTRIES )
+            break;
     }
 
     return html.isEmpty() ? "" : table( html );
 }
 
-QString YQPkgChangeLogView::notDisplayedChanges(int missing, const std::string &pkg)
-{
-    // TRANSLATORS: The package change log is too long to display, only the latest
-    // changes are displayed. %1 is the number of the items which are not displayed,
-    // %2 contains a command for getting the full changes manually.
-    QString msg = _("(%1 more change entries are not displayed. Run \""
-        "%2\" to see the complete change log.)");
 
-    QString cmd = QString("rpm -q --changelog %1").arg(pkg.c_str());
-    return msg.arg(QString::number(missing), cmd);
+QString YQPkgChangeLogView::omittedEntries( int                 omittedCount,
+                                            const std::string & pkgName )
+{
+    QString rpmCmd = QString( "rpm -q --changelog %1" ).arg( fromUTF8( pkgName ) );
+
+    QString msg = _( "(%1 more; run \"%2\" to see the complete change log)" )
+        .arg( omittedCount )
+        .arg( rpmCmd );
+
+    msg = QString( "<i>" ) + msg + "</i>";
+
+    return msg;
 }
 
