@@ -37,9 +37,6 @@
 #include "YQPkgFilterTab.h"
 
 
-#define SHOW_ONLY_IMPORTANT_PAGES  1
-#define VIEW_BUTTON_LEFT           1
-
 #define MARGIN                     5 // inner margin between 3D borders and content
 #define TOP_EXTRA_MARGIN           3
 #define SPLITTER_HALF_SPACING      2
@@ -113,10 +110,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     _priv->baseClassWidgetStack->addWidget( _priv->outerSplitter );
 
 
-#if SHOW_ONLY_IMPORTANT_PAGES
-
     //
-    // "View" and "Close" buttons
+    // "View" button
     //
 
     QWidget * buttonBox = new QWidget( this );
@@ -129,8 +124,6 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     buttonBox->setLayout( buttonBoxLayout );
     buttonBoxLayout->setContentsMargins( 0, 0, 0, 0 );
 
-#if VIEW_BUTTON_LEFT
-
     // Translators: Button with pop-up menu to open a new page (very much like
     // in a web browser) with another package filter view or to switch to an
     // existing one if it's open already
@@ -138,12 +131,6 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     _priv->viewButton = new QPushButton( _( "&View" ), this );
     CHECK_NEW( _priv->viewButton );
     setCornerWidget( _priv->viewButton, Qt::TopLeftCorner );
-#else
-    _priv->viewButton = new QPushButton( _( "&View" ), buttonBox );
-    CHECK_NEW( _priv->viewButton );
-    buttonBoxLayout->addWidget( _priv->viewButton );
-
-#endif // VIEW_BUTTON_LEFT
 
     QMenu * menu = new QMenu( _priv->viewButton );
     CHECK_NEW( menu );
@@ -151,8 +138,6 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 
     connect( menu, SIGNAL( triggered( QAction * ) ),
              this, SLOT  ( showPage ( QAction * ) ) );
-
-#endif // SHOW_ONLY_IMPORTANT_PAGES
 
 
     //
@@ -174,16 +159,16 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     CHECK_NEW( _priv->diskUsageList );
 
     {
-        QSplitter * sp = _priv->leftPaneSplitter;
-        sp->setStretchFactor( sp->indexOf( _priv->filtersWidgetStack ), 1 );
-        sp->setStretchFactor( sp->indexOf( _priv->diskUsageList      ), 2 );
-
+        QSplitter * splitter = _priv->leftPaneSplitter;
+        splitter->setStretchFactor( splitter->indexOf( _priv->filtersWidgetStack ), 1 );
+        splitter->setStretchFactor( splitter->indexOf( _priv->diskUsageList      ), 1 );
 
         // FIXME: Don't always hide the disk usage list
+        const int diskUsageListHeight = 0;
         QList<int> sizes;
         sizes << _priv->leftPaneSplitter->height();
-        sizes << 0;
-        sp->setSizes( sizes );
+        sizes << diskUsageListHeight;
+        splitter->setSizes( sizes );
     }
 
 
@@ -261,9 +246,9 @@ YQPkgFilterTab::diskUsageList() const
 
 
 void
-YQPkgFilterTab::addPage( const QString &        pageLabel,
-                         QWidget *              pageContent,
-                         const QString &        internalName )
+YQPkgFilterTab::addPage( const QString & pageLabel,
+                         QWidget *       pageContent,
+                         const QString & internalName )
 {
     YQPkgFilterPage * page = new YQPkgFilterPage( pageLabel,
                                                   pageContent,
@@ -282,10 +267,6 @@ YQPkgFilterTab::addPage( const QString &        pageLabel,
 
         _priv->viewButton->menu()->addAction( action );
     }
-
-#if ! SHOW_ONLY_IMPORTANT_PAGES
-    page->tabIndex = tabBar()->addTab( pageLabel );
-#endif
 }
 
 
@@ -457,7 +438,7 @@ YQPkgFilterTab::tabCount() const
 
 
 bool
-YQPkgFilterTab::eventFilter ( QObject * watchedObj, QEvent * event )
+YQPkgFilterTab::eventFilter( QObject * watchedObj, QEvent * event )
 {
     if ( watchedObj == tabBar() &&
          event && event->type() == QEvent::MouseButtonPress )
