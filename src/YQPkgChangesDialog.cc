@@ -32,12 +32,8 @@
 #include "YQPkgList.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
-
 #include "YQPkgChangesDialog.h"
 
-
-using std::set;
-using std::string;
 
 YQPkgChangesDialog::YQPkgChangesDialog( QWidget *       parent,
                                         const QString & message,
@@ -225,7 +221,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
     bool byUser = flt.testFlag( FilterUser      );
     bool byApp  = flt.testFlag( FilterUser      );
 
-    set<string> ignoredNames;
+    std::set<std::string> ignoredNames;
 
     if ( ! byUser || ! byApp )
         ignoredNames = zypp::ui::userWantedPackageNames();
