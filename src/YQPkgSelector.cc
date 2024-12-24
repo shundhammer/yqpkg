@@ -43,7 +43,6 @@
 
 #include "Exception.h"
 #include "Logger.h"
-#include "QY2ComboTabWidget.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "WindowSettings.h"
