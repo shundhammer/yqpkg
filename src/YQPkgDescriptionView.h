@@ -18,6 +18,7 @@
 #ifndef YQPkgDescriptionView_h
 #define YQPkgDescriptionView_h
 
+
 #include <QUrl>
 #include "YQPkgGenericDetailsView.h"
 
@@ -99,9 +100,10 @@ protected:
     void initLang();
 
 private:
-    QString langWithCountry;
-    QString lang;
-    bool _showSupportability;
+
+    QString _langWithCountry;
+    QString _lang;
+    bool    _showSupportability;
 
 };
 
