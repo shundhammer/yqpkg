@@ -33,8 +33,6 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
 
     logVerbose() << "Creating language list" << endl;
 
-    int numCol = 0;
-
     // Translators: Table column heading for a language ISO code like "de_DE",
     // "en_US". Please keep this short to avoid stretching the column too wide!
     QString codeHeader = _( "Code" );
@@ -42,6 +40,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     // Full (human readable) language / country name like "German (Austria)"
     QString langheader = _( "Language");
 
+    int numCol = 0;
     QStringList headers;
     headers <<  "";         _statusCol  = numCol++;
     headers << codeHeader;  _nameCol    = numCol++;
@@ -116,10 +115,11 @@ YQPkgLangList::filter()
 
         zypp::Locale lang = selection()->zyppLang();
 
-        zypp::sat::LocaleSupport myLocale( lang );
-        for_( it, myLocale.selectableBegin(), myLocale.selectableEnd() )
+        zypp::sat::LocaleSupport currentLocale( lang );
+        for_( it, currentLocale.selectableBegin(), currentLocale.selectableEnd() )
         {
             ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
             if ( zyppPkg )
             {
                 if ( (*it)->installedSize() > 0 )
@@ -165,6 +165,8 @@ YQPkgLangList::updateActions( YQPkgObjListItem * item)
     actionSetCurrentDelete->setEnabled( false );
     actionSetCurrentUpdate->setEnabled( false );
 }
+
+
 
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList *      langList,
@@ -302,3 +304,4 @@ bool YQPkgLangListItem::operator<( const QTreeWidgetItem & otherListViewItem ) c
 
     return QY2ListViewItem::operator<( otherListViewItem );
 }
+

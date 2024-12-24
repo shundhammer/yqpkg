@@ -15,16 +15,10 @@
  */
 
 
-#include "YQi18n.h"
-#include "QY2CursorHelper.h"
-#include "utf8.h"
-#include "YQSignalBlocker.h"
-
 #include <zypp/Date.h>
 #include <zypp/Edition.h>
 #include <boost/ref.hpp>
 
-#include <QApplication>
 #include <QBoxLayout>
 #include <QEventLoop>
 #include <QHBoxLayout>
@@ -35,13 +29,17 @@
 #include <QSplitter>
 #include <QTreeWidget>
 
-#include "YQPkgHistoryDialog.h"
-#include "YQPkgList.h"
-#include "YQIconPool.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
+#include "YQIconPool.h"
+#include "YQPkgList.h"
+#include "YQSignalBlocker.h"
+#include "YQi18n.h"
+#include "utf8.h"
+
+#include "YQPkgHistoryDialog.h"
 
 
 #define SPACING         4	// between subwidgets
@@ -72,7 +70,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
 
     // Heading
 
-    QLabel * label = new QLabel(  _( "Package History (/var/log/zypp/history)" ), this );
+    QLabel * label = new QLabel( _( "Package History (/var/log/zypp/history)" ), this );
     label->setFixedHeight( label->sizeHint().height() );
     layout->addWidget( label );
 

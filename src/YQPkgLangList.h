@@ -24,7 +24,7 @@
 class YQPkgLangListItem;
 
 /**
- * Display a list of zypp::Selection objects.
+ * Display a list of languages and locales.
  **/
 class YQPkgLangList : public YQPkgObjList
 {
@@ -132,16 +132,22 @@ public:
     zypp::Locale zyppLang() const { return _zyppLang; }
 
 
-    // Columns
-
-    int statusCol()     const   { return _langList->statusCol(); }
+    /**
+     * Return the column number (0..n) of the status column.
+     **/
+    int statusCol() const { return _langList->statusCol(); }
 
     /**
-     * override this two as we don't have a real selectable and
-     * the status depends on the language
+     * override this as we don't have a real selectable and
+     * the status depends on the language.
      **/
     virtual ZyppStatus status() const;
-    virtual void setStatus( ZyppStatus newStatus, bool sendSignals = true );
+
+    /**
+     * Set the status of this item.
+     **/
+    virtual void setStatus( ZyppStatus newStatus,
+                            bool       sendSignals = true );
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
