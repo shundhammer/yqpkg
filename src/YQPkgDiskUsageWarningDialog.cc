@@ -30,24 +30,23 @@
 #include "YQPkgDiskUsageWarningDialog.h"
 
 
-#define SPACING			2	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING                 2       // between subwidgets
+#define MARGIN                  4       // around the widget
 
 
-YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
-							  const QString & 	message,
-							  int			thresholdPercent,
-							  const QString &	acceptButtonLabel,
-							  const QString &	rejectButtonLabel )
-    : QDialog( parent )
+YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *       parent,
+                                                          const QString & message,
+                                                          int             thresholdPercent,
+                                                          const QString & acceptButtonLabel,
+                                                          const QString & rejectButtonLabel )
+: QDialog( parent )
 {
-    // Dialog title
     setWindowTitle( _( "Disk Space Warning" ) );
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Layout for the dialog ( can't simply insert a QVBox )
+    // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
@@ -55,7 +54,8 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     layout->setMargin ( MARGIN  );
     setLayout(layout);
 
-    // HBox for icon and message
+    // Layout for icon and message
+    
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     layout->addLayout( hbox );
@@ -66,7 +66,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
-    iconLabel->setPixmap( QY2IconLoader::loadIcon( "dialog-warning" ).pixmap(64) );
+    iconLabel->setPixmap( QY2IconLoader::loadIcon( "dialog-warning" ).pixmap( 64 ) );
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     // Label for the message
@@ -94,8 +94,6 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     hbox->setMargin ( MARGIN  );
     layout->addLayout( hbox );
 
-    //addHStretch( hbox );
-
 
     // Accept button - usually "OK" or "Continue"
 
@@ -103,24 +101,19 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     Q_CHECK_PTR( button );
     hbox->addWidget(button);
 
-    connect( button,	SIGNAL( clicked() ),
-	     this,      SLOT  ( accept()  ) );
-
-    //addHStretch( hbox );
-
+    connect( button, SIGNAL( clicked() ),
+             this,   SLOT  ( accept()  ) );
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
-	// Reject button ( if desired ) - usually "Cancel"
+        // Reject button ( if desired ) - usually "Cancel"
 
-	button = new QPushButton( rejectButtonLabel, this );
-	Q_CHECK_PTR( button );
-  hbox->addWidget(button);
+        button = new QPushButton( rejectButtonLabel, this );
+        Q_CHECK_PTR( button );
+        hbox->addWidget(button);
 
-	connect( button,	SIGNAL( clicked() ),
-		 this,      	SLOT  ( reject()  ) );
-
-	//addHStretch( hbox );
+        connect( button, SIGNAL( clicked() ),
+                 this,   SLOT  ( reject()  ) );
     }
 
     // If there is only one button, it's safe to make that one ( the accept
@@ -132,22 +125,18 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 
 
 bool
-YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString & 	message,
-					       int		thresholdPercent,
-					       const QString &	acceptButtonLabel,
-					       const QString &	rejectButtonLabel )
+YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString &  message,
+                                               int              thresholdPercent,
+                                               const QString &  acceptButtonLabel,
+                                               const QString &  rejectButtonLabel )
 {
     YQPkgDiskUsageWarningDialog dialog( 0,
-					message,
-					thresholdPercent,
-					acceptButtonLabel,
-					rejectButtonLabel );
+                                        message,
+                                        thresholdPercent,
+                                        acceptButtonLabel,
+                                        rejectButtonLabel );
     normalCursor();
     dialog.exec();
 
     return dialog.result() == QDialog::Accepted;
 }
-
-
-
-

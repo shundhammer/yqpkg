@@ -18,7 +18,7 @@
 #ifndef YQPkgDiskUsageWarningDialog_h
 #define YQPkgDiskUsageWarningDialog_h
 
-#include <qdialog.h>
+#include <QDialog>
 
 
 class YQPkgDiskUsageList;
@@ -41,10 +41,10 @@ public:
      * and 'false' if the user rejected ( i.e. clicked the 'reject' button or
      * the window manager close button ).
      **/
-    static bool diskUsageWarning( const QString & 	message,
-				  int			thresholdPercent,
-				  const QString &	acceptButtonLabel,
-				  const QString &	rejectButtonLabel = QString() );
+    static bool diskUsageWarning( const QString & message,
+                                  int             thresholdPercent,
+                                  const QString & acceptButtonLabel,
+                                  const QString & rejectButtonLabel = QString() );
 protected:
 
     /**
@@ -55,11 +55,11 @@ protected:
      * Not meant for public use. Applications should use the static
      * 'diskUsageWarning' method instead.
      **/
-    YQPkgDiskUsageWarningDialog( QWidget *		parent,
-				 const QString & 	message,
-				 int			thresholdPercent,
-				 const QString &	acceptButtonLabel,
-				 const QString &	rejectButtonLabel = QString() );
+    YQPkgDiskUsageWarningDialog( QWidget *       parent,
+                                 const QString & message,
+                                 int             thresholdPercent,
+                                 const QString & acceptButtonLabel,
+                                 const QString & rejectButtonLabel = QString() );
 };
 
 
