@@ -18,9 +18,9 @@
 #ifndef YQPkgSelMapper_h
 #define YQPkgSelMapper_h
 
-#include "YQZypp.h"
-#include <map>
 
+#include <map>
+#include "YQZypp.h"
 
 
 /**
@@ -69,12 +69,12 @@ public:
 
 protected:
 
-    typedef std::map<ZyppPkg, ZyppSel>		Cache;
-    typedef std::pair<ZyppPkg, ZyppSel>		CachePair;
-    typedef Cache::iterator 			CacheIterator;
+    typedef std::map<ZyppPkg, ZyppSel>	Cache;
+    typedef std::pair<ZyppPkg, ZyppSel>	CachePair;
+    typedef Cache::iterator 		CacheIterator;
 
-    static int		_refCount;
-    static Cache	_cache;
+    static int	 _refCount;
+    static Cache _cache;
 };
 
 
