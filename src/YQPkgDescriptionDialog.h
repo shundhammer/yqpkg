@@ -32,6 +32,17 @@ class YQPkgDescriptionDialog : public QDialog
 {
     Q_OBJECT
 
+protected:
+
+    /**
+     * Constructor: Creates a description dialog for all packages that match
+     * 'pkgName'.
+     *
+     * Use the static 'showDescriptionDialog()' method instead.
+     **/
+    YQPkgDescriptionDialog( QWidget *       parent,
+                            const QString & pkgName );
+
 public:
 
     /**
@@ -50,14 +61,8 @@ public:
 protected:
 
     /**
-     * Constructor: Creates a description dialog for all packages that match 'pkgName'.
-     **/
-    YQPkgDescriptionDialog( QWidget *		parent,
-			    const QString &	pkgName );
-
-    /**
-     * Apply the filter criteria: Fill the pkg list with pkgs that match the
-     * specified package name.
+     * Apply the filter criteria: Fill the pkg list with pkgs that match
+     * 'pkgName'.
      **/
     void filter( const QString & pkgName );
 
@@ -70,8 +75,8 @@ protected:
 
     // Data members
 
-    YQPkgList *			_pkgList;
-    YQPkgDescriptionView *	_pkgDescription;
+    YQPkgList *            _pkgList;
+    YQPkgDescriptionView * _pkgDescription;
 };
 
 

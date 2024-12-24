@@ -15,10 +15,6 @@
  */
 
 
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
-
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
@@ -29,20 +25,23 @@
 #include <QList>
 #include <QBoxLayout>
 
-#include "YQPkgDescriptionDialog.h"
-#include "YQPkgDescriptionView.h"
-#include "YQPkgList.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
+#include "YQPkgList.h"
+#include "YQi18n.h"
+#include "utf8.h"
+#include "YQPkgDescriptionView.h"
+#include "YQPkgDescriptionDialog.h"
 
 
-#define SPACING			2	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING  2      // between subwidgets
+#define MARGIN   4      // around the widget
 
 
-YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString & pkgName )
+YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
+                                                const QString & pkgName )
     : QDialog( parent )
 {
     // Dialog title
@@ -51,17 +50,17 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Layout for the dialog (can't simply insert a QVBox)
+
+    // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout(layout);
-    layout->setMargin(MARGIN);
-    layout->setSpacing(SPACING);
+    layout->setMargin( MARGIN );
+    layout->setSpacing( SPACING );
 
 
-
-    // VBox for splitter
+    // Splitter
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
@@ -80,8 +79,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     Q_CHECK_PTR( _pkgDescription );
     _pkgDescription->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
-	     _pkgDescription,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _pkgList,        SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             _pkgDescription, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     // Button box (to center the single button)
@@ -99,8 +98,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     hbox->addWidget(button);
     button->setDefault( true );
 
-    connect( button,	SIGNAL( clicked() ),
-	     this,      SLOT  ( accept()  ) );
+    connect( button,    SIGNAL( clicked() ),
+             this,      SLOT  ( accept()  ) );
 
     hbox->addStretch();
 
@@ -120,25 +119,14 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     // Search for pkgs with that name
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
-	  it != zyppPkgEnd();
-	  ++it )
+          it != zyppPkgEnd();
+          ++it )
     {
-	ZyppObj zyppObj = (*it)->theObj();
+        ZyppObj zyppObj = (*it)->theObj();
 
-	if ( zyppObj && zyppObj->name() == pkgName )
-	    _pkgList->addPkgItem( *it, tryCastToZyppPkg( zyppObj ) );
+        if ( zyppObj && zyppObj->name() == pkgName )
+            _pkgList->addPkgItem( *it, tryCastToZyppPkg( zyppObj ) );
     }
-
-#if FIXME
-    // Display description of the first pkg with that name
-
-    YQPkgObjListItem * firstItem = dynamic_cast<YQPkgObjListItem *> ( _pkgList->firstChild() );
-
-    if ( firstItem )
-	_pkgDescription->showDetailsIfVisible( firstItem->selectable() );
-    else
-	_pkgDescription->clear();
-#endif
 
     normalCursor();
 }
@@ -147,11 +135,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 bool
 YQPkgDescriptionDialog::isEmpty() const
 {
-#if FIXME
-    return _pkgList->childCount() == 0;
-#else
     return true;
-#endif
 }
 
 
@@ -172,7 +156,3 @@ YQPkgDescriptionDialog::showDescriptionDialog( const QString & pkgName )
     YQPkgDescriptionDialog dialog( 0, pkgName );
     dialog.exec();
 }
-
-
-
-
