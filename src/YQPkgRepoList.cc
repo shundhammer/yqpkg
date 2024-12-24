@@ -15,7 +15,6 @@
  */
 
 
-#include <QElapsedTimer>
 #include <QHeaderView>
 #include <QTreeWidget>
 
@@ -31,7 +30,6 @@
 
 #include "YQPkgRepoList.h"
 
-#define TIME_FILTER     0
 
 using std::string;
 
@@ -42,27 +40,21 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     // logVerbose() << "Creating repository list" << endl;
 
     _nameCol = -1;
-    _urlCol  = -1;
 
     int numCol = 0;
 
     QStringList headers;
-
-    // Column headers for repository list
-
-    headers <<  _( "Name");	_nameCol = numCol++;
-    // headers << _( "URL");	_urlCol	 = numCol++;
-
+    headers << _( "Name"); _nameCol = numCol++;
     setHeaderLabels( headers );
+
     header()->setSectionResizeMode( _nameCol, QHeaderView::Stretch );
 
-    // setAllColumnsShowFocus( true );
 
-    // allow multi-selection with Ctrl-mouse
+    // Allow multi-selection with Ctrl-mouse
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    connect( this, 	SIGNAL( itemSelectionChanged() ),
-	     this, 	SLOT  ( filterIfVisible()      ) );
+    connect( this, SIGNAL( itemSelectionChanged() ),
+	     this, SLOT  ( filterIfVisible()      ) );
 
     setIconSize( QSize( 32, 32 ) );
 
@@ -97,7 +89,6 @@ YQPkgRepoList::~YQPkgRepoList()
 void YQPkgRepoList::fillList()
 {
     clear();
-    // logVerbose() << "Filling repository list" << endl;
 
     for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
 	  it != ZyppRepositoriesEnd();
@@ -105,8 +96,6 @@ void YQPkgRepoList::fillList()
     {
 	addRepo( *it );
     }
-
-    // logVerbose() << "Inst repository filled" << endl;
 }
 
 
@@ -130,26 +119,20 @@ void YQPkgRepoList::filter()
 
     emit filterStart();
 
-#if TIME_FILTER
-    logInfo() << "Collecting packages in selected repositories..." << endl;
-    QElapsedTimer stopWatch;
-    stopWatch.start();
-#endif
-
 
     //
-    // Collect all packages on this repository
+    // Collect all packages of this repository
     //
 
     QTreeWidgetItem * item;
 
-    QList<QTreeWidgetItem *> items = selectedItems();
+    QList<QTreeWidgetItem *>         items = selectedItems();
     QListIterator<QTreeWidgetItem *> it( items );
 
     while ( it.hasNext() )
     {
         item = it.next();
-        YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
+        YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *>( item );
 
         if ( repoItem )
         {
@@ -157,21 +140,16 @@ void YQPkgRepoList::filter()
 
 	    zypp::PoolQuery query;
 	    query.addRepo( currentRepo.info().alias() );
-	    query.addKind(zypp::ResKind::package);
+	    query.addKind( zypp::ResKind::package );
 
     	    for( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
-	         it != query.selectableEnd(); it++)
+	         it != query.selectableEnd();
+                 ++it )
     	    {
 		emit filterMatch( *it, tryCastToZyppPkg( (*it)->theObj() ) );
     	    }
 	}
     }
-
-#if TIME_FILTER
-    logDebug() << "Packages sent to package list. Elapsed time: "
-	       << stopWatch.elapsed() / 1000.0 << " sec"
-	       << endl;
-#endif
 
     emit filterFinished();
 }
@@ -244,11 +222,6 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList * repoList,
         zypp::Url zyppRepoUrl = *repo.info().baseUrlsBegin();
         QString repoUrl       = zyppRepoUrl.asString().c_str();
 
-        if ( urlCol() >= 0 )
-        {
-            setText( urlCol(), repoUrl );
-        }
-
         if      ( repoUrl.contains( "KDE"    ) )  iconName = "kde";
         else if ( repoUrl.contains( "GNOME"  ) )  iconName = "gnome";
         else if ( repoUrl.contains( "update" ) )  iconName = "applications-utilities";
@@ -281,7 +254,7 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 }
 
 
-bool YQPkgRepoListItem::operator< ( const QTreeWidgetItem & other ) const
+bool YQPkgRepoListItem::operator<( const QTreeWidgetItem & other ) const
 {
     const YQPkgRepoListItem * otherItem = dynamic_cast<const YQPkgRepoListItem *>(&other);
 

@@ -21,8 +21,8 @@
 #include <zypp/Repository.h>
 #include <zypp/Product.h>
 
-#include "QY2ListView.h"
 #include "YQZypp.h"
+#include "QY2ListView.h"
 
 
 class YQPkgRepoListItem;
@@ -83,7 +83,6 @@ public:
     // Column numbers
 
     int nameCol() const { return _nameCol; }
-    int urlCol()  const { return _urlCol;  }
 
 
     /**
@@ -135,7 +134,6 @@ private:
     //
 
     int _nameCol;
-    int _urlCol;
 };
 
 
@@ -174,7 +172,6 @@ public:
     // Columns
 
     int nameCol() const { return _repoList->nameCol(); }
-    int urlCol()  const { return _repoList->urlCol();  }
 
     virtual bool operator<( const QTreeWidgetItem & other ) const;
 
