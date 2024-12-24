@@ -158,20 +158,7 @@ YQPkgPatchList::fillList()
                         {
                             displayPatch = true;
                         }
-#if 0
-                        else
-                            logDebug() << "Patch " << zyppPatch->ident()
-                                       << " is already satisfied"
-                                       << endl;
-#endif
-
                     }
-#if 0
-                    else
-                        logDebug() << "Patch " << zyppPatch->ident()
-                                   << " is not relevant to the system"
-                                   << endl;
-#endif
                     break;
 
                 case RelevantAndInstalledPatches:       // patches we dont need
@@ -221,7 +208,6 @@ YQPkgPatchList::fillList()
 }
 
 
-
 void
 YQPkgPatchList::message( const QString & text )
 {
@@ -231,6 +217,7 @@ YQPkgPatchList::message( const QString & text )
     item->setText( 1, text );
     item->setBackground( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
+
 
 void
 YQPkgPatchList::filterIfVisible()
@@ -251,10 +238,7 @@ YQPkgPatchList::filter()
 
         if ( patch )
         {
-            zypp::Patch::Contents contents(patch->contents());
-#if 0
-            logInfo() << contents << endl;
-#endif
+            zypp::Patch::Contents contents( patch->contents() );
 
             for ( zypp::Patch::Contents::Selectable_iterator it = contents.selectableBegin();
                   it != contents.selectableEnd();
@@ -313,7 +297,6 @@ YQPkgPatchList::selection() const
 
     return item ? dynamic_cast<YQPkgPatchListItem *> (item) : 0;
 }
-
 
 
 void
@@ -557,11 +540,11 @@ YQPkgPatchCategoryItem::asString( YQPkgPatchCategory category )
     switch ( category )
     {
         // Translators: These are patch categories
-        case YQPkgYaSTPatch:            return _( "YaST"        );
-        case YQPkgSecurityPatch:        return _( "security"    );
-        case YQPkgRecommendedPatch:     return _( "recommended" );
-        case YQPkgOptionalPatch:        return _( "optional"    );
-        case YQPkgDocumentPatch:        return _( "document"    );
+        case YQPkgYaSTPatch:        return _( "YaST"        );
+        case YQPkgSecurityPatch:    return _( "security"    );
+        case YQPkgRecommendedPatch: return _( "recommended" );
+        case YQPkgOptionalPatch:    return _( "optional"    );
+        case YQPkgDocumentPatch:    return _( "document"    );
     }
 
     return "";
