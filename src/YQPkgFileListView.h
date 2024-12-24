@@ -21,12 +21,11 @@
 #include "YQPkgGenericDetailsView.h"
 
 
-using std::list;
 using std::string;
 
 
 /**
- * Display a pkg's file list
+ * Display a package's file list
  **/
 class YQPkgFileListView : public YQPkgGenericDetailsView
 {
@@ -47,16 +46,17 @@ public:
     /**
      * Show details for the specified package:
      * In this case the package description.
-     * Overwritten from YQPkgGenericDetailsView.
+     *
+     * Reimplemented from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( ZyppSel selectable );
+    virtual void showDetails( ZyppSel selectable ) override;
 
 protected:
 
     /**
      * Format a file list in HTML
      **/
-    QString formatFileList( const list<string> & fileList ) const;
+    QString formatFileList( const std::list<string> & fileList ) const;
 };
 
 
