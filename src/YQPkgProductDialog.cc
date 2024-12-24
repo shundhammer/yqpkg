@@ -15,32 +15,27 @@
  */
 
 
-#include "YQi18n.h"
-#include "QY2CursorHelper.h"
-
 #include <QApplication>
-#include <qdesktopwidget.h>
+#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QLayout>
+#include <QList>
 #include <QPushButton>
 #include <QSplitter>
-#include <QStyle>
 #include <QTabWidget>
-#include <QList>
-#include <QBoxLayout>
 
-#include "YQPkgProductDialog.h"
-#include "YQPkgProductList.h"
-#include "YQPkgDependenciesView.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "QY2LayoutUtils.h"
+#include "YQPkgDependenciesView.h"
+#include "YQPkgProductList.h"
+#include "YQi18n.h"
+#include "YQPkgProductDialog.h"
 
 
-#define SPACING			2	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING   2  // between subwidgets
+#define MARGIN    4  // around the widget
 
 
 YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
@@ -53,7 +48,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     setSizeGripEnabled( true );
     setMinimumSize( 550, 450 );
 
-    // Layout for the dialog (can't simply insert a QVBox)
+    // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
@@ -82,7 +77,6 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
 
     _detailsViews = new QTabWidget( splitter );
     Q_CHECK_PTR( _detailsViews );
-    //_detailsViews->setMargin( MARGIN );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
     // Dependencies view
@@ -92,8 +86,8 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     _detailsViews->addTab( _dependenciesView, _( "Dependencies" ) );
     _dependenciesView->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _productList,	SIGNAL( currentItemChanged  ( ZyppSel ) ),
-	     _dependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _productList,      SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             _dependenciesView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     // Button box (to center the single button)
@@ -113,8 +107,8 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     hbox->addWidget(button);
     button->setDefault( true );
 
-    connect( button,	SIGNAL( clicked() ),
-	     this,      SLOT  ( accept()  ) );
+    connect( button,    SIGNAL( clicked() ),
+             this,      SLOT  ( accept()  ) );
 
     hbox->addStretch();
 }
@@ -125,9 +119,10 @@ YQPkgProductDialog::polish()
 {
     // Delayed initialization after widget is fully created etc.
 
-    // Only now send currentItemChanged() signal so the details views display something
-    // (showDetailsIfVisible() shows only something if the widget is visible,
-    // as the method name implies)
+    // Only now send currentItemChanged() signal so the details views display
+    // something (showDetailsIfVisible() shows only something if the widget is
+    // visible, as the method name implies)
+
     _productList->selectSomething();
 }
 
@@ -149,7 +144,3 @@ YQPkgProductDialog::showProductDialog( QWidget* parent)
     YQPkgProductDialog dialog( parent );
     dialog.exec();
 }
-
-
-
-

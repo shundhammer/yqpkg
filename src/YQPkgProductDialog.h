@@ -58,16 +58,16 @@ public:
 protected:
 
     /**
-     * Constructor: Creates a description dialog for all packages that match 'pkgName'.
+     * Constructor.
      **/
     YQPkgProductDialog( QWidget * parent );
 
 
     // Data members
 
-    YQPkgProductList *		_productList;
-    QTabWidget *		_detailsViews;
-    YQPkgDependenciesView *	    _dependenciesView;
+    YQPkgProductList *      _productList;
+    QTabWidget *            _detailsViews;
+    YQPkgDependenciesView * _dependenciesView;
 };
 
 
