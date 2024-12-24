@@ -32,8 +32,8 @@ class QTabWidget;
 
 
 /**
- * Display a list of zypp::Patch objects and ( below ) details about the
- * currently selected patch.
+ * Display a list of zypp::Patch objects and details about the currently
+ * selected patch.
  **/
 class YQPkgPatchFilterView : public QWidget
 {
@@ -80,14 +80,14 @@ protected:
 
     // Data members
 
-    QSplitter *			_splitter;
-    YQPkgPatchList *		_patchList;
-    QComboBox *			_patchFilter;
-    QTabWidget *		_detailsViews;
-    YQPkgDescriptionView *	_descriptionView;
-    QLabel *			_totalDownloadSize;
+    QSplitter *            _splitter;
+    YQPkgPatchList *       _patchList;
+    QComboBox *            _patchFilter;
+    QTabWidget *           _detailsViews;
+    YQPkgDescriptionView * _descriptionView;
+    QLabel *               _totalDownloadSize;
 
-    YQPkgSelMapper		_selMapper;
+    YQPkgSelMapper         _selMapper;
 };
 
 
