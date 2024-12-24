@@ -15,31 +15,25 @@
  */
 
 
-#include "Logger.h"
-
-#include "YQi18n.h"
-#include "utf8.h"
-
 #include <QTabWidget>
 #include <QRegExp>
-#include <QDateTime>
 
+#include "Logger.h"
+#include "YQi18n.h"
+#include "utf8.h"
 #include "YQPkgGenericDetailsView.h"
-
-
-using std::string;
 
 
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
     _selectable = 0;
-    _parentTab  = dynamic_cast<QTabWidget *> (parent);
+    _parentTab  = dynamic_cast<QTabWidget *>( parent );
 
     if ( _parentTab )
     {
-        connect( _parentTab, &QTabWidget::currentChanged,
-                 this,       &YQPkgGenericDetailsView::reloadTab );
+        connect( _parentTab, SIGNAL( currentChanged( int ) ),
+                 this,       SLOT  ( reloadTab     ( int ) ) );
     }
 
     QString css;
@@ -69,7 +63,8 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "{color: grey;"
         "font-style: italic;}";
 
-    document()->addResource( QTextDocument::StyleSheetResource, QUrl( "format.css" ), css );
+    document()->addResource( QTextDocument::StyleSheetResource,
+                             QUrl( "format.css" ), css );
 }
 
 
@@ -82,7 +77,7 @@ YQPkgGenericDetailsView::~YQPkgGenericDetailsView()
 void
 YQPkgGenericDetailsView::reloadTab( int newCurrent )
 {
-    if ( _parentTab && _parentTab->widget(newCurrent) == this )
+    if ( _parentTab && _parentTab->widget( newCurrent ) == this )
     {
 	showDetailsIfVisible( _selectable );
     }
@@ -94,14 +89,14 @@ YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
 {
     _selectable = selectable;
 
-    if ( _parentTab )		// Is this view embedded into a tab widget?
+    if ( _parentTab )  // Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
 	{
 	    showDetails( selectable );
 	}
     }
-    else	// No tab parent - simply show data unconditionally.
+    else  // No tab parent - simply show data unconditionally.
     {
 	showDetails( selectable );
     }
@@ -122,6 +117,7 @@ YQPkgGenericDetailsView::htmlStart()
         "<link rel='stylesheet' type='text/css' href='format.css'>"
         "</head><body>";
 }
+
 
 QString
 YQPkgGenericDetailsView::htmlEnd()
@@ -196,10 +192,17 @@ YQPkgGenericDetailsView::row( const QString & contents )
 
 
 QString
-YQPkgGenericDetailsView::cell( QString contents )
+YQPkgGenericDetailsView::cell( const QString & contents )
 {
-    contents = htmlEscape( contents );
-    return "<td>" + contents + "</td>";
+    QString html = htmlEscape( contents );
+    return "<td>" + html + "</td>";
+}
+
+
+QString
+YQPkgGenericDetailsView::cell( const string & contents )
+{
+    return cell( fromUTF8( contents ) );
 }
 
 
@@ -214,13 +217,6 @@ QString
 YQPkgGenericDetailsView::cell( const zypp::Date & date )
 {
     return cell( ( (time_t) date == (time_t) 0 ? "" : date.asString() ) );
-}
-
-
-QString
-YQPkgGenericDetailsView::cell( const string & contents )
-{
-    return cell( fromUTF8( contents ) );
 }
 
 

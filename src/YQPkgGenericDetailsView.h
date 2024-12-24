@@ -18,19 +18,22 @@
 #ifndef YQPkgGenericDetailsView_h
 #define YQPkgGenericDetailsView_h
 
-#include <QTextBrowser>
+
 #include <zypp/Date.h>
+
 #include "YQZypp.h"
+#include <QTextBrowser>
 
 
 class QTabWidget;
+
 using std::string;
 
 
 /**
- * Abstract base class for details views. Handles generic stuff like
- * HTML formatting, Qt slots and display only if this view is visible at all
- * ( it may be hidden if it's part of a QTabWidget ).
+ * Abstract base class for details views. Handles generic stuff like HTML
+ * formatting, Qt slots and display only if this view is visible at all: It may
+ * be hidden if it's part of a QTabWidget.
  **/
 class YQPkgGenericDetailsView : public QTextBrowser
 {
@@ -52,54 +55,59 @@ protected:
 public:
 
     /**
-     * Returns the minimum size required for this widget.
+     * Return the minimum size required for this widget.
      * Inherited from QWidget.
      **/
     virtual QSize minimumSizeHint() const;
 
     /**
-     * starts the html tag and set the style
+     * Start the html tag and set the CSS style
      */
     static QString htmlStart();
+
+    /**
+     * Close the html tag.
+     **/
     static QString htmlEnd();
 
     /**
-     * Returns a uniform heading in HTML format for the specified selectable:
+     * Return a uniform heading in HTML format for the specified selectable:
+     *
      * name and summary
      * or name, version and summary, if 'showVersion' is 'true'
      **/
     static QString htmlHeading( ZyppSel selectable, bool showVersion = false );
 
     /**
-     * Escapes characters special to HTML in a ( plain text ) string, such as:
-     * '<'   ->   '&lt;'
-     * '>'   ->   '&gt;'
-     * '&'   ->   '&amp;'
+     * Escape characters special to HTML in a (plain text) string, such as:
+     * '<'  ->  '&lt;'
+     * '>'  ->  '&gt;'
+     * '&'  ->  '&amp;'
      *
-     * Returns the escaped string.
+     * ...and return the escaped string.
      **/
     static QString htmlEscape( const QString & plainText );
 
     /**
-     * Returns a string containing a HTML table with 'contents'.
+     * Return a string containing a HTML table with 'contents'.
      **/
     static QString table( const QString & contents );
 
     /**
-     * Returns a string containing a HTML table row with 'contents'.
+     * Return a string containing a HTML table row with 'contents'.
      **/
     static QString row( const QString & contents );
 
     /**
-     * Returns a string containing a HTML table cell with 'contents'.
+     * Return a string containing a HTML table cell with 'contents'.
      **/
-    static QString cell( QString contents		);
-    static QString cell( int contents 			);
-    static QString cell( const string & contents	);
-    static QString cell( const zypp::Date & date	);
+    static QString cell( const QString &     contents );
+    static QString cell( const std::string & contents );
+    static QString cell( int                 contents );
+    static QString cell( const zypp::Date &  date     );
 
     /**
-     * Returns a string containing a HTML table cell with 'contents'
+     * Return a string containing a HTML table cell with 'contents'
      * for table headers.
      **/
     static QString hcell( QString contents );
@@ -126,19 +134,15 @@ public slots:
 
 protected slots:
 
-    /**
-     * Show data for the last package.
-     **/
     void reloadTab( int newCurrent );
+
     virtual void reload() { QTextBrowser::reload(); }
 
 
 protected:
 
-    // Data members
-
-    QTabWidget	* 	_parentTab;
-    ZyppSel		_selectable;
+    QTabWidget * _parentTab;
+    ZyppSel      _selectable;
 };
 
 
