@@ -93,4 +93,5 @@ protected:
     QHash<int, QWidget *> _pages;
 };
 
+
 #endif // QY2ComboTabWidget_h
