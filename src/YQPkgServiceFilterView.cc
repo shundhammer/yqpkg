@@ -28,6 +28,7 @@ YQPkgServiceFilterView::YQPkgServiceFilterView( QWidget * parent )
 {
     _serviceList = new YQPkgServiceList( this );
     CHECK_NEW( _serviceList );
+
     init(_serviceList);
 }
 
@@ -49,13 +50,15 @@ void YQPkgServiceFilterView::primaryFilterIfVisible()
 // check if a libzypp service is present
 bool YQPkgServiceFilterView::any_service()
 {
-	bool ret = std::any_of(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
-		// if the repository does not belong to any service then the service name is empty
-		return !repo.info().service().empty();
-	});
+    bool ret = std::any_of( ZyppRepositoriesBegin(),
+                            ZyppRepositoriesEnd(),
+                            [&](const zypp::Repository& repo)
+                                { return !repo.info().service().empty(); }
+                            );
 
-	// logDebug() << "Found a libzypp service: " << ret << endl;
+    // if the repository does not belong to any service then the service name is empty
 
-	return ret;
+    // logDebug() << "Found a libzypp service: " << ret << endl;
+
+    return ret;
 }
-

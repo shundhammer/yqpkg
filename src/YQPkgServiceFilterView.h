@@ -24,8 +24,8 @@ class QWidget;
 class YQPkgServiceList;
 
 /**
- * A widget to display a libzypp servic filter view. It should be used only when
- * a libzypp service is present in the system.
+ * A filter view widget for libzypp services.
+ * It should be used only when a libzypp service is present in the system.
  */
 class YQPkgServiceFilterView : public YQPkgSecondaryFilterView
 {
@@ -53,9 +53,12 @@ protected:
     virtual void primaryFilter();
     virtual void primaryFilterIfVisible();
 
+
     // Data members
+
     // list of services, owned by the parent widget
-    YQPkgServiceList *		_serviceList;
+    YQPkgServiceList * _serviceList;
 };
+
 
 #endif // ifndef YQPkgServiceFilterView_h
