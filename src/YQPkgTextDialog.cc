@@ -15,28 +15,25 @@
  */
 
 
-#include "YQi18n.h"
-#include "utf8.h"
-
-#include <QTextBrowser>
-#include <QPushButton>
-#include <QRegExp>
-#include <QLayout>
-#include <QHBoxLayout>
-#include <QKeyEvent>
 #include <QBoxLayout>
 #include <QEvent>
-#include <QApplication>
+#include <QHBoxLayout>
+#include <QKeyEvent>
+#include <QLayout>
+#include <QPushButton>
+#include <QRegExp>
+#include <QTextBrowser>
 
-#include "YQPkgTextDialog.h"
-#include "QY2LayoutUtils.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "QY2LayoutUtils.h"
+#include "YQi18n.h"
+#include "utf8.h"
+#include "YQPkgTextDialog.h"
 
 
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING      6       // between subwidgets
+#define MARGIN       4       // around the widget
 
 using std::string;
 
@@ -48,13 +45,16 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
 }
 
 
-YQPkgTextDialog::YQPkgTextDialog( const QString & 	text,
-				  QWidget * 		parent,
-				  const QString & 	acceptButtonLabel,
-				  const QString & 	rejectButtonLabel )
+YQPkgTextDialog::YQPkgTextDialog( const QString & text,
+                                  QWidget *       parent,
+                                  const QString & acceptButtonLabel,
+                                  const QString & rejectButtonLabel )
     : QDialog( parent )
 {
-    buildDialog( text, parent, acceptButtonLabel, rejectButtonLabel );
+    buildDialog( text,
+                 parent,
+                 acceptButtonLabel,
+                 rejectButtonLabel );
 }
 
 
@@ -64,21 +64,19 @@ YQPkgTextDialog::~YQPkgTextDialog()
 }
 
 
-void YQPkgTextDialog::buildDialog( const QString & 	text,
-				   QWidget * 		parent,
-				   const QString & 	acceptButtonLabel,
-				   const QString & 	rejectButtonLabel )
+void YQPkgTextDialog::buildDialog( const QString & text,
+                                   QWidget *       parent,
+                                   const QString & acceptButtonLabel,
+                                   const QString & rejectButtonLabel )
 {
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Dialog title
-    setWindowTitle( _( "YaST" ) );
-
-    // Layout for the dialog ( can't simply insert a QVBox )
+    // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
+
     setLayout( layout );
     layout->setMargin ( MARGIN );
     layout->setSpacing( SPACING );
@@ -87,6 +85,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     _textBrowser = new QTextBrowser( this );
     Q_CHECK_PTR( _textBrowser );
+
     layout->addWidget( _textBrowser );
     layout->addSpacing( 2 );
     _textBrowser->document()->setHtml( text );
@@ -98,6 +97,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
+
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addLayout( buttonBox );
@@ -106,32 +106,34 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     // Accept (OK) button
 
     _acceptButton = new QPushButton( acceptButtonLabel, this );
-    buttonBox->addWidget(_acceptButton);
     Q_CHECK_PTR( _acceptButton );
+    buttonBox->addWidget( _acceptButton );
     _acceptButton->setDefault( true );
 
-    connect( _acceptButton,	SIGNAL( clicked() ),
-	     this,      	SLOT  ( accept()  ) );
+    connect( _acceptButton, SIGNAL( clicked() ),
+             this,          SLOT  ( accept()  ) );
 
     buttonBox->addStretch();
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
-	// Reject (Cancel) button
+        // Reject (Cancel) button
 
-	_rejectButton = new QPushButton( rejectButtonLabel, this );
-	buttonBox->addWidget(_rejectButton);
-	Q_CHECK_PTR( _rejectButton );
-	_rejectButton->setDefault( true );
+        _rejectButton = new QPushButton( rejectButtonLabel, this );
+        CHECK_PTR( _rejectButton );
 
-	connect( _rejectButton,	SIGNAL( clicked() ),
-		 this,      	SLOT  ( reject()  ) );
+        buttonBox->addWidget(_rejectButton);
+        Q_CHECK_PTR( _rejectButton );
+        _rejectButton->setDefault( true );
 
-	buttonBox->addStretch();
+        connect( _rejectButton, SIGNAL( clicked() ),
+                 this,          SLOT  ( reject()  ) );
+
+        buttonBox->addStretch();
     }
     else
     {
-	_rejectButton = 0;
+        _rejectButton = 0;
     }
 
     updateGeometry();
@@ -150,28 +152,28 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev && ev->type() == QEvent::KeyPress )
     {
-	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev);
+        QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev);
 
-	if ( keyEvent )
-	{
-	    if ( keyEvent->key() == Qt::Key_Return ||
-		 keyEvent->key() == Qt::Key_Enter    )
-	    {
-		_acceptButton->animateClick();
-		return true; // Stop event processing
-	    }
-	    else if ( keyEvent->key() == Qt::Key_Escape )
-	    {
-		if ( _rejectButton )
-		{
-		    _rejectButton->animateClick();
-		    return true; // Stop event processing
-		}
-	    }
-	}
+        if ( keyEvent )
+        {
+            if ( keyEvent->key() == Qt::Key_Return ||
+                 keyEvent->key() == Qt::Key_Enter    )
+            {
+                _acceptButton->animateClick();
+                return true; // Stop event processing
+            }
+            else if ( keyEvent->key() == Qt::Key_Escape )
+            {
+                if ( _rejectButton )
+                {
+                    _rejectButton->animateClick();
+                    return true; // Stop event processing
+                }
+            }
+        }
     }
 
-    return false;	// Don't stop event processing
+    return false;       // Don't stop event processing
 }
 
 
@@ -187,8 +189,8 @@ void YQPkgTextDialog::setText( const string & text )
 }
 
 
-void YQPkgTextDialog::setText( ZyppSel selectable,
-			       const string & 		 text )
+void YQPkgTextDialog::setText( ZyppSel         selectable,
+                               const string &  text )
 {
     setText( htmlHeading( selectable ) + htmlParagraphs( text ) );
 }
@@ -203,23 +205,23 @@ void YQPkgTextDialog::showText( QWidget * parent, const QString & text )
 }
 
 
-void YQPkgTextDialog::showText( QWidget * 	parent,
-				ZyppSel 	selectable,
-				const string & 	text )
+void YQPkgTextDialog::showText( QWidget *       parent,
+                                ZyppSel         selectable,
+                                const string &  text )
 {
     showText( parent, htmlHeading( selectable ) + fromUTF8( text ) );
 }
 
 
-bool YQPkgTextDialog::confirmText( QWidget * 		parent,
-				   const QString & 	text,
-				   const QString & 	acceptButtonLabel,
-				   const QString & 	rejectButtonLabel )
+bool YQPkgTextDialog::confirmText( QWidget *       parent,
+                                   const QString & text,
+                                   const QString & acceptButtonLabel,
+                                   const QString & rejectButtonLabel )
 {
     YQPkgTextDialog * dia = new YQPkgTextDialog( text,
-						 parent,
-						 acceptButtonLabel,
-						 rejectButtonLabel );
+                                                 parent,
+                                                 acceptButtonLabel,
+                                                 rejectButtonLabel );
     Q_CHECK_PTR( dia );
     bool confirmed = ( dia->exec() == QDialog::Accepted );
     delete dia;
@@ -241,15 +243,14 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const char * text )
 }
 
 
-bool YQPkgTextDialog::confirmText( QWidget * 		parent,
-				   ZyppSel 		selectable,
-				   const string	&	text )
+bool YQPkgTextDialog::confirmText( QWidget *      parent,
+                                   ZyppSel        selectable,
+                                   const string & text )
 {
-    return confirmText( parent, htmlHeading( selectable ) + htmlParagraphs( text ) );
+    return confirmText( parent,
+                        htmlHeading( selectable ) +
+                        htmlParagraphs( text ) );
 }
-
-
-
 
 
 QString
@@ -266,17 +267,16 @@ YQPkgTextDialog::htmlEscape( const QString & plainText )
 }
 
 
-
 QString
 YQPkgTextDialog::htmlParagraphs( const string & rawText )
 {
     QString text = fromUTF8( rawText );
 
-    if ( text.contains( "<!-- DT:Rich -->" ) )	// Special doctype for preformatted HTML
-	return text;
+    if ( text.contains( "<!-- DT:Rich -->" ) ) // Special doctype for preformatted HTML
+        return text;
 
-    text = htmlEscape( text );			// Escape '<', '>', '&'
-    text.replace( "\n\n", "</p><p>" );		// Empty lines mean new paragraph
+    text = htmlEscape( text );         // Escape '<', '>', '&'
+    text.replace( "\n\n", "</p><p>" ); // Empty lines mean new paragraph
     text.prepend( "<p>"  );
     text.append ( "</p>" );
 
@@ -289,9 +289,9 @@ QString
 YQPkgTextDialog::htmlHeading( const QString & text )
 {
     QString html =
-	"<table><tr><td><b>"
-	+ text
-	+ "</b></td></tr></table><br>";
+        "<table><tr><td><b>"
+        + text
+        + "</b></td></tr></table><br>";
 
     return html;
 }
@@ -301,28 +301,24 @@ QString
 YQPkgTextDialog::htmlHeading( ZyppSel selectable )
 {
     if ( ! selectable )
-	return "";
+        return "";
 
     ZyppObj zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
-	return "";
+        return "";
 
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =
-	"<table><tr><td><b>"
-	+ fromUTF8( zyppObj->name() )
-	+ "</b>";
+        "<table><tr><td><b>"
+        + fromUTF8( zyppObj->name() )
+        + "</b>";
 
     if ( ! summary.isEmpty() )
-	html += " - " + summary;
+        html += " - " + summary;
 
     html += "</td></tr></table><br>";
 
     return html;
 }
-
-
-
-

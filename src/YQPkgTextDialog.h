@@ -18,13 +18,14 @@
 #ifndef YQPkgTextDialog_h
 #define YQPkgTextDialog_h
 
+
 #include "YQZypp.h"
 #include <QDialog>
-#include <QEvent>
-#include <zypp/ResObject.h>
+
 
 class QPushButton;
 class QTextBrowser;
+class QEvent;
 
 using std::string;
 
@@ -47,10 +48,10 @@ public:
      * Or, better yet, use the static confirmText() method.
      *
      **/
-    YQPkgTextDialog( const QString & 	text,
-		     QWidget * 		parent,
-		     const QString & 	acceptButtonLabel,
-		     const QString & 	rejectButtonLabel );
+    YQPkgTextDialog( const QString & text,
+                     QWidget *       parent,
+                     const QString & acceptButtonLabel,
+                     const QString & rejectButtonLabel );
     /**
      * Constructor.
      *
@@ -80,18 +81,18 @@ public:
     /**
      * Show a text with a headline identifying a selectable (name+summary).
      **/
-    static void showText( QWidget * 		parent,
-			  ZyppSel 		selectable,
-			  const string &	text );
+    static void showText( QWidget *      parent,
+                          ZyppSel        selectable,
+                          const string & text );
 
     /**
      * Let the user confirm a text. Returns "true" if the user clicked the
      * accept button, false if he clicked the reject button.
      **/
-    static bool confirmText( QWidget * 	parent,
-			     const QString & 	text,
-			     const QString & 	acceptButtonLabel,
-			     const QString & 	rejectButtonLabel );
+    static bool confirmText( QWidget *       parent,
+                             const QString & text,
+                             const QString & acceptButtonLabel,
+                             const QString & rejectButtonLabel );
 
     /**
      * Let the use confirm a text with buttons "Accept" and "Cancel".
@@ -105,9 +106,9 @@ public:
      * (name+summary) with buttons "Accept" and "Cancel".
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
-    static bool confirmText( QWidget * 			parent,
-			     ZyppSel 	selectable,
-			     const string & 		text );
+    static bool confirmText( QWidget *      parent,
+                             ZyppSel        selectable,
+                             const string & text );
 
     /**
      * Simple HTML formatting: Wrap paragraphs in <p>...</p>
@@ -144,23 +145,23 @@ public slots:
      * Set the text contents.
      **/
     void setText( const QString & text );
-    void setText( const string & text );
+    void setText( const string  & text );
 
     /**
-     * Show a text with a headline identifying a zypp::ResObject ( name+summary ).
+     * Show a text with a headline identifying a selectable (name+summary)
      **/
-    void setText( ZyppSel selectable,
-		  const string & text );
+    void setText( ZyppSel        selectable,
+                  const string & text );
 
 protected:
 
     /**
      * Create the dialog. Called from all constructors.
      **/
-    void buildDialog( const QString & 	text,
-		      QWidget * 	parent,
-		      const QString & 	acceptButtonLabel,
-		      const QString & 	rejectButtonLabel = "" );
+    void buildDialog( const QString & text,
+                      QWidget *       parent,
+                      const QString & acceptButtonLabel,
+                      const QString & rejectButtonLabel = "" );
     /**
      * Grab [Return] press events and close dialog.
      * Inherited from QObject.
@@ -170,11 +171,10 @@ protected:
 
     // Data members
 
-    QPushButton *	_acceptButton;
-    QPushButton * 	_rejectButton;
-    QTextBrowser *	_textBrowser;
+    QPushButton *  _acceptButton;
+    QPushButton *  _rejectButton;
+    QTextBrowser * _textBrowser;
 };
-
 
 
 #endif // ifndef YQPkgTextDialog_h
