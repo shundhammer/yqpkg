@@ -18,10 +18,10 @@
 #ifndef YQPkgStatusFilterView_h
 #define YQPkgStatusFilterView_h
 
-#include "YQZypp.h"
 #include <QWidget>
 #include <QPixmap>
 #include <QScrollArea>
+#include "YQZypp.h"
 
 
 class QComboBox;

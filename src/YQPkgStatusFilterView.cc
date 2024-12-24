@@ -15,7 +15,6 @@
  */
 
 
-
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QLabel>
@@ -55,21 +54,19 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QGroupBox * gbox  = new QGroupBox( _( "Show packages with status" ), content );
-    Q_CHECK_PTR( gbox );
-
-    QVBoxLayout * box = new QVBoxLayout;
+    QGroupBox *   gbox = new QGroupBox( _( "Show packages with status" ), content );
+    QVBoxLayout * box  = new QVBoxLayout;
     gbox->setLayout( box );
     layout->addWidget( gbox );
 
-    _showDel            = addStatusCheckBox( gbox, _( "Delete" ),       YQIconPool::pkgDel(),           true );
-    _showInstall        = addStatusCheckBox( gbox, _( "Install" ),      YQIconPool::pkgInstall(),       true );
-    _showUpdate         = addStatusCheckBox( gbox, _( "Update" ),       YQIconPool::pkgUpdate(),        true );
-    _showAutoDel        = addStatusCheckBox( gbox, _( "Autodelete" ),   YQIconPool::pkgAutoDel(),       true );
-    _showAutoInstall    = addStatusCheckBox( gbox, _( "Autoinstall" ),  YQIconPool::pkgAutoInstall(),   true );
-    _showAutoUpdate     = addStatusCheckBox( gbox, _( "Autoupdate" ),   YQIconPool::pkgAutoUpdate(),    true );
-    _showTaboo          = addStatusCheckBox( gbox, _( "Taboo" ),        YQIconPool::pkgTaboo(),         true );
-    _showProtected      = addStatusCheckBox( gbox, _( "Protected" ),    YQIconPool::pkgProtected(),     true );
+    _showDel            = addStatusCheckBox( gbox, _( "Delete" ),       YQIconPool::pkgDel(),         true );
+    _showInstall        = addStatusCheckBox( gbox, _( "Install" ),      YQIconPool::pkgInstall(),     true );
+    _showUpdate         = addStatusCheckBox( gbox, _( "Update" ),       YQIconPool::pkgUpdate(),      true );
+    _showAutoDel        = addStatusCheckBox( gbox, _( "Autodelete" ),   YQIconPool::pkgAutoDel(),     true );
+    _showAutoInstall    = addStatusCheckBox( gbox, _( "Autoinstall" ),  YQIconPool::pkgAutoInstall(), true );
+    _showAutoUpdate     = addStatusCheckBox( gbox, _( "Autoupdate" ),   YQIconPool::pkgAutoUpdate(),  true );
+    _showTaboo          = addStatusCheckBox( gbox, _( "Taboo" ),        YQIconPool::pkgTaboo(),       true );
+    _showProtected      = addStatusCheckBox( gbox, _( "Protected" ),    YQIconPool::pkgProtected(),   true );
 
     box->addSpacing( 8 );
     box->addStretch(); // For the other columns of the QGroupBox (prevent wraparound)
@@ -89,13 +86,12 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     // Refresh button
     _refreshButton = new QPushButton( _( "&Refresh List" ), content );
-    Q_CHECK_PTR( _refreshButton );
     hbox->addWidget(_refreshButton);
 
     hbox->addStretch();
 
-    connect( _refreshButton,    SIGNAL( clicked() ),
-             this,              SLOT  ( filter()  ) );
+    connect( _refreshButton, SIGNAL( clicked() ),
+             this,           SLOT  ( filter()  ) );
 
     for ( int i=0; i < 6; i++ )
         layout->addStretch();
