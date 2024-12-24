@@ -57,13 +57,13 @@ public:
     /**
      * Column number for the pattern order or -1 if disabled
      **/
-    int orderCol()      const   { return _orderCol; }
+    int orderCol() const { return _orderCol; }
 
     /**
      * Flag: Should the order column be shown?
      * (set environment variable Y2_SHOW_PATTERNS_ORDER)
      **/
-    bool showOrderCol() const   { return _orderCol >= 0; }
+    bool showOrderCol() const { return _orderCol >= 0; }
 
     /**
      * Flag: Show invisible patterns, too?
@@ -108,10 +108,10 @@ public slots:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void pkgObjClicked( int                button,
+    virtual void pkgObjClicked( int               button,
                                 QTreeWidgetItem * item,
-                                int                col,
-                                const QPoint &     pos );
+                                int               col,
+                                const QPoint &    pos );
 
     /**
      * Select the first selectable list entry that is not a pattern category.
@@ -307,6 +307,7 @@ protected:
      * close icons.
      **/
     void setTreeIcon( void );
+
     //
     // Data members
     //

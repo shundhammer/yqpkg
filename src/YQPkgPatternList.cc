@@ -399,6 +399,7 @@ YQPkgPatternListItem::init()
 
 
 
+
 YQPkgPatternListItem::~YQPkgPatternListItem()
 {
     // NOP
@@ -462,7 +463,7 @@ YQPkgPatternListItem::resetToolTip()
         infoToolTip += ("<p>" + zypp::str::form("%d / %d", installedPackages(), totalPackages() ) + "</p>");
     }
 
-    setToolTip(_patternList->summaryCol(), fromUTF8(infoToolTip));
+    setToolTip(_patternList->summaryCol(), fromUTF8( infoToolTip ) );
 }
 
 
@@ -515,8 +516,8 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList * patternLi
 
     QFont categoryFont = font( _patternList->summaryCol() );
     categoryFont.setBold(true);
-    QFontMetrics metrics( categoryFont );
-    categoryFont.setPixelSize(int (metrics.height() * 1.1));
+    QFontMetrics fontMetrics( categoryFont );
+    categoryFont.setPixelSize( (int) ( fontMetrics.height() * 1.1 ) );
     setFont( _patternList->summaryCol(), categoryFont );
 }
 
@@ -588,6 +589,3 @@ YQPkgPatternCategoryItem::operator<( const QTreeWidgetItem & otherListViewItem )
 
     return QTreeWidgetItem::operator<( otherListViewItem );
 }
-
-
-
