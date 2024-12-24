@@ -36,7 +36,6 @@ class YQPkgObjListItem;
 class QAction;
 
 using std::string;
-using std::list;
 
 
 /**
@@ -127,6 +126,8 @@ public:
 
 
     class ExcludeRule;
+    typedef std::list<ExcludeRule *> ExcludeRuleList;
+
 
     /**
      * Add an exclude rule to this list.
@@ -375,12 +376,10 @@ protected:
     bool _debug;
     int  _excludedItemsCount;
 
-    typedef list<ExcludeRule *> ExcludeRuleList;
+    QMenu * _installedContextMenu;
+    QMenu * _notInstalledContextMenu;
 
-    ExcludeRuleList     _excludeRules;
-
-    QMenu *     _installedContextMenu;
-    QMenu *     _notInstalledContextMenu;
+    ExcludeRuleList _excludeRules;
 
 
 public:

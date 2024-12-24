@@ -82,22 +82,20 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
 
     createActions();
 
-    connect( this,      SIGNAL( columnClicked           ( int, QTreeWidgetItem *, int, const QPoint & ) ),
-             this,      SLOT  ( pkgObjClicked           ( int, QTreeWidgetItem *, int, const QPoint & ) ) );
+    connect( this,      SIGNAL( columnClicked             ( int, QTreeWidgetItem *, int, const QPoint & ) ),
+             this,      SLOT  ( pkgObjClicked             ( int, QTreeWidgetItem *, int, const QPoint & ) ) );
 
-    connect( this,      SIGNAL( columnDoubleClicked     ( int, QTreeWidgetItem *, int, const QPoint & ) ),
-             this,      SLOT  ( pkgObjClicked           ( int, QTreeWidgetItem *, int, const QPoint & ) ) );
+    connect( this,      SIGNAL( columnDoubleClicked       ( int, QTreeWidgetItem *, int, const QPoint & ) ),
+             this,      SLOT  ( pkgObjClicked             ( int, QTreeWidgetItem *, int, const QPoint & ) ) );
 
-    connect( this,      SIGNAL( currentItemChanged      ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+    connect( this,      SIGNAL( currentItemChanged        ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
              this,      SLOT  ( currentItemChangedInternal( QTreeWidgetItem * ) ) );
 
-    connect( this,      SIGNAL(customContextMenuRequested(const QPoint &)),
-             this,      SLOT  (slotCustomContextMenu(const QPoint&)));
+    connect( this,      SIGNAL(customContextMenuRequested ( const QPoint & ) ),
+             this,      SLOT  (slotCustomContextMenu      ( const QPoint & ) ) );
 
     setIconSize( QSize( 16, 16 ) );
-
     setContextMenuPolicy(Qt::CustomContextMenu);
-
 }
 
 
@@ -121,9 +119,9 @@ YQPkgObjList::addPkgObjItem( ZyppSel selectable, ZyppObj zyppObj )
 
 
 void
-YQPkgObjList::addPassiveItem( const QString &   name,
-                              const QString &   summary,
-                              FSize             size )
+YQPkgObjList::addPassiveItem( const QString & name,
+                              const QString & summary,
+                              FSize           size )
 {
     QY2ListViewItem * item = new QY2ListViewItem( this, QString() );
 
@@ -141,10 +139,10 @@ YQPkgObjList::addPassiveItem( const QString &   name,
 
 
 void
-YQPkgObjList::pkgObjClicked( int                button,
-                             QTreeWidgetItem *  listViewItem,
-                             int                col,
-                             const QPoint &     pos )
+YQPkgObjList::pkgObjClicked( int               button,
+                             QTreeWidgetItem * listViewItem,
+                             int               col,
+                             const QPoint &    pos )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
@@ -169,7 +167,7 @@ YQPkgObjList::pkgObjClicked( int                button,
 void
 YQPkgObjList::currentItemChangedInternal( QTreeWidgetItem * listViewItem )
 {
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *>( listViewItem );
 
     emit currentItemChanged( item ? item->selectable() : ZyppSel() );
 }
@@ -202,17 +200,17 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
     {
         switch ( status )
         {
-            case S_Del:                 icon = YQIconPool::pkgDel();            break;
-            case S_Install:             icon = YQIconPool::pkgInstall();        break;
-            case S_KeepInstalled:       icon = YQIconPool::pkgKeepInstalled();  break;
-            case S_NoInst:              icon = YQIconPool::pkgNoInst();         break;
-            case S_Protected:           icon = YQIconPool::pkgProtected();      break;
-            case S_Taboo:               icon = YQIconPool::pkgTaboo();          break;
-            case S_Update:              icon = YQIconPool::pkgUpdate();         break;
+            case S_Del:            icon = YQIconPool::pkgDel();            break;
+            case S_Install:        icon = YQIconPool::pkgInstall();        break;
+            case S_KeepInstalled:  icon = YQIconPool::pkgKeepInstalled();  break;
+            case S_NoInst:         icon = YQIconPool::pkgNoInst();         break;
+            case S_Protected:      icon = YQIconPool::pkgProtected();      break;
+            case S_Taboo:          icon = YQIconPool::pkgTaboo();          break;
+            case S_Update:         icon = YQIconPool::pkgUpdate();         break;
 
-            case S_AutoDel:             icon = YQIconPool::pkgAutoDel();        break;
-            case S_AutoInstall:         icon = YQIconPool::pkgAutoInstall();    break;
-            case S_AutoUpdate:          icon = YQIconPool::pkgAutoUpdate();     break;
+            case S_AutoDel:        icon = YQIconPool::pkgAutoDel();        break;
+            case S_AutoInstall:    icon = YQIconPool::pkgAutoInstall();    break;
+            case S_AutoUpdate:     icon = YQIconPool::pkgAutoUpdate();     break;
 
                 // Intentionally omitting 'default' branch so the compiler can
                 // catch unhandled enum states
@@ -222,17 +220,17 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
     {
         switch ( status )
         {
-            case S_Del:                 icon = YQIconPool::disabledPkgDel();            break;
-            case S_Install:             icon = YQIconPool::disabledPkgInstall();        break;
-            case S_KeepInstalled:       icon = YQIconPool::disabledPkgKeepInstalled();  break;
-            case S_NoInst:              icon = YQIconPool::disabledPkgNoInst();         break;
-            case S_Protected:           icon = YQIconPool::disabledPkgProtected();      break;
-            case S_Taboo:               icon = YQIconPool::disabledPkgTaboo();          break;
-            case S_Update:              icon = YQIconPool::disabledPkgUpdate();         break;
+            case S_Del:            icon = YQIconPool::disabledPkgDel();            break;
+            case S_Install:        icon = YQIconPool::disabledPkgInstall();        break;
+            case S_KeepInstalled:  icon = YQIconPool::disabledPkgKeepInstalled();  break;
+            case S_NoInst:         icon = YQIconPool::disabledPkgNoInst();         break;
+            case S_Protected:      icon = YQIconPool::disabledPkgProtected();      break;
+            case S_Taboo:          icon = YQIconPool::disabledPkgTaboo();          break;
+            case S_Update:         icon = YQIconPool::disabledPkgUpdate();         break;
 
-            case S_AutoDel:             icon = YQIconPool::disabledPkgAutoDel();        break;
-            case S_AutoInstall:         icon = YQIconPool::disabledPkgAutoInstall();    break;
-            case S_AutoUpdate:          icon = YQIconPool::disabledPkgAutoUpdate();     break;
+            case S_AutoDel:        icon = YQIconPool::disabledPkgAutoDel();        break;
+            case S_AutoInstall:    icon = YQIconPool::disabledPkgAutoInstall();    break;
+            case S_AutoUpdate:     icon = YQIconPool::disabledPkgAutoUpdate();     break;
 
                 // Intentionally omitting 'default' branch so the compiler can
                 // catch unhandled enum states
@@ -248,16 +246,16 @@ YQPkgObjList::statusText( ZyppStatus status ) const
 {
     switch ( status )
     {
-        case S_AutoDel:         return _( "Autodelete"                  );
-        case S_AutoInstall:     return _( "Autoinstall"                 );
-        case S_AutoUpdate:      return _( "Autoupdate"                  );
-        case S_Del:             return _( "Delete"                      );
-        case S_Install:         return _( "Install"                     );
-        case S_KeepInstalled:   return _( "Keep"                        );
-        case S_NoInst:          return _( "Do Not Install"              );
-        case S_Protected:       return _( "Protected -- Do Not Modify"  );
-        case S_Taboo:           return _( "Taboo -- Never Install"      );
-        case S_Update:          return _( "Update"                      );
+        case S_AutoDel:        return _( "Autodelete"                 );
+        case S_AutoInstall:    return _( "Autoinstall"                );
+        case S_AutoUpdate:     return _( "Autoupdate"                 );
+        case S_Del:            return _( "Delete"                     );
+        case S_Install:        return _( "Install"                    );
+        case S_KeepInstalled:  return _( "Keep"                       );
+        case S_NoInst:         return _( "Do Not Install"             );
+        case S_Protected:      return _( "Protected -- Do Not Modify" );
+        case S_Taboo:          return _( "Taboo -- Never Install"     );
+        case S_Update:         return _( "Update"                     );
     }
 
     return QString();
@@ -323,7 +321,9 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
                 }
                 else
                 {
-                    if ( item->selectable()->installedObj() && item->status() != S_Protected && item->selectable()->updateCandidateObj() )
+                    if ( item->selectable()->installedObj()      &&
+                         item->status() != S_Protected           &&
+                         item->selectable()->updateCandidateObj()   )
                     {
                         item->selectable()->setOnSystem( item->selectable()->updateCandidateObj() );
                     }
@@ -356,7 +356,6 @@ YQPkgObjList::selectNextItem()
     while ( (item = *it) != NULL )
     {
         ++it;
-        //item->setSelected( false );                   // Doesn't emit signals
         scrollToItem( *it );    // Scroll if necessary
         setCurrentItem( *it );  // Emits signals
 
@@ -367,65 +366,66 @@ YQPkgObjList::selectNextItem()
 void
 YQPkgObjList::createActions()
 {
-    actionSetCurrentInstall             = createAction( S_Install,              "[+]"           );
-    actionSetCurrentDontInstall         = createAction( S_NoInst,               "[-]"           );
-    actionSetCurrentKeepInstalled       = createAction( S_KeepInstalled,        "[<], [-]"      );
-    actionSetCurrentDelete              = createAction( S_Del,                  "[-]"           );
-    actionSetCurrentUpdate              = createAction( S_Update,               "[>], [+]"      );
+    actionSetCurrentInstall       = createAction( S_Install,       "[+]"      );
+    actionSetCurrentDontInstall   = createAction( S_NoInst,        "[-]"      );
+    actionSetCurrentKeepInstalled = createAction( S_KeepInstalled, "[<], [-]" );
+    actionSetCurrentDelete        = createAction( S_Del,           "[-]"      );
+    actionSetCurrentUpdate        = createAction( S_Update,        "[>], [+]" );
 
-    actionSetCurrentUpdateForce         = createAction( _( "Update unconditionally" ),
-                                                        statusIcon( S_Update, true ),
-                                                        statusIcon( S_Update, false ) ,
-                                                        "",
-                                                        true ) ;
+    actionSetCurrentUpdateForce   = createAction( _( "Update unconditionally" ),
+                                                  statusIcon( S_Update, true ),
+                                                  statusIcon( S_Update, false ) ,
+                                                  "",
+                                                  true ) ;
 
 
+    actionSetCurrentTaboo         = createAction( S_Taboo,         "[!]"    );
+    actionSetCurrentProtected     = createAction( S_Protected,     "[*]"    );
 
-    actionSetCurrentTaboo               = createAction( S_Taboo,                "[!]"           );
-    actionSetCurrentProtected           = createAction( S_Protected,            "[*]"           );
+    actionSetListInstall          = createAction( S_Install,       "", true );
+    actionSetListDontInstall      = createAction( S_NoInst,        "", true );
+    actionSetListKeepInstalled    = createAction( S_KeepInstalled, "", true );
+    actionSetListDelete           = createAction( S_Del,           "", true );
+    actionSetListProtected        = createAction( S_Protected,     "", true );
 
-    actionSetListInstall                = createAction( S_Install,              "", true );
-    actionSetListDontInstall            = createAction( S_NoInst,               "", true );
-    actionSetListKeepInstalled          = createAction( S_KeepInstalled,        "", true );
-    actionSetListDelete                 = createAction( S_Del,                  "", true );
-    actionSetListProtected              = createAction( S_Protected,            "", true );
+    actionSetListUpdate           = createAction( _( "Update if newer version available" ),
+                                                  statusIcon( S_Update, true ),
+                                                  statusIcon( S_Update, false ),
+                                                  "",
+                                                  true );
 
-    actionSetListUpdate                 = createAction( _( "Update if newer version available" ),
-                                                        statusIcon( S_Update, true ),
-                                                        statusIcon( S_Update, false ),
-                                                        "",
-                                                        true );
+    actionSetListUpdateForce      = createAction( _( "Update unconditionally" ),
+                                                  statusIcon( S_Update, true ),
+                                                  statusIcon( S_Update, false ),
+                                                  "",
+                                                  true );
 
-    actionSetListUpdateForce            = createAction( _( "Update unconditionally" ),
-                                                        statusIcon( S_Update, true ),
-                                                        statusIcon( S_Update, false ),
-                                                        "",
-                                                        true );
+    actionSetListTaboo            = createAction( S_Taboo,                "", true );
 
-    actionSetListTaboo                  = createAction( S_Taboo,                "", true );
-
-    connect( actionSetCurrentInstall,        &QAction::triggered, this, &YQPkgObjList::setCurrentInstall );
-    connect( actionSetCurrentDontInstall,    &QAction::triggered, this, &YQPkgObjList::setCurrentDontInstall );
-    connect( actionSetCurrentKeepInstalled,  &QAction::triggered, this, &YQPkgObjList::setCurrentKeepInstalled );
-    connect( actionSetCurrentDelete,         &QAction::triggered, this, &YQPkgObjList::setCurrentDelete );
-    connect( actionSetCurrentUpdate,         &QAction::triggered, this, &YQPkgObjList::setCurrentUpdate );
-    connect( actionSetCurrentUpdateForce,    &QAction::triggered, this, &YQPkgObjList::setCurrentUpdateForce );
-    connect( actionSetCurrentTaboo,          &QAction::triggered, this, &YQPkgObjList::setCurrentTaboo );
-    connect( actionSetCurrentProtected,      &QAction::triggered, this, &YQPkgObjList::setCurrentProtected );
-    connect( actionSetListInstall,           &QAction::triggered, this, &YQPkgObjList::setListInstall );
-    connect( actionSetListDontInstall,       &QAction::triggered, this, &YQPkgObjList::setListDontInstall );
-    connect( actionSetListKeepInstalled,     &QAction::triggered, this, &YQPkgObjList::setListKeepInstalled );
-    connect( actionSetListDelete,            &QAction::triggered, this, &YQPkgObjList::setListDelete );
-    connect( actionSetListUpdate,            &QAction::triggered, this, &YQPkgObjList::setListUpdate );
-    connect( actionSetListUpdateForce,       &QAction::triggered, this, &YQPkgObjList::setListUpdateForce );
-    connect( actionSetListTaboo,             &QAction::triggered, this, &YQPkgObjList::setListTaboo );
-    connect( actionSetListProtected,         &QAction::triggered, this, &YQPkgObjList::setListProtected );
+    connect( actionSetCurrentInstall,        SIGNAL( triggered() ), this, SLOT( setCurrentInstall()       ) );
+    connect( actionSetCurrentDontInstall,    SIGNAL( triggered() ), this, SLOT( setCurrentDontInstall()   ) );
+    connect( actionSetCurrentKeepInstalled,  SIGNAL( triggered() ), this, SLOT( setCurrentKeepInstalled() ) );
+    connect( actionSetCurrentDelete,         SIGNAL( triggered() ), this, SLOT( setCurrentDelete()        ) );
+    connect( actionSetCurrentUpdate,         SIGNAL( triggered() ), this, SLOT( setCurrentUpdate()        ) );
+    connect( actionSetCurrentUpdateForce,    SIGNAL( triggered() ), this, SLOT( setCurrentUpdateForce()   ) );
+    connect( actionSetCurrentTaboo,          SIGNAL( triggered() ), this, SLOT( setCurrentTaboo()         ) );
+    connect( actionSetCurrentProtected,      SIGNAL( triggered() ), this, SLOT( setCurrentProtected()     ) );
+    connect( actionSetListInstall,           SIGNAL( triggered() ), this, SLOT( setListInstall()          ) );
+    connect( actionSetListDontInstall,       SIGNAL( triggered() ), this, SLOT( setListDontInstall()      ) );
+    connect( actionSetListKeepInstalled,     SIGNAL( triggered() ), this, SLOT( setListKeepInstalled()    ) );
+    connect( actionSetListDelete,            SIGNAL( triggered() ), this, SLOT( setListDelete()           ) );
+    connect( actionSetListUpdate,            SIGNAL( triggered() ), this, SLOT( setListUpdate()           ) );
+    connect( actionSetListUpdateForce,       SIGNAL( triggered() ), this, SLOT( setListUpdateForce()      ) );
+    connect( actionSetListTaboo,             SIGNAL( triggered() ), this, SLOT( setListTaboo()            ) );
+    connect( actionSetListProtected,         SIGNAL( triggered() ), this, SLOT( setListProtected()        ) );
 }
 
 
 
 QAction *
-YQPkgObjList::createAction( ZyppStatus status, const QString & key, bool enabled )
+YQPkgObjList::createAction( ZyppStatus      status,
+                            const QString & key,
+                            bool            enabled )
 {
     return createAction( statusText( status ),
                          statusIcon( status, true ),
@@ -436,11 +436,11 @@ YQPkgObjList::createAction( ZyppStatus status, const QString & key, bool enabled
 
 
 QAction *
-YQPkgObjList::createAction( const QString &     text,
-                            const QPixmap &     icon,
-                            const QPixmap &     insensitiveIcon,
-                            const QString &     key,
-                            bool                enabled )
+YQPkgObjList::createAction( const QString & text,
+                            const QPixmap & icon,
+                            const QPixmap & insensitiveIcon,
+                            const QString & key,
+                            bool            enabled )
 {
     QString label = text;
 
@@ -452,8 +452,7 @@ YQPkgObjList::createAction( const QString &     text,
 
     if ( ! insensitiveIcon.isNull() )
     {
-        iconSet.addPixmap( insensitiveIcon,
-                           QIcon::Disabled );
+        iconSet.addPixmap( insensitiveIcon, QIcon::Disabled );
     }
 
     QAction * action = new QAction( label,      // text
@@ -472,9 +471,9 @@ YQPkgObjList::createNotInstalledContextMenu()
     _notInstalledContextMenu = new QMenu( this );
     Q_CHECK_PTR( _notInstalledContextMenu );
 
-    _notInstalledContextMenu->addAction( actionSetCurrentInstall        );
-    _notInstalledContextMenu->addAction( actionSetCurrentDontInstall    );
-    _notInstalledContextMenu->addAction( actionSetCurrentTaboo          );
+    _notInstalledContextMenu->addAction( actionSetCurrentInstall     );
+    _notInstalledContextMenu->addAction( actionSetCurrentDontInstall );
+    _notInstalledContextMenu->addAction( actionSetCurrentTaboo       );
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -486,10 +485,10 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu = new QMenu( this );
     Q_CHECK_PTR( _installedContextMenu );
 
-    _installedContextMenu->addAction( actionSetCurrentKeepInstalled     );
-    _installedContextMenu->addAction( actionSetCurrentDelete            );
-    _installedContextMenu->addAction( actionSetCurrentUpdate            );
-    _installedContextMenu->addAction( actionSetCurrentUpdateForce       );
+    _installedContextMenu->addAction( actionSetCurrentKeepInstalled );
+    _installedContextMenu->addAction( actionSetCurrentDelete        );
+    _installedContextMenu->addAction( actionSetCurrentUpdate        );
+    _installedContextMenu->addAction( actionSetCurrentUpdateForce   );
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -501,13 +500,13 @@ YQPkgObjList::addAllInListSubMenu( QMenu * menu )
     QMenu * submenu = new QMenu( menu );
     Q_CHECK_PTR( submenu );
 
-    submenu->addAction( actionSetListInstall            );
-    submenu->addAction( actionSetListDontInstall        );
-    submenu->addAction( actionSetListKeepInstalled      );
-    submenu->addAction( actionSetListDelete             );
-    submenu->addAction( actionSetListUpdate             );
-    submenu->addAction( actionSetListUpdateForce        );
-    submenu->addAction( actionSetListTaboo              );
+    submenu->addAction( actionSetListInstall       );
+    submenu->addAction( actionSetListDontInstall   );
+    submenu->addAction( actionSetListKeepInstalled );
+    submenu->addAction( actionSetListDelete        );
+    submenu->addAction( actionSetListUpdate        );
+    submenu->addAction( actionSetListUpdateForce   );
+    submenu->addAction( actionSetListTaboo         );
 
     QAction *action = menu->addMenu( submenu );
     action->setText( _( "&All in This List" ) );
@@ -571,7 +570,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
             actionSetCurrentUpdateForce->setEnabled( false );
         }
     }
-    else        // ! item
+    else  // ! item
     {
         actionSetCurrentInstall->setEnabled( false );
         actionSetCurrentDontInstall->setEnabled( false );
@@ -611,7 +610,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
                 switch( event->key() )
                 {
-                    case Qt::Key_Space:         // Cycle
+                    case Qt::Key_Space:  // Cycle
                         item->cycleStatus();
                         event->accept();
                         return;
@@ -638,7 +637,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
                         event->accept();
                         return;
 
-                    case Qt::Key_Exclam:        // Taboo
+                    case Qt::Key_Exclam:  // Taboo
 
                         if ( ! installed )
                             setCurrentStatus( S_Taboo );
@@ -646,7 +645,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
                         event->accept();
                         return;
 
-                    case Qt::Key_Asterisk:      // Protected
+                    case Qt::Key_Asterisk:  // Protected
 
                         if ( installed )
                             setCurrentStatus( S_Protected );
@@ -654,7 +653,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
                         event->accept();
                         return;
 
-                    case Qt::Key_Greater:       // Update what is worth to be updated
+                    case Qt::Key_Greater:  // Update what can be updated
 
                         if ( installed && item->candidateIsNewer() )
                             setCurrentStatus( S_Update );
@@ -842,8 +841,8 @@ YQPkgObjList::shouldKeepFocus( QWidget * widget ) const
 
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
-                                    ZyppSel selectable,
-                                    ZyppObj zyppObj )
+                                    ZyppSel        selectable,
+                                    ZyppObj        zyppObj )
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
     , _selectable( selectable )
@@ -855,10 +854,10 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
 }
 
 
-YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *      pkgObjList,
-                                    QY2ListViewItem *   parent,
-                                    ZyppSel             selectable,
-                                    ZyppObj             zyppObj )
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *    pkgObjList,
+                                    QY2ListViewItem * parent,
+                                    ZyppSel           selectable,
+                                    ZyppObj           zyppObj )
     : QY2ListViewItem( parent )
     , _pkgObjList( pkgObjList )
     , _selectable( selectable )
@@ -870,7 +869,7 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *      pkgObjList,
 }
 
 
-YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *      pkgObjList )
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList )
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
     , _selectable( 0 )
@@ -910,8 +909,8 @@ YQPkgObjListItem::init()
     if ( installed && ! candidate )
         _installedIsNewer = true;
 
-    if ( nameCol()    >= 0 )    setText( nameCol(),     zyppObj()->name()       );
-    if ( summaryCol() >= 0 )    setText( summaryCol(),  zyppObj()->summary()    );
+    if ( nameCol()    >= 0 )  setText( nameCol(),     zyppObj()->name()    );
+    if ( summaryCol() >= 0 )  setText( summaryCol(),  zyppObj()->summary() );
 
     if ( sizeCol()    >= 0 )
     {
@@ -1049,7 +1048,6 @@ YQPkgObjListItem::bySelection() const
 }
 
 
-
 void
 YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 {
@@ -1076,7 +1074,6 @@ YQPkgObjListItem::solveResolvableCollections()
 {
     zypp::getZYpp()->resolver()->resolvePool();
 }
-
 
 
 void
@@ -1355,16 +1352,16 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
         }
         else if ( col == statusCol() )
         {
-            // Sorting by status depends on the numeric value of the
-            // ZyppStatus enum, thus it is important to insert new
-            // package states there where they make most sense. We want to show
-            // dangerous or noteworthy states first - e.g., "taboo" which should
-            // seldeom occur, but when it does, it is important.
+            // Sorting by status depends on the numeric value of the ZyppStatus
+            // enum, thus it is important to insert new package states there
+            // where they make most sense. We want to show dangerous or
+            // noteworthy states first - e.g., "taboo" which should seldeom
+            // occur, but when it does, it is important.
 
-            bool b = ( this->status() < other->status() );
-            if ( !b && this->status() == other->status() )
-                b = this->zyppObj()->name() < other->zyppObj()->name();
-            return b;
+            bool result = ( this->status() < other->status() );
+            if ( ! result && this->status() == other->status() )
+                result = this->zyppObj()->name() < other->zyppObj()->name();
+            return result;
         }
         else if ( col == instVersionCol() ||
                   col == versionCol() )
