@@ -20,11 +20,11 @@
 
 #include <QKeyEvent>
 #include <QMap>
-#include <QByteArray>
 
 #include <zypp/DiskUsageCounter.h>
 
 #include "QY2DiskUsageList.h"
+
 
 typedef zypp::DiskUsageCounter::MountPoint ZyppPartitionDu;
 class YQPkgDiskUsageListItem;
@@ -37,13 +37,13 @@ class YQPkgDiskUsageListItem;
  *
  * Example: Disk space usage:
  *
- *	70%
- *	75%
- *	80% 	[proximity range start]
- *	85%
- *	90%	[inner range start]
- *	95%
- *	100%
+ *      70%
+ *      75%
+ *      80%     [proximity range start]
+ *      85%
+ *      90%     [inner range start]
+ *      95%
+ *      100%
  *
  * A warning is to be posted when there is only 90% disk space left. After the
  * warning is displayed, there shall be no more warning until disk usage decreases
@@ -112,10 +112,10 @@ public:
 
 protected:
 
-    bool 	_inRange;
-    bool	_isClose;
-    bool	_hasBeenClose;
-    bool 	_warningPosted;
+    bool _inRange;
+    bool _isClose;
+    bool _hasBeenClose;
+    bool _warningPosted;
 };
 
 
@@ -137,7 +137,8 @@ public:
      * this many percent used disk space in the list. This is useful for
      * warning dialogs ( only? ).
      **/
-    YQPkgDiskUsageList( QWidget * parent, int thresholdPercent = 0 );
+    YQPkgDiskUsageList( QWidget * parent,
+                        int       thresholdPercent = 0 );
 
     /**
      * Destructor.
@@ -189,8 +190,8 @@ protected:
 
     // Data members
 
-    QMap<QString, YQPkgDiskUsageListItem*>  _items;
-    bool				_debug;
+    QMap<QString, YQPkgDiskUsageListItem*> _items;
+    bool                                   _debug;
 };
 
 
@@ -203,8 +204,8 @@ public:
      * Constructor. Creates a YQPkgDiskUsageList item that corresponds to the
      * specified file system.
      **/
-    YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
-			    const ZyppPartitionDu &	partitionDu );
+    YQPkgDiskUsageListItem( YQPkgDiskUsageList *    parent,
+                            const ZyppPartitionDu & partitionDu );
 
     /**
      * Destructor.
@@ -261,10 +262,9 @@ protected:
 
     // Data members
 
-    ZyppPartitionDu 		_partitionDu;
-    YQPkgDiskUsageList *	_pkgDiskUsageList;
+    ZyppPartitionDu      _partitionDu;
+    YQPkgDiskUsageList * _pkgDiskUsageList;
 };
-
 
 
 #endif // ifndef YQPkgDiskUsageList_h
