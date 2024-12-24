@@ -86,8 +86,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     Q_CHECK_PTR( layout );
 
     setLayout(layout);
-    layout->setMargin(MARGIN);
-    layout->setSpacing(SPACING);
+    layout->setMargin( MARGIN );
+    layout->setSpacing( SPACING );
 
 
     // Conflict list
@@ -103,6 +103,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
 
     // Button box
+
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
 
@@ -110,6 +111,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->setMargin ( MARGIN  );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
+
 
     // "OK" button
 
@@ -149,7 +151,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     button = new QPushButton( _( "&Cancel" ), this);
     Q_CHECK_PTR( button );
 
-    buttonBox->addWidget(button);
+    buttonBox->addWidget( button );
     buttonBox->addStretch();
 
     connect( button, SIGNAL( clicked() ),
@@ -189,17 +191,13 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     QSize size = _busyPopup->sizeHint();
     QPixmap pixmap( 3 * size.width(), 3 * size.height() );
 
-    // Clear the pixmap with the widget's normal background color.
-    // FIXME pixmap.fill( _busyPopup->paletteBackgroundColor() );
-
     // Render the text - aligned top and left because otherwise it will of
     // course be centered inside the pixmap which is usually much larger than
     // the popup, thus the text would be cut off.
+
     QPainter painter( &pixmap );
     painter.drawText( pixmap.rect(), Qt::AlignLeft | Qt::AlignTop, _busyPopup->text() );
     painter.end();
-
-    //FIXME _busyPopup->setPaletteBackgroundPixmap( pixmap );
 
     // If the application manages to render the true contents of the label we
     // just misused so badly, the real label will interfere with the background
@@ -207,10 +205,12 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // multiprocessor machines tend to have this problem.
     // So let's get rid of the label text and solely rely on the background
     // pixmap.
+
     _busyPopup->setText( "" );
 
     // Make sure the newly emptied text doesn't cause the busy dialog to be
     // resized to nil (or a window manager dependent minimum size).
+
     _busyPopup->setFixedSize( _busyPopup->size() );
 
     WindowSettings::read( this, "PkgConflictDialog" );
@@ -389,6 +389,7 @@ void
 YQPkgConflictDialog::askCreateSolverTestCase()
 {
     QString testCaseDir = "/var/log/YaST2/solverTestcase";
+
     // Heading for popup dialog
     QString heading = QString( "<h2>%1</h2>" ).arg( _( "Create Dependency Resolver Test Case" ) );
 
@@ -402,11 +403,13 @@ YQPkgConflictDialog::askCreateSolverTestCase()
                                               _( "C&ontinue" ),         // button #0
                                               _( "&Cancel" ) );         // button #1
 
-    if ( button_no == 1 )       // Cancel
+    if ( button_no == 1 )  // Cancel
         return;
 
     logInfo() << "Generating solver test case START" << endl;
+
     bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable( testCaseDir ) );
+
     logInfo() << "Generating solver test case END" << endl;
 
     if ( success )
