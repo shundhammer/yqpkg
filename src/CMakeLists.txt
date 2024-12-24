@@ -34,6 +34,7 @@ set( SOURCES
   PkgCommitPage.cc
   PkgTasks.cc
   PkgTaskListWidget.cc
+  SearchFilter.cc
   SummaryPage.cc
   WindowSettings.cc
   Workflow.cc
