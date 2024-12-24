@@ -15,13 +15,10 @@
  */
 
 
-#include "Logger.h"
 
+#include "Logger.h"
 #include "YQi18n.h"
 #include "utf8.h"
-
-#include <QDateTime>
-
 #include "YQPkgDependenciesView.h"
 
 
@@ -126,8 +123,8 @@ YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
 
 
 QString
-YQPkgDependenciesView::row( const QString &		heading,
-			    const zypp::Capabilities & 	capSet )
+YQPkgDependenciesView::row( const QString & heading,
+			    const ZyppCap & capSet )
 {
     QString content = htmlLines( capSet );
 
@@ -142,9 +139,9 @@ YQPkgDependenciesView::row( const QString &		heading,
 
 
 QString
-YQPkgDependenciesView::row( const QString & 		heading,
-			    const zypp::Capabilities & 	capSet1,
-			    const zypp::Capabilities & 	capSet2 )
+YQPkgDependenciesView::row( const QString & heading,
+			    const ZyppCap & capSet1,
+			    const ZyppCap & capSet2 )
 {
     QString content1 = htmlLines( capSet1 );
     QString content2 = htmlLines( capSet2 );
@@ -161,11 +158,11 @@ YQPkgDependenciesView::row( const QString & 		heading,
 
 
 QString
-YQPkgDependenciesView::htmlLines( const zypp::Capabilities & capSet )
+YQPkgDependenciesView::htmlLines( const ZyppCap & capSet )
 {
     QString html;
 
-    for ( zypp::Capabilities::const_iterator it = capSet.begin();
+    for ( ZyppCap::const_iterator it = capSet.begin();
 	  it != capSet.end();
 	  ++it )
     {
@@ -177,5 +174,3 @@ YQPkgDependenciesView::htmlLines( const zypp::Capabilities & capSet )
 
     return html;
 }
-
-

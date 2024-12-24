@@ -21,7 +21,8 @@
 #include "YQZypp.h"
 #include "YQPkgGenericDetailsView.h"
 
-using std::string;
+
+typedef zypp::Capabilities ZyppCap;
 
 
 /**
@@ -77,19 +78,19 @@ protected:
      *
      * Returns an empty string if capSet is empty.
      **/
-    static QString row( const QString &		heading,
-			const zypp::Capabilities & 	capSet );
+    static QString row( const QString &	heading,
+			const ZyppCap & capSet );
 
 
     /**
-     * Format two zypp::Capabilities (describing zypp::Dep::REQUIRES etc.)
+     * Format two ZyppCap (describing zypp::Dep::REQUIRES etc.)
      * with a heading in HTML lines.
      *
      * Returns an empty string both capSets are empty.
      **/
-    static QString row( const QString & 	heading,
-			const zypp::Capabilities & 	capSet1,
-			const zypp::Capabilities & 	capSet2 );
+    static QString row( const QString & heading,
+			const ZyppCap & capSet1,
+			const ZyppCap & capSet2 );
 
     /**
      * Returns a string containing a HTML table row with 'contents'.
@@ -100,11 +101,11 @@ protected:
 	{ return YQPkgGenericDetailsView::row( contents ); }
 
     /**
-     * Format a zypp::Capabilities (describing zypp::Dep::REQUIRES etc.)
+     * Format a ZyppCap (describing zypp::Dep::REQUIRES etc.)
      * in HTML lines, separated with <BR>.
      * Returns an empty string if capSet is empty.
      **/
-    static QString htmlLines( const zypp::Capabilities & capSet );
+    static QString htmlLines( const ZyppCap & capSet );
 };
 
 
