@@ -15,8 +15,8 @@
  */
 
 
-#ifndef YQPkgClassFilterView_h
-#define YQPkgClassFilterView_h
+#ifndef YQPkgClassificationFilterView_h
+#define YQPkgClassificationFilterView_h
 
 #include "YQZypp.h"
 #include <QTreeWidget>
@@ -43,7 +43,7 @@ class YQPkgClassItem;
  * Filter view for package classes (categories) like suggested, recommended,
  * orphaned etc. packages. See enum YPkgClass.
  **/
-class YQPkgClassFilterView : public QTreeWidget
+class YQPkgClassificationFilterView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -52,12 +52,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgClassFilterView( QWidget * parent );
+    YQPkgClassificationFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgClassFilterView();
+    virtual ~YQPkgClassificationFilterView();
 
     /**
      * Check if 'pkg' matches the selected package class and send a filterMatch
@@ -136,8 +136,8 @@ class YQPkgClassItem: public QTreeWidgetItem
 {
 public:
 
-    YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
-		    YQPkgClass             pkgClass );
+    YQPkgClassItem( QTreeWidget * parentView,
+		    YQPkgClass    pkgClass );
 
     virtual ~YQPkgClassItem();
 
@@ -145,13 +145,10 @@ public:
 
     virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 
-
 private:
-
-    // Data members
 
     YQPkgClass _pkgClass;
 };
 
 
-#endif // ifndef YQPkgClassFilterView_h
+#endif // ifndef YQPkgClassificationFilterView_h

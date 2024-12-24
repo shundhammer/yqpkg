@@ -44,7 +44,7 @@ class YQPkgFileListView;
 class YQPkgFilterTab;
 class YQPkgLangList;
 class YQPkgList;
-class YQPkgClassFilterView;
+class YQPkgClassificationFilterView;
 class YQPkgPatchFilterView;
 class YQPkgPatchList;
 class YQPkgPatternList;
@@ -269,12 +269,12 @@ protected:
 
     void basicLayout();
 
-    QWidget *	layoutRightPane		( QWidget *parent );
-    void	layoutFilters		( QWidget *parent );
-    void 	layoutPkgList		( QWidget *parent );
-    void 	layoutDetailsViews	( QWidget *parent );
-    void 	layoutButtons		( QWidget *parent );
-    void 	layoutMenuBar		( QWidget *parent );
+    QWidget *   layoutRightPane         ( QWidget *parent );
+    void        layoutFilters           ( QWidget *parent );
+    void        layoutPkgList           ( QWidget *parent );
+    void        layoutDetailsViews      ( QWidget *parent );
+    void        layoutButtons           ( QWidget *parent );
+    void        layoutMenuBar           ( QWidget *parent );
 
     /**
      * Establish Qt signal / slot connections.
@@ -295,14 +295,14 @@ protected:
     /**
      * Connect a filter view that provides the usual signals with a package
      * list. By convention, filter views provide the following signals:
-     *	  filterStart()
-     *	  filterMatch()
-     *	  filterFinished()
-     *	  updatePackages()  (optional)
+     *    filterStart()
+     *    filterMatch()
+     *    filterFinished()
+     *    updatePackages()  (optional)
      **/
-    void connectFilter( QWidget *	filter,
-			QWidget *	pkgList,
-			bool		hasUpdateSignal = true );
+    void connectFilter( QWidget *       filter,
+                        QWidget *       pkgList,
+                        bool            hasUpdateSignal = true );
 
     /**
      * Connect the patch list. Caution: Possible bootstrap problem!
@@ -326,9 +326,9 @@ protected:
      * based on its old status.
      * 'kind' is 'package' or 'pattern' (used only for debug logging).
      **/
-    void importSelectable( ZyppSel	selectable,
-			   bool		isWanted,
-			   const char * kind );
+    void importSelectable( ZyppSel      selectable,
+                           bool         isWanted,
+                           const char * kind );
 #endif
 
     /**
@@ -341,16 +341,16 @@ protected:
      * Return HTML code describing a symbol (an icon).
      **/
     QString symHelp( const QString & imgFileName,
-		     const QString & summary,
-		     const QString & explanation	);
+                     const QString & summary,
+                     const QString & explanation        );
 
 
     /**
      * Return HTML code describing a key.
      **/
     QString keyHelp( const QString & key,
-		     const QString & summary,
-		     const QString & explanation	);
+                     const QString & summary,
+                     const QString & explanation        );
 
     /**
      * loads settings that are shared with other frontends
@@ -375,42 +375,42 @@ protected:
 
     // Data members
 
-    QAction *				_autoDependenciesAction;
-    QPushButton *			_checkDependenciesButton;
-    QTabWidget *			_detailsViews;
+    QAction *                           _autoDependenciesAction;
+    QPushButton *                       _checkDependenciesButton;
+    QTabWidget *                        _detailsViews;
 
-    YQPkgFilterTab *			_filters;
-    YQPkgChangeLogView *		_pkgChangeLogView;
-    YQPkgDependenciesView *		_pkgDependenciesView;
-    YQPkgDescriptionView *		_pkgDescriptionView;
-    YQPkgFileListView *			_pkgFileListView;
+    YQPkgFilterTab *                    _filters;
+    YQPkgChangeLogView *                _pkgChangeLogView;
+    YQPkgDependenciesView *             _pkgDependenciesView;
+    YQPkgDescriptionView *              _pkgDescriptionView;
+    YQPkgFileListView *                 _pkgFileListView;
     QLabel *                            _repoUpgradeLabel;
     QLabel *                            _repoUpgradingLabel;
     QWidget *                           _notificationsContainer;
-    YQPkgRepoFilterView *		_repoFilterView;
-    YQPkgServiceFilterView *		_serviceFilterView;
-    YQPkgLangList *			_langList;
-    YQPkgList *				_pkgList;
-    YQPkgPatternList *			_patternList;
-    YQPkgClassFilterView *              _pkgClassFilterView;
-    YQPkgSearchFilterView *		_searchFilterView;
-    YQPkgStatusFilterView *		_statusFilterView;
-    YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
-    YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
+    YQPkgRepoFilterView *               _repoFilterView;
+    YQPkgServiceFilterView *            _serviceFilterView;
+    YQPkgLangList *                     _langList;
+    YQPkgList *                         _pkgList;
+    YQPkgPatternList *                  _patternList;
+    YQPkgClassificationFilterView *     _pkgClassificationFilterView;
+    YQPkgSearchFilterView *             _searchFilterView;
+    YQPkgStatusFilterView *             _statusFilterView;
+    YQPkgTechnicalDetailsView *         _pkgTechnicalDetailsView;
+    YQPkgUpdateProblemFilterView *      _updateProblemFilterView;
     YQPkgUpdatesFilterView *            _updatesFilterView;
-    YQPkgVersionsView *			_pkgVersionsView;
-    YQPkgPatchFilterView *		_patchFilterView;
-    YQPkgPatchList *			_patchList;
+    YQPkgVersionsView *                 _pkgVersionsView;
+    YQPkgPatchFilterView *              _patchFilterView;
+    YQPkgPatchList *                    _patchList;
 
-    QMenuBar *				_menuBar;
-    QMenu *				_fileMenu;
-    QMenu *				_pkgMenu;
-    QMenu *				_patchMenu;
-    QMenu *				_configMenu;
-    QMenu *				_dependencyMenu;
-    QMenu *				_optionsMenu;
-    QMenu *				_extrasMenu;
-    QMenu *				_helpMenu;
+    QMenuBar *                          _menuBar;
+    QMenu *                             _fileMenu;
+    QMenu *                             _pkgMenu;
+    QMenu *                             _patchMenu;
+    QMenu *                             _configMenu;
+    QMenu *                             _dependencyMenu;
+    QMenu *                             _optionsMenu;
+    QMenu *                             _extrasMenu;
+    QMenu *                             _helpMenu;
 
     QAction *                           _showDevelAction;
     QAction *                           _showDebugAction;
@@ -419,10 +419,10 @@ protected:
     QAction *                           _cleanDepsOnRemoveAction;
     QAction *                           _allowVendorChangeAction;
 
-    YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
-    YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;
+    YQPkgObjList::ExcludeRule *         _excludeDevelPkgs;
+    YQPkgObjList::ExcludeRule *         _excludeDebugInfoPkgs;
 
-    QColor				_normalButtonBackground;
+    QColor                              _normalButtonBackground;
 };
 
 

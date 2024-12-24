@@ -15,15 +15,13 @@
  */
 
 
-#include "Logger.h"
-
-#include "YQi18n.h"
-#include "utf8.h"
-
 #include <QApplication>
 
-#include "YQPkgClassFilterView.h"
+#include "Logger.h"
 #include "YQPkgSelector.h"
+#include "YQi18n.h"
+#include "utf8.h"
+#include "YQPkgClassificationFilterView.h"
 
 
 using std::string;
@@ -68,7 +66,7 @@ pkgClassIcon( YQPkgClass pkgClass )
 }
 
 
-YQPkgClassFilterView::YQPkgClassFilterView( QWidget * parent )
+YQPkgClassificationFilterView::YQPkgClassificationFilterView( QWidget * parent )
     : QTreeWidget( parent )
 {
     setIconSize( QSize( 32, 32 ) );
@@ -83,13 +81,13 @@ YQPkgClassFilterView::YQPkgClassFilterView( QWidget * parent )
 }
 
 
-YQPkgClassFilterView::~YQPkgClassFilterView()
+YQPkgClassificationFilterView::~YQPkgClassificationFilterView()
 {
 }
 
 
 void
-YQPkgClassFilterView::fillPkgClasses()
+YQPkgClassificationFilterView::fillPkgClasses()
 {
     new YQPkgClassItem( this, YQPkgClassRecommended	   );
     new YQPkgClassItem( this, YQPkgClassSuggested	   );
@@ -106,7 +104,7 @@ YQPkgClassFilterView::fillPkgClasses()
 
 
 void
-YQPkgClassFilterView::filterIfVisible()
+YQPkgClassificationFilterView::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
@@ -114,7 +112,7 @@ YQPkgClassFilterView::filterIfVisible()
 
 
 void
-YQPkgClassFilterView::filter()
+YQPkgClassificationFilterView::filter()
 {
     emit filterStart();
 
@@ -161,7 +159,7 @@ YQPkgClassFilterView::filter()
 
 
 void
-YQPkgClassFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
+YQPkgClassificationFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 {
     YQPkgClassItem * sel = dynamic_cast<YQPkgClassItem *>( newSelection );
 
@@ -196,7 +194,7 @@ YQPkgClassFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 
 
 bool
-YQPkgClassFilterView::check( ZyppSel selectable, ZyppPkg pkg )
+YQPkgClassificationFilterView::check( ZyppSel selectable, ZyppPkg pkg )
 {
     bool match = checkMatch( selectable, pkg );
 
@@ -208,7 +206,7 @@ YQPkgClassFilterView::check( ZyppSel selectable, ZyppPkg pkg )
 
 
 bool
-YQPkgClassFilterView::checkMatch( ZyppSel selectable, ZyppPkg pkg )
+YQPkgClassificationFilterView::checkMatch( ZyppSel selectable, ZyppPkg pkg )
 {
     if ( ! pkg )
 	return false;
@@ -233,7 +231,7 @@ YQPkgClassFilterView::checkMatch( ZyppSel selectable, ZyppPkg pkg )
 
 
 YQPkgClass
-YQPkgClassFilterView::selectedPkgClass() const
+YQPkgClassificationFilterView::selectedPkgClass() const
 {
     QTreeWidgetItem * qItem = currentItem();
 
@@ -250,7 +248,7 @@ YQPkgClassFilterView::selectedPkgClass() const
 
 
 void
-YQPkgClassFilterView::showPkgClass( YQPkgClass pkgClass )
+YQPkgClassificationFilterView::showPkgClass( YQPkgClass pkgClass )
 {
     QTreeWidgetItemIterator it( this );
 
@@ -272,11 +270,9 @@ YQPkgClassFilterView::showPkgClass( YQPkgClass pkgClass )
 
 
 
-
-
-YQPkgClassItem::YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
-				YQPkgClass pkgClass )
-    : QTreeWidgetItem( parentFilterView )
+YQPkgClassItem::YQPkgClassItem( QTreeWidget * parentView,
+				YQPkgClass    pkgClass )
+    : QTreeWidgetItem( parentView )
     , _pkgClass( pkgClass )
 {
     setText( 0, translatedText( pkgClass ) );
@@ -300,5 +296,3 @@ YQPkgClassItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
     else
 	return true;
 }
-
-

@@ -47,7 +47,7 @@ set( SOURCES
   YQPkgAppWorkflowSteps.cc
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc
-  YQPkgClassFilterView.cc
+  YQPkgClassificationFilterView.cc
   YQPkgConflictDialog.cc
   YQPkgConflictList.cc
   YQPkgDependenciesView.cc

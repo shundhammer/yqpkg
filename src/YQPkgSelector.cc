@@ -50,7 +50,7 @@
 #include "YQPkgApplication.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
-#include "YQPkgClassFilterView.h"
+#include "YQPkgClassificationFilterView.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
 #include "YQPkgDependenciesView.h"
@@ -115,30 +115,30 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
                               long      modeFlags )
     : YQPkgSelectorBase( parent, modeFlags )
 {
-    _showChangesDialog          = true;
-    _autoDependenciesAction     = 0;
-    _detailsViews               = 0;
-    _filters                    = 0;
-    _langList                   = 0;
-    _pkgClassFilterView         = 0;
-    _patchFilterView            = 0;
-    _patchList                  = 0;
-    _patternList                = 0;
-    _pkgChangeLogView           = 0;
-    _pkgDependenciesView        = 0;
-    _pkgDescriptionView         = 0;
-    _pkgFileListView            = 0;
-    _pkgList                    = 0;
-    _pkgTechnicalDetailsView    = 0;
-    _pkgVersionsView            = 0;
-    _repoFilterView             = 0;
-    _serviceFilterView          = 0;
-    _searchFilterView           = 0;
-    _statusFilterView           = 0;
-    _updateProblemFilterView    = 0;
-    _updatesFilterView          = 0;
-    _excludeDevelPkgs           = 0;
-    _excludeDebugInfoPkgs       = 0;
+    _showChangesDialog           = true;
+    _autoDependenciesAction      = 0;
+    _detailsViews                = 0;
+    _filters                     = 0;
+    _langList                    = 0;
+    _pkgClassificationFilterView = 0;
+    _patchFilterView             = 0;
+    _patchList                   = 0;
+    _patternList                 = 0;
+    _pkgChangeLogView            = 0;
+    _pkgDependenciesView         = 0;
+    _pkgDescriptionView          = 0;
+    _pkgFileListView             = 0;
+    _pkgList                     = 0;
+    _pkgTechnicalDetailsView     = 0;
+    _pkgVersionsView             = 0;
+    _repoFilterView              = 0;
+    _serviceFilterView           = 0;
+    _searchFilterView            = 0;
+    _statusFilterView            = 0;
+    _updateProblemFilterView     = 0;
+    _updatesFilterView           = 0;
+    _excludeDevelPkgs            = 0;
+    _excludeDebugInfoPkgs        = 0;
 
     logDebug() << "Creating YQPkgSelector..." << endl;
 
@@ -200,15 +200,15 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
 #endif
     else if ( searchMode() && _searchFilterView )
     {
-        if ( _pkgClassFilterView && anyRetractedPkgInstalled() )
+        if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
         {
             // Exceptional case: If the system has any retracted package
             // installed, switch to that filter view and show those packages.
             // This should happen only very, very rarely.
 
             logInfo() << "Found installed retracted packages; switching to that view" << endl;
-            _filters->showPage( _pkgClassFilterView );
-            _pkgClassFilterView->showPkgClass( YQPkgClassRetractedInstalled );
+            _filters->showPage( _pkgClassificationFilterView );
+            _pkgClassificationFilterView->showPkgClass( YQPkgClassRetractedInstalled );
 
             // Also show a pop-up warning?
             //
@@ -369,12 +369,12 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     // Package classification view
     //
 
-    _pkgClassFilterView = new YQPkgClassFilterView( parent );
-    CHECK_NEW( _pkgClassFilterView );
-    _filters->addPage( _( "Package &Classification" ), _pkgClassFilterView, "package_classification" );
+    _pkgClassificationFilterView = new YQPkgClassificationFilterView( parent );
+    CHECK_NEW( _pkgClassificationFilterView );
+    _filters->addPage( _( "Package &Classification" ), _pkgClassificationFilterView, "package_classification" );
 
-    connect( this,                SIGNAL( loadData() ),
-             _pkgClassFilterView, SLOT  ( filter()   ) );
+    connect( this,                         SIGNAL( loadData() ),
+             _pkgClassificationFilterView, SLOT  ( filter()   ) );
 
 
     //
@@ -1014,16 +1014,16 @@ void
 YQPkgSelector::makeConnections()
 {
 #if USE_UPDATE_PROBLEM_FILTER_VIEW
-    connectFilter( _updateProblemFilterView,    _pkgList, false );
+    connectFilter( _updateProblemFilterView,     _pkgList, false );
 #endif
-    connectFilter( _patternList,                _pkgList );
-    connectFilter( _updatesFilterView,          _pkgList, false );
-    connectFilter( _langList,                   _pkgList );
-    connectFilter( _repoFilterView,             _pkgList, false );
-    connectFilter( _serviceFilterView,          _pkgList, false );
-    connectFilter( _pkgClassFilterView,         _pkgList, false );
-    connectFilter( _statusFilterView,           _pkgList, false );
-    connectFilter( _searchFilterView,           _pkgList, false );
+    connectFilter( _patternList,                 _pkgList );
+    connectFilter( _updatesFilterView,           _pkgList, false );
+    connectFilter( _langList,                    _pkgList );
+    connectFilter( _repoFilterView,              _pkgList, false );
+    connectFilter( _serviceFilterView,           _pkgList, false );
+    connectFilter( _pkgClassificationFilterView, _pkgList, false );
+    connectFilter( _statusFilterView,            _pkgList, false );
+    connectFilter( _searchFilterView,            _pkgList, false );
 
     if ( _searchFilterView && _pkgList )
     {
