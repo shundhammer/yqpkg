@@ -49,10 +49,11 @@ public:
 
     /**
      * Initialize the primary widget
-     * @param primary_widget the primary widget to which the secondary views
-     *      will be added. It should be a subclass of YQPkgSecondaryFilterView.
+     *
+     * The primaryWidget is the primary widget to which the secondary views
+     * will be added. It should be a subclass of YQPkgSecondaryFilterView.
      */
-    void init(QWidget * primary_widget);
+    void init( QWidget * primaryWidget );
 
 signals:
 
@@ -66,15 +67,15 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective repository
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective repository
      **/
-    void filterNearMatch( ZyppSel	selectable,
-			  ZyppPkg	pkg );
+    void filterNearMatch( ZyppSel selectable,
+                          ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -104,39 +105,42 @@ protected slots:
      * Propagate a filter match from the primary filter
      * and appy any selected secondary filter(s) to it
      **/
-    void primaryFilterMatch( ZyppSel	selectable,
-			     ZyppPkg 	pkg );
+    void primaryFilterMatch( ZyppSel selectable,
+                             ZyppPkg pkg );
 
     /**
      * Propagate a filter near match from the primary filter
      * and appy any selected secondary filter(s) to it
      **/
-    void primaryFilterNearMatch( ZyppSel	selectable,
-				 ZyppPkg	pkg );
+    void primaryFilterNearMatch( ZyppSel selectable,
+                                 ZyppPkg pkg );
 
 protected:
 
     /**
      * Widget layout for the secondary filters
      **/
-    QWidget * layoutSecondaryFilters( QWidget * parent, QWidget * primary_widget );
+    QWidget * layoutSecondaryFilters( QWidget * parent,
+                                      QWidget * primaryWidget );
 
     /**
      * Check if pkg matches the the currently selected secondary filter
      **/
-    bool secondaryFilterMatch( ZyppSel 	selectable,
-			       ZyppPkg 		pkg );
+    bool secondaryFilterMatch( ZyppSel selectable,
+                               ZyppPkg pkg );
 
-    virtual void primaryFilter() {}
+    virtual void primaryFilter()          {}
     virtual void primaryFilterIfVisible() {}
 
 
     // Data members
-    QY2ComboTabWidget *		_secondaryFilters;
-    QWidget *			    _allPackages;
-    QWidget *_unmaintainedPackages;
-    YQPkgSearchFilterView *	    _searchFilterView;
-    YQPkgStatusFilterView *	    _statusFilterView;
+
+    QY2ComboTabWidget *     _secondaryFilters;
+    QWidget *               _allPackages;
+    QWidget *               _unmaintainedPackages;
+    YQPkgSearchFilterView * _searchFilterView;
+    YQPkgStatusFilterView * _statusFilterView;
 };
+
 
 #endif // ifndef YQPkgSecondaryFilterView_h

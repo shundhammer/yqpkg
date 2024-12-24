@@ -35,40 +35,43 @@ YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )
 {
 }
 
-void YQPkgSecondaryFilterView::init(QWidget * primary_widget)
+
+void YQPkgSecondaryFilterView::init(QWidget * primaryWidget)
 {
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout( this );
     CHECK_NEW( layout );
-    layout->setContentsMargins(0,0,0,0);
+    layout->setContentsMargins( 0, 0, 0, 0);
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     CHECK_NEW( splitter );
 
     layout->addWidget( splitter );
-    splitter->addWidget(primary_widget);
+    splitter->addWidget( primaryWidget );
 
-    primary_widget->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
+    primaryWidget->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
 
     // Directly propagate signals filterStart() and filterFinished()
-    // from primary filter to the outside
-    connect( primary_widget,	SIGNAL( filterStart() ),
-	     this,		SIGNAL( filterStart() ) );
+    // from the primary filter to the outside
 
-    connect( primary_widget,	SIGNAL( filterFinished() ),
-	     this, 		SIGNAL( filterFinished() ) );
+    connect( primaryWidget, SIGNAL( filterStart() ),
+             this,          SIGNAL( filterStart() ) );
 
-    // Redirect filterMatch() and filterNearMatch() signals to secondary filter
-    connect( primary_widget,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
-	     this,		SLOT  ( primaryFilterMatch	( ZyppSel, ZyppPkg ) ) );
+    connect( primaryWidget, SIGNAL( filterFinished() ),
+             this,          SIGNAL( filterFinished() ) );
 
-    connect( primary_widget,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
-	     this,		SLOT  ( primaryFilterNearMatch	( ZyppSel, ZyppPkg ) ) );
+    // Redirect filterMatch() and filterNearMatch() signals to the secondary filter
 
-    layoutSecondaryFilters( splitter, primary_widget );
+    connect( primaryWidget, SIGNAL( filterMatch             ( ZyppSel, ZyppPkg ) ),
+             this,          SLOT  ( primaryFilterMatch      ( ZyppSel, ZyppPkg ) ) );
 
-    splitter->setStretchFactor(0, 5);
-    splitter->setStretchFactor(1, 1);
-    splitter->setStretchFactor(2, 3);
+    connect( primaryWidget, SIGNAL( filterNearMatch         ( ZyppSel, ZyppPkg ) ),
+             this,          SLOT  ( primaryFilterNearMatch  ( ZyppSel, ZyppPkg ) ) );
+
+    layoutSecondaryFilters( splitter, primaryWidget );
+
+    splitter->setStretchFactor( 0, 5 );
+    splitter->setStretchFactor( 1, 1 );
+    splitter->setStretchFactor( 2, 3 );
 }
 
 YQPkgSecondaryFilterView::~YQPkgSecondaryFilterView()
@@ -77,7 +80,7 @@ YQPkgSecondaryFilterView::~YQPkgSecondaryFilterView()
 }
 
 QWidget *
-YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * primary_widget )
+YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * primaryWidget )
 {
     QWidget *vbox = new QWidget( parent );
     CHECK_NEW( vbox );
@@ -89,19 +92,20 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     layout->setContentsMargins( 0, 0, 0, 0 );
 
     // Translators: This is a combo box where the user can apply a secondary filter
-    // in addition to the primary filter by repository - one of
-    // "All packages", "RPM groups", "search", "summary"
+    // in addition to the primary filter by repository.
     //
     // And yes, the colon really belongs there since this is one of the very
     // few cases where a combo box label is left to the combo box rather than
     // above it.
+
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ));
     CHECK_NEW( _secondaryFilters );
-    layout->addWidget(_secondaryFilters);
+    layout->addWidget( _secondaryFilters );
 
     //
     // All Packages
     //
+
     _allPackages = new QWidget( this );
     CHECK_NEW( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
@@ -113,6 +117,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     CHECK_NEW( _unmaintainedPackages );
     _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
 
+
     //
     // Package search view
     //
@@ -121,56 +126,62 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     CHECK_NEW( _searchFilterView );
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
-    connect( _searchFilterView,	SIGNAL( filterStart() ),
-	     primary_widget,	SLOT  ( filter()      ) );
+    connect( _searchFilterView, SIGNAL( filterStart() ),
+             primaryWidget,     SLOT  ( filter()      ) );
 
-    connect( _secondaryFilters, &QY2ComboTabWidget::currentChanged,
-             this,              &YQPkgSecondaryFilterView::filter );
+    connect( _secondaryFilters, SIGNAL( currentChanged( QWidget * ) ),
+             this,              SLOT  ( filter()                    ) );
 
     //
-    // Status change view
+    // Status filter view
     //
+
     _statusFilterView = new YQPkgStatusFilterView( parent );
     CHECK_NEW( _statusFilterView );
+
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
-    connect( _statusFilterView,	SIGNAL( filterStart() ),
-	     primary_widget,	    SLOT  ( filter() ) );
+    connect( _statusFilterView, SIGNAL( filterStart() ),
+             primaryWidget,     SLOT  ( filter()      ) );
 
     return _secondaryFilters;
 }
+
 
 void YQPkgSecondaryFilterView::filter()
 {
     primaryFilter();
 }
 
+
 void YQPkgSecondaryFilterView::filterIfVisible()
 {
     primaryFilterIfVisible();
 }
 
-void YQPkgSecondaryFilterView::primaryFilterMatch( ZyppSel 	selectable,
-						 ZyppPkg 	pkg )
+void YQPkgSecondaryFilterView::primaryFilterMatch( ZyppSel selectable,
+                                                   ZyppPkg pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
-	   emit filterMatch( selectable, pkg );
+        emit filterMatch( selectable, pkg );
 }
 
-void YQPkgSecondaryFilterView::primaryFilterNearMatch( ZyppSel	selectable,
-						     ZyppPkg 	pkg )
+
+void YQPkgSecondaryFilterView::primaryFilterNearMatch( ZyppSel  selectable,
+                                                       ZyppPkg  pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
-	   emit filterNearMatch( selectable, pkg );
+        emit filterNearMatch( selectable, pkg );
 }
+
 
 bool
-YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel	selectable,
-		      ZyppPkg 	pkg )
+YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel selectable,
+                                                ZyppPkg pkg )
 {
     if ( _allPackages->isVisible() )
     {
-	    return true;
+        return true;
     }
     else if ( _unmaintainedPackages->isVisible() )
     {
@@ -178,13 +189,13 @@ YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel	selectable,
     }
     else if ( _searchFilterView->isVisible() )
     {
-	    return _searchFilterView->check( selectable, pkg );
+        return _searchFilterView->check( selectable, pkg );
     }
     else if ( _statusFilterView->isVisible() )
     {
-	    return _statusFilterView->check( selectable, pkg );
+        return _statusFilterView->check( selectable, pkg );
     }
 
-	return true;
+    return true;
 }
 
