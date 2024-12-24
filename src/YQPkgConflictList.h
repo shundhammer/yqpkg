@@ -19,7 +19,6 @@
 #define YQPkgConflictList_h
 
 
-#include <stdio.h>
 #include <QMap>
 #include <QFile>
 #include <QScrollArea>
@@ -129,8 +128,8 @@ public:
     /**
      * Constructor.
      **/
-    YQPkgConflict( QWidget *			parent,
-		   zypp::ResolverProblem_Ptr	problem );
+    YQPkgConflict( QWidget *                 parent,
+                   zypp::ResolverProblem_Ptr problem );
 
     /**
      * Destructor.
@@ -151,7 +150,7 @@ public:
     /**
      * save one item to file.
      **/
-    void saveToFile( QFile &file ) const;
+    void saveToFile( QFile & file ) const;
 
 
 protected slots:
@@ -178,12 +177,12 @@ protected:
     // Data members
     //
 
-    zypp::ResolverProblem_Ptr		_problem;
-    QLabel *				_resolutionsHeader;
-    QList<zypp::ProblemSolution_Ptr>	_resolutions;
-    QMap<QRadioButton *, zypp::ProblemSolution_Ptr> 	_solutions;
-    QMap<QLabel *, zypp::ProblemSolution_Ptr> 		_details;
-    QVBoxLayout *					_layout;
+    zypp::ResolverProblem_Ptr           _problem;
+    QLabel *                            _resolutionsHeader;
+    QList<zypp::ProblemSolution_Ptr>    _resolutions;
+    QMap<QRadioButton *, zypp::ProblemSolution_Ptr>     _solutions;
+    QMap<QLabel *, zypp::ProblemSolution_Ptr>           _details;
+    QVBoxLayout *                                       _layout;
 };
 
 #endif // ifndef YQPkgConflictList_h

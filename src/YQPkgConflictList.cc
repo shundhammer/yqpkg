@@ -15,50 +15,29 @@
  */
 
 
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
+#include <errno.h>
 
 #include <zypp/ZYppFactory.h>
 
-#include <errno.h>
 
-#include <QPainter>
-#include <QPixmap>
 #include <QDateTime>
 #include <QMessageBox>
 #include <QRadioButton>
-#include <QList>
-#include <QToolTip>
-#include <QDebug>
 #include <QVBoxLayout>
 
-#include "YQPkgConflictList.h"
-#include "YQPkgConflictDialog.h"
-#include "YQIconPool.h"
-
-#include "Logger.h"
 #include "Exception.h"
-
-
-using std::list;
-using std::string;
-
-
-#define LIST_SPLIT_THRESHOLD	8
-
-#define RED			QColor( 0xC0, 0, 0 )
-#define BRIGHT_RED		QColor( 0xFF, 0, 0 )
-#define BLUE			QColor( 0, 0, 0xC0 )
-#define LIGHT_BLUE		QColor( 0xE0, 0xE0, 0xF8 )
-#define LIGHT_GREY		QColor( 0xE0, 0xE0, 0xE0 )
-#define MAGENTA			Qt::magenta
-#define DEEP_ORANGE		QColor( 0xFF, 0x80, 0x20 )
-#define LIGHT_ORANGE		QColor( 0xFF, 0xC0, 0x50 )
+#include "Logger.h"
+#include "QY2CursorHelper.h"
+#include "YQIconPool.h"
+#include "YQPkgConflictDialog.h"
+#include "YQi18n.h"
+#include "utf8.h"
+#include "YQPkgConflictList.h"
 
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
-    : QScrollArea( parent ), _layout( 0 )
+    : QScrollArea( parent )
+    , _layout( 0 )
 {
     setWidget( new QFrame( this ) );
     _layout = new QVBoxLayout;
@@ -73,6 +52,7 @@ YQPkgConflictList::~YQPkgConflictList()
 {
     // NOP
 }
+
 
 void
 YQPkgConflictList::clear()
@@ -94,20 +74,19 @@ void
 YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
 {
     clear();
-    string text;
 
     zypp::ResolverProblemList::iterator it = problemList.begin();
 
     while ( it != problemList.end() )
     {
-	YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
-	Q_CHECK_PTR( conflict );
+        YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
+        Q_CHECK_PTR( conflict );
 
         connect( conflict, SIGNAL( expanded() ),
                  SLOT( relayout() ) );
         _layout->addWidget( conflict );
         _conflicts.push_back( conflict );
-	++it;
+        ++it;
     }
     _layout->addStretch( 1 );
     relayout();
@@ -115,7 +94,7 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
 
 void YQPkgConflictList::relayout()
 {
-     // for some weird reason, the layout's minSize is still 18x18 even after 3000 pixels
+    // for some weird reason, the layout's minSize is still 18x18 even after 3000 pixels
     // inserted, so we have to do the math on our own
     QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
 
@@ -153,11 +132,11 @@ YQPkgConflictList::applyResolutions()
 void
 YQPkgConflictList::askSaveToFile() const
 {
-    QString filename = YQApplication::askForSaveFileName( "conflicts.txt",	// startsWith
-							  "*.txt",		// filter
-							  _( "Save Conflicts List" ) );
+    QString filename = YQApplication::askForSaveFileName( "conflicts.txt",      // startsWith
+                                                          "*.txt",              // filter
+                                                          _( "Save Conflicts List" ) );
     if ( ! filename.isEmpty() )
-	saveToFile( filename, true );
+        saveToFile( filename, true );
 }
 #endif
 
@@ -170,20 +149,20 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( ! file.open(QIODevice::WriteOnly) )
     {
-	logError() << "Can't open file " << filename << endl;
+        logError() << "Can't open file " << filename << endl;
 
-	if ( interactive )
-	{
-	    // Post error popup.
+        if ( interactive )
+        {
+            // Post error popup.
 
-	    QMessageBox::warning( 0,						// parent
-				  _( "Error" ),					// caption
-				  _( "Cannot open file %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
-	}
-	return;
+            QMessageBox::warning( 0,                                            // parent
+                                  _( "Error" ),                                 // caption
+                                  _( "Cannot open file %1" ).arg( filename ),
+                                  QMessageBox::Ok | QMessageBox::Default,       // button0
+                                  QMessageBox::NoButton,                        // button1
+                                  QMessageBox::NoButton );                      // button2
+        }
+        return;
     }
 
 
@@ -199,7 +178,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     foreach( conflict, _conflicts )
     {
-	conflict->saveToFile( file );
+        conflict->saveToFile( file );
     }
 
 
@@ -211,7 +190,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     // Clean up
 
     if ( file.isOpen() )
-	file.close();
+        file.close();
 }
 
 
@@ -219,8 +198,8 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
 
 
-YQPkgConflict::YQPkgConflict( QWidget *				parent,
-			      zypp::ResolverProblem_Ptr		problem	)
+YQPkgConflict::YQPkgConflict( QWidget *                         parent,
+                              zypp::ResolverProblem_Ptr         problem )
     : QFrame( parent )
     , _problem( problem )
     , _resolutionsHeader( 0 )
@@ -310,8 +289,8 @@ YQPkgConflict::addSolutions()
 
             QLabel * detailsLabel = new QLabel( details, this );
 
-            connect( detailsLabel, 	SIGNAL( linkActivated ( const QString & ) ),
-                     this,		SLOT  ( detailsExpanded()                 ) );
+            connect( detailsLabel,      SIGNAL( linkActivated ( const QString & ) ),
+                     this,              SLOT  ( detailsExpanded()                 ) );
 
             QHBoxLayout * hbox = new QHBoxLayout();
             hbox->addSpacing( 15 );
@@ -320,7 +299,7 @@ YQPkgConflict::addSolutions()
             _details[ detailsLabel ] = *it;
         }
 
-	++it;
+        ++it;
     }
 }
 
@@ -354,11 +333,11 @@ YQPkgConflict::userSelectedResolution()
         zypp::ProblemSolution_Ptr solution = it.value();
 
         logInfo() << "User selected resolution \""<< solution->description()
-		       <<"\"" << endl;
+                  <<"\"" << endl;
         return solution;
     }
 
-    return zypp::ProblemSolution_Ptr();		// Null pointer
+    return zypp::ProblemSolution_Ptr();         // Null pointer
 }
 
 
@@ -366,7 +345,7 @@ void
 YQPkgConflict::saveToFile( QFile &file ) const
 {
     if ( ! file.isOpen() )
-	return;
+        return;
 
     // Write item
 
@@ -387,7 +366,7 @@ YQPkgConflict::saveToFile( QFile &file ) const
             .arg( button->isChecked() ? "x" : " " )
             .arg( qPrintable( fromUTF8( solution->description() ) ) );
         buffer += fromUTF8( solution->details() );
-	buffer += "\n";
+        buffer += "\n";
         file.write( buffer.toUtf8() );
     }
 
