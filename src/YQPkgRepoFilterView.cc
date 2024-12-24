@@ -15,20 +15,13 @@
  */
 
 
-#include <QVBoxLayout>
-#include <QSplitter>
 
-#include "YQi18n.h"
-#include "QY2ComboTabWidget.h"
-#include "QY2LayoutUtils.h"
-#include "YQPkgSearchFilterView.h"
-#include "YQPkgStatusFilterView.h"
-#include "YQZypp.h"
-#include "YQPkgRepoFilterView.h"
-#include "YQPkgRepoList.h"
-
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
+#include "YQPkgRepoList.h"
+#include "YQZypp.h"
+#include "YQi18n.h"
+#include "YQPkgRepoFilterView.h"
 
 
 YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
@@ -45,6 +38,7 @@ YQPkgRepoFilterView::~YQPkgRepoFilterView()
 {
     // NOP
 }
+
 
 ZyppRepo
 YQPkgRepoFilterView::selectedRepo() const

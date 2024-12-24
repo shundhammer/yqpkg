@@ -41,7 +41,7 @@ public:
 
     /**
      * Current selected repository, or 0 if nothing is selected
-     */
+     **/
     zypp::Repository selectedRepo() const;
 
 
