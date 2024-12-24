@@ -170,7 +170,6 @@ protected:
     QPushButton * _searchButton;
 
     QCheckBox *   _searchInName;
-    QCheckBox *   _searchInKeywords;
     QCheckBox *   _searchInSummary;
     QCheckBox *   _searchInDescription;
     QCheckBox *   _searchInRequires;

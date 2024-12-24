@@ -92,8 +92,6 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     _searchInName        = new QCheckBox( _( "Nam&e"            ), gbox ); CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
-    _searchInKeywords    = new QCheckBox( _( "&Keywords"        ), gbox ); CHECK_NEW( _searchInKeywords    );
-    vLayout->addWidget(_searchInKeywords);
     _searchInSummary     = new QCheckBox( _( "Su&mmary"         ), gbox ); CHECK_NEW( _searchInSummary     );
     vLayout->addWidget(_searchInSummary);
     _searchInDescription = new QCheckBox( _( "Descr&iption"     ), gbox ); CHECK_NEW( _searchInDescription );
@@ -110,7 +108,6 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     vLayout->addWidget(_searchInFileList);
 
     _searchInName->setChecked( true );
-    _searchInKeywords->setChecked( true );
 
     layout->addStretch();
 
@@ -274,7 +271,6 @@ YQPkgSearchFilterView::filter()
             if ( _searchInRequires->isChecked() )    query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
             if ( _searchInProvides->isChecked() )    query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
             if ( _searchInFileList->isChecked() )    query.addAttribute( zypp::sat::SolvAttr::filelist );
-            if ( _searchInKeywords->isChecked() )    query.addAttribute( zypp::sat::SolvAttr::keywords );
 
             _searchText->setEnabled( false );
             _searchButton->setEnabled( false );
@@ -455,7 +451,6 @@ void YQPkgSearchFilterView::readSettings()
     settings.beginGroup( "PkgSearchFilterView" );
 
     _searchInName->setChecked        ( settings.value( "searchInName",        true  ).toBool() );
-    _searchInKeywords->setChecked    ( settings.value( "searchInKeywords",    true  ).toBool() );
     _searchInSummary->setChecked     ( settings.value( "searchInSummary",     false ).toBool() );
     _searchInDescription->setChecked ( settings.value( "searchInDescription", false ).toBool() );
     _searchInProvides->setChecked    ( settings.value( "searchInProvides",    false ).toBool() );
@@ -476,7 +471,6 @@ void YQPkgSearchFilterView::writeSettings()
     settings.beginGroup( "PkgSearchFilterView" );
 
     settings.setValue( "searchInName",        _searchInName->isChecked()        );
-    settings.setValue( "searchInKeywords",    _searchInKeywords->isChecked()    );
     settings.setValue( "searchInSummary",     _searchInSummary->isChecked()     );
     settings.setValue( "searchInDescription", _searchInDescription->isChecked() );
     settings.setValue( "searchInProvides",    _searchInProvides->isChecked()    );
