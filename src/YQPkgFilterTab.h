@@ -72,7 +72,8 @@ public:
     /**
      * Constructor. 'settingsName' is the name to use to save and load settings.
      **/
-    YQPkgFilterTab( QWidget * parent, const QString & settingsName );
+    YQPkgFilterTab( QWidget *       parent,
+                    const QString & settingsName );
 
     /**
      * Destructor.
@@ -84,9 +85,9 @@ public:
      * content and an internal name (or ID).
      * 'pageContent' will be reparented to a subwidget of this class.
      **/
-    void addPage( const QString &       pageLabel,
-                  QWidget *             pageContent,
-                  const QString &       internalName );
+    void addPage( const QString & pageLabel,
+                  QWidget *       pageContent,
+                  const QString & internalName );
 
     /**
      * Return the right pane.
@@ -229,7 +230,7 @@ protected:
 
 private:
 
-    ImplPtr<YQPkgFilterTabPrivate> priv;
+    ImplPtr<YQPkgFilterTabPrivate> _priv;
 };
 
 
@@ -239,21 +240,21 @@ private:
  **/
 struct YQPkgFilterPage
 {
-    YQPkgFilterPage( const QString &	pageLabel,
-		     QWidget *		content,
-		     const QString &	internalName )
-	: content( content )
-	, label( pageLabel )
-	, id( internalName )
-	, closeEnabled( true )
-	, tabIndex( -1 )
-	{}
+    YQPkgFilterPage( const QString &    pageLabel,
+                     QWidget *          content,
+                     const QString &    internalName )
+        : content( content )
+        , label( pageLabel )
+        , id( internalName )
+        , closeEnabled( true )
+        , tabIndex( -1 )
+        {}
 
-    QWidget *	content;
-    QString	label;		// user visible text
-    QString	id;		// internal name
-    bool	closeEnabled;
-    int		tabIndex;	// index of the corresponding tab or -1 if none
+    QWidget * content;
+    QString   label;          // user visible text
+    QString   id;             // internal name
+    bool      closeEnabled;
+    int       tabIndex;       // index of the corresponding tab or -1 if none
 };
 
 
