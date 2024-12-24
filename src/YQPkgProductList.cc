@@ -35,22 +35,19 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
 
     QStringList headers;
     int numCol = 0;
-    headers << ( "" );			_statusCol	= numCol++;
-    headers << _( "Product"	);	_nameCol	= numCol++;
-    headers <<  _( "Summary"	);	_summaryCol	= numCol++;
-    headers <<  _( "Version" 	);	_versionCol	= numCol++;
-    headers <<  _( "Vendor" 	);	_vendorCol	= numCol++;
+    headers << ( "" );             _statusCol  = numCol++;
+    headers << _( "Product"     ); _nameCol    = numCol++;
+    headers <<  _( "Summary"    ); _summaryCol = numCol++;
+    headers <<  _( "Version"    ); _versionCol = numCol++;
+    headers <<  _( "Vendor"     ); _vendorCol  = numCol++;
 
     setColumnCount( numCol );
-    setHeaderLabels(headers);
+    setHeaderLabels( headers );
 
     setAllColumnsShowFocus( true );
-    //setColumnAlignment( sizeCol(), Qt::AlignRight );
 
     setSortingEnabled( true );
     sortByColumn( nameCol(), Qt::AscendingOrder );
-
-
 
     fillList();
     selectSomething();
@@ -69,37 +66,37 @@ void
 YQPkgProductList::fillList()
 {
     clear();
-    logDebug() << "Filling product list" << endl;
+    // logVerbose() << "Filling product list" << endl;
 
     for ( ZyppPoolIterator it = zyppProductsBegin();
-	  it != zyppProductsEnd();
-	  ++it )
+          it != zyppProductsEnd();
+          ++it )
     {
-	ZyppProduct zyppProduct = tryCastToZyppProduct( (*it)->theObj() );
+        ZyppProduct zyppProduct = tryCastToZyppProduct( (*it)->theObj() );
 
-	if ( zyppProduct )
-	{
-	    addProductItem( *it, zyppProduct );
-	}
-	else
-	{
-	    logError() << "Found non-product selectable" << endl;
-	}
+        if ( zyppProduct )
+        {
+            addProductItem( *it, zyppProduct );
+        }
+        else
+        {
+            logError() << "Found non-product selectable" << endl;
+        }
     }
 
-    logDebug() << "product list filled" << endl;
-    resizeColumnToContents(_statusCol);
+    // logVerbose() << "product list filled" << endl;
+    resizeColumnToContents( _statusCol );
 }
 
 
 void
-YQPkgProductList::addProductItem( ZyppSel	selectable,
-				  ZyppProduct	zyppProduct )
+YQPkgProductList::addProductItem( ZyppSel     selectable,
+                                  ZyppProduct zyppProduct )
 {
     if ( ! selectable )
     {
-	logError() << "NULL ZyppSel!" << endl;
-	return;
+        logError() << "NULL ZyppSel!" << endl;
+        return;
     }
 
     new YQPkgProductListItem( this, selectable, zyppProduct );
@@ -110,23 +107,25 @@ YQPkgProductList::addProductItem( ZyppSel	selectable,
 
 
 
-YQPkgProductListItem::YQPkgProductListItem( YQPkgProductList * 	productList,
-					    ZyppSel		selectable,
-					    ZyppProduct 	zyppProduct )
-    : YQPkgObjListItem( productList, selectable, zyppProduct )
+YQPkgProductListItem::YQPkgProductListItem( YQPkgProductList *  productList,
+                                            ZyppSel             selectable,
+                                            ZyppProduct         zyppProduct )
+    : YQPkgObjListItem( productList,
+                        selectable,
+                        zyppProduct )
     , _productList( productList )
     , _zyppProduct( zyppProduct )
 {
     if ( ! _zyppProduct )
-	_zyppProduct = tryCastToZyppProduct( selectable->theObj() );
+        _zyppProduct = tryCastToZyppProduct( selectable->theObj() );
 
     if ( ! _zyppProduct )
-	return;
+        return;
 
     setStatusIcon();
 
     if ( vendorCol() > -1 )
-	setText( vendorCol(), zyppProduct->vendor() );
+        setText( vendorCol(), zyppProduct->vendor() );
 
 }
 
@@ -137,13 +136,8 @@ YQPkgProductListItem::~YQPkgProductListItem()
 }
 
 
-
-
 void
 YQPkgProductListItem::applyChanges()
 {
     solveResolvableCollections();
 }
-
-
-

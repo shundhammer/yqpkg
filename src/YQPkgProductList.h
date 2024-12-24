@@ -53,8 +53,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addProductItem( ZyppSel	selectable,
-			 ZyppProduct	zyppProduct );
+    void addProductItem( ZyppSel     selectable,
+                         ZyppProduct zyppProduct );
 
     /**
      * Fill the product list.
@@ -93,9 +93,9 @@ public:
      * Constructor. Creates a YQPkgProductList item that corresponds to
      * zyppProduct.
      **/
-    YQPkgProductListItem( YQPkgProductList * 	productList,
-			  ZyppSel		selectable,
-			  ZyppProduct 		zyppProduct );
+    YQPkgProductListItem( YQPkgProductList *    productList,
+                          ZyppSel               selectable,
+                          ZyppProduct           zyppProduct );
 
     /**
      * Destructor
@@ -110,10 +110,10 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _productList->statusCol();	}
-    int summaryCol()	const	{ return _productList->summaryCol();	}
-    int versionCol()	const   { return _productList->versionCol();	}
-    int vendorCol()	const   { return _productList->vendorCol();	}
+    int statusCol()     const   { return _productList->statusCol();     }
+    int summaryCol()    const   { return _productList->summaryCol();    }
+    int versionCol()    const   { return _productList->versionCol();    }
+    int vendorCol()     const   { return _productList->vendorCol();     }
 
 
 protected:
@@ -129,8 +129,8 @@ protected:
 
     // Data members
 
-    YQPkgProductList *	_productList;
-    ZyppProduct		_zyppProduct;
+    YQPkgProductList *  _productList;
+    ZyppProduct         _zyppProduct;
 };
 
 
