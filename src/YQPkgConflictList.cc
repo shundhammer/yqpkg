@@ -64,38 +64,44 @@ YQPkgConflictList::clear()
         _layout->removeWidget( conflict );
         delete conflict;
     }
+
     _conflicts.clear();
 
     // kill the stretch item, too
+
     delete _layout->takeAt( 0 );
 }
 
+
 void
-YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
+YQPkgConflictList::fill( ZyppProblemList problemList )
 {
     clear();
 
-    zypp::ResolverProblemList::iterator it = problemList.begin();
+    ZyppProblemList::iterator it = problemList.begin();
 
     while ( it != problemList.end() )
     {
         YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
         Q_CHECK_PTR( conflict );
 
-        connect( conflict, SIGNAL( expanded() ),
-                 SLOT( relayout() ) );
+        connect( conflict, SIGNAL( expanded() ), SLOT( relayout() ) );
+
         _layout->addWidget( conflict );
         _conflicts.push_back( conflict );
         ++it;
     }
+
     _layout->addStretch( 1 );
     relayout();
 }
 
+
 void YQPkgConflictList::relayout()
 {
-    // for some weird reason, the layout's minSize is still 18x18 even after 3000 pixels
-    // inserted, so we have to do the math on our own
+    // For some weird reason, the layout's minSize is still 18x18 even after
+    // 3000 pixels inserted, so we have to do the math on our own.
+
     QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
 
     YQPkgConflict * conflict;
@@ -109,15 +115,16 @@ void YQPkgConflictList::relayout()
     widget()->resize( minSize );
 }
 
+
 void
 YQPkgConflictList::applyResolutions()
 {
-    zypp::ProblemSolutionList userChoices;
-    YQPkgConflict *           conflict;
+    ZyppSolutionList userChoices;
+    YQPkgConflict *  conflict;
 
     foreach( conflict, _conflicts )
     {
-        zypp::ProblemSolution_Ptr userChoice = conflict->userSelectedResolution();
+        ZyppSolution userChoice = conflict->userSelectedResolution();
 
         if ( userChoice )
             userChoices.push_back( userChoice );
@@ -198,8 +205,8 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
 
 
-YQPkgConflict::YQPkgConflict( QWidget *                         parent,
-                              zypp::ResolverProblem_Ptr         problem )
+YQPkgConflict::YQPkgConflict( QWidget *   parent,
+                              ZyppProblem problem )
     : QFrame( parent )
     , _problem( problem )
     , _resolutionsHeader( 0 )
@@ -257,21 +264,26 @@ YQPkgConflict::addSolutions()
     hbox->addLayout( vbox );
     _layout->addLayout( hbox );
 
-    zypp::ProblemSolutionList solutions = problem()->solutions();
-    zypp::ProblemSolutionList::iterator it = solutions.begin();
+    ZyppSolutionList solutions = problem()->solutions();
+    ZyppSolutionList::iterator it = solutions.begin();
 
-    int n=0;
+    int count = 0;
 
     while ( it != solutions.end() )
     {
-        ++n;
-        QString shortcut = "" + QString( (n<10)?"&":"" ) +  QString::number(n) + ": ";
+        ZyppSolution solution = *it;
+        QString      shortcut;
 
-        QRadioButton * solutionButton = new QRadioButton( shortcut +  fromUTF8( ( *it )->description() ), this );
+        if ( ++count < 10 )
+            shortcut = QString( "&%1:" ).arg( count );
+
+        QString text = shortcut + fromUTF8( solution->description() );
+
+        QRadioButton * solutionButton = new QRadioButton( text, this );
         vbox->addWidget( solutionButton );
-        _solutions[ solutionButton ] = *it;
+        _solutions[ solutionButton ] = solution;
 
-        QString details = fromUTF8( ( *it )->details() );
+        QString details = fromUTF8( solution->details() );
 
         if ( ! details.isEmpty() )
         {
@@ -289,19 +301,20 @@ YQPkgConflict::addSolutions()
 
             QLabel * detailsLabel = new QLabel( details, this );
 
-            connect( detailsLabel,      SIGNAL( linkActivated ( const QString & ) ),
-                     this,              SLOT  ( detailsExpanded()                 ) );
+            connect( detailsLabel, SIGNAL( linkActivated( QString ) ),
+                     this,         SLOT  ( detailsExpanded()        ) );
 
             QHBoxLayout * hbox = new QHBoxLayout();
             hbox->addSpacing( 15 );
             hbox->addWidget( detailsLabel );
             vbox->addLayout( hbox );
-            _details[ detailsLabel ] = *it;
+            _details[ detailsLabel ] = solution;
         }
 
         ++it;
     }
 }
+
 
 void
 YQPkgConflict::detailsExpanded()
@@ -320,24 +333,25 @@ YQPkgConflict::detailsExpanded()
 }
 
 
-zypp::ProblemSolution_Ptr
+ZyppSolution
 YQPkgConflict::userSelectedResolution()
 {
-    QMap<QRadioButton*, zypp::ProblemSolution_Ptr>::iterator it;
+    QMap<QRadioButton*, ZyppSolution>::iterator it;
 
     for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
-        QRadioButton *button = it.key();
-        if ( !button->isChecked() )
-            continue;
-        zypp::ProblemSolution_Ptr solution = it.value();
+        QRadioButton * button = it.key();
 
-        logInfo() << "User selected resolution \""<< solution->description()
-                  <<"\"" << endl;
-        return solution;
+        if ( button->isChecked() )
+        {
+            ZyppSolution solution = it.value();
+            logInfo() << "User selected resolution \"" << solution->description() << "\"" << endl;
+
+            return solution;
+        }
     }
 
-    return zypp::ProblemSolution_Ptr();         // Null pointer
+    return ZyppSolution(); // Null pointer
 }
 
 
@@ -349,7 +363,7 @@ YQPkgConflict::saveToFile( QFile &file ) const
 
     // Write item
 
-    QMap<QRadioButton*, zypp::ProblemSolution_Ptr>::const_iterator it;
+    QMap<QRadioButton*, ZyppSolution>::const_iterator it;
 
     file.write( problem()->description().c_str() );
     file.write( "\n" );
@@ -360,8 +374,8 @@ YQPkgConflict::saveToFile( QFile &file ) const
 
     for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
-        QRadioButton  *button = it.key();
-        zypp::ProblemSolution_Ptr solution = it.value();
+        QRadioButton * button   = it.key();
+        ZyppSolution   solution = it.value();
         buffer = QString( "    [%1] %2\n" )
             .arg( button->isChecked() ? "x" : " " )
             .arg( qPrintable( fromUTF8( solution->description() ) ) );

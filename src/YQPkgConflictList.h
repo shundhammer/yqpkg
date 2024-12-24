@@ -34,6 +34,11 @@ class YQPkgConflict;
 class YQPkgConflictResolution;
 class YQPkgConflictDialog;
 
+typedef zypp::ResolverProblem_Ptr  ZyppProblem;
+typedef zypp::ResolverProblemList  ZyppProblemList;
+typedef zypp::ProblemSolution_Ptr  ZyppSolution;
+typedef zypp::ProblemSolutionList  ZyppSolutionList;
+
 
 /**
  * Display package dependency conflicts in a tree list and let the user
@@ -57,7 +62,7 @@ public:
     /**
      * Fill the list with the specified problems.
      **/
-    void fill( zypp::ResolverProblemList problemList );
+    void fill( ZyppProblemList problemList );
 
     /**
      * Check if the conflict list is empty.
@@ -103,7 +108,7 @@ public:
 protected:
 
     QList<YQPkgConflict*> _conflicts;
-    QVBoxLayout *_layout;
+    QVBoxLayout *         _layout;
 
 signals:
 
@@ -128,8 +133,8 @@ public:
     /**
      * Constructor.
      **/
-    YQPkgConflict( QWidget *                 parent,
-                   zypp::ResolverProblem_Ptr problem );
+    YQPkgConflict( QWidget *   parent,
+                   ZyppProblem problem );
 
     /**
      * Destructor.
@@ -139,13 +144,13 @@ public:
     /**
      * Returns the corresponding ResolverProblem.
      **/
-    zypp::ResolverProblem_Ptr problem() const { return _problem; }
+    ZyppProblem problem() const { return _problem; }
 
     /**
      * Returns the resolution the user selected
      * or 0 if he didn't select one
      **/
-    zypp::ProblemSolution_Ptr userSelectedResolution();
+    ZyppSolution userSelectedResolution();
 
     /**
      * save one item to file.
@@ -177,12 +182,12 @@ protected:
     // Data members
     //
 
-    zypp::ResolverProblem_Ptr           _problem;
-    QLabel *                            _resolutionsHeader;
-    QList<zypp::ProblemSolution_Ptr>    _resolutions;
-    QMap<QRadioButton *, zypp::ProblemSolution_Ptr>     _solutions;
-    QMap<QLabel *, zypp::ProblemSolution_Ptr>           _details;
-    QVBoxLayout *                                       _layout;
+    ZyppProblem                        _problem;
+    QLabel *                           _resolutionsHeader;
+    QList<ZyppSolution>                _resolutions;
+    QMap<QRadioButton *, ZyppSolution> _solutions;
+    QMap<QLabel *, ZyppSolution>       _details;
+    QVBoxLayout *                      _layout;
 };
 
 #endif // ifndef YQPkgConflictList_h
