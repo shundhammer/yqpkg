@@ -24,13 +24,11 @@
 #include <QEvent>
 #include <QScrollArea>
 
-
 class QComboBox;
 class QCheckBox;
 class QPushButton;
 class QRadioButton;
 
-using std::list;
 using std::string;
 
 
@@ -100,8 +98,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel   selectable,
-                      ZyppPkg   pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -168,23 +166,22 @@ protected:
     // Data members
     //
 
-    QComboBox *         _searchText;
-    QPushButton *       _searchButton;
+    QComboBox *   _searchText;
+    QPushButton * _searchButton;
 
-    QCheckBox *         _searchInName;
-    QCheckBox *         _searchInKeywords;
-    QCheckBox *         _searchInSummary;
-    QCheckBox *         _searchInDescription;
-    QCheckBox *         _searchInRequires;
-    QCheckBox *         _searchInProvides;
-    QCheckBox *         _searchInFileList;
+    QCheckBox *   _searchInName;
+    QCheckBox *   _searchInKeywords;
+    QCheckBox *   _searchInSummary;
+    QCheckBox *   _searchInDescription;
+    QCheckBox *   _searchInRequires;
+    QCheckBox *   _searchInProvides;
+    QCheckBox *   _searchInFileList;
 
-    QComboBox *         _searchMode;
-    QCheckBox *         _caseSensitive;
+    QComboBox *   _searchMode;
+    QCheckBox *   _caseSensitive;
 
-    int                 _matchCount;
+    int           _matchCount;
 };
-
 
 
 #endif // ifndef YQPkgSearchFilterView_h
