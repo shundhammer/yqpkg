@@ -30,13 +30,14 @@ public:
 
     /**
      * Returns the product if the filter finds a single product
-     * or null product if there are no or multiple products.
-      * @param  filter filtering function, the parameter is the product pool item,
-      *     returning true if it matches the expectations
-      * @return      Found zypp product or null
+     * or null if there are none, or if there are multiple products.
+     *
+      * 'filter' is the filtering functio. Its parameter is the product pool
+      * item. This function returns true if it matches the expectations.
       */
-    static ZyppProduct singleProductFilter( std::function<bool(const zypp::PoolItem& item)> filter);
-
+    static ZyppProduct singleProductFilter( std::function<bool(const zypp::PoolItem & item)> filter );
 };
 
+
 #endif // ifndef YQPkgFilters_h
+

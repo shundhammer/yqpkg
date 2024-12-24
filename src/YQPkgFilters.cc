@@ -17,47 +17,53 @@
 
 #include <algorithm>
 
-#include "Logger.h"
-
 #include <zypp/ResPool.h>
 #include <zypp/PoolItem.h>
 
+#include "Logger.h"
 #include "YQPkgFilters.h"
 
 
 ZyppProduct
-YQPkgFilters::singleProductFilter(std::function<bool(const zypp::PoolItem& item)> filter)
+YQPkgFilters::singleProductFilter(std::function<bool( const zypp::PoolItem & item)> filter )
 {
     ZyppProduct product;
 
-    auto it = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product );
-    auto end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product );
+    // Thanks a lot for those 'auto' variables. That leaves figuring out WTH
+    // this code does to the reader. This is the lazy Ruby attitude.
+
+    auto product_begin = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product );
+    auto product_end   = zypp::ResPool::instance().byKindEnd  ( zypp::ResKind::product );
 
     // Find the first product
-    auto product_it = std::find_if(it, end, [&](const zypp::PoolItem& item) {
-        return filter(item);
-    });
 
-    if (product_it == end)
+    auto it = std::find_if( product_begin, product_end,
+                            [&]( const zypp::PoolItem & item ) { return filter(item); }
+                            );
+
+    if ( it == product_end )
     {
         // logDebug() << "No product found " << endl;
         return product;
     }
 
-    product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    logInfo() << "Found product " << product->name() << endl;
+    product = zypp::asKind<zypp::Product>( it->resolvable() );
 
     // Check if there is another product
-    product_it = std::find_if(++product_it, end, [&](const zypp::PoolItem& item) {
-        return filter(item);
-    });
 
-    if (product_it == end)
+    it = std::find_if( ++it, product_end,
+                       [&](const zypp::PoolItem& item) { return filter(item); }
+                       );
+
+    if ( it == product_end )
+    {
+        logInfo() << "Found single product " << product->name() << endl;
+
         return product;
+    }
 
-    product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    logInfo() << "Found another product " << product->name() << endl;
+    product = zypp::asKind<zypp::Product>( it->resolvable() );
+    // logVerbose() << "Found another product " << product->name() << endl;
 
-    // nullptr
-    return ZyppProduct();
+    return ZyppProduct(); // NULL pointer
 }
