@@ -25,12 +25,13 @@
 
 
 class YQPkgServiceListItem;
-namespace zypp {
+
+namespace zypp
+{
     class RepoManager;
 }
 
-// just a service name
-typedef std::string	ZyppService;
+typedef std::string ZyppService;
 
 
 /**
@@ -72,16 +73,18 @@ public slots:
     /**
      * Add a service to the list.
      **/
-    void addService( ZyppService service, const zypp::RepoManager &mgr );
+    void addService( ZyppService service,
+                     const zypp::RepoManager & repoManager );
 
 
 public:
 
     // Column numbers
-    int nameCol()	const	{ return _nameCol;	}
+
+    int nameCol() const { return _nameCol; }
 
     /**
-     * Returns the currently selected item or 0 if there is none.
+     * Return the currently selected item or 0 if there is none.
      **/
     YQPkgServiceListItem * selection() const;
 
@@ -98,15 +101,15 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective repository
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable,
+                      ZyppPkg pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective repository
      **/
-    void filterNearMatch( ZyppSel	selectable,
-			  ZyppPkg	pkg );
+    void filterNearMatch( ZyppSel selectable,
+                          ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -128,9 +131,8 @@ private:
     // Data members
     //
 
-    int	_nameCol;
+    int _nameCol;
 };
-
 
 
 class YQPkgServiceListItem: public QY2ListViewItem
@@ -140,7 +142,9 @@ public:
     /**
      * Constructor
      **/
-    YQPkgServiceListItem( YQPkgServiceList *parentList, ZyppService service, const zypp::RepoManager &mgr );
+    YQPkgServiceListItem( YQPkgServiceList *        parentList,
+                          ZyppService               service,
+                          const zypp::RepoManager & repoManager );
 
     /**
      * Destructor
@@ -169,19 +173,17 @@ public:
     static ZyppProduct singleProduct( ZyppService service );
 
 
-    // Columns
+    int nameCol() const { return _serviceList->nameCol(); }
 
-    int nameCol()	const	{ return _serviceList->nameCol();	}
+    virtual bool operator<( const QTreeWidgetItem & other ) const;
 
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 protected:
 
     // Data members
 
-    YQPkgServiceList *		_serviceList;
-    // the zypp service
-    ZyppService			_zyppService;
-    std::string _zyppServiceName;
+    YQPkgServiceList * _serviceList;
+    ZyppService        _zyppService;
+    std::string        _zyppServiceName;
 };
 
 
