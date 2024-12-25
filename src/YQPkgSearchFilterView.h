@@ -85,6 +85,14 @@ public slots:
     void filterIfVisible();
 
     /**
+     * Check if 'searchFilter' matches a zypp capabilites container 'capSet'
+     * such as its 'provides()' or 'requires()'.
+     **/
+    bool checkCap( zypp::Capabilities   capSet,
+                   const SearchFilter & searchFilter );
+
+
+    /**
      * Set the keyboard focus into this view's input field.
      **/
     void setFocus();

@@ -50,6 +50,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 {
     _matchCount = 0;
 
+#if 1
     QWidget * content = new QWidget;
     CHECK_NEW( content );
 
@@ -69,15 +70,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     hbox->addWidget(_searchText);
     _searchText->setEditable( true );
-    _searchText->lineEdit()->setClearButtonEnabled( true );
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), content );
     CHECK_NEW( _searchButton );
     hbox->addWidget(_searchButton);
-
-    connect( _searchButton, SIGNAL( clicked() ),
-             this,          SLOT  ( filter()  ) );
 
     layout->addStretch();
 
@@ -134,12 +131,12 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Caution: combo box items must be inserted in the same order as enum
     // SearchFilter::FilterMode in SearchFilter.h!
 
-    _searchMode->addItem( _( "Auto"                   ) );
-    _searchMode->addItem( _( "Contains"               ) );
-    _searchMode->addItem( _( "Starts With"            ) );
-    _searchMode->addItem( _( "Exact Match"            ) );
-    _searchMode->addItem( _( "Use Wild Cards"         ) );
-    _searchMode->addItem( _( "Use Regular Expression" ) );
+    _searchMode->addItem( _( "Auto"               ) );
+    _searchMode->addItem( _( "Contains"           ) );
+    _searchMode->addItem( _( "Starts With"        ) );
+    _searchMode->addItem( _( "Exact Match"        ) );
+    _searchMode->addItem( _( "Wildcards"          ) );
+    _searchMode->addItem( _( "Regular Expression" ) );
 
     _searchMode->setCurrentIndex( SearchFilter::Auto );
 
@@ -154,6 +151,12 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     setWidgetResizable( true );
     setWidget( content );
+#endif
+
+    _searchText->lineEdit()->setClearButtonEnabled( true );
+
+    connect( _searchButton, SIGNAL( clicked() ),
+             this,          SLOT  ( filter()  ) );
 
     readSettings();
 }
@@ -219,6 +222,7 @@ YQPkgSearchFilterView::filter()
     {
         if ( ! _searchText->currentText().isEmpty() )
         {
+#if 0
             // Create a progress dialog that is only displayed if the search takes
             // longer than a couple of seconds.
 
@@ -234,8 +238,8 @@ YQPkgSearchFilterView::filter()
 
             parentWidget()->parentWidget()->setCursor( Qt::WaitCursor );
             progress.setCursor( Qt::ArrowCursor );
-
-            QElapsedTimer timer;
+            int progressCount = 0;
+#endif
 
             //
             // Build the query
@@ -286,24 +290,32 @@ YQPkgSearchFilterView::filter()
             if ( _searchInName->isChecked()        ) query.addAttribute( zypp::sat::SolvAttr::name );
             if ( _searchInDescription->isChecked() ) query.addAttribute( zypp::sat::SolvAttr::description );
             if ( _searchInSummary->isChecked()     ) query.addAttribute( zypp::sat::SolvAttr::summary );
-            if ( _searchInRequires->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
-            if ( _searchInProvides->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+            if ( _searchInRequires->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr( "solvable:requires" ) );
+            if ( _searchInProvides->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr( "solvable:provides" ) );
             if ( _searchInFileList->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr::filelist );
 
             _searchText->setEnabled( false );   // Disable for the duration of the search
             _searchButton->setEnabled( false );
 
-            timer.start();
-            int count = 0;
+            QElapsedTimer queryTimer;
+            queryTimer.start();
 
             //
             // Start the query and iterate over the results
             //
 
             for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
-                  it != query.selectableEnd() && ! progress.wasCanceled();
+                  it != query.selectableEnd();
                   ++it )
             {
+#if 0
+                progress.setValue( progressCount++ );
+
+                if (  progress.wasCanceled() )
+                    break;
+
+#endif
+
                 ZyppSel selectable = *it;
                 ZyppPkg zyppPkg    = tryCastToZyppPkg( selectable->theObj() );
 
@@ -313,12 +325,8 @@ YQPkgSearchFilterView::filter()
                     emit filterMatch( selectable, zyppPkg );
                 }
 
-                if ( progress.wasCanceled() )
-                    break;
 
-                progress.setValue( count++ );
-
-                if ( timer.elapsed() > 300 ) // milisec
+                if ( queryTimer.elapsed() > 300 ) // milisec
                 {
                     // Process events only every 300 milliseconds - this is very
                     // expensive since both the progress dialog and the package
@@ -326,7 +334,7 @@ YQPkgSearchFilterView::filter()
                     // each time.
 
                     qApp->processEvents();
-                    timer.restart();
+                    queryTimer.restart();
                 }
             }
 
@@ -361,9 +369,9 @@ YQPkgSearchFilterView::filter()
         msgBox.exec();
     }
 
-    _searchText->setEnabled(true);
+    _searchText->setEnabled(true);   // Re-enable the widgets we disabled earlier
     _searchButton->setEnabled(true);
-    parentWidget()->parentWidget()->setCursor(Qt::ArrowCursor);
+    parentWidget()->parentWidget()->setCursor( Qt::ArrowCursor );
 
     emit filterFinished();
 }
@@ -386,21 +394,37 @@ YQPkgSearchFilterView::check( ZyppSel   selectable,
 {
     if ( ! zyppObj )
         return false;
-    
+
     SearchFilter searchFilter( buildSearchFilterFromWidgets() );
 
     bool match =
-        ( _searchInName->isChecked()        && searchFilter.matches( zyppObj->name()                     ) ) ||
-        ( _searchInSummary->isChecked()     && searchFilter.matches( zyppObj->summary()                  ) ) ||
-        ( _searchInDescription->isChecked() && searchFilter.matches( zyppObj->description()              ) )
-        ;
-#if 0
-        ||
-        ( _searchInProvides->isChecked()    && searchFilter.matches( zyppObj->dep( zypp::Dep::PROVIDES ) ) ) ||
-        ( _searchInRequires->isChecked()    && searchFilter.matches( zyppObj->dep( zypp::Dep::REQUIRES ) ) );
-#endif
+        ( _searchInName->isChecked()        && searchFilter.matches( zyppObj->name()         ) ) ||
+        ( _searchInSummary->isChecked()     && searchFilter.matches( zyppObj->summary()      ) ) ||
+        ( _searchInDescription->isChecked() && searchFilter.matches( zyppObj->description()  ) ) ||
+        ( _searchInProvides->isChecked()    && checkCap( zyppObj->provides(), searchFilter   ) ) ||
+        ( _searchInRequires->isChecked()    && checkCap( zyppObj->requires(), searchFilter   ) );
 
     return match;
+}
+
+
+bool
+YQPkgSearchFilterView::checkCap( zypp::Capabilities   capSet,
+                                 const SearchFilter & searchFilter )
+{
+    for ( zypp::Capabilities::const_iterator it = capSet.begin();
+	  it != capSet.end();
+	  ++it )
+    {
+        zypp::CapDetail cap( *it );
+
+	if ( cap.isSimple() && searchFilter.matches( cap.name().asString() ) )
+	{
+	    return true;
+	}
+    }
+
+    return false;
 }
 
 

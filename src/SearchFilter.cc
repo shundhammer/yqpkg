@@ -94,7 +94,7 @@ bool SearchFilter::matches( const QString & str ) const
             return str.contains( _pattern );
     }
 
-    logError() << "Undefined filter mode " << (int) _filterMode << endl;
+    logError() << "Undefined filter mode " << toString( _filterMode ) << endl;
     return false;
 }
 
