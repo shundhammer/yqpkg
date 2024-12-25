@@ -18,8 +18,8 @@
 #   make VERBOSE=1
 #
 
-cmake_minimum_required( VERSION 3.10 )
-project( yqpkg )
+cmake_minimum_required(VERSION 3.17)
+project(yqpkg LANGUAGES CXX)
 
 # Options usage:
 #
@@ -65,8 +65,10 @@ if ( WERROR )
   add_compile_options( "-Werror" )
 endif()
 
-# libzypp uses the C++17 standard
+# libzypp and Qt 6 require C++17
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 #
 # Descend into subdirectories
