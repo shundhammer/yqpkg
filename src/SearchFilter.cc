@@ -21,6 +21,9 @@ SearchFilter::SearchFilter( const QString & pattern,
     _filterMode( filterMode ),
     _defaultFilterMode( defaultFilterMode )
 {
+    if ( _defaultFilterMode == Auto )
+        _defaultFilterMode = StartsWith;
+
     if ( _filterMode == Auto )
         guessFilterMode();
 
@@ -33,47 +36,58 @@ SearchFilter::SearchFilter( const QString & pattern,
 
 void SearchFilter::guessFilterMode()
 {
-    if ( _pattern.isEmpty() )
-    {
-        _filterMode = SelectAll;
-    }
-    else if ( _pattern.startsWith( "=" ) )
-    {
-        _filterMode = ExactMatch;
-        _pattern.remove( QRegExp( "^=" ) );
-        _regexp.setPattern( _pattern );
-    }
-    else if ( _pattern.contains( "*.*" ) )
-    {
-        _filterMode = Wildcard;
-    }
-    else if ( _pattern.contains( ".*" ) ||
-              _pattern.contains( "^"  ) ||
-              _pattern.contains( "$"  ) ||
-              _pattern.contains( "("  ) ||
-              _pattern.contains( "|"  ) ||
-              _pattern.contains( "["  )   )
-    {
-        _filterMode = RegExp;
-    }
-    else if ( _pattern.contains( "*" ) ||
-              _pattern.contains( "?" )   )
-    {
-        _filterMode = Wildcard;
-    }
-    else
-    {
-        if ( _defaultFilterMode == Auto )
-            _filterMode = StartsWith;
-        else
-            _filterMode = _defaultFilterMode;
-    }
+    _filterMode = guessFilterMode( _pattern );
+
+    if ( _filterMode == Auto )             // Still Auto?
+        _filterMode = _defaultFilterMode;  // Use the fallback.
 
 #if 1
     logDebug() << "using filter mode " << toString( _filterMode )
                << " from \"" << _pattern << "\""
                << endl;
 #endif
+
+    if ( _filterMode == ExactMatch && _pattern.startsWith( "=" ) )
+    {
+        _pattern.remove( QRegExp( "^=" ) );
+        _regexp.setPattern( _pattern );
+    }
+}
+
+
+SearchFilter::FilterMode
+SearchFilter::guessFilterMode( const QString & pattern )
+{
+    SearchFilter::FilterMode filterMode = Auto;
+
+    if ( pattern.isEmpty() )
+    {
+        filterMode = SelectAll;
+    }
+    else if ( pattern.startsWith( "=" ) )
+    {
+        filterMode = ExactMatch;
+    }
+    else if ( pattern.contains( "*.*" ) )
+    {
+        filterMode = Wildcard;
+    }
+    else if ( pattern.contains( ".*" ) ||
+              pattern.contains( "^"  ) ||
+              pattern.contains( "$"  ) ||
+              pattern.contains( "("  ) ||
+              pattern.contains( "|"  ) ||
+              pattern.contains( "["  )   )
+    {
+        filterMode = RegExp;
+    }
+    else if ( pattern.contains( "*" ) ||
+              pattern.contains( "?" )   )
+    {
+        filterMode = Wildcard;
+    }
+
+    return filterMode;
 }
 
 

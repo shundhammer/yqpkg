@@ -105,6 +105,25 @@ public slots:
     void setFocus();
 
 
+protected slots:
+
+    /**
+     * Notification that the search mode changed so the detected search mode
+     * can be updated.
+     **/
+    void searchModeChanged( int index );
+
+    /**
+     * Update the detected search filter mode label.
+     **/
+    void updateDetectedFilterMode( int index = -1 );
+
+    /**
+     * Update the detected search filter mode label.
+     **/
+    void updateDetectedFilterMode( const QString & searchPattern );
+
+
 signals:
 
     /**

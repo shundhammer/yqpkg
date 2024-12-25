@@ -92,6 +92,14 @@ public:
      **/
     static QString toString( FilterMode filterMode );
 
+    /**
+     * Guess the filter mode from 'pattern' if "Auto" was selected.
+     *
+     * 'pattern' might be modified: E.g. a pattern "=foo" would be detected as
+     * "ExactMatch", and the '=' would be removed to result in "foo".
+     **/
+    static FilterMode guessFilterMode( const QString & pattern );
+
 
 protected:
 

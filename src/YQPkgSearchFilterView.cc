@@ -65,7 +65,14 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     connect( _ui->searchButton, SIGNAL( clicked() ),
              this,              SLOT  ( filter()  ) );
 
+    connect( _ui->searchMode,   SIGNAL( currentIndexChanged( int ) ),
+             this,              SLOT  ( searchModeChanged  ( int ) ) );
+
+    connect( _ui->searchText,   SIGNAL( textEdited              ( QString ) ),
+             this,              SLOT  ( updateDetectedFilterMode( QString ) ) );
+
     readSettings();
+    updateDetectedFilterMode();
 }
 
 
@@ -79,11 +86,80 @@ YQPkgSearchFilterView::~YQPkgSearchFilterView()
 SearchFilter
 YQPkgSearchFilterView::buildSearchFilterFromWidgets()
 {
-    SearchFilter searchFilter( _ui->searchText->text(), 
+    SearchFilter searchFilter( _ui->searchText->text(),
                                (SearchFilter::FilterMode) _ui->searchMode->currentIndex() );
     searchFilter.setCaseSensitive( _ui->caseSensitive->isChecked() );
 
     return searchFilter;
+}
+
+
+void
+YQPkgSearchFilterView::updateDetectedFilterMode( int index )
+{
+    if ( index < 0 )
+        index = _ui->searchMode->currentIndex();
+
+    SearchFilter::FilterMode searchMode = (SearchFilter::FilterMode)( index );
+
+    if ( searchMode == SearchFilter::Auto )
+    {
+        updateDetectedFilterMode( _ui->searchText->text() );
+    }
+    else
+    {
+        _ui->detectedAutoMode->hide();
+    }
+}
+
+
+void
+YQPkgSearchFilterView::updateDetectedFilterMode( const QString & searchPattern )
+{
+    // This method is called when the user starts typing in _ui->searchText.
+    // 'searchPattern' is the new content of the field.
+
+    int index = _ui->searchMode->currentIndex();
+    SearchFilter::FilterMode filterMode = (SearchFilter::FilterMode)( index );
+
+    if ( filterMode != SearchFilter::Auto )
+    {
+        _ui->detectedAutoMode->hide();
+        return;
+    }
+
+    SearchFilter::FilterMode detectedMode = SearchFilter::guessFilterMode( searchPattern );
+    QString text;
+
+    if ( detectedMode == SearchFilter::Auto || searchPattern.isEmpty() )
+    {
+        detectedMode = SearchFilter::StartsWith;  // Use the fallback
+
+        // Translators: This is the default search filter mode.
+        // %1 is a text from the combo box that is already translated.
+        text = _( "Default: %1" );
+    }
+    else
+    {
+        // Translators: This is the detected search filter mode.
+        // %1 is a text from the combo box that is already translated.
+        text = _( "Detected: %1" );
+    }
+
+    // Use the text from the combo box because it's already translated
+    QString filterText = _ui->searchMode->itemText( detectedMode );
+
+    text = text.arg( filterText );
+
+    _ui->detectedAutoMode->setText( text );
+    _ui->detectedAutoMode->show();
+}
+
+
+void
+YQPkgSearchFilterView::searchModeChanged( int index )
+{
+    updateDetectedFilterMode( index );
 }
 
 
