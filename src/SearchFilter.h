@@ -11,6 +11,8 @@
 #define SearchFilter_h
 
 
+#include <string>
+
 #include <QString>
 #include <QRegExp>
 #include <QTextStream>
@@ -54,7 +56,8 @@ public:
     /**
      * Check if a string matches this filter.
      **/
-    bool matches( const QString & str ) const;
+    bool matches( const QString &     str ) const;
+    bool matches( const std::string & str ) const;
 
     /**
      * Return the pattern.

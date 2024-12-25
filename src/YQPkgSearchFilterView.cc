@@ -32,6 +32,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "SearchFilter.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "YQPkgSelector.h"
@@ -130,14 +131,17 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     label->setBuddy( _searchMode );
 
-    // Caution: combo box items must be inserted in the same order as enum SearchMode!
+    // Caution: combo box items must be inserted in the same order as enum
+    // SearchFilter::FilterMode in SearchFilter.h!
+
+    _searchMode->addItem( _( "Auto"                   ) );
     _searchMode->addItem( _( "Contains"               ) );
-    _searchMode->addItem( _( "Begins with"            ) );
+    _searchMode->addItem( _( "Starts With"            ) );
     _searchMode->addItem( _( "Exact Match"            ) );
     _searchMode->addItem( _( "Use Wild Cards"         ) );
     _searchMode->addItem( _( "Use Regular Expression" ) );
 
-    _searchMode->setCurrentIndex( Contains );
+    _searchMode->setCurrentIndex( SearchFilter::Auto );
 
     layout->addStretch();
 
@@ -216,13 +220,7 @@ YQPkgSearchFilterView::filter()
         if ( ! _searchText->currentText().isEmpty() )
         {
             // Create a progress dialog that is only displayed if the search takes
-            // longer than a couple of seconds ( default: 4 ).
-
-
-            zypp::PoolQuery query;
-            query.addKind(zypp::ResKind::package);
-
-            string searchtext = _searchText->currentText().toUtf8().data();
+            // longer than a couple of seconds.
 
             QProgressDialog progress( _( "Searching..." ), // text
                                       _( "&Cancel" ),      // cancelButtonLabel
@@ -238,48 +236,69 @@ YQPkgSearchFilterView::filter()
             progress.setCursor( Qt::ArrowCursor );
 
             QElapsedTimer timer;
-            query.setCaseSensitive( _caseSensitive->isChecked() );
 
-            switch ( _searchMode->currentIndex() )
+            //
+            // Build the query
+            //
+
+            SearchFilter searchFilter( buildSearchFilterFromWidgets() );
+
+            // Use a zypp::PoolQuery for improved performance
+            zypp::PoolQuery query;
+            query.addKind( zypp::ResKind::package );
+            string searchPattern = toUTF8( searchFilter.pattern() );
+            query.setCaseSensitive( searchFilter.isCaseSensitive() );
+
+            switch ( searchFilter.filterMode() )
             {
-                case Contains:
+                case SearchFilter::Contains:
                     query.setMatchSubstring();
                     break;
 
-                case BeginsWith: query.setMatchRegex();
-                    searchtext = "^" + searchtext;
+                case SearchFilter::StartsWith:
+                    query.setMatchRegex();
+                    searchPattern = "^" + searchPattern;
                     break;
 
-                case ExactMatch:
+                case SearchFilter::ExactMatch:
                     query.setMatchExact();
                     break;
 
-                case UseWildcards:
+                case SearchFilter::Wildcard:
                     query.setMatchGlob();
                     break;
 
-                case UseRegExp:
+                case SearchFilter::RegExp:
                     query.setMatchRegex();
                     break;
 
-                    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
+                default:
+                    logError() << "Unexpected search mode "
+                               << SearchFilter::toString( searchFilter.filterMode() )
+                               << " - falling back to 'Contains'"
+                               << endl;
+                    query.setMatchSubstring();
+                    break;
             }
 
-            query.addString( searchtext );
+            query.addString( searchPattern );
 
-            if ( _searchInName->isChecked() )        query.addAttribute( zypp::sat::SolvAttr::name );
+            if ( _searchInName->isChecked()        ) query.addAttribute( zypp::sat::SolvAttr::name );
             if ( _searchInDescription->isChecked() ) query.addAttribute( zypp::sat::SolvAttr::description );
-            if ( _searchInSummary->isChecked()  )    query.addAttribute( zypp::sat::SolvAttr::summary );
-            if ( _searchInRequires->isChecked() )    query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
-            if ( _searchInProvides->isChecked() )    query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
-            if ( _searchInFileList->isChecked() )    query.addAttribute( zypp::sat::SolvAttr::filelist );
+            if ( _searchInSummary->isChecked()     ) query.addAttribute( zypp::sat::SolvAttr::summary );
+            if ( _searchInRequires->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
+            if ( _searchInProvides->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+            if ( _searchInFileList->isChecked()    ) query.addAttribute( zypp::sat::SolvAttr::filelist );
 
-            _searchText->setEnabled( false );
+            _searchText->setEnabled( false );   // Disable for the duration of the search
             _searchButton->setEnabled( false );
 
             timer.start();
-
             int count = 0;
+
+            //
+            // Start the query and iterate over the results
+            //
 
             for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
                   it != query.selectableEnd() && ! progress.wasCanceled();
@@ -350,100 +369,38 @@ YQPkgSearchFilterView::filter()
 }
 
 
+SearchFilter
+YQPkgSearchFilterView::buildSearchFilterFromWidgets()
+{
+    SearchFilter::FilterMode filterMode = (SearchFilter::FilterMode) _searchMode->currentIndex();
+    SearchFilter searchFilter( _searchText->currentText(), filterMode );
+    searchFilter.setCaseSensitive( _caseSensitive->isChecked() );
+
+    return searchFilter;
+}
+
+
 bool
 YQPkgSearchFilterView::check( ZyppSel   selectable,
                               ZyppObj   zyppObj )
 {
-    QRegExp regexp( _searchText->currentText() );
-    regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
-
-    return check( selectable, zyppObj, regexp );
-}
-
-
-bool
-YQPkgSearchFilterView::check( ZyppSel         selectable,
-                              ZyppObj         zyppObj,
-                              const QRegExp & regexp )
-{
     if ( ! zyppObj )
         return false;
+    
+    SearchFilter searchFilter( buildSearchFilterFromWidgets() );
 
     bool match =
-        ( _searchInName->isChecked()        && check( zyppObj->name(),        regexp ) ) ||
-        ( _searchInSummary->isChecked()     && check( zyppObj->summary(),     regexp ) ) ||
-        ( _searchInDescription->isChecked() && check( zyppObj->description(), regexp ) ) ||
-        ( _searchInProvides->isChecked()    && check( zyppObj->dep( zypp::Dep::PROVIDES ), regexp ) ) ||
-        ( _searchInRequires->isChecked()    && check( zyppObj->dep( zypp::Dep::REQUIRES ), regexp ) );
-
-    if ( match )
-    {
-        ZyppPkg zyppPkg = tryCastToZyppPkg( zyppObj );
-
-        if ( zyppPkg )
-        {
-            _matchCount++;
-            emit filterMatch( selectable, zyppPkg );
-        }
-    }
+        ( _searchInName->isChecked()        && searchFilter.matches( zyppObj->name()                     ) ) ||
+        ( _searchInSummary->isChecked()     && searchFilter.matches( zyppObj->summary()                  ) ) ||
+        ( _searchInDescription->isChecked() && searchFilter.matches( zyppObj->description()              ) )
+        ;
+#if 0
+        ||
+        ( _searchInProvides->isChecked()    && searchFilter.matches( zyppObj->dep( zypp::Dep::PROVIDES ) ) ) ||
+        ( _searchInRequires->isChecked()    && searchFilter.matches( zyppObj->dep( zypp::Dep::REQUIRES ) ) );
+#endif
 
     return match;
-}
-
-
-bool
-YQPkgSearchFilterView::check( const string &  attribute,
-                              const QRegExp & regexp )
-{
-    QString att         = fromUTF8( attribute );
-    QString searchText  = _searchText->currentText();
-    bool match          = false;
-
-    switch ( _searchMode->currentIndex() )
-    {
-        case Contains:
-            match = att.contains( searchText, _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive);
-            break;
-
-        case BeginsWith:
-            match = att.startsWith( searchText ); // only case sensitive
-            break;
-
-        case ExactMatch:
-            match = ( att == searchText );
-            break;
-
-        case UseWildcards:
-        case UseRegExp:
-            // Both cases differ in how the regexp is set up during initialization
-            match = att.contains( regexp );
-            break;
-
-            // Intentionally omitting "default" branch - let gcc watch for unhandled enums
-    }
-
-    return match;
-}
-
-
-bool
-YQPkgSearchFilterView::check( const zypp::Capabilities & capSet,
-                              const QRegExp &            regexp )
-{
-    for ( zypp::Capabilities::const_iterator it = capSet.begin();
-          it != capSet.end();
-          ++it )
-    {
-        zypp::CapDetail cap( *it );
-
-        if ( cap.isSimple() && check( cap.name().asString(), regexp ) )
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 
@@ -460,8 +417,7 @@ void YQPkgSearchFilterView::readSettings()
     _searchInFileList->setChecked    ( settings.value( "searchInFileList",    false ).toBool() );
 
     _caseSensitive->setChecked       ( settings.value( "caseSensitive",       false ).toBool() );
-
-    _searchMode->setCurrentIndex     ( settings.value( "searchMode", (int) BeginsWith ).toInt() );
+    _searchMode->setCurrentIndex     ( settings.value( "searchMode",          0     ).toInt() );
 
     settings.endGroup();
 }

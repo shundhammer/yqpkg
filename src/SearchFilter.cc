@@ -7,9 +7,10 @@
  *              Donated by the QDirStat project
  */
 
-#include "SearchFilter.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "utf8.h"
+#include "SearchFilter.h"
 
 
 SearchFilter::SearchFilter( const QString & pattern,
@@ -68,7 +69,7 @@ void SearchFilter::guessFilterMode()
             _filterMode = _defaultFilterMode;
     }
 
-#if 0
+#if 1
     logDebug() << "using filter mode " << toString( _filterMode )
                << " from \"" << _pattern << "\""
                << endl;
@@ -96,6 +97,13 @@ bool SearchFilter::matches( const QString & str ) const
     logError() << "Undefined filter mode " << (int) _filterMode << endl;
     return false;
 }
+
+
+bool SearchFilter::matches( const std::string & str ) const
+{
+    return matches( fromUTF8( str ) );
+}
+
 
 
 void SearchFilter::setCaseSensitive( bool sensitive )

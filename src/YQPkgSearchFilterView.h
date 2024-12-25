@@ -24,6 +24,9 @@
 #include <QEvent>
 #include <QScrollArea>
 
+#include "SearchFilter.h"
+
+
 class QComboBox;
 class QCheckBox;
 class QPushButton;
@@ -114,42 +117,16 @@ signals:
 
 protected:
 
-    // Caution: Enum order must match corresponding message strings in combo box!
-    enum SearchMode
-    {
-        Contains = 0,
-        BeginsWith,
-        ExactMatch,
-        UseWildcards,
-        UseRegExp
-    };
+    /**
+     * Build a SearchFilter object from the widgets.
+     **/
+    SearchFilter buildSearchFilterFromWidgets();
 
     /**
      * Key press event: Execute search upon 'Return'
      * Reimplemented from QVBox / QWidget.
      **/
     virtual void keyPressEvent( QKeyEvent * event );
-
-    // THESE SHOULD BE DEPRECATED but still used in secondary
-    // filters
-    /**
-     * Check if pkg matches the search criteria.
-     **/
-    bool check( ZyppSel         selectable,
-                ZyppObj         zyppObj,
-                const QRegExp & regexp );
-
-    /**
-     * Check if a single pkg attribute matches the search criteria.
-     **/
-    bool check( const string & attribute, const QRegExp & regexp );
-
-    /**
-     * Check capability like
-     * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
-     * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
-     **/
-    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
 
     /**
      * Read settings from the config file.
