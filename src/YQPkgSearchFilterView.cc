@@ -79,8 +79,8 @@ YQPkgSearchFilterView::~YQPkgSearchFilterView()
 SearchFilter
 YQPkgSearchFilterView::buildSearchFilterFromWidgets()
 {
-    SearchFilter::FilterMode filterMode = (SearchFilter::FilterMode) _ui->searchMode->currentIndex();
-    SearchFilter searchFilter( _ui->searchText->text(), filterMode );
+    SearchFilter searchFilter( _ui->searchText->text(), 
+                               (SearchFilter::FilterMode) _ui->searchMode->currentIndex() );
     searchFilter.setCaseSensitive( _ui->caseSensitive->isChecked() );
 
     return searchFilter;
