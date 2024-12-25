@@ -168,6 +168,17 @@ YQPkgSearchFilterView::~YQPkgSearchFilterView()
 }
 
 
+SearchFilter
+YQPkgSearchFilterView::buildSearchFilterFromWidgets()
+{
+    SearchFilter::FilterMode filterMode = (SearchFilter::FilterMode) _searchMode->currentIndex();
+    SearchFilter searchFilter( _searchText->currentText(), filterMode );
+    searchFilter.setCaseSensitive( _caseSensitive->isChecked() );
+
+    return searchFilter;
+}
+
+
 void
 YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 {
@@ -347,17 +358,6 @@ YQPkgSearchFilterView::filter()
     parentWidget()->parentWidget()->setCursor( Qt::ArrowCursor );
 
     emit filterFinished();
-}
-
-
-SearchFilter
-YQPkgSearchFilterView::buildSearchFilterFromWidgets()
-{
-    SearchFilter::FilterMode filterMode = (SearchFilter::FilterMode) _searchMode->currentIndex();
-    SearchFilter searchFilter( _searchText->currentText(), filterMode );
-    searchFilter.setCaseSensitive( _caseSensitive->isChecked() );
-
-    return searchFilter;
 }
 
 
