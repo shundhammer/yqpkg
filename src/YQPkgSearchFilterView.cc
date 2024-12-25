@@ -21,6 +21,7 @@
 #include <QGroupBox>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QLineEdit>
 #include <QLayout>
 #include <QMessageBox>
 #include <QProgressDialog>
@@ -67,6 +68,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     hbox->addWidget(_searchText);
     _searchText->setEditable( true );
+    _searchText->lineEdit()->setClearButtonEnabled( true );
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), content );
