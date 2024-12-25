@@ -222,25 +222,6 @@ YQPkgSearchFilterView::filter()
     {
         if ( ! _searchText->currentText().isEmpty() )
         {
-#if 0
-            // Create a progress dialog that is only displayed if the search takes
-            // longer than a couple of seconds.
-
-            QProgressDialog progress( _( "Searching..." ), // text
-                                      _( "&Cancel" ),      // cancelButtonLabel
-                                      0,
-                                      1000,
-                                      this                 // parent
-                                      );
-
-            progress.setWindowTitle( "" );
-            progress.setMinimumDuration( 1500 ); // millisec
-
-            parentWidget()->parentWidget()->setCursor( Qt::WaitCursor );
-            progress.setCursor( Qt::ArrowCursor );
-            int progressCount = 0;
-#endif
-
             //
             // Build the query
             //
@@ -308,14 +289,6 @@ YQPkgSearchFilterView::filter()
                   it != query.selectableEnd();
                   ++it )
             {
-#if 0
-                progress.setValue( progressCount++ );
-
-                if (  progress.wasCanceled() )
-                    break;
-
-#endif
-
                 ZyppSel selectable = *it;
                 ZyppPkg zyppPkg    = tryCastToZyppPkg( selectable->theObj() );
 
