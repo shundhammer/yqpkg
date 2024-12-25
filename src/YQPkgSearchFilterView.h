@@ -20,11 +20,18 @@
 
 #include "YQZypp.h"
 #include <QWidget>
-#include <QRegExp>
 #include <QEvent>
-#include <QScrollArea>
+#include <QWidget>
 
 #include "SearchFilter.h"
+
+
+// Generated with 'uic' from a Qt designer .ui form: search-filter-view.ui
+//
+// Check out ../build/src/yqpkg_autogen/include/ui_search-filter-view.h
+// for the variable names of the widgets.
+
+#include "ui_search-filter-view.h"
 
 
 class QComboBox;
@@ -38,7 +45,7 @@ using std::string;
 /**
  * Filter view for searching within packages
  **/
-class YQPkgSearchFilterView : public QScrollArea
+class YQPkgSearchFilterView : public QWidget
 {
     Q_OBJECT
 
@@ -151,20 +158,7 @@ protected:
     // Data members
     //
 
-    QComboBox *   _searchText;
-    QPushButton * _searchButton;
-
-    QCheckBox *   _searchInName;
-    QCheckBox *   _searchInSummary;
-    QCheckBox *   _searchInDescription;
-    QCheckBox *   _searchInRequires;
-    QCheckBox *   _searchInProvides;
-    QCheckBox *   _searchInFileList;
-
-    QComboBox *   _searchMode;
-    QCheckBox *   _caseSensitive;
-
-    int           _matchCount;
+    Ui::SearchFilterView * _ui;
 };
 
 

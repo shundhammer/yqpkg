@@ -336,7 +336,7 @@ YQPkgSelector::layoutFilters( QWidget * parent )
         _patternList = new YQPkgPatternList( parent );
         CHECK_NEW( _patternList );
 
-        _filters->addPage( _( "Patter&ns" ), _patternList, "patterns" );
+        _filters->addPage( _( "P&atterns" ), _patternList, "patterns" );
 
         connect( _patternList, SIGNAL( statusChanged()           ),
                  this,         SLOT  ( autoResolveDependencies() ) );
@@ -358,7 +358,7 @@ YQPkgSelector::layoutFilters( QWidget * parent )
 
     _updatesFilterView = new YQPkgUpdatesFilterView( parent );
     CHECK_NEW( _updatesFilterView );
-    _filters->addPage( _( "Updates" ), _updatesFilterView, "updates" );
+    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates" );
 
     connect( this,               SIGNAL( loadData() ),
              _updatesFilterView, SLOT  ( filter()   ) );
