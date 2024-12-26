@@ -45,7 +45,7 @@ using std::set;
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    logDebug() << "Creating patch list" << endl;
+    logDebug() << "Creating patch list" << Qt::endl;
 
     _filterCriteria = RelevantPatches;
 
@@ -72,7 +72,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     fillList();
 
-    logDebug() << "Creating patch list done" << endl;
+    logDebug() << "Creating patch list done" << Qt::endl;
 }
 
 
@@ -103,7 +103,7 @@ YQPkgPatchList::category( YQPkgPatchCategory category )
     if ( ! cat )
     {
 #if VERBOSE_PATCHES
-        logDebug() << "New patch category \""<< category << "\"" << endl;
+        logDebug() << "New patch category \""<< category << "\"" << Qt::endl;
 #endif
 
         cat = new YQPkgPatchCategoryItem( category, this );
@@ -130,7 +130,7 @@ YQPkgPatchList::fillList()
     _categories.clear();
 
     clear();
-    // logDebug() << "Filling patch list" << endl;
+    // logDebug() << "Filling patch list" << Qt::endl;
 
     for ( ZyppPoolIterator it = zyppPatchesBegin();
           it != zyppPatchesEnd();
@@ -179,7 +179,7 @@ YQPkgPatchList::fillList()
                     break;
 
                 default:
-                    logDebug() << "unknown patch filter" << endl;
+                    logDebug() << "unknown patch filter" << Qt::endl;
                     break;
 
             }
@@ -189,19 +189,19 @@ YQPkgPatchList::fillList()
 #if VERBOSE_PATCHES
                 logDebug() << "Displaying patch " << zyppPatch->name()
                            << " - " <<  zyppPatch->summary()
-                           << endl;
+                           << Qt::endl;
 #endif
                 addPatchItem( *it, zyppPatch);
             }
         }
         else
         {
-            logError() << "Found non-patch selectable" << endl;
+            logError() << "Found non-patch selectable" << Qt::endl;
         }
     }
 
 #if VERBOSE_PATCHES
-    logDebug() << "Patch list filled" << endl;
+    logDebug() << "Patch list filled" << Qt::endl;
 #endif
 
     resizeColumnToContents( _statusCol );
@@ -254,12 +254,12 @@ YQPkgPatchList::filter()
         }
         else
         {
-            logInfo() << "patch is bogus" << endl;
+            logInfo() << "patch is bogus" << Qt::endl;
         }
 
     }
     else
-        logWarning() << "selection empty" << endl;
+        logWarning() << "selection empty" << Qt::endl;
 
     emit filterFinished();
 }
@@ -271,7 +271,7 @@ YQPkgPatchList::addPatchItem( ZyppSel   selectable,
 {
     if ( ! selectable || ! zyppPatch )
     {
-        logError() << "NULL ZyppSel!" << endl;
+        logError() << "NULL ZyppSel!" << Qt::endl;
         return;
     }
 
@@ -375,7 +375,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 
                 if ( item && item->selectable()->hasInstalledObj() )
                 {
-                    logWarning() << "Deleting patches is not supported" << endl;
+                    logWarning() << "Deleting patches is not supported" << Qt::endl;
                     return;
                 }
             }
@@ -528,7 +528,7 @@ YQPkgPatchCategoryItem::patchCategory( const QString & cat )
     if ( category == "optional"    ) return YQPkgOptionalPatch;
     if ( category == "document"    ) return YQPkgDocumentPatch;
 
-    logWarning() << "Unknown patch category \"" << category << "\"" << endl;
+    logWarning() << "Unknown patch category \"" << category << "\"" << Qt::endl;
 
     return YQPkgOptionalPatch;
 }

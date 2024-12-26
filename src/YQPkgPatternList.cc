@@ -43,7 +43,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent,
     : YQPkgObjList( parent )
     , _orderCol( -1 )
 {
-    logDebug() << "Creating pattern list" << endl;
+    logDebug() << "Creating pattern list" << Qt::endl;
 
     // Translators: "Pattern" refers to so-called "software patterns",
     // i.e., specific task-oriented groups of packages, like "everything that
@@ -113,7 +113,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent,
 #endif
     }
 
-    logDebug() << "Creating pattern list done" << endl;
+    logDebug() << "Creating pattern list done" << Qt::endl;
 }
 
 
@@ -129,7 +129,7 @@ YQPkgPatternList::fillList()
     _categories.clear();
 
     clear();
-    logDebug() << "Filling pattern list" << endl;
+    logDebug() << "Filling pattern list" << Qt::endl;
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
           it != zyppPatternsEnd();
@@ -146,18 +146,18 @@ YQPkgPatternList::fillList()
 #if VERBOSE_PATTERN_LIST
             else
                 logDebug() << "Pattern " << zyppPattern->name()
-                           << " is not user-visible" << endl;
+                           << " is not user-visible" << Qt::endl;
 #endif
         }
         else
         {
-            logError() << "Found non-Pattern selectable" << endl;
+            logError() << "Found non-Pattern selectable" << Qt::endl;
         }
     }
 
 
 #if VERBOSE_PATTERN_LIST
-    logDebug() << "Pattern list filled" << endl;
+    logDebug() << "Pattern list filled" << Qt::endl;
 #endif
 
     resizeColumnToContents( _iconCol   );
@@ -176,7 +176,7 @@ YQPkgPatternList::category( const QString & categoryName )
     if ( ! cat )
     {
 #if VERBOSE_PATTERN_LIST
-        logDebug() << "New pattern category \""<< categoryName << "\"" << endl;
+        logDebug() << "New pattern category \""<< categoryName << "\"" << Qt::endl;
 #endif
 
         cat = new YQPkgPatternCategoryItem( this, categoryName );
@@ -245,7 +245,7 @@ YQPkgPatternList::addPatternItem( ZyppSel     selectable,
 {
     if ( ! selectable )
     {
-        logError() << "NULL ZyppSelectable!" << endl;
+        logError() << "NULL ZyppSelectable!" << Qt::endl;
         return;
     }
 

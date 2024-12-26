@@ -52,27 +52,27 @@ YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
     , _zyppLogger(0)
     , _pkgTasks(0)
 {
-    logDebug() << "Creating YQPkgApplication" << endl;
+    logDebug() << "Creating YQPkgApplication" << Qt::endl;
 
     _instance = this;
     _optFlags = optFlags;
 
     if ( ! runningAsRoot() )
     {
-        logInfo() << "Not running as root - enforcing read-only mode" << endl;
+        logInfo() << "Not running as root - enforcing read-only mode" << Qt::endl;
         _optFlags |= OptReadOnly;
     }
 
-    logDebug() << "_optFlags: 0x" << hex << _optFlags << dec << endl;
+    logDebug() << "_optFlags: 0x" << hex << _optFlags << dec << Qt::endl;
 
     createMainWin(); // Create this early to get early visual feedback
-    logDebug() << "Creating YQPkgApplication done" << endl;
+    logDebug() << "Creating YQPkgApplication done" << Qt::endl;
 }
 
 
 YQPkgApplication::~YQPkgApplication()
 {
-    logDebug() << "Destroying YQPkgApplication..." << endl;
+    logDebug() << "Destroying YQPkgApplication..." << Qt::endl;
 
     if ( _pkgSel )
         delete _pkgSel;
@@ -100,13 +100,13 @@ YQPkgApplication::~YQPkgApplication()
 
     _instance = 0;
 
-    logDebug() << "Destroying YQPkgApplication done" << endl;
+    logDebug() << "Destroying YQPkgApplication done" << Qt::endl;
 }
 
 
 void YQPkgApplication::run()
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
 
     if ( ! _workflow )
         createWorkflow();
@@ -128,12 +128,12 @@ void YQPkgApplication::run()
 
 void YQPkgApplication::createMainWin()
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
 
     if ( _mainWin )
         return;
 
-    logDebug() << "Creating the main window" << endl;
+    logDebug() << "Creating the main window" << Qt::endl;
 
     _mainWin = new MainWindow();
     CHECK_NEW( _mainWin );
@@ -149,7 +149,7 @@ void YQPkgApplication::createWorkflow()
     if ( _workflow )
         return;
 
-    logDebug() << "Creating the application workflow" << endl;
+    logDebug() << "Creating the application workflow" << Qt::endl;
 
     WorkflowStepList steps;
     steps << new YQPkgInitReposStep( this, "initRepos" ) // excluded from history
@@ -160,7 +160,7 @@ void YQPkgApplication::createWorkflow()
     _workflow = new Workflow( steps );
     CHECK_PTR( _workflow );
 
-    logDebug() << "Starting workflow" << endl;
+    logDebug() << "Starting workflow" << Qt::endl;
     _workflow->start();
 }
 
@@ -344,21 +344,21 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 
         if ( currentPage == _pkgSel )
         {
-            logInfo() << "Caught WM_CLOSE for YQPkgSelector" << endl;
+            logInfo() << "Caught WM_CLOSE for YQPkgSelector" << Qt::endl;
             _pkgSel->wmClose();  // _pkgSel handles asking for confirmation etc.
 
             return true;        // Event processing finished for this one
         }
         else if ( currentPage == _pkgCommitPage )
         {
-            logInfo() << "Caught WM_CLOSE for PkgCommitPage" << endl;
+            logInfo() << "Caught WM_CLOSE for PkgCommitPage" << Qt::endl;
             _pkgCommitPage->wmClose();
 
             return true;        // Event processing finished for this one
         }
         else
         {
-            logInfo() << "Caught WM_CLOSE, but not for YQPkgSelector" << endl;
+            logInfo() << "Caught WM_CLOSE, but not for YQPkgSelector" << Qt::endl;
         }
     }
 
@@ -373,7 +373,7 @@ void YQPkgApplication::next()
     if ( ! _workflow )
         return;
 
-    logDebug() << "Current page: " << _workflow->currentStep()->id() << endl;
+    logDebug() << "Current page: " << _workflow->currentStep()->id() << Qt::endl;
 
     if ( _workflow->currentStep()->id() == "pkgCommit" )
     {
@@ -381,7 +381,7 @@ void YQPkgApplication::next()
 
         if ( ! _pkgCommitPage->showSummaryPage() )
         {
-            logInfo() << "Skipping summary page -> quitting" << endl;
+            logInfo() << "Skipping summary page -> quitting" << Qt::endl;
             quit();
 
             return;
@@ -390,12 +390,12 @@ void YQPkgApplication::next()
 
     if ( _workflow->atLastStep() )
     {
-        logDebug() << "This was the last step." << endl;
+        logDebug() << "This was the last step." << Qt::endl;
         finish();
     }
     else
     {
-        logDebug() << "Next step in the workflow." << endl;
+        logDebug() << "Next step in the workflow." << Qt::endl;
         _workflow->next();
     }
 }
@@ -403,14 +403,14 @@ void YQPkgApplication::next()
 
 void YQPkgApplication::finish()
 {
-    logDebug() << "Quitting the program." << endl;
+    logDebug() << "Quitting the program." << Qt::endl;
     quit();
 }
 
 
 void YQPkgApplication::back()
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
     CHECK_PTR( _workflow );
 
     if ( ! _workflow )
@@ -422,7 +422,7 @@ void YQPkgApplication::back()
 
 void YQPkgApplication::restart()
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
     CHECK_PTR( _workflow );
 
     if ( ! _workflow )
@@ -437,7 +437,7 @@ void YQPkgApplication::skipCommit()
     // The user finished the package selection with "Accept", but there was no
     // change: Skip the "commit" phase and go straight to the summary screen.
 
-    logDebug() << endl;
+    logDebug() << Qt::endl;
     CHECK_PTR( _workflow );
 
     if ( ! _workflow )
@@ -449,7 +449,7 @@ void YQPkgApplication::skipCommit()
 
 void YQPkgApplication::quit( bool askForConfirmation )
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
 
     if ( askForConfirmation )
     {

@@ -157,7 +157,7 @@ QY2ListView::saveColumnWidths()
     for ( int i = 0; i < columnCount(); i++ )
     {
 	int size = header()->sectionSize(i);
-	// yuiMilestone() << "Saving size " << size << " for section " << i << endl;
+	// yuiMilestone() << "Saving size " << size << " for section " << i << Qt::endl;
 	_savedColumnWidth.push_back( size );
     }
 }
@@ -183,7 +183,7 @@ QY2ListView::restoreColumnWidths()
 	    yuiDebug() << "Restoring size " << _savedColumnWidth[i]
 		       << " for section " << i
 		       << " now " << header()->sectionSize(i)
-		       << endl;
+		       << Qt::endl;
 #endif
 	}
     }

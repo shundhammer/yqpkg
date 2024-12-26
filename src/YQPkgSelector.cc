@@ -141,10 +141,10 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _excludeDevelPkgs            = 0;
     _excludeDebugInfoPkgs        = 0;
 
-    logDebug() << "Creating YQPkgSelector..." << endl;
+    logDebug() << "Creating YQPkgSelector..." << Qt::endl;
 
-    if ( onlineUpdateMode() )   logInfo() << "Online update mode" << endl;
-    if ( updateMode() )         logInfo() << "Update mode" << endl;
+    if ( onlineUpdateMode() )   logInfo() << "Online update mode" << Qt::endl;
+    if ( updateMode() )         logInfo() << "Update mode" << Qt::endl;
 
     basicLayout();
     addMenus();         // Only after all widgets are created!
@@ -160,7 +160,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
 
     if ( ! pagesRestored )
     {
-        logDebug() << "No page configuration saved, using fallbacks" << endl;
+        logDebug() << "No page configuration saved, using fallbacks" << Qt::endl;
 
         //
         // Add a number of default tabs in the desired order
@@ -207,7 +207,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
             // installed, switch to that filter view and show those packages.
             // This should happen only very, very rarely.
 
-            logInfo() << "Found installed retracted packages; switching to that view" << endl;
+            logInfo() << "Found installed retracted packages; switching to that view" << Qt::endl;
             _filters->showPage( _pkgClassificationFilterView );
             _pkgClassificationFilterView->showPkgClass( YQPkgClassRetractedInstalled );
 
@@ -260,17 +260,17 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     }
 #endif
 
-    logDebug() << "YQPkgSelector init done" << endl;
+    logDebug() << "YQPkgSelector init done" << Qt::endl;
 }
 
 
 YQPkgSelector::~YQPkgSelector()
 {
-    logDebug() << "Destroying YQPkgSelector..." << endl;
+    logDebug() << "Destroying YQPkgSelector..." << Qt::endl;
 
     writeSettings();
 
-    logDebug() << "Destroying YQPkgSelector done." << endl;
+    logDebug() << "Destroying YQPkgSelector done." << Qt::endl;
 }
 
 
@@ -1136,7 +1136,7 @@ YQPkgSelector::manualResolvePackageDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
-        logError() << "No package conflict dialog existing" << endl;
+        logError() << "No package conflict dialog existing" << Qt::endl;
         return QDialog::Accepted;
     }
 
@@ -1180,7 +1180,7 @@ YQPkgSelector::hotkeyInsertPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
-        logInfo() << "Activating patches filter view" << endl;
+        logInfo() << "Activating patches filter view" << Qt::endl;
 
         addPatchFilterView();
         connectPatchList();
@@ -1258,11 +1258,11 @@ YQPkgSelector::pkgExport()
             exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
             exportFile << writer;
 
-            logInfo() << "Package list exported to " << filename << endl;
+            logInfo() << "Package list exported to " << filename << Qt::endl;
         }
         catch ( std::exception & exception )
         {
-            logWarning() << "Error exporting package list to " << filename << endl;
+            logWarning() << "Error exporting package list to " << filename << Qt::endl;
 
             // The export might have left over a partially written file.
             // Try to delete it. Don't care if it doesn't exist and unlink() fails.
@@ -1289,7 +1289,7 @@ YQPkgSelector::pkgImport()
 
     if ( ! filename.isEmpty() )
     {
-        logInfo() << "Importing package list from " << filename << endl;
+        logInfo() << "Importing package list from " << filename << Qt::endl;
 
         try
         {
@@ -1319,7 +1319,7 @@ YQPkgSelector::pkgImport()
             logDebug() << "Found "        << importPkg.size()
                        <<" packages and " << importPatterns.size()
                        << " patterns in " << filename
-                       << endl;
+                       << Qt::endl;
 
 
             //
@@ -1360,7 +1360,7 @@ YQPkgSelector::pkgImport()
         }
         catch ( const zypp::Exception & exception )
         {
-            logWarning() << "Error reading package list from " << filename << endl;
+            logWarning() << "Error reading package list from " << filename << Qt::endl;
 
             // Post error popup
             QMessageBox::warning( this,                                         // parent
@@ -1402,7 +1402,7 @@ YQPkgSelector::importSelectable( ZyppSel             selectable,
             case S_Del:
             case S_AutoDel:
                 newStatus = S_KeepInstalled;
-                logDebug() << "Keeping " << kind << " " << selectable->name() << endl;
+                logDebug() << "Keeping " << kind << " " << selectable->name() << Qt::endl;
                 break;
 
             case S_NoInst:
@@ -1411,12 +1411,12 @@ YQPkgSelector::importSelectable( ZyppSel             selectable,
                 if ( selectable->hasCandidateObj() )
                 {
                     newStatus = S_Install;
-                    logDebug() << "Adding " << kind << " " <<  selectable->name() << endl;
+                    logDebug() << "Adding " << kind << " " <<  selectable->name() << Qt::endl;
                 }
                 else
                 {
                     logDebug() << "Can't add " << kind << " " << selectable->name()
-                               << ": No candidate" << endl;
+                               << ": No candidate" << Qt::endl;
                 }
                 break;
         }
@@ -1436,7 +1436,7 @@ YQPkgSelector::importSelectable( ZyppSel             selectable,
             case S_Update:
             case S_AutoUpdate:
                 newStatus = S_Del;
-                logDebug() << "Deleting " << kind << " " << selectable->name() << endl;
+                logDebug() << "Deleting " << kind << " " << selectable->name() << Qt::endl;
                 break;
 
             case S_Del:
@@ -1463,7 +1463,7 @@ YQPkgSelector::globalUpdatePkg( bool force )
 
     int count = _pkgList->globalSetPkgStatus( S_Update, force,
                                               true ); // countOnly
-    logInfo() << count << " pkgs found for update" << endl;
+    logInfo() << count << " pkgs found for update" << Qt::endl;
 
     if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
     {
@@ -1545,15 +1545,15 @@ YQPkgSelector::updateRepositoryUpgradeLabel()
 void
 YQPkgSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
 {
-    logDebug() << "link " << link << " clicked on label" << endl;
+    logDebug() << "link " << link << " clicked on label" << Qt::endl;
 
     QUrl url(link);
     if (url.scheme() == "repoupgradeadd")
     {
-        logDebug() << "looking for repo " << url.path() << endl;
+        logDebug() << "looking for repo " << url.path() << Qt::endl;
         std::string alias(url.path().remove(0,1).toStdString());
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
-        logDebug() << repo.name() << endl;
+        logDebug() << repo.name() << Qt::endl;
 
         if ( repo != zypp::Repository::noRepository )
         {
@@ -1571,7 +1571,7 @@ YQPkgSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
             zypp::getZYpp()->resolver()->removeUpgradeRepo(repo);
     }
     else
-        logDebug() << "unknown link operation " << url.scheme() << endl;
+        logDebug() << "unknown link operation " << url.scheme() << Qt::endl;
 
     resolveDependencies();
     emit refresh();
@@ -1709,7 +1709,7 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
         {
             subPkgs[ name ] = *it;
 
-            logDebug() << "Found subpackage: " << name << endl;
+            logDebug() << "Found subpackage: " << name << Qt::endl;
         }
     }
 
@@ -1735,7 +1735,7 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
                 case S_Taboo:
                 case S_Del:
                     // Don't install the subpackage
-                    logInfo() << "Ignoring unwanted subpackage " << subPkgName << endl;
+                    logInfo() << "Ignoring unwanted subpackage " << subPkgName << Qt::endl;
                     break;
 
                 case S_AutoInstall:
@@ -1747,7 +1747,7 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
                     if ( ! subPkg->installedObj() )
                     {
                         subPkg->setStatus( S_Install );
-                        logInfo() << "Installing subpackage " << subPkgName << endl;
+                        logInfo() << "Installing subpackage " << subPkgName << Qt::endl;
                     }
                     break;
 
@@ -1760,12 +1760,12 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
                     if ( ! subPkg->installedObj() )
                     {
                         subPkg->setStatus( S_Install );
-                        logInfo() << "Installing subpackage " << subPkgName << endl;
+                        logInfo() << "Installing subpackage " << subPkgName << Qt::endl;
                     }
                     else
                     {
                         subPkg->setStatus( S_Update );
-                        logInfo() << "Updating subpackage " << subPkgName << endl;
+                        logInfo() << "Updating subpackage " << subPkgName << Qt::endl;
                     }
                     break;
 
@@ -1795,7 +1795,7 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
 bool
 YQPkgSelector::anyRetractedPkgInstalled()
 {
-    logInfo() << "Checking for retracted installed packages..." << endl;
+    logInfo() << "Checking for retracted installed packages..." << Qt::endl;
 
     for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
     {
@@ -1803,7 +1803,7 @@ YQPkgSelector::anyRetractedPkgInstalled()
             return true;
     }
 
-    logInfo() << "No retracted packages installed." << endl;
+    logInfo() << "No retracted packages installed." << Qt::endl;
 
     return false;
 }
@@ -1907,7 +1907,7 @@ YQPkgSelector::write_etc_sysconfig_yast()
     }
     catch( const std::exception &e )
     {
-        logError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << endl;
+        logError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << Qt::endl;
     }
 }
 

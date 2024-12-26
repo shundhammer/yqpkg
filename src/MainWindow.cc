@@ -82,11 +82,11 @@ void MainWindow::showPage( QWidget * page )
         {
             logDebug() << "Showing page " << page->objectName()
                        << " class " << page->metaObject()->className()
-                       << endl;
+                       << Qt::endl;
         }
         else
         {
-            logDebug() << "Showing class " << page->metaObject()->className() << endl;
+            logDebug() << "Showing class " << page->metaObject()->className() << Qt::endl;
         }
 
         _layout->addWidget( page );
@@ -120,7 +120,7 @@ QWidget * MainWindow::findPage( const QString & pageName )
 {
     if ( pageName.isEmpty() )
     {
-        logError() << "Empty page name" << endl;
+        logError() << "Empty page name" << Qt::endl;
         return 0;
     }
 
@@ -135,7 +135,7 @@ QWidget * MainWindow::findPage( const QString & pageName )
             return page;
     }
 
-    logError() << "No page with name \"" << pageName << "\"" << endl;
+    logError() << "No page with name \"" << pageName << "\"" << Qt::endl;
 
     return 0;
 }
@@ -164,6 +164,6 @@ void MainWindow::closeEvent( QCloseEvent * event )
 {
     Q_UNUSED( event );
 
-    logInfo() << "Caught WM_CLOSE" << endl;
+    logInfo() << "Caught WM_CLOSE" << Qt::endl;
     // event->ignore();
 }
