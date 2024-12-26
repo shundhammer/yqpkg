@@ -63,7 +63,7 @@ YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
         _optFlags |= OptReadOnly;
     }
 
-    logDebug() << "_optFlags: 0x" << hex << _optFlags << dec << Qt::endl;
+    logDebug() << "_optFlags: 0x" << Qt::hex << _optFlags << Qt::dec << Qt::endl;
 
     createMainWin(); // Create this early to get early visual feedback
     logDebug() << "Creating YQPkgApplication done" << Qt::endl;
