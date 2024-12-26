@@ -227,6 +227,7 @@ protected:
     // Data members
 
     long                        _modeFlags;
+    bool                        _blockResolver;
     bool			_showChangesDialog;
     YQPkgConflictDialog *	_pkgConflictDialog;
     YQPkgDiskUsageList *	_diskUsageList;

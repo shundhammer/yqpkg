@@ -74,6 +74,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdatesFilterView.h"
 #include "YQPkgVersionsView.h"
+#include "YQSignalBlocker.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -114,6 +115,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
                               long      modeFlags )
     : YQPkgSelectorBase( parent, modeFlags )
 {
+    _blockResolver               = true;
     _showChangesDialog           = true;
     _autoDependenciesAction      = 0;
     _detailsViews                = 0;
@@ -241,14 +243,20 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         _filters->diskUsageList()->updateDiskUsage();
 
 
+    _blockResolver = false;
+
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
     if ( ! testMode() )
     {
         // Fire up the first dependency check in the main loop.
         // Don't do this right away - wait until all initializations are finished.
+#if 0
         QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
+#endif
 
+        if ( _pkgConflictDialog )
+            QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
     }
 #endif
 
@@ -434,12 +442,6 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     CHECK_NEW( _searchFilterView );
     _filters->addPage( _( "S&earch" ), _searchFilterView, "search" );
 
-
-#if 0
-    // DEBUG
-
-    _filters->addPage( _( "&Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", this ), "keywords" );
-#endif
 
     //
     // Status change view

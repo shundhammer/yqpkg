@@ -33,10 +33,12 @@
 #include <QPixmap>
 #include <QBoxLayout>
 
-#include "Logger.h"
+#include "BusyPopup.h"
 #include "Exception.h"
-#include "WindowSettings.h"
+#include "Logger.h"
+#include "MainWindow.h"
 #include "QY2LayoutUtils.h"
+#include "WindowSettings.h"
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
 
@@ -248,8 +250,14 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
 
 int
-YQPkgConflictDialog::verifySystem()
+YQPkgConflictDialog::verifySystem( bool showBusyPopup)
 {
+    BusyPopup * busyPopup = 0;
+
+    if ( showBusyPopup )
+        busyPopup = new BusyPopup( _( "Verifying System Dependencies" ),
+                                   MainWindow::instance() );
+
     prepareSolving();
     logInfo() << "Verifying all system dependencies..." << endl;
 
@@ -257,8 +265,19 @@ YQPkgConflictDialog::verifySystem()
 
     logDebug() << "System dependencies verified." << endl;
 
+    if ( busyPopup )
+        delete busyPopup;
+
     return processSolverResult( success );
 }
+
+
+int
+YQPkgConflictDialog::verifySystemWithBusyPopup()
+{
+    return verifySystem( true ); // showBusyPopup
+}
+
 
 
 int

@@ -45,6 +45,7 @@ YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent,
                                       long      modeFlags )
     : QFrame( parent )
     , _modeFlags( modeFlags )
+    , _blockResolver( true )
 {
     _showChangesDialog          = false;
     _pkgConflictDialog          = 0;
@@ -68,18 +69,15 @@ YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent,
 
     _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
 
-    // FIXME: Use a normal Qt connect(), not this obfuscated C++ contest winner.
-    // The logger is logging connect() problems to stderr now, so there is no reason
-    // for this ugliness.
-
-    connect( _actionResetIgnoredDependencyProblems, &QAction::triggered,
-             this,                                  &YQPkgSelectorBase::resetIgnoredDependencyProblems );
+    connect( _actionResetIgnoredDependencyProblems, SIGNAL( triggered() ),
+             this,                                  SLOT  ( resetIgnoredDependencyProblems() ) );
 #endif
 
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Patch    >();
 
+    _blockResolver = false;
     logInfo() << "PackageSelectorBase init done" << endl;
 }
 
@@ -100,10 +98,13 @@ void YQPkgSelectorBase::reset()
 
 int YQPkgSelectorBase::resolveDependencies()
 {
+    if ( _blockResolver )
+        return QDialog::Rejected;
+
     if ( ! _pkgConflictDialog )
     {
         logError() << "No package conflict dialog existing" << endl;
-        return QDialog::Accepted;
+        return QDialog::Rejected;
     }
 
 
@@ -407,7 +408,7 @@ bool YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 void YQPkgSelectorBase::notImplemented()
 {
     QMessageBox::information( this, "",
-                              _( "Not implemented yet. Sorry." ),
+                              _( "Not implemented yet" ),
                               QMessageBox::Ok );
 }
 

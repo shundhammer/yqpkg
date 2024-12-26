@@ -25,7 +25,7 @@ set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 set( SOURCES
 
   main.cc
-  # BusyPopup.cc
+  BusyPopup.cc
   Logger.cc
   Exception.cc
   FSize.cc

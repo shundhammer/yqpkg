@@ -114,7 +114,12 @@ public slots:
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-    int verifySystem();
+    int verifySystem( bool showBusyPopup = false );
+
+    /**
+     * The same as verifySystem(), but with a busy popup.
+     **/
+    int verifySystemWithBusyPopup();
 
     /**
      * Update all installed packages that can be updated without a problem.
