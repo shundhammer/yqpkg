@@ -13,252 +13,218 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="outerLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
-    <number>12</number>
+    <number>8</number>
    </property>
    <property name="leftMargin">
-    <number>0</number>
+    <number>15</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>24</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>15</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>8</number>
    </property>
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+    <layout class="QHBoxLayout" name="searchTextHBox">
+     <item>
+      <widget class="QLineEdit" name="searchText">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="placeholderText">
+        <string>Search Text or Pattern</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="searchButton">
+       <property name="text">
+        <string>&amp;Search</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="vSpacer1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="lineWidth">
-      <number>0</number>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
      </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>298</width>
+       <height>10</height>
+      </size>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>379</width>
-        <height>738</height>
-       </rect>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="searchInGroupBox">
+     <property name="title">
+      <string>Search In</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>8</number>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="spacing">
-        <number>10</number>
-       </property>
-       <property name="leftMargin">
-        <number>15</number>
-       </property>
-       <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
-        <number>15</number>
-       </property>
-       <property name="bottomMargin">
-        <number>10</number>
-       </property>
-       <item>
-        <layout class="QHBoxLayout" name="searchTextHBox">
-         <item>
-          <widget class="QLineEdit" name="searchText">
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="placeholderText">
-            <string>Search Text or Pattern</string>
-           </property>
-           <property name="clearButtonEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="searchButton">
-           <property name="text">
-            <string>&amp;Search</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="vSpacer1">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>17</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="searchInGroupBox">
-         <property name="title">
-          <string>Search In</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="searchInName">
-            <property name="text">
-             <string>N&amp;ame</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="searchInSummary">
-            <property name="text">
-             <string>Su&amp;mmary</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="searchInDescription">
-            <property name="text">
-             <string>D&amp;escription</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="searchInProvides">
-            <property name="text">
-             <string>RPM P&amp;rovides</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="searchInRequires">
-            <property name="text">
-             <string>RPM Re&amp;quires</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="searchInFileList">
-            <property name="text">
-             <string>File &amp;List</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="vSpacer2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>17</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="searchModeVBox">
-         <item>
-          <widget class="QLabel" name="searchModeCaption">
-           <property name="text">
-            <string>Searc&amp;h Mode:</string>
-           </property>
-           <property name="buddy">
-            <cstring>searchMode</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="searchMode">
-           <item>
-            <property name="text">
-             <string>Auto</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Contains</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Starts With</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Exact Match</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Wildcards</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Regular Expression</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="detectedAutoMode">
-         <property name="text">
-          <string>Detected:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="caseSensitive">
-         <property name="text">
-          <string>Case Sensiti&amp;ve</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="vSpacerBottom">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>17</width>
-           <height>240</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
+      <item>
+       <widget class="QCheckBox" name="searchInName">
+        <property name="text">
+         <string>N&amp;ame</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="searchInSummary">
+        <property name="text">
+         <string>Su&amp;mmary</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="searchInDescription">
+        <property name="text">
+         <string>D&amp;escription</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="searchInProvides">
+        <property name="text">
+         <string>RPM P&amp;rovides</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="searchInRequires">
+        <property name="text">
+         <string>RPM Re&amp;quires</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="searchInFileList">
+        <property name="text">
+         <string>File &amp;List</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="vSpacer2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>298</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="searchModeVBox">
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <property name="bottomMargin">
+      <number>8</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="searchModeCaption">
+       <property name="text">
+        <string>Searc&amp;h Mode:</string>
+       </property>
+       <property name="buddy">
+        <cstring>searchMode</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="searchMode">
+       <item>
+        <property name="text">
+         <string>Auto</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Contains</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Starts With</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Exact Match</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Wildcards</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Regular Expression</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="detectedAutoMode">
+       <property name="text">
+        <string>Detected:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="caseSensitive">
+     <property name="text">
+      <string>Case Sensiti&amp;ve</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="vSpacerBottom">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>298</width>
+       <height>310</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

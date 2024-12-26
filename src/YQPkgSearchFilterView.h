@@ -62,12 +62,6 @@ public:
     virtual ~YQPkgSearchFilterView();
 
     /**
-     * Returns the minimum size required for this widget.
-     * Inherited from QWidget.
-     **/
-    virtual QSize minimumSizeHint() const;
-
-    /**
      * Check one ResObject against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
