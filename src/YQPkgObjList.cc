@@ -109,7 +109,7 @@ YQPkgObjList::addPkgObjItem( ZyppSel selectable, ZyppObj zyppObj )
 {
     if ( ! selectable )
     {
-        logError() << "Null zypp::ui::Selectable!" << endl;
+        logError() << "Null zypp::ui::Selectable!" << Qt::endl;
         return;
     }
 
@@ -148,7 +148,7 @@ YQPkgObjList::pkgObjClicked( int               button,
 
     if ( item )
     {
-        // logDebug() << "CLICKED: %s", item->zyppObj()->name().c_str()) << endl;
+        // logDebug() << "CLICKED: %s", item->zyppObj()->name().c_str()) << Qt::endl;
 
         if ( button == Qt::LeftButton )
         {
@@ -186,7 +186,7 @@ YQPkgObjList::clear()
 void
 YQPkgObjList::resetContent()
 {
-    logDebug() << endl;
+    logDebug() << Qt::endl;
     clear();
 }
 
@@ -701,7 +701,7 @@ void
 YQPkgObjList::applyExcludeRules()
 {
     _excludedItemsCount = 0;
-    // logDebug() << "Applying exclude rules" << endl;
+    // logDebug() << "Applying exclude rules" << Qt::endl;
     QTreeWidgetItemIterator listView_it( this );
 
     while ( *listView_it )
@@ -724,7 +724,7 @@ YQPkgObjList::logExcludeStatistics()
 {
     if ( _excludedItemsCount > 0 )
     {
-        logVerbose() << _excludedItemsCount << " packages excluded" << endl;
+        logVerbose() << _excludedItemsCount << " packages excluded" << Qt::endl;
 
         for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
               rule_it != _excludeRules.end();
@@ -736,7 +736,7 @@ YQPkgObjList::logExcludeStatistics()
             {
                 logDebug() << "Active exclude rule: \""
                            << rule->regexp().pattern() << "\""
-                           << endl;
+                           << Qt::endl;
             }
         }
     }
@@ -782,11 +782,11 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
             {
                 logDebug() << "Rule \"" << matchingRule->regexp().pattern()
                            << "\" matches: Excluding " << item->zyppObj()->name()
-                           << endl;
+                           << Qt::endl;
             }
             else
             {
-                logDebug() << "Un-excluding " << item->zyppObj()->name() << endl;
+                logDebug() << "Un-excluding " << item->zyppObj()->name() << Qt::endl;
             }
 #endif
         }
@@ -1030,7 +1030,7 @@ YQPkgObjListItem::status() const
 {
     if ( ! selectable() )
     {
-        logError() << "No selectable" << endl;
+        logError() << "No selectable" << Qt::endl;
         return S_NoInst;
     }
 
@@ -1144,7 +1144,7 @@ YQPkgObjListItem::cycleStatus()
             }
             else
             {
-                logWarning() << "No candidate for " << selectable()->theObj()->name() << endl;
+                logWarning() << "No candidate for " << selectable()->theObj()->name() << Qt::endl;
                 newStatus = S_NoInst;
             }
             break;
@@ -1203,7 +1203,7 @@ YQPkgObjListItem::showNotifyTexts( ZyppStatus status )
 
     if ( ! text.empty() )
     {
-        logDebug() << "Showing notify text" << endl;
+        logDebug() << "Showing notify text" << Qt::endl;
         YQPkgTextDialog::showText( _pkgObjList, selectable(), text );
     }
 }
@@ -1247,14 +1247,14 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
     if ( licenseText.empty() )
         return true;
 
-    logDebug() << "Showing license agreement for " << sel->name() << endl;
+    logDebug() << "Showing license agreement for " << sel->name() << Qt::endl;
 
     bool confirmed = YQPkgTextDialog::confirmText( 0, // parent
                                                    sel, licenseText );
 
     if ( confirmed )
     {
-        logInfo() << "User confirmed license agreement for " << sel->name() << endl;
+        logInfo() << "User confirmed license agreement for " << sel->name() << Qt::endl;
         sel->setLicenceConfirmed( true );
     }
     else
@@ -1269,7 +1269,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 
                 logWarning() << "User rejected license agreement for " << sel->name()
                              << " - setting to TABOO"
-                             << endl;
+                             << Qt::endl;
 
                 sel->setStatus( S_Taboo );
                 break;
@@ -1280,7 +1280,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 
                 logWarning() << "User rejected license agreement for " << sel->name()
                              << "  - setting to PROTECTED"
-                             << endl;
+                             << Qt::endl;
 
                 sel->setStatus( S_Protected );
                 // S_Keep wouldn't be good enough: The next solver run might
@@ -1432,7 +1432,7 @@ YQPkgObjList::ExcludeRule::enable( bool enable )
 #if VERBOSE_EXCLUDE_RULES
     logDebug() << ( enable ? "Enabling" : "Disabling" )
                << " exclude rule " << _regexp.pattern()
-               << endl;
+               << Qt::endl;
 #endif
 }
 

@@ -158,7 +158,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( ! file.open(QIODevice::WriteOnly) )
     {
-        logError() << "Can't open file " << filename << endl;
+        logError() << "Can't open file " << filename << Qt::endl;
 
         if ( interactive )
         {
@@ -347,7 +347,7 @@ YQPkgConflict::userSelectedResolution()
         if ( button->isChecked() )
         {
             ZyppSolution solution = it.value();
-            logInfo() << "User selected resolution \"" << solution->description() << "\"" << endl;
+            logInfo() << "User selected resolution \"" << solution->description() << "\"" << Qt::endl;
 
             return solution;
         }
