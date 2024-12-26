@@ -25,6 +25,7 @@ PkgCommitCallbacks::PkgCommitCallbacks()
     _pkgDownloadCallback.connect();
     _pkgInstallCallback.connect();
     _pkgRemoveCallback.connect();
+    _fileConflictsCheckCallback.connect();
 }
 
 PkgCommitCallbacks::~PkgCommitCallbacks()

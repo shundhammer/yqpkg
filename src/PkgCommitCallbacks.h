@@ -24,6 +24,7 @@
 #include <zypp/Resolvable.h>
 #include <zypp/Url.h>
 #include <zypp/ZYppCallbacks.h>
+#include <zypp/sat/FileConflicts.h>
 
 #include "utf8.h"
 #include "YQZypp.h"     // ZyppRes
@@ -375,6 +376,114 @@ struct PkgRemoveCallback:
 }; // PkgRemoveCallback
 
 
+
+
+struct FileConflictsCheckCallback:
+    public zypp::callback::ReceiveReport<zypp::target::FindFileConflictstReport>
+{
+    // See also the zypper sources in src/callbacks/rpm.h
+
+    /**
+     * Starting the file conflicts check.
+     *
+     * Return 'true' to continue, 'false' to abort.
+     **/
+    virtual bool start( const zypp::ProgressData & progress )
+        {
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
+        }
+
+    /**
+     * Reporting progress during the file conflicts check.
+     *
+     * 'skippedSolvables' is the queue of solvables that cannot be checked,
+     * e.g. because they are not yet downloaded (not downloading all in
+     * advance).
+     *
+     * Return 'true' to continue, 'false' to abort.
+     **/
+    virtual bool progress( const zypp::ProgressData & progress,
+                           const zypp::sat::Queue &   skippedSolvables )
+        {
+            Q_UNUSED( skippedSolvables );
+
+            // For zypp::ProgressData, see
+            //
+            //   /usr/include/zypp-core/ui/progressdata.h
+            //
+            // Strong alcoholic beverage strongly advised.
+            //
+            // Of course everything is ordered there in order of increasing
+            // importance with the important things carefully saved until the
+            // end to maintain suspense.
+            //
+            // Of course there are things like internal class definitions and
+            // internal typedefs like value_type (long long, of course, just in
+            // case we have to report a flight to the moon with millimeter
+            // precision), and of course receiver function types and whatnot.
+            //
+            // Finally, near the end, there are the important methods: There is
+            // progress.val(), and it can basically be any numeric value
+            // between progress.min() and progress.max(), but
+            // progress.reportValue() gives a percentage (0..100) or -1 if it's
+            // only some "keep alive" ping with no known numeric value.
+            //
+            // Lesser men would have called that function something like
+            // 'percent()' or 'percentage()', but that might pose a real danger
+            // that somebody might understand the intent behind it all, and we
+            // can't have that, can we?
+            //
+            // This was the result of a two-hour hunt through the sources of
+            // yast-pkg-bindings and zypper and trying to find out where the
+            // hell that Out::PercentBar comes from in the zypper sources where
+            // this zypp::ProgressData is used.
+            //
+            // Of course it's not in the zypper sources (that would have been
+            // too easy), but in /usr/include/zypp-tui/output/Out.h; where else?
+#if 0
+            // This little nugget of information cost 2 hours of lifetime, two
+            // years worth of life energy and a lot of screaming at the
+            // computer.
+            //
+            // It wasn't its fault, of course, but it was conveniently there to
+            // scream at; unlike certain other people.
+
+            int percent = progress.reportValue();
+
+            doSomething( percent );
+#endif
+
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
+        }
+
+    /**
+     * The result of the file conflicts check, which implies that the check is
+     * now finished.
+     *
+     * 'skippedSolvables' is the queue of solvables that cannot be checked,
+     * e.g. because they are not yet downloaded (not downloading all in
+     * advance).
+     *
+     * 'conflicts' contains the problems found.
+     *
+     * Return 'true' to continue, 'false' to abort. This callback automatically
+     * returns 'false' (abort) if any conflicts were found.
+     **/
+    virtual bool result( const zypp::ProgressData &       progress,
+                         const zypp::sat::Queue &         skippedSolvables,
+                         const zypp::sat::FileConflicts & conflicts )
+        {
+            Q_UNUSED( skippedSolvables );
+
+            if ( ! conflicts.empty() )
+                return false; // abort
+
+            return ! PkgCommitSignalForwarder::instance()->doAbort();
+        }
+
+}; // FileConflictsCheckCallback
+
+
 //
 //----------------------------------------------------------------------
 //
@@ -410,9 +519,10 @@ public:
 
 protected:
 
-    PkgDownloadCallback _pkgDownloadCallback;
-    PkgInstallCallback  _pkgInstallCallback;
-    PkgRemoveCallback   _pkgRemoveCallback;
+    PkgDownloadCallback        _pkgDownloadCallback;
+    PkgInstallCallback         _pkgInstallCallback;
+    PkgRemoveCallback          _pkgRemoveCallback;
+    FileConflictsCheckCallback _fileConflictsCheckCallback;
 };
 
 
