@@ -34,14 +34,9 @@
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-static void qt_logger( QtMsgType msgType, const char *msg);
-#else
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
 		       const QString & msg );
-#endif
-
 
 Logger * Logger::_defaultLogger = 0;
 QString  Logger::_lastLogDir;
@@ -91,11 +86,7 @@ Logger::~Logger()
     if ( this == _defaultLogger )
     {
 	_defaultLogger = 0;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-	qInstallMsgHandler(0);
-#else
 	qInstallMessageHandler(0); // Restore default message handler
-#endif
     }
 }
 
@@ -157,11 +148,7 @@ void Logger::openLogFile( const QString & filename )
 void Logger::setDefaultLogger()
 {
     _defaultLogger = this;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    qInstallMsgHandler( qt_logger );
-#else
     qInstallMessageHandler( qt_logger );
-#endif
 }
 
 
@@ -316,39 +303,12 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
 	case QtWarningMsg:  severity = LogSeverityWarning; break;
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
-#if QT_VERSION >= 0x050500
 	case QtInfoMsg:	    severity = LogSeverityInfo;	   break;
-#endif
     }
 
     return severity;
 }
 
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )) // Qt 4.x
-
-static void qt_logger( QtMsgType msgType, const char *msg)
-{
-    Logger::log( 0, // use default logger
-		 "[Qt]", 0, "", // file, line, function
-		 toLogSeverity( msgType ) )
-	<< msg << endl;
-
-    if ( msgType == QtFatalMsg )
-    {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	abort();
-    }
-
-    if ( msgType == QtWarningMsg &&
-	 QString( msg ).contains( "cannot connect to X server" ) )
-    {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	exit( 1 );
-    }
-}
-
-#else // Qt 5.x
 
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
@@ -448,8 +408,6 @@ static void qt_logger( QtMsgType msgType,
         fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
     }
 }
-
-#endif // Qt 5.x
 
 
 QString Logger::userName()

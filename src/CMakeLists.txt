@@ -14,7 +14,7 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 set( TARGETBIN yqpkg )
 
-find_package( Qt5 COMPONENTS Core Gui Widgets REQUIRED )
+find_package( Qt5 5.15 COMPONENTS Core Gui Widgets REQUIRED )
 # find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
