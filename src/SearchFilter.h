@@ -14,7 +14,7 @@
 #include <string>
 
 #include <QString>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 
 
@@ -65,10 +65,10 @@ public:
     const QString & pattern() const { return _pattern; }
 
     /**
-     * Return the regexp. This is only meaningful in filter modes RegExp
+     * Return the regular expression. This is only meaningful in filter modes RegExp
      * and Wildcard.
      **/
-    const QRegExp & regexp() const { return _regexp; }
+    const QRegularExpression & regexp() const { return _regexp; }
 
     /**
      * Return the filter mode.
@@ -79,7 +79,7 @@ public:
      * Return 'true' if the matching is case sensitive, 'false if not.
      **/
     bool isCaseSensitive() const
-        { return _regexp.caseSensitivity() == Qt::CaseSensitive; }
+        { return ((_regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption) == 0); }
 
     /**
      * Set the match to case sensitive ('true') or case insensitive
@@ -112,7 +112,7 @@ protected:
     // Data members
 
     QString    _pattern;
-    QRegExp    _regexp;
+    QRegularExpression _regexp;
     FilterMode _filterMode;
     FilterMode _defaultFilterMode;
 
