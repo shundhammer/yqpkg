@@ -157,11 +157,7 @@ YQPkgDiskUsageList::sizeHint() const
 {
     QFontMetrics fontMetrics( font() );
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     return QSize( fontMetrics.horizontalAdvance( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
-#else
-    return QSize( fontMetrics.width( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
-#endif
 }
 
 
