@@ -102,7 +102,9 @@ void YQPkgConflictList::relayout()
     // For some weird reason, the layout's minSize is still 18x18 even after
     // 3000 pixels inserted, so we have to do the math on our own.
 
-    QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
+    int left = 0, top = 0, right = 0, bottom = 0;
+    _layout->getContentsMargins(&left, &top, &right, &bottom);
+    QSize minSize = QSize( left + right, top + bottom );
 
     YQPkgConflict * conflict;
 
