@@ -28,9 +28,9 @@ SearchFilter::SearchFilter( const QString & pattern,
         guessFilterMode();
 
     if ( _filterMode == Wildcard )
-        _regexp.setPatternSyntax( QRegExp::Wildcard );
+        _regexp.setPattern( QRegularExpression::wildcardToRegularExpression( _regexp.pattern() ) );
 
-    _regexp.setCaseSensitivity( Qt::CaseInsensitive );
+    _regexp.setPatternOptions( QRegularExpression::CaseInsensitiveOption );
 }
 
 
@@ -94,14 +94,16 @@ SearchFilter::guessFilterMode( const QString & pattern )
 
 bool SearchFilter::matches( const QString & str ) const
 {
-    Qt::CaseSensitivity caseSensitivity = _regexp.caseSensitivity();
+    Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive;
+    if (( _regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption ) == 0 )
+      caseSensitivity = Qt::CaseSensitive;
 
     switch ( _filterMode )
     {
         case Contains:   return str.contains  ( _pattern, caseSensitivity );
         case StartsWith: return str.startsWith( _pattern, caseSensitivity );
         case ExactMatch: return QString::compare( str, _pattern, caseSensitivity ) == 0;
-        case Wildcard:   return _regexp.exactMatch( str );
+        case Wildcard:   return _regexp.match( str ).hasMatch();
         case RegExp:     return str.contains( _regexp );
         case SelectAll:  return true;
         case Auto:
@@ -123,8 +125,10 @@ bool SearchFilter::matches( const std::string & str ) const
 
 void SearchFilter::setCaseSensitive( bool sensitive )
 {
-    _regexp.setCaseSensitivity( sensitive ?
-                                Qt::CaseSensitive : Qt::CaseInsensitive );
+    if (sensitive)
+      _regexp.setPatternOptions( QRegularExpression::NoPatternOption );
+    else
+      _regexp.setPatternOptions( QRegularExpression::CaseInsensitiveOption );
 }
 
 
