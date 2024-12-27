@@ -35,7 +35,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString & label,
     : QWidget(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->setMargin( 0 );
+    vbox->setContentsMargins( 0, 0, 0, 0 );
 
     this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 

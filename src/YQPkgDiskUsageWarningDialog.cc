@@ -51,7 +51,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *       parent
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     layout->setSpacing( SPACING );
-    layout->setMargin ( MARGIN  );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     setLayout(layout);
 
     // Layout for icon and message
@@ -91,7 +91,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *       parent
     hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
+    hbox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( hbox );
 
 

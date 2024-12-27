@@ -213,7 +213,7 @@ YQPkgConflict::YQPkgConflict( QWidget *   parent,
 {
     _layout = new QVBoxLayout( this );
     _layout->setSpacing( 0 );
-    _layout->setMargin( 0 );
+    _layout->setContentsMargins( 0, 0, 0, 0 );
 
     formatHeading();
 
