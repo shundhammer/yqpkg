@@ -850,7 +850,7 @@ YQPkgSelector::addMenus()
                                                 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
     _showDevelAction->setCheckable(true);
 
-    _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
+    _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
     CHECK_NEW( _excludeDevelPkgs );
     _excludeDevelPkgs->enable( false );
 
@@ -858,7 +858,7 @@ YQPkgSelector::addMenus()
     _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
                                                 this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
-    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
+    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
     CHECK_NEW( _excludeDebugInfoPkgs );
     _excludeDebugInfoPkgs->enable( false );
 
@@ -1784,7 +1784,7 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
 
     YQPkgChangesDialog::showChangesDialog( this,
                                            _( "Added Subpackages:" ),
-                                           QRegExp( ".*" + suffix + "$" ),
+                                           QRegularExpression( ".*" + suffix + "$" ),
                                            _( "&OK" ),
                                            QString(),                   // rejectButtonLabel
                                            YQPkgChangesDialog::FilterAutomatic,

@@ -18,7 +18,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSettings>
 
 #include <zypp/VendorSupportOptions.h>
@@ -33,7 +33,7 @@
 #include "YQPkgDescriptionView.h"
 
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
-#define DESKTOP_FILE_DIR        "\\/share\\/applications\\/.*\\.desktop$"       // RegExp
+#define DESKTOP_FILE_DIR        "\\/share\\/applications\\/.*\\.desktop$"       // RegularExpression
 
 
 using std::list;
@@ -301,7 +301,7 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
     {
         QString line = fromUTF8( *it );
 
-        if ( line.contains( QRegExp( DESKTOP_FILE_DIR ) ) )
+        if ( line.contains( QRegularExpression( DESKTOP_FILE_DIR ) ) )
             desktopFiles << line;
     }
 
@@ -318,9 +318,9 @@ void YQPkgDescriptionView::initLang()
         _langWithCountry = lang_cstr;
 
          // remove .utf8 / @euro etc.
-        _langWithCountry.replace( QRegExp( "[@\\.].*$" ), "" );
+        _langWithCountry.replace( QRegularExpression( "[@\\.].*$" ), "" );
 
         _lang = _langWithCountry;
-        _lang.replace( QRegExp( "_.*$" ), "" ); // remove _DE etc.
+        _lang.replace( QRegularExpression( "_.*$" ), "" ); // remove _DE etc.
     }
 }

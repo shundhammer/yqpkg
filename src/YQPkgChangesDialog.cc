@@ -144,7 +144,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *       parent,
 void
 YQPkgChangesDialog::filter( Filters flt )
 {
-    filter( QRegExp( "" ), flt );
+    filter( QRegularExpression( "" ), flt );
 }
 
 
@@ -170,12 +170,12 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 void
 YQPkgChangesDialog::setFilter( Filters filters )
 {
-    setFilter( QRegExp( "" ), filters );
+    setFilter( QRegularExpression( "" ), filters );
 }
 
 
 void
-YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
+YQPkgChangesDialog::setFilter( const QRegularExpression & regexp, Filters flt )
 {
     logInfo() << "filter changed to: " << flt << endl;
 
@@ -212,7 +212,7 @@ YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
 
 
 void
-YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
+YQPkgChangesDialog::filter( const QRegularExpression & regexp, Filters flt )
 {
     busyCursor();
     _pkgList->clear();
@@ -241,8 +241,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
                      modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
                  ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
             {
-                if ( regexp.isEmpty()
-                     || regexp.indexIn( selectable->name().c_str() ) >= 0 )
+                if ( regexp.match( selectable->name().c_str() ).hasMatch() )
                 {
                     if ( ! contains( ignoredNames, selectable->name() ) )
                     {
@@ -310,7 +309,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 bool
 YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
                                        const QString &  message,
-                                       const QRegExp &  regexp,
+                                       const QRegularExpression & regexp,
                                        const QString &  acceptButtonLabel,
                                        const QString &  rejectButtonLabel,
                                        Filters          flt,
