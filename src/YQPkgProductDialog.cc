@@ -15,12 +15,11 @@
  */
 
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QList>
 #include <QPushButton>
+#include <QScreen>
 #include <QSplitter>
 #include <QTabWidget>
 
@@ -130,7 +129,7 @@ YQPkgProductDialog::polish()
 QSize
 YQPkgProductDialog::sizeHint() const
 {
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QRect available = this->screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
     size = size.boundedTo( QSize( available.width(), available.height() ) );
 
