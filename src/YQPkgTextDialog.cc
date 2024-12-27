@@ -21,7 +21,6 @@
 #include <QKeyEvent>
 #include <QLayout>
 #include <QPushButton>
-#include <QRegExp>
 #include <QTextBrowser>
 
 #include "Exception.h"
@@ -259,9 +258,9 @@ YQPkgTextDialog::htmlEscape( const QString & plainText )
     QString html = plainText;
     // logDebug() << "Escaping \"" << plainText << "\"" << endl;
 
-    html.replace( QRegExp( "&" ), "&amp;" );
-    html.replace( QRegExp( "<" ), "&lt;"  );
-    html.replace( QRegExp( ">" ), "&gt;"  );
+    html.replace( "&", "&amp;" );
+    html.replace( "<", "&lt;" );
+    html.replace( ">", "&gt;" );
 
     return html;
 }

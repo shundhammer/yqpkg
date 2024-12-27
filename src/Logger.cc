@@ -483,7 +483,7 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-	oldName.remove( QRegExp( "\\.log$" ) );
+        oldName.truncate( sizeof( ".log" ) );
 
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
@@ -496,7 +496,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-	pattern.remove( QRegExp( "\\.log$" ) );
+        pattern.truncate( sizeof( ".log" ) );
 
     pattern += "-??.old";
 
