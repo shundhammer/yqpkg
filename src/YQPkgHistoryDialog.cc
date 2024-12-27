@@ -64,7 +64,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout( layout );
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 

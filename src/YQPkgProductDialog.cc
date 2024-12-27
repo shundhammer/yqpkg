@@ -54,7 +54,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     Q_CHECK_PTR( layout );
     setLayout(layout);
     layout->setSpacing( SPACING );
-    layout->setMargin ( MARGIN  );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
 
     // VBox for splitter
 
@@ -95,7 +95,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
+    hbox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( hbox );
     hbox->addStretch();
 

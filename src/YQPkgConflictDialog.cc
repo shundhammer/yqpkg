@@ -88,7 +88,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     Q_CHECK_PTR( layout );
 
     setLayout(layout);
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 
@@ -110,7 +110,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     Q_CHECK_PTR( buttonBox );
 
     buttonBox->setSpacing( SPACING );
-    buttonBox->setMargin ( MARGIN  );
+    buttonBox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
 

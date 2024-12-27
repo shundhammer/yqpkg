@@ -56,7 +56,7 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout(layout);
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 
@@ -88,7 +88,7 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
+    hbox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( hbox );
 
     // "OK" button
