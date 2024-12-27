@@ -57,6 +57,8 @@ _You've been warned._
 
 ## The Name: YQPkg
 
+_(Pronounced Y-Q-Package)_
+
 YQPkg is just a working title. Suggestions for a better one are welcome; see the
 [naming suggestions issue](https://github.com/shundhammer/yqpkg/issues/19).
 
