@@ -34,6 +34,7 @@ set( SOURCES
   PkgCommitPage.cc
   PkgTasks.cc
   PkgTaskListWidget.cc
+  ProgressDialog.cc
   SearchFilter.cc
   SummaryPage.cc
   WindowSettings.cc
@@ -109,6 +110,7 @@ set( QRC_FILES icons.qrc ) # Compiled-in resources: icons
 
 set( UI_FILES
      pkg-commit-page.ui
+     progress-dialog.ui
      search-filter-view.ui
      summary-page.ui
      updates-filter-view.ui

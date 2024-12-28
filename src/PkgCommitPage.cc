@@ -29,6 +29,7 @@
 #include "Logger.h"
 #include "PkgTasks.h"
 #include "PkgTaskListWidget.h"
+#include "ProgressDialog.h"
 #include "YQPkgApplication.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
@@ -49,6 +50,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     , _pkgTasks( 0 )
     , _showingDetails( false )
     , _startedInstallingPkg( false )
+    , _fileConflictsProgressDialog( 0 )
 {
     CHECK_PTR( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -76,6 +78,9 @@ PkgCommitPage::~PkgCommitPage()
     writeSettings();
     delete _ui;
     // PkgCommitSignalForwarder::instance()->deleteLater();
+
+    // don't delete _fileConflictsProgressDialog:
+    // It has the main window as its parent.
 
     _instance = 0;
 }
@@ -493,6 +498,19 @@ bool PkgCommitPage::updateTotalProgressBar()
     }
 
     return didUpdate;
+}
+
+
+ProgressDialog *
+PkgCommitPage::fileConflictsProgressDialog()
+{
+    if ( ! _fileConflictsProgressDialog )
+    {
+        _fileConflictsProgressDialog =
+            new ProgressDialog( _( "Checking File Conflicts..." ) );
+    }
+
+    return _fileConflictsProgressDialog;
 }
 
 

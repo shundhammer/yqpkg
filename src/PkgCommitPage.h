@@ -37,6 +37,7 @@
 
 
 class PkgTasks;
+class ProgressDialog;
 using zypp::ByteCount;
 
 
@@ -307,6 +308,14 @@ protected:
     bool updateTotalProgressBar();
 
     /**
+     * Return the (non-modal!) file conflicts check progress dialog. Create it
+     * if it doesn't exist yet.
+     *
+     * Not to confuse with the total progress bar of the commit page.
+     **/
+    ProgressDialog * fileConflictsProgressDialog();
+
+    /**
      * The common part of pkgInstallStart() and pkgRemoveStart() /
      * ...progress(), ...End(), ...Error().
      *
@@ -339,6 +348,7 @@ protected:
     PkgTasks *          _pkgTasks;
     bool                _showingDetails;
     bool                _startedInstallingPkg;
+    ProgressDialog *    _fileConflictsProgressDialog;
 
     ByteCount           _totalDownloadSize;
     ByteCount           _totalInstalledSize;
