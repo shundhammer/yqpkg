@@ -24,7 +24,6 @@
 #include <QLineEdit>
 #include <QLayout>
 #include <QMessageBox>
-#include <QProgressDialog>
 #include <QPushButton>
 #include <QSettings>
 
