@@ -49,7 +49,8 @@ void SearchFilter::guessFilterMode()
 
     if ( _filterMode == ExactMatch && _pattern.startsWith( "=" ) )
     {
-        _pattern.remove( QRegExp( "^=" ) );
+        // remove leading equals sign
+        _pattern.remove( 0, 1 ); // FIXME: Use _pattern.removeFirst() once Qt >= 6.5 is required
         _regexp.setPattern( _pattern );
     }
 }
