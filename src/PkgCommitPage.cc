@@ -953,8 +953,15 @@ void PkgCommitPage::fileConflictsCheckStart()
     logDebug() << endl;
 
     fileConflictsProgressDialog()->reset();
-    fileConflictsProgressDialog()->show();
-    processEvents();
+    _fileConflictsCheckTimer.start();
+
+    // Not showing the progress dialog yet:
+    //
+    // This is done in ..CheckProgress() only after a certain time has passed
+    // to avoid excessive flicker: Most file conflicts checks only last under
+    // one second, and we don't want to pop up and then immediately pop down
+    // that progress dialog. Only show it if it's worthwhile; if it takes
+    // longer than usual.
 }
 
 
@@ -962,12 +969,32 @@ void PkgCommitPage::fileConflictsCheckProgress( int percent )
 {
     logDebug() << percent << "%" << endl;
 
+    bool doProcessEvents = false;
+
+    // Show the progress dialog if it's not shown yet
+
+    if ( ! fileConflictsProgressDialog()->isVisible() &&
+         _fileConflictsCheckTimer.isValid()  &&
+         _fileConflictsCheckTimer.elapsed() > 1500 ) // millisec
+    {
+        logDebug() << "Showing the progress dialog" << endl;
+
+        fileConflictsProgressDialog()->show();
+        _fileConflictsCheckTimer.invalidate();
+        doProcessEvents = true;
+    }
+
+
+    // Update the progress bar
+
     if ( percent > fileConflictsProgressDialog()->value() )
-        // Avoid pointless expensive event processing
     {
         fileConflictsProgressDialog()->setValue( percent );
-        processEvents();
+        doProcessEvents = true;
     }
+
+    if ( doProcessEvents )
+        processEvents();
 }
 
 

@@ -19,7 +19,9 @@
 #define PkgCommitPage_h
 
 
+#include <QElapsedTimer>
 #include <QWidget>
+
 #include <zypp/ZYppCommitPolicy.h>
 #include <zypp/ByteCount.h>
 
@@ -353,6 +355,7 @@ protected:
     bool                _showingDetails;
     bool                _startedInstallingPkg;
     ProgressDialog *    _fileConflictsProgressDialog;
+    QElapsedTimer       _fileConflictsCheckTimer;
 
     ByteCount           _totalDownloadSize;
     ByteCount           _totalInstalledSize;
