@@ -27,6 +27,7 @@
 #include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "PkgTasks.h"
 #include "PkgTaskListWidget.h"
 #include "ProgressDialog.h"
@@ -967,7 +968,7 @@ void PkgCommitPage::fileConflictsCheckStart()
 
 void PkgCommitPage::fileConflictsCheckProgress( int percent )
 {
-    logDebug() << percent << "%" << endl;
+    logVerbose() << percent << "%" << endl;
 
     bool doProcessEvents = false;
 
@@ -998,14 +999,27 @@ void PkgCommitPage::fileConflictsCheckProgress( int percent )
 }
 
 
-void PkgCommitPage::fileConflictsCheckResult()
+void PkgCommitPage::fileConflictsCheckResult( const QStringList & conflicts )
 {
     logDebug() << endl;
 
     fileConflictsProgressDialog()->hide();
     processEvents();
 
-    // TO DO: Show the conflicts
+    if ( conflicts.isEmpty() )
+         return;
+
+    int count = 0;
+
+    foreach ( const QString & conflict, conflicts )
+    {
+        QMessageBox::warning( MainWindow::instance(),  // parent
+                              _( "File Conflict" ),    // title
+                              conflict );
+
+        if ( ++count > 10 )
+            break;
+    }
 }
 
 

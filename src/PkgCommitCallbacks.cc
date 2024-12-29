@@ -110,8 +110,8 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
     connect( instance(), SIGNAL( fileConflictsCheckProgress( int ) ),
              receiver,   SLOT  ( fileConflictsCheckProgress( int ) ) );
 
-    connect( instance(), SIGNAL( fileConflictsCheckResult() ),
-             receiver,   SLOT  ( fileConflictsCheckResult() ) );
+    connect( instance(), SIGNAL( fileConflictsCheckResult( QStringList ) ),
+             receiver,   SLOT  ( fileConflictsCheckResult( QStringList ) ) );
 
 
     connect( receiver,   SIGNAL( abortCommit() ),

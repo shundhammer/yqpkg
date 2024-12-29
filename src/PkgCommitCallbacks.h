@@ -20,6 +20,7 @@
 
 
 #include <QObject>
+#include <QStringList>
 
 #include <zypp/Resolvable.h>
 #include <zypp/Url.h>
@@ -28,6 +29,8 @@
 
 #include "utf8.h"
 #include "YQZypp.h"     // ZyppRes
+
+#define TEST_FILE_CONFLICTS     0
 
 
 class PkgCommitSignalForwarder;
@@ -137,7 +140,7 @@ signals:
 
     void fileConflictsCheckStart();
     void fileConflictsCheckProgress( int percent );
-    void fileConflictsCheckResult();
+    void fileConflictsCheckResult  ( const QStringList & conflictsList );
 
 
 public slots:
@@ -172,7 +175,7 @@ public:
 
     void sendFileConflictsCheckStart()                           { emit fileConflictsCheckStart();             }
     void sendFileConflictsCheckProgress( int percent )           { emit fileConflictsCheckProgress( percent ); }
-    void sendFileConflictsCheckResult()                          { emit fileConflictsCheckResult();            }
+    void sendFileConflictsCheckResult( const QStringList & conflicts ) { emit fileConflictsCheckResult( conflicts ); }
 
 
     //
@@ -446,7 +449,22 @@ struct FileConflictsCheckCallback:
         {
             Q_UNUSED( skippedSolvables );
 
-            PkgCommitSignalForwarder::instance()->sendFileConflictsCheckResult();
+            QStringList conflictsList;
+
+            for ( zypp::sat::FileConflicts::const_iterator it = conflicts.begin();
+                  it != conflicts.end();
+                  ++it )
+            {
+                conflictsList << fromUTF8( (*it).asUserString() );
+            }
+
+#if TEST_FILE_CONFLICTS
+            conflictsList << QString( "File /usr/bin/foo\n   from package\n      foo\n   conflicts with file from package \n      foobar" );
+            conflictsList << QString( "File /usr/bin/bar\n   from package\n      bar\n   conflicts with file from package \n      foobar" );
+            conflictsList << QString( "File /usr/bin/baz\n   from package\n      baz\n   conflicts with file from package \n      foobar" );
+#endif
+
+            PkgCommitSignalForwarder::instance()->sendFileConflictsCheckResult( conflictsList );
 
             if ( ! conflicts.empty() )
                 return false; // abort

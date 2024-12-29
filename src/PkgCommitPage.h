@@ -20,6 +20,7 @@
 
 
 #include <QElapsedTimer>
+#include <QStringList>
 #include <QWidget>
 
 #include <zypp/ZYppCommitPolicy.h>
@@ -209,7 +210,7 @@ public slots:
 
     void fileConflictsCheckStart();
     void fileConflictsCheckProgress( int percent );
-    void fileConflictsCheckResult();
+    void fileConflictsCheckResult  ( const QStringList & conflicts );
 
 
 protected slots:
