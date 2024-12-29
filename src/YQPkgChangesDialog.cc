@@ -258,11 +258,13 @@ YQPkgChangesDialog::filter( const QRegularExpression & regexp, Filters flt )
     normalCursor();
 }
 
+
 bool
 YQPkgChangesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     return true;
 }
+
 
 bool
 YQPkgChangesDialog::isEmpty() const
@@ -307,13 +309,13 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 
 
 bool
-YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
-                                       const QString &  message,
+YQPkgChangesDialog::showChangesDialog( QWidget *                  parent,
+                                       const QString &            message,
                                        const QRegularExpression & regexp,
-                                       const QString &  acceptButtonLabel,
-                                       const QString &  rejectButtonLabel,
-                                       Filters          flt,
-                                       Options          options )
+                                       const QString &            acceptButtonLabel,
+                                       const QString &            rejectButtonLabel,
+                                       Filters                    flt,
+                                       Options                    options )
 {
     YQPkgChangesDialog dialog( parent,
                                message,
@@ -332,6 +334,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
     return dialog.result() == QDialog::Accepted;
 }
 
+
 YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *       parent,
                                                                 const QString & message,
                                                                 const QString & acceptButtonLabel,
@@ -343,13 +346,16 @@ YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *       
 {
 }
 
-bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
+
+bool
+YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     if (!pkg || !sel)
         return false;
 
     return pkg->maybeUnsupported() && sel->toInstall();
 }
+
 
 bool
 YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *       parent,
@@ -376,5 +382,3 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *       p
 
     return dialog.result() == QDialog::Accepted;
 }
-
-

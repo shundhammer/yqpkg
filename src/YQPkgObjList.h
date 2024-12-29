@@ -665,9 +665,9 @@ public:
      * The parent YQPkgObjList will assume ownership of this exclude rule
      * and destroy it when the parent is destroyed.
      **/
-    ExcludeRule( YQPkgObjList *  parent,
+    ExcludeRule( YQPkgObjList *             parent,
                  const QRegularExpression & regexp,
-                 int             column = 0 );
+                 int                        column = 0 );
 
 
     // Intentionally omitting virtual destructor:
@@ -722,10 +722,10 @@ public:
 
 private:
 
-    YQPkgObjList * _parent;
-    QRegularExpression _regexp;
-    int            _column;
-    bool           _enabled;
+    YQPkgObjList *      _parent;
+    QRegularExpression  _regexp;
+    int                 _column;
+    bool                _enabled;
 };
 
 

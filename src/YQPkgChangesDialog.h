@@ -76,7 +76,7 @@ public:
      * This will change the combo box current selected filter and update the
      * list.
      **/
-    void setFilter( Filters f );
+    void setFilter( Filters flt );
 
     /**
      * Set the current filter.
@@ -118,13 +118,13 @@ public:
      * status), the dialog is not shown at all (and returns 'true') - unless
      * 'showIfListEmpty' is 'true'.
      **/
-    static bool showChangesDialog( QWidget *       parent,
-                                   const QString & message,
+    static bool showChangesDialog( QWidget *                  parent,
+                                   const QString &            message,
                                    const QRegularExpression & regexp,
-                                   const QString & acceptButtonLabel,
-                                   const QString & rejectButtonLabel = QString(),
-                                   Filters         flt = FilterAutomatic,
-                                   Options         opt = OptionAutoAcceptIfEmpty );
+                                   const QString &            acceptButtonLabel,
+                                   const QString &            rejectButtonLabel = QString(),
+                                   Filters                    flt = FilterAutomatic,
+                                   Options                    opt = OptionAutoAcceptIfEmpty );
 
     /**
      * Returns the preferred size.
