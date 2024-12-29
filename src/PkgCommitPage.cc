@@ -1013,12 +1013,14 @@ void PkgCommitPage::fileConflictsCheckResult( const QStringList & conflicts )
 
     foreach ( const QString & conflict, conflicts )
     {
-        QMessageBox::warning( MainWindow::instance(),  // parent
-                              _( "File Conflict" ),    // title
-                              conflict );
+        logError() << "FILE CONFLICT: " << conflict.simplified() << endl;
 
-        if ( ++count > 10 )
-            break;
+        if ( ++count < 6 )
+        {
+            QMessageBox::warning( MainWindow::instance(),  // parent
+                                  _( "File Conflict" ),    // title
+                                  conflict );
+        }
     }
 }
 
