@@ -27,7 +27,7 @@ ProgressDialog::ProgressDialog( const QString & text, QWidget * parent )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this );
-
+    setText( text );
     reset();
 }
 

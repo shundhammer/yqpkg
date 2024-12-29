@@ -508,6 +508,7 @@ PkgCommitPage::fileConflictsProgressDialog()
     {
         _fileConflictsProgressDialog =
             new ProgressDialog( _( "Checking File Conflicts..." ) );
+        CHECK_PTR( _fileConflictsProgressDialog );
     }
 
     return _fileConflictsProgressDialog;
@@ -941,6 +942,43 @@ void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
     // here. None of this would work with multiple Qt threads.
 
     PkgCommitSignalForwarder::instance()->setReply( (ErrorReply) result );
+}
+
+
+//----------------------------------------------------------------------
+
+
+void PkgCommitPage::fileConflictsCheckStart()
+{
+    logDebug() << endl;
+
+    fileConflictsProgressDialog()->reset();
+    fileConflictsProgressDialog()->show();
+    processEvents();
+}
+
+
+void PkgCommitPage::fileConflictsCheckProgress( int percent )
+{
+    logDebug() << percent << "%" << endl;
+
+    if ( percent > fileConflictsProgressDialog()->value() )
+        // Avoid pointless expensive event processing
+    {
+        fileConflictsProgressDialog()->setValue( percent );
+        processEvents();
+    }
+}
+
+
+void PkgCommitPage::fileConflictsCheckResult()
+{
+    logDebug() << endl;
+
+    fileConflictsProgressDialog()->hide();
+    processEvents();
+
+    // TO DO: Show the conflicts
 }
 
 

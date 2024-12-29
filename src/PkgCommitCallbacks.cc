@@ -104,6 +104,16 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
              receiver,   SLOT  ( pkgRemoveError      ( ZyppRes, const QString & ) ) );
 
 
+    connect( instance(), SIGNAL( fileConflictsCheckStart() ),
+             receiver,   SLOT  ( fileConflictsCheckStart() ) );
+
+    connect( instance(), SIGNAL( fileConflictsCheckProgress( int ) ),
+             receiver,   SLOT  ( fileConflictsCheckProgress( int ) ) );
+
+    connect( instance(), SIGNAL( fileConflictsCheckResult() ),
+             receiver,   SLOT  ( fileConflictsCheckResult() ) );
+
+
     connect( receiver,   SIGNAL( abortCommit() ),
              this,       SLOT  ( abortCommit() ) );
 }

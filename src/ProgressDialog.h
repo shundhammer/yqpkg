@@ -64,6 +64,11 @@ public:
     void reset();
 
     /**
+     * Return the current progressbar value in percent.
+     **/
+    int value() const { return progressBar()->value(); }
+
+    /**
      * Set the progressbar value in percent (0..100).
      **/
     void setValue( int val ) { progressBar()->setValue( val ); }

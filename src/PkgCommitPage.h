@@ -205,6 +205,10 @@ public slots:
     void pkgRemoveEnd        ( ZyppRes zyppRes );
     void pkgRemoveError      ( ZyppRes zyppRes, const QString & msg );
 
+    void fileConflictsCheckStart();
+    void fileConflictsCheckProgress( int percent );
+    void fileConflictsCheckResult();
+
 
 protected slots:
 
