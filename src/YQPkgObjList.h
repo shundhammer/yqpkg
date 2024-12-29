@@ -19,7 +19,7 @@
 #define YQPkgObjList_h
 
 #include <QPixmap>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QMenu>
 #include <QEvent>
 
@@ -666,7 +666,7 @@ public:
      * and destroy it when the parent is destroyed.
      **/
     ExcludeRule( YQPkgObjList *  parent,
-                 const QRegExp & regexp,
+                 const QRegularExpression & regexp,
                  int             column = 0 );
 
 
@@ -691,12 +691,12 @@ public:
     /**
      * Change the regular expression after creation.
      **/
-    void setRegexp( const QRegExp & regexp );
+    void setRegexp( const QRegularExpression & regexp );
 
     /**
      * Returns the regexp.
      **/
-    QRegExp regexp() const { return _regexp; };
+    QRegularExpression regexp() const { return _regexp; };
 
     /**
      * Change the column number to check against after creation.
@@ -723,7 +723,7 @@ public:
 private:
 
     YQPkgObjList * _parent;
-    QRegExp        _regexp;
+    QRegularExpression _regexp;
     int            _column;
     bool           _enabled;
 };
