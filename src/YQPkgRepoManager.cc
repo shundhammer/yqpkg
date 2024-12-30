@@ -184,7 +184,16 @@ void YQPkgRepoManager::refreshRepos()
         return;
     }
 
-    // TO DO: Refresh the repos if needed
+    for ( RepoInfoIterator it = _repos.begin(); it != _repos.end(); ++it )
+    {
+        zypp::RepoInfo repo = *it;
+
+        logInfo() << "Refreshing repo " << repo.name() << endl;
+
+        repoManager()->buildCache( repo, zypp::RepoManager::BuildIfNeeded );
+
+        logDebug() << "Refreshing repo " << repo.name() << " done" << endl;
+    }
 }
 
 
