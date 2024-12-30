@@ -29,7 +29,7 @@
 #include <sys/types.h>	// pid_t, getpwuid()
 
 
-#define VERBOSE_ROTATE 0
+#define VERBOSE_ROTATE  0
 
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
@@ -483,7 +483,7 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-        oldName.truncate( sizeof( ".log" ) );
+        oldName.chop( sizeof( ".log" ) );
 
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
@@ -496,7 +496,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-        pattern.truncate( sizeof( ".log" ) );
+        pattern.chop( sizeof( ".log" ) );
 
     pattern += "-??.old";
 
