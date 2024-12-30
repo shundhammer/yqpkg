@@ -954,7 +954,6 @@ void PkgCommitPage::fileConflictsCheckStart()
     logDebug() << endl;
 
     fileConflictsProgressDialog()->reset();
-    _fileConflictsCheckTimer.start();
 
     // Not showing the progress dialog yet:
     //
@@ -970,20 +969,11 @@ void PkgCommitPage::fileConflictsCheckProgress( int percent )
 {
     // logVerbose() << percent << "%" << endl;
 
-    bool doProcessEvents = false;
 
     // Show the progress dialog if it's not shown yet
 
-    if ( ! fileConflictsProgressDialog()->isVisible() &&
-         _fileConflictsCheckTimer.isValid()  &&
-         _fileConflictsCheckTimer.elapsed() > 1500 ) // millisec
-    {
-        logDebug() << "Showing the progress dialog" << endl;
-
-        fileConflictsProgressDialog()->show();
-        _fileConflictsCheckTimer.invalidate();
-        doProcessEvents = true;
-    }
+    const int millisec   = 1500;
+    bool doProcessEvents = fileConflictsProgressDialog()->showDelayed( millisec );
 
 
     // Update the progress bar
