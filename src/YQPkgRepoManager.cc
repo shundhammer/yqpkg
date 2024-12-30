@@ -104,8 +104,6 @@ void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
 zypp::ZYpp::Ptr
 YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 {
-
-
     while ( _zypp_ptr == NULL && attempts > 0 )
     {
 	try
@@ -188,11 +186,8 @@ void YQPkgRepoManager::refreshRepos()
     {
         zypp::RepoInfo repo = *it;
 
-        logInfo() << "Refreshing repo " << repo.name() << endl;
-
+        logInfo() << "Triggering repo refresh for " << repo.name() << endl;
         repoManager()->buildCache( repo, zypp::RepoManager::BuildIfNeeded );
-
-        logDebug() << "Refreshing repo " << repo.name() << " done" << endl;
     }
 }
 
