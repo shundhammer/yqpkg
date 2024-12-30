@@ -958,17 +958,17 @@ void PkgCommitPage::fileConflictsCheckStart()
 
     // Not showing the progress dialog yet:
     //
-    // This is done in ..CheckProgress() only after a certain time has passed
-    // to avoid excessive flicker: Most file conflicts checks only last under
-    // one second, and we don't want to pop up and then immediately pop down
-    // that progress dialog. Only show it if it's worthwhile; if it takes
-    // longer than usual.
+    // This is done in ..CheckProgress() only after a certain amount of time
+    // has passed to avoid excessive flicker: Most file conflicts checks only
+    // take under one second, and we don't want to pop up and then immediately
+    // pop down that progress dialog. Only show it if it's worthwhile; if it
+    // takes longer than usual.
 }
 
 
 void PkgCommitPage::fileConflictsCheckProgress( int percent )
 {
-    logVerbose() << percent << "%" << endl;
+    // logVerbose() << percent << "%" << endl;
 
     bool doProcessEvents = false;
 
