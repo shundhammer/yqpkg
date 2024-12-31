@@ -996,6 +996,10 @@ void PkgCommitPage::fileConflictsCheckResult( const QStringList & conflicts )
     fileConflictsProgressDialog()->hide();
     processEvents();
 
+    logInfo() << "File conflicts check finished after "
+              << fileConflictsProgressDialog()->elapsed() / 1000.0 << " sec"
+              << endl;
+
     if ( conflicts.isEmpty() )
          return;
 
