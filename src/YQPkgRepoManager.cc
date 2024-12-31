@@ -16,6 +16,7 @@
 
 
 #include <unistd.h>             // geteuid()
+#include <QElapsedTimer>
 
 #include <zypp/ZYppFactory.h>
 
@@ -182,12 +183,30 @@ void YQPkgRepoManager::refreshRepos()
         return;
     }
 
+    QElapsedTimer timer;
+
     for ( RepoInfoIterator it = _repos.begin(); it != _repos.end(); ++it )
     {
         zypp::RepoInfo repo = *it;
 
-        logInfo() << "Triggering repo refresh for " << repo.name() << endl;
-        repoManager()->buildCache( repo, zypp::RepoManager::BuildIfNeeded );
+        try
+        {
+            timer.start();
+
+            logInfo() << "Refreshing repo " << repo.name() << "..." << endl;
+
+            repoManager()->buildCache( repo, zypp::RepoManager::BuildIfNeeded );
+            repoManager()->loadFromCache( repo );
+
+            logInfo() << "Refreshing repo " << repo.name()
+                      << " done after " << timer.elapsed() / 1000.0 << " sec"
+                      << endl;
+        }
+        catch ( const zypp::repo::RepoMetadataException & exception )
+        {
+            Q_UNUSED( exception );
+            logWarning() << "CAUGHT zypp exception for repo " << repo.name() << endl;
+        }
     }
 }
 
