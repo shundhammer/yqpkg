@@ -144,14 +144,14 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *       parent,
 void
 YQPkgChangesDialog::filter( Filters flt )
 {
-    filter( QRegExp( "" ), flt );
+    filter( QRegularExpression( "" ), flt );
 }
 
 
 void
 YQPkgChangesDialog::slotFilterChanged( int index )
 {
-    logInfo() << "filter index changed to: " << index << endl;
+    logInfo() << "filter index changed to: " << index << Qt::endl;
     QVariant var = _filter->itemData( index );
 
     if ( var.isValid() && var.canConvert<Filters>() )
@@ -161,7 +161,7 @@ YQPkgChangesDialog::slotFilterChanged( int index )
     }
     else
     {
-        logError() << "Can't find filter for index " << index << endl;
+        logError() << "Can't find filter for index " << index << Qt::endl;
     }
 
 }
@@ -170,14 +170,14 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 void
 YQPkgChangesDialog::setFilter( Filters filters )
 {
-    setFilter( QRegExp( "" ), filters );
+    setFilter( QRegularExpression( "" ), filters );
 }
 
 
 void
-YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
+YQPkgChangesDialog::setFilter( const QRegularExpression & regexp, Filters flt )
 {
-    logInfo() << "filter changed to: " << flt << endl;
+    logInfo() << "filter changed to: " << flt << Qt::endl;
 
     int index = -1;
 
@@ -206,13 +206,13 @@ YQPkgChangesDialog::setFilter( const QRegExp & regexp, Filters flt )
     }
     else
     {
-        logError() << "Can't find index for filter " << flt << endl;
+        logError() << "Can't find index for filter " << flt << Qt::endl;
     }
 }
 
 
 void
-YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
+YQPkgChangesDialog::filter( const QRegularExpression & regexp, Filters flt )
 {
     busyCursor();
     _pkgList->clear();
@@ -241,8 +241,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
                      modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
                  ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
             {
-                if ( regexp.isEmpty()
-                     || regexp.indexIn( selectable->name().c_str() ) >= 0 )
+                if ( regexp.match( selectable->name().c_str() ).hasMatch() )
                 {
                     if ( ! contains( ignoredNames, selectable->name() ) )
                     {
@@ -259,11 +258,13 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters flt )
     normalCursor();
 }
 
+
 bool
 YQPkgChangesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     return true;
 }
+
 
 bool
 YQPkgChangesDialog::isEmpty() const
@@ -296,7 +297,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 
     if ( dialog.isEmpty() && options.testFlag( OptionAutoAcceptIfEmpty ) )
     {
-        logInfo() << "No items to show in changes dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in changes dialog, accepting it automatically" << Qt::endl;
         return true;
     }
 
@@ -308,13 +309,13 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 
 
 bool
-YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
-                                       const QString &  message,
-                                       const QRegExp &  regexp,
-                                       const QString &  acceptButtonLabel,
-                                       const QString &  rejectButtonLabel,
-                                       Filters          flt,
-                                       Options          options )
+YQPkgChangesDialog::showChangesDialog( QWidget *                  parent,
+                                       const QString &            message,
+                                       const QRegularExpression & regexp,
+                                       const QString &            acceptButtonLabel,
+                                       const QString &            rejectButtonLabel,
+                                       Filters                    flt,
+                                       Options                    options )
 {
     YQPkgChangesDialog dialog( parent,
                                message,
@@ -324,7 +325,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 
     if ( dialog.isEmpty() &&  options.testFlag(OptionAutoAcceptIfEmpty) )
     {
-        logInfo() << "No items to show in dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in dialog, accepting it automatically" << Qt::endl;
         return true;
     }
 
@@ -332,6 +333,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *        parent,
 
     return dialog.result() == QDialog::Accepted;
 }
+
 
 YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *       parent,
                                                                 const QString & message,
@@ -344,13 +346,16 @@ YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *       
 {
 }
 
-bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
+
+bool
+YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     if (!pkg || !sel)
         return false;
 
     return pkg->maybeUnsupported() && sel->toInstall();
 }
+
 
 bool
 YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *       parent,
@@ -369,7 +374,7 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *       p
 
     if ( dialog.isEmpty() && options.testFlag( OptionAutoAcceptIfEmpty ) )
     {
-        logInfo() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
+        logInfo() << "No items to show in unsupported packages dialog, accepting it automatically" << Qt::endl;
         return true;
     }
 
@@ -377,5 +382,3 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *       p
 
     return dialog.result() == QDialog::Accepted;
 }
-
-

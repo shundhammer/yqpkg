@@ -18,7 +18,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSettings>
 
 #include <zypp/VendorSupportOptions.h>
@@ -32,15 +32,8 @@
 #include "YQPkgDescriptionDialog.h"
 #include "YQPkgDescriptionView.h"
 
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 15, 0 ))
-#  define QT_KEEP_EMPTY_PARTS QString::KeepEmptyParts
-#else
-#  define QT_KEEP_EMPTY_PARTS Qt::KeepEmptyParts
-#endif
-
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
-#define DESKTOP_FILE_DIR        "\\/share\\/applications\\/.*\\.desktop$"       // RegExp
+#define DESKTOP_FILE_DIR        "\\/share\\/applications\\/.*\\.desktop$"       // RegularExpression
 
 
 using std::list;
@@ -143,7 +136,7 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = text.trimmed().split( '\n', QT_KEEP_EMPTY_PARTS );
+    QStringList lines = text.trimmed().split( '\n', Qt::KeepEmptyParts );
     QStringList::const_iterator it = lines.begin();
 
     while ( it != lines.end() )
@@ -192,13 +185,13 @@ YQPkgDescriptionView::showLink( const QUrl & url )
     if ( url.scheme() == "pkg" )
     {
         QString pkgName = url.authority();
-        logInfo() << "Hyperlinking to package \"" << pkgName << "\"" << endl;
+        logInfo() << "Hyperlinking to package \"" << pkgName << "\"" << Qt::endl;
         YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }
     else
     {
         logError() << "Protocol not supported - can't follow hyperlink \""
-                   << url.toString() << "\"" << endl;
+                   << url.toString() << "\"" << Qt::endl;
     }
 }
 
@@ -263,8 +256,6 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
     QString name;
 
     QSettings file( fileName, QSettings::IniFormat );
-    file.setIniCodec( "UTF-8");
-
     file.beginGroup( "Desktop Entry" );
     desktopEntries["Icon"] = file.value( "Icon" ).toString();
     desktopEntries["Exec"] = file.value( "Exec" ).toString();
@@ -308,7 +299,7 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
     {
         QString line = fromUTF8( *it );
 
-        if ( line.contains( QRegExp( DESKTOP_FILE_DIR ) ) )
+        if ( line.contains( QRegularExpression( DESKTOP_FILE_DIR ) ) )
             desktopFiles << line;
     }
 
@@ -325,9 +316,9 @@ void YQPkgDescriptionView::initLang()
         _langWithCountry = lang_cstr;
 
          // remove .utf8 / @euro etc.
-        _langWithCountry.replace( QRegExp( "[@\\.].*$" ), "" );
+        _langWithCountry.replace( QRegularExpression( "[@\\.].*$" ), "" );
 
         _lang = _langWithCountry;
-        _lang.replace( QRegExp( "_.*$" ), "" ); // remove _DE etc.
+        _lang.replace( QRegularExpression( "_.*$" ), "" ); // remove _DE etc.
     }
 }

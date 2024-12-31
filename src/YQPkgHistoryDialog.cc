@@ -64,7 +64,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout( layout );
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 
@@ -166,7 +166,7 @@ YQPkgHistoryDialog::populate()
     }
     catch (  const zypp::Exception & exception )
     {
-        logWarning() << "CAUGHT zypp exception: " << exception.asUserHistory() << endl;
+        logWarning() << "CAUGHT zypp exception: " << exception.asUserHistory() << Qt::endl;
         showReadHistoryWarning( fromUTF8( exception.asUserHistory() ) );
     }
 }

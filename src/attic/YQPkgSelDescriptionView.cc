@@ -17,7 +17,6 @@
 
 #include <unistd.h>
 
-#include <QRegExp>
 #include <QBuffer>
 
 #include "Logger.h"
@@ -97,10 +96,10 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     if ( ! iconName.isEmpty() )
     {
 	if ( iconName.startsWith( "./" ) )
-	    iconName.replace( QRegExp( "^\\./" ), "" );
+            iconName.remove( 0, sizeof( "./" ) );
 
 	if ( pattern && iconName.isEmpty() )
-	    logWarning() << "No icon for pattern " << zyppObj->name() << endl;
+	    logWarning() << "No icon for pattern " << zyppObj->name() << Qt::endl;
     }
 
 

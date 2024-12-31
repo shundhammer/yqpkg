@@ -29,19 +29,14 @@
 #include <sys/types.h>	// pid_t, getpwuid()
 
 
-#define VERBOSE_ROTATE 0
+#define VERBOSE_ROTATE  0
 
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-static void qt_logger( QtMsgType msgType, const char *msg);
-#else
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
 		       const QString & msg );
-#endif
-
 
 Logger * Logger::_defaultLogger = 0;
 QString  Logger::_lastLogDir;
@@ -84,18 +79,14 @@ Logger::~Logger()
 {
     if ( _logFile.isOpen() )
     {
-	// logInfo() << "-- Log End --\n" << endl;
+	// logInfo() << "-- Log End --\n" << Qt::endl;
 	_logFile.close();
     }
 
     if ( this == _defaultLogger )
     {
 	_defaultLogger = 0;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-	qInstallMsgHandler(0);
-#else
 	qInstallMessageHandler(0); // Restore default message handler
-#endif
     }
 }
 
@@ -144,7 +135,7 @@ void Logger::openLogFile( const QString & filename )
 	    _logStream.setDevice( &_logFile );
 	    _logStream << "\n\n";
 	    log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
-		<< "-- Log Start --" << endl;
+		<< "-- Log Start --" << Qt::endl;
 	}
 	else
 	{
@@ -157,11 +148,7 @@ void Logger::openLogFile( const QString & filename )
 void Logger::setDefaultLogger()
 {
     _defaultLogger = this;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    qInstallMsgHandler( qt_logger );
-#else
     qInstallMessageHandler( qt_logger );
-#endif
 }
 
 
@@ -275,7 +262,7 @@ void Logger::setLogLevel( Logger *logger, LogSeverity newLevel )
 
 void Logger::newline()
 {
-    _logStream << endl;
+    _logStream << Qt::endl;
 }
 
 
@@ -316,39 +303,12 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
 	case QtWarningMsg:  severity = LogSeverityWarning; break;
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
-#if QT_VERSION >= 0x050500
 	case QtInfoMsg:	    severity = LogSeverityInfo;	   break;
-#endif
     }
 
     return severity;
 }
 
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )) // Qt 4.x
-
-static void qt_logger( QtMsgType msgType, const char *msg)
-{
-    Logger::log( 0, // use default logger
-		 "[Qt]", 0, "", // file, line, function
-		 toLogSeverity( msgType ) )
-	<< msg << endl;
-
-    if ( msgType == QtFatalMsg )
-    {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	abort();
-    }
-
-    if ( msgType == QtWarningMsg &&
-	 QString( msg ).contains( "cannot connect to X server" ) )
-    {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	exit( 1 );
-    }
-}
-
-#else // Qt 5.x
 
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
@@ -369,7 +329,7 @@ static void qt_logger( QtMsgType msgType,
             Logger::log( 0, // use default logger
                          context.file, context.line, context.function,
                          toLogSeverity( msgType ) )
-                << "[Qt] " << line << endl;
+                << "[Qt] " << line << Qt::endl;
         }
     }
 
@@ -422,20 +382,20 @@ static void qt_logger( QtMsgType msgType,
 
                 QString text = "FATAL: Could not connect to the display.";
                 fprintf( stderr, "\n%s\n", qPrintable( text ) );
-                logError() << text << endl;
+                logError() << text << Qt::endl;
             }
             else
             {
                 fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
             }
 
-            logInfo() << "-- Exiting --\n" << endl;
+            logInfo() << "-- Exiting --\n" << Qt::endl;
 	    exit( 1 ); // Don't dump core, just exit
         }
 	else
         {
             fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
-            logInfo() << "-- Aborting with core dump --\n" << endl;
+            logInfo() << "-- Aborting with core dump --\n" << Qt::endl;
 	    abort(); // Exit with core dump (it might contain a useful backtrace)
         }
     }
@@ -448,8 +408,6 @@ static void qt_logger( QtMsgType msgType,
         fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
     }
 }
-
-#endif // Qt 5.x
 
 
 QString Logger::userName()
@@ -487,7 +445,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
     if ( (uid_t) dirInfo.ownerId()  != getuid() )
     {
 	logError() << "ERROR: Directory " << logDir
-		   << " is not owned by " << userName() << endl;
+		   << " is not owned by " << userName() << Qt::endl;
 
 	QByteArray nameTemplate( QString( logDir + "-XXXXXX" ).toUtf8() );
 	char * result = mkdtemp( nameTemplate.data() );
@@ -500,7 +458,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
 	else
 	{
 	    logError() << "Could not create log dir " << nameTemplate
-		       << ": " << formatErrno() << endl;
+		       << ": " << formatErrno() << Qt::endl;
 
 	    logDir = "/";
 	    // No permissions to write to /,
@@ -525,7 +483,7 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-	oldName.remove( QRegExp( "\\.log$" ) );
+        oldName.chop( sizeof( ".log" ) );
 
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
@@ -538,7 +496,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-	pattern.remove( QRegExp( "\\.log$" ) );
+        pattern.chop( sizeof( ".log" ) );
 
     pattern += "-??.old";
 
@@ -563,7 +521,7 @@ void Logger::logRotate( const QString & logDir,
 	{
 	    bool success = dir.remove( newName );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << endl;
+	    logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif
@@ -575,7 +533,7 @@ void Logger::logRotate( const QString & logDir,
 #if VERBOSE_ROTATE
 	    logDebug() << "Renaming " << currentName << " to " << newName
 		       << ( success ? "" : " FAILED" )
-		       << endl;
+		       << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif
@@ -593,7 +551,7 @@ void Logger::logRotate( const QString & logDir,
 	{
 	    bool success = dir.remove( match );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << endl;
+	    logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif

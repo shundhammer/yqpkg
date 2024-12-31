@@ -35,7 +35,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString & label,
     : QWidget(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->setMargin( 0 );
+    vbox->setContentsMargins( 0, 0, 0, 0 );
 
     this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
@@ -86,7 +86,7 @@ QY2ComboTabWidget::showPageIndex( int index )
     {
         QWidget * page = _pages[ index ];
         _widgetStack->setCurrentWidget( page );
-        // yuiDebug() << "Changing current page" << endl;
+        // yuiDebug() << "Changing current page" << Qt::endl;
         emit currentChanged( page );
     }
     else

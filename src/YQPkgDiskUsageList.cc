@@ -117,7 +117,7 @@ YQPkgDiskUsageList::updateDiskUsage()
         if ( item )
             item->updateDuData( partitionDu );
         else
-            logError() << "No entry for mount point " << partitionDu.dir << endl;
+            logError() << "No entry for mount point " << partitionDu.dir << Qt::endl;
     }
 
     resizeColumnToContents( totalSizeCol() );
@@ -157,11 +157,7 @@ YQPkgDiskUsageList::sizeHint() const
 {
     QFontMetrics fontMetrics( font() );
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     return QSize( fontMetrics.horizontalAdvance( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
-#else
-    return QSize( fontMetrics.width( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
-#endif
 }
 
 
@@ -178,7 +174,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
             if ( event->key() == Qt::Key_Q )
             {
                 _debug = ! _debug;
-                logInfo() << "Debug mode: " << _debug << endl;
+                logInfo() << "Debug mode: " << _debug << Qt::endl;
             }
 
         }
@@ -251,7 +247,7 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList *    parent,
     , _partitionDu( partitionDu )
     , _pkgDiskUsageList( parent )
 {
-    // logVerbose() << "disk usage list entry for " << partitionDu.dir << endl;
+    // logVerbose() << "disk usage list entry for " << partitionDu.dir << Qt::endl;
 }
 
 
@@ -301,7 +297,7 @@ YQPkgDiskUsageListItem::checkRemainingDiskSpace()
                << " free percent: " << percent << "%, "
                << " bfree: " << freeSize()
                << " (" << free << "MiB)"
-               << endl;
+               << Qt::endl;
 #endif
 
     if ( percent > MIN_PERCENT_WARN )

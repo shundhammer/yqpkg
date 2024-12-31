@@ -20,7 +20,7 @@
 
 #include <QDialog>
 #include <QComboBox>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFlags>
 
 #include "YQZypp.h"
@@ -76,7 +76,7 @@ public:
      * This will change the combo box current selected filter and update the
      * list.
      **/
-    void setFilter( Filters f );
+    void setFilter( Filters flt );
 
     /**
      * Set the current filter.
@@ -84,7 +84,7 @@ public:
      * This will change the combo box current selected filter and update the
      * list.
      **/
-    void setFilter( const QRegExp & regexp, Filters flt );
+    void setFilter( const QRegularExpression & regexp, Filters flt );
 
     /**
      * Static convenience method: Post a changes dialog with text 'message', a
@@ -118,13 +118,13 @@ public:
      * status), the dialog is not shown at all (and returns 'true') - unless
      * 'showIfListEmpty' is 'true'.
      **/
-    static bool showChangesDialog( QWidget *       parent,
-                                   const QString & message,
-                                   const QRegExp & regexp,
-                                   const QString & acceptButtonLabel,
-                                   const QString & rejectButtonLabel = QString(),
-                                   Filters         flt = FilterAutomatic,
-                                   Options         opt = OptionAutoAcceptIfEmpty );
+    static bool showChangesDialog( QWidget *                  parent,
+                                   const QString &            message,
+                                   const QRegularExpression & regexp,
+                                   const QString &            acceptButtonLabel,
+                                   const QString &            rejectButtonLabel = QString(),
+                                   Filters                    flt = FilterAutomatic,
+                                   Options                    opt = OptionAutoAcceptIfEmpty );
 
     /**
      * Returns the preferred size.
@@ -173,7 +173,7 @@ protected:
      * dependency solver ), by application ( i.e. via software selections ) or
      * manually by the user and whose name matches 'regexp'.
      **/
-    void filter( const QRegExp & regexp, Filters flt = FilterAutomatic );
+    void filter( const QRegularExpression & regexp, Filters flt = FilterAutomatic );
 
     /**
      * extra filter for child classes

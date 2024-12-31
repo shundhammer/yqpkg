@@ -19,7 +19,9 @@
 #define PkgCommitPage_h
 
 
+#include <QStringList>
 #include <QWidget>
+
 #include <zypp/ZYppCommitPolicy.h>
 #include <zypp/ByteCount.h>
 
@@ -37,6 +39,7 @@
 
 
 class PkgTasks;
+class ProgressDialog;
 using zypp::ByteCount;
 
 
@@ -204,6 +207,10 @@ public slots:
     void pkgRemoveEnd        ( ZyppRes zyppRes );
     void pkgRemoveError      ( ZyppRes zyppRes, const QString & msg );
 
+    void fileConflictsCheckStart();
+    void fileConflictsCheckProgress( int percent );
+    void fileConflictsCheckResult  ( const QStringList & conflicts );
+
 
 protected slots:
 
@@ -307,6 +314,14 @@ protected:
     bool updateTotalProgressBar();
 
     /**
+     * Return the (non-modal!) file conflicts check progress dialog. Create it
+     * if it doesn't exist yet.
+     *
+     * Not to confuse with the total progress bar of the commit page.
+     **/
+    ProgressDialog * fileConflictsProgressDialog();
+
+    /**
      * The common part of pkgInstallStart() and pkgRemoveStart() /
      * ...progress(), ...End(), ...Error().
      *
@@ -339,6 +354,7 @@ protected:
     PkgTasks *          _pkgTasks;
     bool                _showingDetails;
     bool                _startedInstallingPkg;
+    ProgressDialog *    _fileConflictsProgressDialog;
 
     ByteCount           _totalDownloadSize;
     ByteCount           _totalInstalledSize;

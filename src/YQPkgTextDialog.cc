@@ -21,7 +21,6 @@
 #include <QKeyEvent>
 #include <QLayout>
 #include <QPushButton>
-#include <QRegExp>
 #include <QTextBrowser>
 
 #include "Exception.h"
@@ -78,7 +77,7 @@ void YQPkgTextDialog::buildDialog( const QString & text,
     Q_CHECK_PTR( layout );
 
     setLayout( layout );
-    layout->setMargin ( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
     // Text browser
@@ -99,7 +98,7 @@ void YQPkgTextDialog::buildDialog( const QString & text,
     Q_CHECK_PTR( buttonBox );
 
     buttonBox->setSpacing( SPACING );
-    buttonBox->setMargin ( MARGIN  );
+    buttonBox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
 
@@ -257,11 +256,11 @@ QString
 YQPkgTextDialog::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // logDebug() << "Escaping \"" << plainText << "\"" << endl;
+    // logDebug() << "Escaping \"" << plainText << "\"" << Qt::endl;
 
-    html.replace( QRegExp( "&" ), "&amp;" );
-    html.replace( QRegExp( "<" ), "&lt;"  );
-    html.replace( QRegExp( ">" ), "&gt;"  );
+    html.replace( "&", "&amp;" );
+    html.replace( "<", "&lt;" );
+    html.replace( ">", "&gt;" );
 
     return html;
 }

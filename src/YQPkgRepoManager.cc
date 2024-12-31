@@ -16,54 +16,59 @@
 
 
 #include <unistd.h>             // geteuid()
+#include <iostream>             // cerr
+#include <QElapsedTimer>
+#include <QMessageBox>
 
 #include <zypp/ZYppFactory.h>
 
-#include "Logger.h"
 #include "Exception.h"
-#include "YQi18n.h"
+#include "Logger.h"
+#include "MainWindow.h"
 #include "YQPkgApplication.h"
+#include "YQi18n.h"
+#include "utf8.h"
 #include "YQPkgRepoManager.h"
 
 
 YQPkgRepoManager::YQPkgRepoManager()
 {
-    logDebug() << "Creating YQPkgRepoManager" << endl;
+    logDebug() << "Creating YQPkgRepoManager" << Qt::endl;
 }
 
 
 YQPkgRepoManager::~YQPkgRepoManager()
 {
-    logDebug() << "Destroying YQPkgRepoManager..." << endl;
+    logDebug() << "Destroying YQPkgRepoManager..." << Qt::endl;
 
     shutdownZypp();
 
-    logDebug() << "Destroying YQPkgRepoManager done" << endl;
+    logDebug() << "Destroying YQPkgRepoManager done" << Qt::endl;
 }
 
 
 void YQPkgRepoManager::initTarget()
 {
-    logDebug() << "Creating the ZyppLogger" << endl;
+    logDebug() << "Creating the ZyppLogger" << Qt::endl;
     YQPkgApplication::instance()->createZyppLogger();
 
-    logDebug() << "Initializing zypp..." << endl;
+    logDebug() << "Initializing zypp..." << Qt::endl;
 
     zyppPtr()->initializeTarget( "/", false );  // don't rebuild rpmdb
     zyppPtr()->target()->load(); // Load pkgs from the target (rpmdb)
 
-    logDebug() << "Initializing zypp done" << endl;
+    logDebug() << "Initializing zypp done" << Qt::endl;
 }
 
 
 void YQPkgRepoManager::shutdownZypp()
 {
-    logDebug() << "Shutting down zypp..." << endl;
+    logDebug() << "Shutting down zypp..." << Qt::endl;
 
     _repo_manager_ptr.reset();  // deletes the RepoManager
     _zypp_ptr.reset();          // deletes the ZYpp instance
 
-    logDebug() << "Shutting down zypp done" << endl;
+    logDebug() << "Shutting down zypp done" << Qt::endl;
 }
 
 
@@ -82,13 +87,12 @@ YQPkgRepoManager::repoManager()
 {
     if ( ! _repo_manager_ptr )
     {
-        logDebug() << "Creating RepoManager" << endl;
+        logDebug() << "Creating RepoManager" << Qt::endl;
         _repo_manager_ptr.reset( new zypp::RepoManager() );
     }
 
     return _repo_manager_ptr;
 }
-
 
 
 void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
@@ -104,13 +108,11 @@ void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
 zypp::ZYpp::Ptr
 YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 {
-
-
     while ( _zypp_ptr == NULL && attempts > 0 )
     {
 	try
 	{
-	    logInfo() << "Initializing Zypp library..." << endl;
+	    logInfo() << "Initializing Zypp library..." << Qt::endl;
 	    _zypp_ptr = zypp::getZYpp();
 
  	    // initialize solver flag, be compatible with zypper
@@ -145,9 +147,36 @@ void YQPkgRepoManager::attachRepos()
     // TO DO: Progress callbacks
     // TO DO: check and load services (?)
 
-    findEnabledRepos();
-    refreshRepos();
-    loadRepos();
+    try
+    {
+        findEnabledRepos();
+        refreshRepos();
+        loadRepos();
+    }
+    catch ( const zypp::Exception & ex )
+    {
+        logError() << "Caught zypp exception: " << ex.asString() << Qt::endl;
+
+        if ( geteuid() != 0 )
+        {
+            logInfo() << "Run 'sudo zypper refresh' and restart the program." << Qt::endl;
+
+            QString message = _( "Error loading the repos. Run\n\n"
+                                 "    sudo zypper refresh\n\n"
+                                 "and restart the program." );
+            std::cerr << toUTF8( message ) << std::endl;
+
+            QMessageBox::warning( MainWindow::instance(), // parent
+                                  _( "Error" ),
+                                  message,
+                                  QMessageBox::Ok );
+
+            logInfo() << "Exiting." << Qt::endl;
+            exit( 1 );
+        }
+
+        throw;  // Nothing else that we can do here
+    }
 }
 
 
@@ -165,12 +194,12 @@ void YQPkgRepoManager::findEnabledRepos()
 
             logInfo() << "Found repo \"" << repo.name() << "\""
                       << " URL: " << repo.url().asString()
-                      << endl;
+                      << Qt::endl;
         }
         else
         {
             logInfo() << "Ignoring disabled repo \"" << repo.name() << "\""
-                      << endl;
+                      << Qt::endl;
         }
     }
 }
@@ -180,11 +209,36 @@ void YQPkgRepoManager::refreshRepos()
 {
     if ( geteuid() != 0 )
     {
-        logWarning() << "Skipping repos refresh for non-root user" << endl;
+        logWarning() << "Skipping repos refresh for non-root user" << Qt::endl;
         return;
     }
 
-    // TO DO: Refresh the repos if needed
+    QElapsedTimer timer;
+
+    for ( RepoInfoIterator it = _repos.begin(); it != _repos.end(); ++it )
+    {
+        zypp::RepoInfo repo = *it;
+
+        try
+        {
+            timer.start();
+
+            logInfo() << "Refreshing repo " << repo.name() << "..." << Qt::endl;
+
+            repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
+            repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
+            repoManager()->loadFromCache  ( repo );
+
+            logInfo() << "Refreshing repo " << repo.name()
+                      << " done after " << timer.elapsed() / 1000.0 << " sec"
+                      << Qt::endl;
+        }
+        catch ( const zypp::repo::RepoMetadataException & exception )
+        {
+            Q_UNUSED( exception );
+            logWarning() << "CAUGHT zypp exception for repo " << repo.name() << Qt::endl;
+        }
+    }
 }
 
 
@@ -192,7 +246,7 @@ void YQPkgRepoManager::loadRepos()
 {
     for ( const zypp::RepoInfo & repo: _repos )
     {
-        logDebug() << "Loading resolvables from " << repo.name() << endl;
+        logDebug() << "Loading resolvables from " << repo.name() << Qt::endl;
 
         // TO DO: progress callbacks
 	repoManager()->loadFromCache( repo );

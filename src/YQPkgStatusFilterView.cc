@@ -44,7 +44,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     QVBoxLayout * layout  = new QVBoxLayout();
 
     content->setLayout(layout);
-    layout->setMargin ( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
     layout->addStretch();

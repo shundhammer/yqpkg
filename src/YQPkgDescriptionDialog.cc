@@ -15,11 +15,10 @@
  */
 
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QScreen>
 #include <QSplitter>
 #include <QStyle>
 #include <QList>
@@ -56,7 +55,7 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout(layout);
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 
@@ -88,7 +87,7 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
+    hbox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( hbox );
 
     // "OK" button
@@ -142,7 +141,7 @@ YQPkgDescriptionDialog::isEmpty() const
 QSize
 YQPkgDescriptionDialog::sizeHint() const
 {
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QRect available = this->screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
     size = size.boundedTo( QSize( available.width(), available.height() ) );
 
