@@ -16,14 +16,18 @@
 
 
 #include <unistd.h>             // geteuid()
+#include <iostream>             // cerr
 #include <QElapsedTimer>
+#include <QMessageBox>
 
 #include <zypp/ZYppFactory.h>
 
-#include "Logger.h"
 #include "Exception.h"
-#include "YQi18n.h"
+#include "Logger.h"
+#include "MainWindow.h"
 #include "YQPkgApplication.h"
+#include "YQi18n.h"
+#include "utf8.h"
 #include "YQPkgRepoManager.h"
 
 
@@ -91,7 +95,6 @@ YQPkgRepoManager::repoManager()
 }
 
 
-
 void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
 {
     (void) zyppConnectInternal( attempts, waitSeconds );
@@ -144,9 +147,36 @@ void YQPkgRepoManager::attachRepos()
     // TO DO: Progress callbacks
     // TO DO: check and load services (?)
 
-    findEnabledRepos();
-    refreshRepos();
-    loadRepos();
+    try
+    {
+        findEnabledRepos();
+        refreshRepos();
+        loadRepos();
+    }
+    catch ( const zypp::Exception & ex )
+    {
+        logError() << "Caught zypp exception: " << ex.asString() << endl;
+
+        if ( geteuid() != 0 )
+        {
+            logInfo() << "Run 'sudo zypper refresh' and restart the program." << endl;
+
+            QString message = _( "Error loading the repos. Run\n\n"
+                                 "    sudo zypper refresh\n\n"
+                                 "and restart the program." );
+            std::cerr << toUTF8( message ) << std::endl;
+
+            QMessageBox::warning( MainWindow::instance(), // parent
+                                  _( "Error" ),
+                                  message,
+                                  QMessageBox::Ok );
+
+            logInfo() << "Exiting." << endl;
+            exit( 1 );
+        }
+
+        throw;  // Nothing else that we can do here
+    }
 }
 
 
@@ -195,8 +225,9 @@ void YQPkgRepoManager::refreshRepos()
 
             logInfo() << "Refreshing repo " << repo.name() << "..." << endl;
 
-            repoManager()->buildCache( repo, zypp::RepoManager::BuildIfNeeded );
-            repoManager()->loadFromCache( repo );
+            repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
+            repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
+            repoManager()->loadFromCache  ( repo );
 
             logInfo() << "Refreshing repo " << repo.name()
                       << " done after " << timer.elapsed() / 1000.0 << " sec"

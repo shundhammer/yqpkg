@@ -159,8 +159,6 @@ void YQPkgInitReposStep::initRepos()
     try
     {
         repoMan->zyppConnect(); // This may throw
-        repoMan->initTarget();
-        repoMan->attachRepos();
     }
     catch ( ... )
     {
@@ -173,6 +171,9 @@ void YQPkgInitReposStep::initRepos()
                               QMessageBox::Ok );
         throw;  // Nothing else that we can do here
     }
+
+    repoMan->initTarget();
+    repoMan->attachRepos();
 
     logDebug() << "Initializing zypp done" << endl;
     _reposInitialized = true;
