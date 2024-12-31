@@ -481,7 +481,8 @@ struct FileConflictsCheckCallback:
 
 
 /**
- * Class to bundle the zypp callbacks needed during a zypp package commit.
+ * Class to bundle the zypp callbacks needed during a zypp package commit and
+ * to translate each libzypp event ("report" in libzypp lingo) into a Qt signal.
  *
  * The constructor instantiates and connects the callbacks, the destructor
  * disconnects and deletes them; so the instance of this object needs to live

@@ -20,6 +20,25 @@
 #include "PkgCommitCallbacks.h"
 
 
+PkgCommitCallbacks::PkgCommitCallbacks()
+{
+    _pkgDownloadCallback.connect();
+    _pkgInstallCallback.connect();
+    _pkgRemoveCallback.connect();
+    _fileConflictsCheckCallback.connect();
+}
+
+PkgCommitCallbacks::~PkgCommitCallbacks()
+{
+    // Each zypp::Callback disconnects automatically in the dtor.
+}
+
+
+//
+//----------------------------------------------------------------------
+//
+
+
 PkgCommitSignalForwarder * PkgCommitSignalForwarder::_instance = 0;
 
 
@@ -97,23 +116,4 @@ void PkgCommitSignalForwarder::connectAll( QObject * receiver )
 
     connect( receiver,   SIGNAL( abortCommit() ),
              this,       SLOT  ( abortCommit() ) );
-}
-
-
-//
-//----------------------------------------------------------------------
-//
-
-
-PkgCommitCallbacks::PkgCommitCallbacks()
-{
-    _pkgDownloadCallback.connect();
-    _pkgInstallCallback.connect();
-    _pkgRemoveCallback.connect();
-    _fileConflictsCheckCallback.connect();
-}
-
-PkgCommitCallbacks::~PkgCommitCallbacks()
-{
-    // Each zypp::Callback disconnects automatically in the dtor.
 }

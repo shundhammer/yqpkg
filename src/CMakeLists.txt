@@ -35,7 +35,6 @@ set( SOURCES
   PkgTasks.cc
   PkgTaskListWidget.cc
   ProgressDialog.cc
-  RepoCallbacks.cc
   SearchFilter.cc
   SummaryPage.cc
   WindowSettings.cc

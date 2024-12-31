@@ -29,16 +29,12 @@ typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
 typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
-class ProgressDialog;
-
 
 /**
  * Handler for zypp Repos on the YQPkg side
  **/
 class YQPkgRepoManager: public QObject
 {
-    Q_OBJECT
-    
 public:
     /**
      * Constructor
@@ -90,17 +86,6 @@ public:
     RepoManager_Ptr repoManager();
 
 
-public slots:
-
-    //
-    // Callbacks for repo refresh
-    //
-
-    void repoRefreshStart   ( const QString & repoName );
-    void repoRefreshProgress( int percent );
-    void repoRefreshEnd();
-
-
 protected:
 
     /**
@@ -133,24 +118,6 @@ protected:
      **/
     void loadRepos();
 
-    /**
-     * Return the (non-modal!) repo refresh / load progress dialog.
-     * Create it if it doesn't exist yet.
-     **/
-    ProgressDialog * progressDialog();
-
-    /**
-     * Process the pending Qt events.
-     *
-     * This is necessary in callbacks to receive user events (e.g. button
-     * clicks) and to update the display.
-     *
-     * DO NOT use MainWindow::processEvents() instead which might ignore user
-     * input events (e.g. clicks on buttons).
-     **/
-    void processEvents();
-
-
     //
     // Data members
     //
@@ -158,7 +125,6 @@ protected:
     zypp::ZYpp::Ptr     _zypp_ptr;
     RepoManager_Ptr     _repo_manager_ptr;
     RepoInfoList        _repos;
-    ProgressDialog *    _progressDialog;
 };
 
 #endif // YQPkgRepoManager_h
