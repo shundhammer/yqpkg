@@ -36,7 +36,8 @@ being installed / updated / removed.
 
 Limitations:
 
-- No repo refresh yet. If needed, use `sudo zypper ref` before program start.
+- ~~No repo refresh yet. If needed, use `sudo zypper ref` before program start.~~
+  _Repo refresh is now implemented._
 
 - No GPG key import from repos, no failed package GPG signature fail prompt.
 
