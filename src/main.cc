@@ -88,7 +88,7 @@ bool commandLineOption( const QString & longName,
 YQPkgAppOptions
 parseCommandLineOptions( QStringList & argList )
 {
-    YQPkgAppOptions optFlags( 0 );
+    YQPkgAppOptions optFlags;
 
     if ( commandLineOption( "--read-only",     "-r", argList ) ) optFlags |= OptReadOnly;
     if ( commandLineOption( "--dry-run",       "-n", argList ) ) optFlags |= OptDryRun;
