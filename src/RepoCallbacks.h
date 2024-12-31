@@ -18,6 +18,7 @@
 #ifndef RepoCallbacks_h
 #define RepoCallbacks_h
 
+#include <iostream>     // cerr
 #include <QObject>
 #include <zypp/ZYppCallbacks.h>
 
@@ -131,6 +132,7 @@ struct ZyppRepoRefreshCallback:
                         const zypp::RepoInfo       repo )
         {
             Q_UNUSED( progressData );
+            std::cerr << "repo refresh start " << repo.name() << std::endl;
 
             RepoSignalForwarder::instance()->sendRepoRefreshStart( fromUTF8( repo.name() ) );
         }

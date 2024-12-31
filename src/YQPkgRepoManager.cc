@@ -217,6 +217,14 @@ void YQPkgRepoManager::findEnabledRepos()
 }
 
 
+bool progressReceiver( const zypp::ProgressData & progressData )
+{
+    logDebug() << "Progress: " << progressData.reportValue() << endl;
+
+    return true; // Don't abort
+}
+
+
 void YQPkgRepoManager::refreshRepos()
 {
     if ( geteuid() != 0 )
@@ -225,6 +233,7 @@ void YQPkgRepoManager::refreshRepos()
         return;
     }
 
+    zypp::ProgressData::ReceiverFnc receiver = progressReceiver;
     QElapsedTimer timer;
 
     for ( RepoInfoIterator it = _repos.begin(); it != _repos.end(); ++it )
@@ -237,9 +246,14 @@ void YQPkgRepoManager::refreshRepos()
 
             logInfo() << "Refreshing repo " << repo.name() << "..." << endl;
 
-            repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
-            repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
-            repoManager()->loadFromCache  ( repo );
+            logDebug() << "    Refreshing metadata" << endl;
+            repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded, receiver );
+
+            logDebug() << "    Building cache" << endl;
+            repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded,   receiver );
+
+            logDebug() << "    Loading from cache" << endl;
+            repoManager()->loadFromCache  ( repo, receiver );
 
             logInfo() << "Refreshing repo " << repo.name()
                       << " done after " << timer.elapsed() / 1000.0 << " sec"

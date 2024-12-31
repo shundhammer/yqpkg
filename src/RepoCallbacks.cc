@@ -59,11 +59,14 @@ void RepoSignalForwarder::connectRefreshSignals( QObject * receiver )
 
 RepoRefreshCallbacks::RepoRefreshCallbacks()
 {
-    _zyppRepoRefreshCallback.connect();
+    logDebug() << "Connecting repo refresh callbacks" << endl;
+   _zyppRepoRefreshCallback.connect();
 }
 
 RepoRefreshCallbacks::~RepoRefreshCallbacks()
 {
+    logDebug() << "Disconnecting repo refresh callbacks" << endl;
+
     // Each zypp::Callback disconnects automatically in the dtor.
 }
 
