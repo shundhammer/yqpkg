@@ -25,6 +25,8 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "ProgressDialog.h"
+#include "RepoCallbacks.h"
 #include "YQPkgApplication.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -32,8 +34,11 @@
 
 
 YQPkgRepoManager::YQPkgRepoManager()
+    : _progressDialog(0)
 {
     logDebug() << "Creating YQPkgRepoManager" << endl;
+
+    RepoSignalForwarder::instance()->connectRefreshSignals( this );
 }
 
 
@@ -44,6 +49,8 @@ YQPkgRepoManager::~YQPkgRepoManager()
     shutdownZypp();
 
     logDebug() << "Destroying YQPkgRepoManager done" << endl;
+
+    // RepoSignalForwarder::instance()->deleteLater();
 }
 
 
@@ -144,11 +151,16 @@ YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 
 void YQPkgRepoManager::attachRepos()
 {
-    // TO DO: Progress callbacks
     // TO DO: check and load services (?)
+
+    // Create and install the callbacks.
+    // They are uninstalled when the 'callbacks' variable goes out of scope.
+    RepoRefreshCallbacks callbacks;
+    RepoSignalForwarder::instance()->reset();
 
     try
     {
+
         findEnabledRepos();
         refreshRepos();
         loadRepos();
@@ -248,12 +260,69 @@ void YQPkgRepoManager::loadRepos()
     {
         logDebug() << "Loading resolvables from " << repo.name() << endl;
 
-        // TO DO: progress callbacks
 	repoManager()->loadFromCache( repo );
-
-        // TO DO: This is greatly simplified.
-        //
-        // See y-pkg-bindings/src/Source_Resolvables.cc for the mind-boggling
-        // gory details.
     }
 }
+
+
+ProgressDialog *
+YQPkgRepoManager::progressDialog()
+{
+    if ( ! _progressDialog )
+    {
+        _progressDialog = new ProgressDialog( _( "Refreshing repository" ) );
+        CHECK_NEW( _progressDialog );
+    }
+
+    return _progressDialog;
+}
+
+
+void YQPkgRepoManager::repoRefreshStart( const QString & repoName )
+{
+    logDebug() << repoName << endl;
+
+    progressDialog()->reset();
+    progressDialog()->setText( _( "Refreshing Repository %1" ).arg( repoName ) );
+}
+
+
+void YQPkgRepoManager::repoRefreshProgress( int percent )
+{
+    logVerbose() << percent << "%" << endl;
+
+
+    // Show the progress dialog if it's not shown yet
+
+    const int millisec   = 1500;
+    bool doProcessEvents = progressDialog()->showDelayed( millisec );
+
+
+    // Update the progress bar
+
+    if ( percent > progressDialog()->value() )
+    {
+        progressDialog()->setValue( percent );
+        doProcessEvents = true;
+    }
+
+    if ( doProcessEvents )
+        processEvents();
+}
+
+
+void YQPkgRepoManager::repoRefreshEnd()
+{
+    logDebug() << endl;
+
+    progressDialog()->hide();
+    processEvents();
+}
+
+
+void YQPkgRepoManager::processEvents()
+{
+    QCoreApplication::processEvents( QEventLoop::AllEvents,
+                                     500 ); //millisec
+}
+
