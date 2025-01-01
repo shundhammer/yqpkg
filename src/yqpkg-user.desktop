@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=YQPkg
+Name=YQPkg (read-only as a nonprivileged user)
 Exec=yqpkg
 Icon=yqpkg
-GenericName=YQPkg Qt-based package manager
+GenericName=YQPkg Qt-based package manager (read-only as a non-root user)
 Terminal=false
 MimeType=
 Categories=Qt;System;Package Management

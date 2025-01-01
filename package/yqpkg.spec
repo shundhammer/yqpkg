@@ -40,6 +40,8 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  %{libzypp_devel_version}
 
+Requires:       xdg-utils  # xdg-su
+
 Summary:        Standalone graphical package management based on libzypp
 License:        GPL-2.0
 URL:            http://github.com/shundhammer/yqpkg

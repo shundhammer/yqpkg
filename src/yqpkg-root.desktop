@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=YQPkg (root)
+Exec=xdg-su -c yqpkg
+Icon=yqpkg
+GenericName=YQPkg Qt-based package manager (with full root privileges)
+Terminal=false
+MimeType=
+Categories=Qt;System;Package Management
+Keywords=package management;system administration
