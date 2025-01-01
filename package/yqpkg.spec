@@ -1,7 +1,7 @@
 #
 # spec file for package yqpkg
 #
-# Copyright (c) 2021 SUSE LLC
+# Copyright (c) 2024 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,7 +20,7 @@ Name:           yqpkg
 
 # If you change the version here, don't forget ../VERSION.cmake !
 # To increase only the last number, use  rake version:bump
-Version:        0.7.0
+Version:        0.8.0
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
