@@ -75,7 +75,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="PkgTaskListWidget" name="reposList">
+      <widget class="QListWidget" name="reposList">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
          <horstretch>1</horstretch>
@@ -112,26 +112,6 @@
        <property name="uniformItemSizes">
         <bool>false</bool>
        </property>
-       <item>
-        <property name="text">
-         <string>Tumbleweed OSS Repo</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tumbleweed Non-OSS Repo</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>NVidia Repo</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>PackMan Essentials Repo</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item>
@@ -229,13 +209,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PkgTaskListWidget</class>
-   <extends>QListWidget</extends>
-   <header>PkgTaskListWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>
