@@ -144,7 +144,6 @@ YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 
 void YQPkgRepoManager::attachRepos()
 {
-    // TO DO: Progress callbacks
     // TO DO: check and load services (?)
 
     try
@@ -215,19 +214,15 @@ void YQPkgRepoManager::refreshRepos()
 
     QElapsedTimer timer;
 
-    for ( RepoInfoIterator it = _repos.begin(); it != _repos.end(); ++it )
+    for ( const zypp::RepoInfo & repo: _repos )
     {
-        zypp::RepoInfo repo = *it;
-
         try
         {
             timer.start();
-
             logInfo() << "Refreshing repo " << repo.name() << "..." << endl;
 
             repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
             repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
-            repoManager()->loadFromCache  ( repo );
 
             logInfo() << "Refreshing repo " << repo.name()
                       << " done after " << timer.elapsed() / 1000.0 << " sec"
