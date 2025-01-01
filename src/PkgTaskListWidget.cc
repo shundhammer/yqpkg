@@ -104,7 +104,7 @@ PkgTaskListWidgetItem::PkgTaskListWidgetItem( PkgTask *           task,
 bool PkgTaskListWidgetItem::operator<( const QListWidgetItem & otherListWidgetItem ) const
 {
     const PkgTaskListWidgetItem * other =
-        dynamic_cast<const PkgTaskListWidgetItem *> (&otherListWidgetItem);
+        dynamic_cast<const PkgTaskListWidgetItem *>( &otherListWidgetItem );
 
     if ( other && sortByInsertionSequence() )
     {
