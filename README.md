@@ -38,12 +38,12 @@ Limitations:
 
 - ~~No repo refresh yet. If needed, use `sudo zypper ref` before program start.~~
 
-  _Repo refresh is now implemented._
+  _Repo refresh is now implemented; now even with progress feedback.__
 
 - No GPG key import from repos, no failed package GPG signature fail prompt.
 
-- No repo operations. You get the repo view, though, where you can view and
-  select packages by repo.
+- No repo operations like adding, removing, setting priority, enabling, disabling.
+  You get the repo view, though, where you can view and select packages by repo.
 
 For details and screenshots, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
 

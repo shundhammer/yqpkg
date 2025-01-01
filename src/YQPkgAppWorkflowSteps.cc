@@ -18,12 +18,13 @@
 #include <QMessageBox>
 
 #include "Exception.h"
+#include "InitReposPage.h"
 #include "Logger.h"
 #include "MainWindow.h"
 #include "PkgCommitPage.h"
 #include "SummaryPage.h"
-#include "YQPkgSelector.h"
 #include "YQPkgRepoManager.h"
+#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "YQPkgApplication.h"
 #include "YQPkgAppWorkflowSteps.h"
@@ -142,7 +143,7 @@ QWidget * YQPkgInitReposStep::createPage()
 {
     _doProcessEvents = true; // This is a splash screen, so process events
 
-    return new QLabel( _( "Loading package manager data..." ) );
+    return new InitReposPage( _app->repoManager() );
 }
 
 

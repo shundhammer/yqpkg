@@ -29,6 +29,7 @@ set( SOURCES
   Logger.cc
   Exception.cc
   FSize.cc
+  InitReposPage.cc
   MainWindow.cc
   PkgCommitCallbacks.cc
   PkgCommitPage.cc
