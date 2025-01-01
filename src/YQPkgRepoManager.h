@@ -35,6 +35,8 @@ typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
  **/
 class YQPkgRepoManager: public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * Constructor
