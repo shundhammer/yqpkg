@@ -248,12 +248,6 @@ void YQPkgRepoManager::loadRepos()
     {
         logDebug() << "Loading resolvables from " << repo.name() << endl;
 
-        // TO DO: progress callbacks
 	repoManager()->loadFromCache( repo );
-
-        // TO DO: This is greatly simplified.
-        //
-        // See y-pkg-bindings/src/Source_Resolvables.cc for the mind-boggling
-        // gory details.
     }
 }
