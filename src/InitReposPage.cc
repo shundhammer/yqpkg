@@ -132,6 +132,8 @@ void InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
 
     if ( item )
         item->setIcon( icon );
+
+    _ui->reposList->scrollToItem( item );
 }
 
 
