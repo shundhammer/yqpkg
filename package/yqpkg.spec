@@ -1,7 +1,7 @@
 #
 # spec file for package yqpkg
 #
-# Copyright (c) 2024 SUSE LLC
+# Copyright (c) 2025 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -34,7 +34,6 @@ BuildRequires:  gcc-c++
 BuildRequires:  gcc-fortran
 
 BuildRequires:  pkg-config
-
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
@@ -87,6 +86,7 @@ install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
 %files -n %{bin_name}
+%doc README.md
 %defattr(-,root,root)
 %{_bindir}/yqpkg
 %doc %dir %{_docdir}/%{bin_name}

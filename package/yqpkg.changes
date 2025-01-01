@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Wed Jan  1 19:58:53 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- All major features are now implemented
+- 0.8.0
+
+-------------------------------------------------------------------
 Mon Nov 18 10:55:55 UTC 2024 - Stefan Hundhammer <shundhammer@suse.com>
 
-- Initial version
+- Initial version as a hackweek project (proof of concept)
 - 0.1.0
 
 -------------------------------------------------------------------
