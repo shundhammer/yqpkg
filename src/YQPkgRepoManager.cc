@@ -158,17 +158,7 @@ void YQPkgRepoManager::attachRepos()
 
         if ( geteuid() != 0 )
         {
-            logInfo() << "Run 'sudo zypper refresh' and restart the program." << endl;
-
-            QString message = _( "Error loading the repos. Run\n\n"
-                                 "    sudo zypper refresh\n\n"
-                                 "and restart the program." );
-            std::cerr << toUTF8( message ) << std::endl;
-
-            QMessageBox::warning( MainWindow::instance(), // parent
-                                  _( "Error" ),
-                                  message,
-                                  QMessageBox::Ok );
+            notifyUserToRunZypperDup();
 
             logInfo() << "Exiting." << endl;
             exit( 1 );
@@ -194,6 +184,8 @@ void YQPkgRepoManager::findEnabledRepos()
             logInfo() << "Found repo \"" << repo.name() << "\""
                       << " URL: " << repo.url().asString()
                       << endl;
+
+            emit foundRepo( repo );
         }
         else
         {
@@ -223,6 +215,7 @@ void YQPkgRepoManager::refreshRepos()
         {
             timer.start();
             logInfo() << "Refreshing repo " << repo.name() << "..." << endl;
+            emit refreshRepoStart( repo );
 
             repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
             repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
@@ -233,6 +226,8 @@ void YQPkgRepoManager::refreshRepos()
             logInfo() << "Refreshing repo " << repo.name()
                       << " done after " << timer.elapsed() / 1000.0 << " sec"
                       << endl;
+
+            emit refreshRepoDone( repo );
         }
         catch ( const zypp::repo::RepoMetadataException & exception )
         {
@@ -252,3 +247,20 @@ void YQPkgRepoManager::loadRepos()
 	repoManager()->loadFromCache( repo );
     }
 }
+
+
+void YQPkgRepoManager::notifyUserToRunZypperDup() const
+{
+    logInfo() << "Run 'sudo zypper refresh' and restart the program." << endl;
+
+    QString message = _( "Error loading the repos. Run\n\n"
+                         "    sudo zypper refresh\n\n"
+                         "and restart the program." );
+    std::cerr << toUTF8( message ) << std::endl;
+
+    QMessageBox::warning( MainWindow::instance(), // parent
+                          _( "Error" ),
+                          message,
+                          QMessageBox::Ok );
+}
+

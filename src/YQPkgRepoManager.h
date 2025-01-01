@@ -88,6 +88,24 @@ public:
     RepoManager_Ptr repoManager();
 
 
+signals:
+
+    /**
+     * Emitted when an enabled repo was found.
+     **/
+    void foundRepo( const zypp::RepoInfo & repo );
+
+    /**
+     * Emitted when refreshing a repo starts.
+     **/
+    void refreshRepoStart( const zypp::RepoInfo & repo );
+
+    /**
+     * Emitted when refreshing a repo is done.
+     **/
+    void refreshRepoDone ( const zypp::RepoInfo & repo );
+
+
 protected:
 
     /**
@@ -119,6 +137,13 @@ protected:
      * Load the resolvables from the enabled repos.
      **/
     void loadRepos();
+
+    /**
+     * Notify the user to run 'zypper dup' in a warning pop-up and on stderr.
+     * This does not exit.
+     **/
+    void notifyUserToRunZypperDup() const;
+
 
     //
     // Data members
