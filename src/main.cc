@@ -44,6 +44,8 @@ void usage()
 	 << "  -r | --read-only (default for non-root users)\n"
 	 << "  -n | --dry-run\n"
 	 << "  -d | --download-only\n"
+         << "  -f | --no-repo-refresh\n"
+         << "  -v | --no-verify\n"
 	 << "  -h | --help \n"
 	 << "\n"
 	 << "Debugging options:\n"
@@ -51,6 +53,7 @@ void usage()
 	 << "  --fake-root\n"
 	 << "  --fake-commit\n"
 	 << "  --fake-summary\n"
+         << "  --slow-repo-refresh\n"
 	 << "\n"
 	 << std::endl;
 
@@ -90,13 +93,16 @@ parseCommandLineOptions( QStringList & argList )
 {
     YQPkgAppOptions optFlags;
 
-    if ( commandLineOption( "--read-only",     "-r", argList ) ) optFlags |= OptReadOnly;
-    if ( commandLineOption( "--dry-run",       "-n", argList ) ) optFlags |= OptDryRun;
-    if ( commandLineOption( "--download-only", "-d", argList ) ) optFlags |= OptDownloadOnly;
-    if ( commandLineOption( "--fake-root",     ""  , argList ) ) optFlags |= OptFakeRoot;
-    if ( commandLineOption( "--fake-commit",   "" ,  argList ) ) optFlags |= OptFakeCommit;
-    if ( commandLineOption( "--fake-summary",  "" ,  argList ) ) optFlags |= OptFakeSummary;
-    if ( commandLineOption( "--help",          "-h" ,argList ) ) usage(); // this will exit
+    if ( commandLineOption( "--read-only",          "-r", argList ) ) optFlags |= OptReadOnly;
+    if ( commandLineOption( "--dry-run",            "-n", argList ) ) optFlags |= OptDryRun;
+    if ( commandLineOption( "--download-only",      "-d", argList ) ) optFlags |= OptDownloadOnly;
+    if ( commandLineOption( "--no-repo-refresh",    "-f", argList ) ) optFlags |= OptNoRepoRefresh;
+    if ( commandLineOption( "--no-verify",          "-v", argList ) ) optFlags |= OptNoVerify;
+    if ( commandLineOption( "--fake-root",          "" ,  argList ) ) optFlags |= OptFakeRoot;
+    if ( commandLineOption( "--fake-commit",        "" ,  argList ) ) optFlags |= OptFakeCommit;
+    if ( commandLineOption( "--fake-summary",       "" ,  argList ) ) optFlags |= OptFakeSummary;
+    if ( commandLineOption( "--slow-repo-refresh",  "" ,  argList ) ) optFlags |= OptSlowRepoRefresh;
+    if ( commandLineOption( "--help",               "-h", argList ) ) usage(); // this will exit
 
     if ( ! argList.isEmpty() )
     {

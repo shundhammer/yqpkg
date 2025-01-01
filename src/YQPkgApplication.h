@@ -39,16 +39,19 @@ typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
 enum YQPkgAppOption
 {
-    OptNone         = 0,
-    OptReadOnly     = 0x01,
-    OptDryRun       = 0x02,
-    OptDownloadOnly = 0x04,
+    OptNone            = 0,
+    OptReadOnly        = 0x01,
+    OptDryRun          = 0x02,
+    OptDownloadOnly    = 0x04,
+    OptNoRepoRefresh   = 0x08,
+    OptNoVerify        = 0x10,
 
     // For debugging
 
-    OptFakeRoot     = 0x100,
-    OptFakeCommit   = 0x200,
-    OptFakeSummary  = 0x400
+    OptFakeRoot        = 0x100,
+    OptFakeCommit      = 0x200,
+    OptFakeSummary     = 0x400,
+    OptSlowRepoRefresh = 0x800,
 };
 
 // See https://doc.qt.io/qt-5/qflags.html

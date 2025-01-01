@@ -15,7 +15,7 @@
  */
 
 
-#include <unistd.h>             // geteuid()
+#include <unistd.h>             // geteuid(), sleep()
 #include <iostream>             // cerr
 #include <QElapsedTimer>
 #include <QMessageBox>
@@ -212,6 +212,9 @@ void YQPkgRepoManager::refreshRepos()
         return;
     }
 
+    if ( YQPkgApplication::isOptionSet( OptNoRepoRefresh ) )
+        return;
+
     QElapsedTimer timer;
 
     for ( const zypp::RepoInfo & repo: _repos )
@@ -223,6 +226,9 @@ void YQPkgRepoManager::refreshRepos()
 
             repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
             repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
+
+            if ( YQPkgApplication::isOptionSet( OptSlowRepoRefresh ) )
+                sleep( 2 );
 
             logInfo() << "Refreshing repo " << repo.name()
                       << " done after " << timer.elapsed() / 1000.0 << " sec"

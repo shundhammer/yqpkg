@@ -255,7 +255,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
 #endif
 
-        if ( _pkgConflictDialog )
+        if ( _pkgConflictDialog && ! YQPkgApplication::isOptionSet( OptNoVerify ) )
             QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
     }
 #endif
