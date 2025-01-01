@@ -109,6 +109,7 @@ set( QRC_FILES icons.qrc ) # Compiled-in resources: icons
 #
 
 set( UI_FILES
+     init-repos-page.ui
      pkg-commit-page.ui
      progress-dialog.ui
      search-filter-view.ui
