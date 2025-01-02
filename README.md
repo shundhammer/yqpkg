@@ -106,7 +106,7 @@ libzypp-devel.
 
 ```
 sudo zypper install -t pattern devel_C_C++ devel_qt5
-sudo zypper install cmake libzypp-devel
+sudo zypper install cmake libzypp-devel libqt5-qtbase-devel
 ```
 
 
