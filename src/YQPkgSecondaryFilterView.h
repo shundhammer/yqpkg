@@ -137,7 +137,6 @@ protected:
 
     QY2ComboTabWidget *     _secondaryFilters;
     QWidget *               _allPackages;
-    QWidget *               _unmaintainedPackages;
     YQPkgSearchFilterView * _searchFilterView;
     YQPkgStatusFilterView * _statusFilterView;
 };

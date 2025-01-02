@@ -107,12 +107,6 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
 
-    // Unmaintained packages: Packages that are not provided in any of
-    // the configured repositories
-    _unmaintainedPackages = new QWidget( this );
-    CHECK_NEW( _unmaintainedPackages );
-    _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
-
 
     //
     // Package search view
@@ -127,6 +121,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
 
     connect( _secondaryFilters, SIGNAL( currentChanged( QWidget * ) ),
              this,              SLOT  ( filter()                    ) );
+
 
     //
     // Status filter view
@@ -178,10 +173,6 @@ YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel selectable,
     if ( _allPackages->isVisible() )
     {
         return true;
-    }
-    else if ( _unmaintainedPackages->isVisible() )
-    {
-        return ( selectable->availableSize() == 0 );
     }
     else if ( _searchFilterView->isVisible() )
     {
