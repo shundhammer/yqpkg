@@ -56,6 +56,18 @@ public:
      **/
     void addPage( const QString & pageLabel, QWidget * page );
 
+    /**
+     * Declare a previously added page to be the one where the whole widget
+     * stacck will be minimized (hidden) whenever that combo box entry is
+     * selected.
+     *
+     * This will usually be an empty page; like the "All Packages" page in
+     * YQPkgSecondaryFilter: it doesn't need all that screen space that is
+     * reserved for the other secondary filters, so that whole widget tack can
+     * be collapsed.
+     **/
+    void setMinimizePage( QWidget * page );
+
 
 signals:
 
@@ -91,6 +103,7 @@ protected:
     QLabel		* _comboLabel;
     QStackedWidget 	* _widgetStack;
     QHash<int, QWidget *> _pages;
+    QWidget            *  _minimizePage;
 };
 
 

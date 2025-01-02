@@ -74,10 +74,12 @@ void YQPkgSecondaryFilterView::init(QWidget * primaryWidget)
     splitter->setStretchFactor( 2, 3 );
 }
 
+
 YQPkgSecondaryFilterView::~YQPkgSecondaryFilterView()
 {
     // NOP
 }
+
 
 QWidget *
 YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * primaryWidget )
@@ -134,6 +136,10 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
 
     connect( _statusFilterView, SIGNAL( filterStart() ),
              primaryWidget,     SLOT  ( filter()      ) );
+
+
+    // Collapse the secondary filters whenever "All Packages" is selected
+    _secondaryFilters->setMinimizePage( _allPackages );
 
     return _secondaryFilters;
 }

@@ -32,16 +32,18 @@ using std::string;
 
 QY2ComboTabWidget::QY2ComboTabWidget( const QString & label,
                                       QWidget *       parent )
-    : QWidget(parent)
+    : QWidget( parent )
+    , _minimizePage( 0 )
 {
-    QVBoxLayout *vbox = new QVBoxLayout(this);
+    QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setContentsMargins( 0, 0, 0, 0 );
 
     this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
-    _comboLabel = new QLabel(label);
-    vbox->addWidget(_comboLabel);
+    _comboLabel = new QLabel( label );
     Q_CHECK_PTR( _comboLabel );
+    _comboLabel->setAlignment( Qt::AlignLeft | Qt::AlignBottom );
+    vbox->addWidget( _comboLabel );
 
     _comboBox = new QComboBox( this );
     Q_CHECK_PTR( _comboBox );
@@ -80,12 +82,22 @@ QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 
 
 void
+QY2ComboTabWidget::setMinimizePage( QWidget * page )
+{
+    _minimizePage = page;
+    _widgetStack->setVisible( page != _widgetStack->currentWidget() );
+}
+
+
+void
 QY2ComboTabWidget::showPageIndex( int index )
 {
     if ( _pages.contains(index) )
     {
         QWidget * page = _pages[ index ];
         _widgetStack->setCurrentWidget( page );
+        _widgetStack->setVisible( page != _minimizePage );
+
         // yuiDebug() << "Changing current page" << endl;
         emit currentChanged( page );
     }
@@ -110,7 +122,7 @@ QY2ComboTabWidget::showPage( QWidget * page )
         return;
     }
 
-    // Search the dict for this page
+    // Search the hash for this page
 
     QHashIterator<int, QWidget *> it( _pages );
 
