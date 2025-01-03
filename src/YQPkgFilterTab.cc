@@ -46,9 +46,8 @@ typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
 struct YQPkgFilterTabPrivate
 {
-    YQPkgFilterTabPrivate( const QString & name )
-        : settingsName( name )
-        , baseClassWidgetStack(0)
+    YQPkgFilterTabPrivate()
+        : baseClassWidgetStack(0)
         , outerSplitter(0)
         , leftPaneSplitter(0)
         , filtersWidgetStack(0)
@@ -59,7 +58,6 @@ struct YQPkgFilterTabPrivate
         , tabContextMenuPage(0)
         {}
 
-    QString               settingsName;
     QStackedWidget *      baseClassWidgetStack;
     QSplitter *           outerSplitter;
     QSplitter *           leftPaneSplitter;
@@ -78,9 +76,9 @@ struct YQPkgFilterTabPrivate
 
 
 
-YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
+YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     : QTabWidget( parent )
-    , _priv( new YQPkgFilterTabPrivate( settingsName ) )
+    , _priv( new YQPkgFilterTabPrivate() )
 {
     CHECK_NEW( _priv );
 
@@ -621,16 +619,16 @@ YQPkgFilterTab::readSettings()
     closeAllPages();
 
     QSettings settings;
-    settings.beginGroup( _priv->settingsName );
+    settings.beginGroup( "Pages" );
 
-    QStringList pages = settings.value( "TabPages" ).toStringList();
+    QStringList pages = settings.value( "OpenPages"   ).toStringList();
     QString current   = settings.value( "CurrentPage" ).toString();
 
     settings.endGroup();
 
 
     logDebug() << "Restoring pages " << pages << endl;
-    logDebug() << "Current page: " << current << endl;
+    logDebug() << "Current page:   " << current << endl;
 
     foreach ( QString id, pages )
     {
@@ -676,9 +674,9 @@ YQPkgFilterTab::writeSettings()
 
 
     QSettings settings;
-    settings.beginGroup( _priv->settingsName );
+    settings.beginGroup( "Pages" );
 
-    settings.setValue( "TabPages", pages );
+    settings.setValue( "OpenPages", pages );
 
     if ( currentPage )
         settings.setValue( "CurrentPage", currentPage->id );

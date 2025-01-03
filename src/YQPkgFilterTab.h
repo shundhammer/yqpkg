@@ -70,10 +70,9 @@ class YQPkgFilterTab: public QTabWidget
 public:
 
     /**
-     * Constructor. 'settingsName' is the name to use to save and load settings.
+     * Constructor.
      **/
-    YQPkgFilterTab( QWidget *       parent,
-                    const QString & settingsName );
+    YQPkgFilterTab( QWidget * parent );
 
     /**
      * Destructor.
@@ -149,6 +148,7 @@ public slots:
      **/
     void showPage( QWidget * page );
     void showPage( const QString & internalName );
+    void showPage( int tabIndex );
 
     /**
      * Close the current page unless this is the last visible page.
@@ -179,11 +179,6 @@ public slots:
 
 
 protected slots:
-
-    /**
-     * Show the page with the specified tab index.
-     **/
-    void showPage( int tabIndex );
 
     /**
      * Show the page with the widget of this action's data().

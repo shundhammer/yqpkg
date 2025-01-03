@@ -155,8 +155,10 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _filters->readSettings();
     bool pagesRestored = _filters->tabCount() > 0;
 
+#if 0
     if ( _pkgList )
         _pkgList->clear();
+#endif
 
     if ( ! pagesRestored )
     {
@@ -168,7 +170,12 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
 
         if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
         if ( _updatesFilterView ) _filters->showPage( _updatesFilterView );
+        if ( _repoFilterView    ) _filters->showPage( _repoFilterView    );
         if ( _patternList       ) _filters->showPage( _patternList       );
+        if ( _statusFilterView  ) _filters->showPage( _statusFilterView  );
+
+        // Select the active page
+        if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
     }
 
 
@@ -274,8 +281,7 @@ YQPkgSelector::~YQPkgSelector()
 }
 
 
-void
-YQPkgSelector::basicLayout()
+void YQPkgSelector::basicLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout( layout );
@@ -286,45 +292,85 @@ YQPkgSelector::basicLayout()
     layout->setSpacing( SPACING_BELOW_MENU_BAR );
     layoutMenuBar( this );
 
-    QString settingsName = "YQPkgSel";
-
-    if ( onlineUpdateMode() )   settingsName = "YQOnlineUpdate";
-    if ( updateMode() )         settingsName = "YQSystemUpdate";
-
-    _filters = new YQPkgFilterTab( this, settingsName );
+    _filters = new YQPkgFilterTab( this );
     CHECK_NEW( _filters );
 
     layout->addWidget( _filters );
-    layoutFilters( this );
+    createFilterViews();
+    _filters->showPage( 0 );
+
     layoutRightPane( _filters->rightPane() );
 }
 
 
-void
-YQPkgSelector::layoutFilters( QWidget * parent )
+// --- Filter views START ---
+
+
+void YQPkgSelector::createFilterViews()
+{
+    // The order of creation is both the order in the "View" button's menu and
+    // the order of tabs
+
+    createUpdateProblemsFilterView(); // Only if problematic packages present
+    createPatchFilterView();          // Patches - Online update or F2
+
+
+    // Standard views - visible by default
+
+    createSearchFilterView();         // Package search
+    createUpdatesFilterView();        // Package update
+    createRepoFilterView();
+    createServiceFilterView();        // Only if services available
+    createPatternsFilterView();
+
+    // Not visible by default
+
+    createPkgClassificationFilterView();
+    createLanguagesFilterView();
+
+    // This should be the last one
+    createStatusFilterView();        // a.k.a. intallation summary
+}
+
+
+void YQPkgSelector::createSearchFilterView()
+{
+    _searchFilterView = new YQPkgSearchFilterView( this );
+    CHECK_NEW( _searchFilterView );
+
+    _filters->addPage( _( "S&earch" ), _searchFilterView, "search" );
+}
+
+
+void YQPkgSelector::createUpdatesFilterView()
+{
+    _updatesFilterView = new YQPkgUpdatesFilterView( this );
+    CHECK_NEW( _updatesFilterView );
+
+    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates" );
+}
+
+
+void YQPkgSelector::createUpdateProblemsFilterView()
 {
 #if USE_UPDATE_PROBLEM_FILTER_VIEW
-    //
-    // Update problem view
-    //
 
     if ( updateMode() )
     {
         if ( YQPkgUpdateProblemFilterView::haveProblematicPackages()
              || testMode() )
         {
-            _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
+            _updateProblemFilterView = new YQPkgUpdateProblemFilterView( this );
             CHECK_NEW( _updateProblemFilterView );
             _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView, "update_problems" );
         }
     }
 #endif
+}
 
 
-    //
-    // Patches view
-    //
-
+void YQPkgSelector::createPatchFilterView()
+{
     if ( onlineUpdateMode()
 #if ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE
          || ! zyppPool().empty<zypp::Patch>()
@@ -333,130 +379,77 @@ YQPkgSelector::layoutFilters( QWidget * parent )
     {
         addPatchFilterView();
     }
+}
 
 
-    //
-    // Patterns view
-    //
-
-    if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
-    {
-        _patternList = new YQPkgPatternList( parent );
-        CHECK_NEW( _patternList );
-
-        _filters->addPage( _( "P&atterns" ), _patternList, "patterns" );
-
-        connect( _patternList, SIGNAL( statusChanged()           ),
-                 this,         SLOT  ( autoResolveDependencies() ) );
-
-        connect( this,         SIGNAL( refresh()                 ),
-                 _patternList, SLOT  ( updateItemStates()        ) );
-
-        if ( _pkgConflictDialog )
-        {
-            connect( _pkgConflictDialog, SIGNAL( updatePackages()         ),
-                     _patternList,       SLOT  ( updateItemStates()       ) );
-        }
-    }
-
-
-    //
-    // Updates view
-    //
-
-    _updatesFilterView = new YQPkgUpdatesFilterView( parent );
-    CHECK_NEW( _updatesFilterView );
-    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates" );
-
-    connect( this,               SIGNAL( loadData() ),
-             _updatesFilterView, SLOT  ( filter()   ) );
-
-
-    //
-    // Package classification view
-    //
-
-    _pkgClassificationFilterView = new YQPkgClassificationFilterView( parent );
-    CHECK_NEW( _pkgClassificationFilterView );
-    _filters->addPage( _( "Package &Classification" ), _pkgClassificationFilterView, "package_classification" );
-
-    connect( this,                         SIGNAL( loadData() ),
-             _pkgClassificationFilterView, SLOT  ( filter()   ) );
-
-
-    //
-    // Languages view
-    //
-
-    _langList = new YQPkgLangList( parent );
-    CHECK_NEW( _langList );
-
-    _filters->addPage( _( "&Languages" ), _langList, "languages" );
-    _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
-
-    connect( _langList, SIGNAL( statusChanged()           ),
-             this,      SLOT  ( autoResolveDependencies() ) );
-
-    connect( this,      SIGNAL( refresh()                 ),
-             _langList, SLOT  ( updateItemStates()        ) );
-
-
-    //
-    // Repository view
-    //
-
-    _repoFilterView = new YQPkgRepoFilterView( parent );
+void YQPkgSelector::createRepoFilterView()
+{
+    _repoFilterView = new YQPkgRepoFilterView( this );
     CHECK_NEW( _repoFilterView );
+
     _filters->addPage( _( "&Repositories" ), _repoFilterView, "repos" );
 
-    // hide and show the upgrade label when tabs change, or when the user
-    // selects repositories
-
-    connect( _repoFilterView, SIGNAL( filterStart()                  ),
-             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
-
-    connect( this,            SIGNAL( refresh()                      ),
-             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
-
-    connect( _filters,        SIGNAL( currentChanged( QWidget * )    ),
-             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+}
 
 
-    // Services view - only if a service is present
-
-    if ( YQPkgServiceFilterView::any_service() )
+void YQPkgSelector::createServiceFilterView()
+{
+    if ( YQPkgServiceFilterView::any_service() ) // Only if a service is present
     {
-        _serviceFilterView = new YQPkgServiceFilterView( parent );
+        _serviceFilterView = new YQPkgServiceFilterView( this );
         CHECK_NEW( _serviceFilterView );
 
         // TRANSLATORS: Menu item
         _filters->addPage( _( "&Services" ), _serviceFilterView, "services" );
     }
+}
 
 
-    //
-    // Package search view
-    //
+void YQPkgSelector::createPatternsFilterView()
+{
+    if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
+    {
+        _patternList = new YQPkgPatternList( this );
+        CHECK_NEW( _patternList );
 
-    _searchFilterView = new YQPkgSearchFilterView( parent );
-    CHECK_NEW( _searchFilterView );
-    _filters->addPage( _( "S&earch" ), _searchFilterView, "search" );
+        _filters->addPage( _( "P&atterns" ), _patternList, "patterns" );
+    }
+}
 
 
-    //
-    // Status change view
-    //
+void YQPkgSelector::createPkgClassificationFilterView()
+{
+    _pkgClassificationFilterView = new YQPkgClassificationFilterView( this );
+    CHECK_NEW( _pkgClassificationFilterView );
+    _filters->addPage( _( "Package &Classification" ), _pkgClassificationFilterView, "package_classification" );
+}
 
-    _statusFilterView = new YQPkgStatusFilterView( parent );
+
+void YQPkgSelector::createLanguagesFilterView()
+{
+    _langList = new YQPkgLangList( this );
+    CHECK_NEW( _langList );
+
+    _filters->addPage( _( "&Languages" ), _langList, "languages" );
+    _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
+}
+
+
+void YQPkgSelector::createStatusFilterView()
+{
+    _statusFilterView = new YQPkgStatusFilterView( this );
     CHECK_NEW( _statusFilterView );
     _filters->addPage( _( "&Installation Summary" ), _statusFilterView, "inst_summary" );
 }
 
 
+// --- Filter views END ---
+
+
 QWidget *
-YQPkgSelector::layoutRightPane( QWidget *parent )
+YQPkgSelector::layoutRightPane( QWidget * parent )
 {
-    QVBoxLayout *layout = new QVBoxLayout( parent );
+    QVBoxLayout * layout = new QVBoxLayout( parent );
     CHECK_NEW( layout );
     layout->setContentsMargins( SPLITTER_HALF_SPACING,  // left
                                 0,                      // top
@@ -1036,6 +1029,7 @@ YQPkgSelector::makeConnections()
     {
         connect( _repoFilterView,       SIGNAL( filterNearMatch  ( ZyppSel, ZyppPkg ) ),
                  _pkgList,              SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
+
     }
 
     if ( _serviceFilterView && _pkgList )
@@ -1043,6 +1037,31 @@ YQPkgSelector::makeConnections()
         connect( _serviceFilterView,    SIGNAL( filterNearMatch  ( ZyppSel, ZyppPkg ) ),
                  _pkgList,              SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
+
+
+    if ( _updatesFilterView )
+    {
+        connect( this,                  SIGNAL( loadData() ),
+                 _updatesFilterView,    SLOT  ( filter()   ) );
+    }
+
+
+    if ( _langList )
+    {
+
+        connect( _langList, SIGNAL( statusChanged()           ),
+                 this,      SLOT  ( autoResolveDependencies() ) );
+
+        connect( this,      SIGNAL( refresh()                 ),
+                 _langList, SLOT  ( updateItemStates()        ) );
+    }
+
+    if ( _pkgClassificationFilterView )
+    {
+        connect( this,                         SIGNAL( loadData() ),
+                 _pkgClassificationFilterView, SLOT  ( filter()   ) );
+    }
+
 
     if ( _pkgList && _filters->diskUsageList() )
     {
@@ -1052,6 +1071,23 @@ YQPkgSelector::makeConnections()
     }
 
     connectPatchList();
+    connectPatternList();
+
+
+    // Hide and show the upgrade label when tabs change, or when the user
+    // selects repositories
+
+    connect( this,            SIGNAL( refresh()                      ),
+             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+
+    connect( _filters,        SIGNAL( currentChanged( QWidget * )    ),
+             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+
+    if ( _repoFilterView )
+    {
+        connect( _repoFilterView, SIGNAL( filterStart()                  ),
+                 this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+    }
 
 
     //
@@ -1163,14 +1199,13 @@ YQPkgSelector::addPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
+        createPatchFilterView();
         _patchFilterView = new YQPkgPatchFilterView( this );
         CHECK_NEW( _patchFilterView );
         _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
 
         _patchList = _patchFilterView->patchList();
         CHECK_PTR( _patchList );
-
-        connectPatchList();
     }
 }
 
@@ -1206,13 +1241,13 @@ YQPkgSelector::connectPatchList()
         connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
                  _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
 
-        connect( _patchList,            SIGNAL( statusChanged()                 ),
-                 this,                  SLOT  ( autoResolveDependencies()       ) );
+        connect( _patchList,            SIGNAL( statusChanged()           ),
+                 this,                  SLOT  ( autoResolveDependencies() ) );
 
         if ( _pkgConflictDialog )
         {
-            connect( _pkgConflictDialog,SIGNAL( updatePackages()                ),
-                     _patchList,        SLOT  ( updateItemStates()              ) );
+            connect( _pkgConflictDialog,SIGNAL( updatePackages()   ),
+                     _patchList,        SLOT  ( updateItemStates() ) );
         }
 
         connect( this,                  SIGNAL( refresh()                       ),
@@ -1220,6 +1255,27 @@ YQPkgSelector::connectPatchList()
 
     }
 }
+
+
+void
+YQPkgSelector::connectPatternList()
+{
+    if ( ! _patternList )
+        return;
+
+    connect( _patternList, SIGNAL( statusChanged()           ),
+             this,         SLOT  ( autoResolveDependencies() ) );
+
+    connect( this,         SIGNAL( refresh()                 ),
+             _patternList, SLOT  ( updateItemStates()        ) );
+
+    if ( _pkgConflictDialog )
+    {
+        connect( _pkgConflictDialog, SIGNAL( updatePackages()   ),
+                 _patternList,       SLOT  ( updateItemStates() ) );
+    }
+}
+
 
 
 #if FIXME_IMPORT_EXPORT
@@ -1496,49 +1552,68 @@ YQPkgSelector::globalUpdatePkg( bool force )
 void
 YQPkgSelector::updateRepositoryUpgradeLabel()
 {
+    if ( ! _repoFilterView || ! _repoFilterView->isVisible() )
+    {
+        _repoUpgradeLabel->hide();
+        _repoUpgradingLabel->hide();
+
+        return;
+    }
+
     zypp::ResPool::repository_iterator it;
     _repoUpgradeLabel->setText("");
     _repoUpgradingLabel->setText("");
 
     // we iterate twice to show first the repo upgrades that
     // can be cancelled, and then the repo that can be added
-    for ( it = zypp::getZYpp()->pool().knownRepositoriesBegin();
+
+    for ( it  = zypp::getZYpp()->pool().knownRepositoriesBegin();
           it != zypp::getZYpp()->pool().knownRepositoriesEnd();
           ++it )
     {
-        zypp::Repository repo(*it);
-        // add the option to cancel the upgrade job against this
-        // repository if there is a job for it
+        zypp::Repository repo( *it );
+
+        // add the option to cancel the upgrade job against this repository
+        // if there is a job for it
+
         if ( zypp::getZYpp()->resolver()->upgradingRepo(repo) )
         {
-            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + _("<p><small><a href=\"repoupgraderemove:///%1\">Cancel switching</a> system packages to versions in repository %2</small></p>")
-                                         .arg(fromUTF8(repo.alias().c_str()))
-                                         .arg(fromUTF8(repo.name().c_str()))
-                                         );
+            QString html = _( "<p><small><a href=\"repoupgraderemove:///%1\">"
+                              "Cancel switching</a> system packages to versions "
+                              "in repository %2</small></p>" )
+                .arg( fromUTF8( repo.alias().c_str() ) )
+                .arg( fromUTF8( repo.name().c_str() ) );
+
+            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + html );
         }
     }
 
-    for ( it = zypp::getZYpp()->pool().knownRepositoriesBegin();
+    for ( it  = zypp::getZYpp()->pool().knownRepositoriesBegin();
           it != zypp::getZYpp()->pool().knownRepositoriesEnd();
           ++it )
     {
         zypp::Repository repo(*it);
-        // add the option to upgrade to this repo packages if it is not the system
-        // repository and there is no upgrade job in the solver for it
+
+        // Add the option to upgrade to this repo packages if it is not the
+        // system repository and there is no upgrade job in the solver for it
         // and the repo is the one selected right now
+
         if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) &&
              ! repo.isSystemRepo() &&
              _repoFilterView->selectedRepo() == repo )
         {
-            _repoUpgradeLabel->setText(_repoUpgradeLabel->text() + _("<p><a href=\"repoupgradeadd:///%1\">Switch system packages</a> to the versions in this repository (%2)</p>")
-                                       .arg(fromUTF8(repo.alias().c_str()))
-                                       .arg(fromUTF8(repo.name().c_str()))
-                                       );
+            QString html = _( "<p><a href=\"repoupgradeadd:///%1\">"
+                              "Switch system packages</a> to the versions "
+                              "in this repository (%2)</p>" )
+                .arg( fromUTF8(repo.alias().c_str()) )
+                .arg( fromUTF8(repo.name().c_str()) );
+
+            _repoUpgradeLabel->setText( _repoUpgradeLabel->text() + html );
         }
     }
-    _repoUpgradeLabel->setVisible(!_repoUpgradeLabel->text().isEmpty() &&
-                                  _repoFilterView->isVisible() );
-    _repoUpgradingLabel->setVisible(!_repoUpgradingLabel->text().isEmpty());
+
+    _repoUpgradeLabel->setVisible  ( ! _repoUpgradeLabel->text().isEmpty()   );
+    _repoUpgradingLabel->setVisible( ! _repoUpgradingLabel->text().isEmpty() );
 }
 
 

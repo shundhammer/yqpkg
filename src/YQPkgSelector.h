@@ -267,14 +267,29 @@ protected:
 
     // Layout methods - create and layout widgets
 
-    void basicLayout();
+    void        basicLayout();
+    void        createFilterViews();
 
-    QWidget *   layoutRightPane         ( QWidget *parent );
-    void        layoutFilters           ( QWidget *parent );
-    void        layoutPkgList           ( QWidget *parent );
-    void        layoutDetailsViews      ( QWidget *parent );
-    void        layoutButtons           ( QWidget *parent );
-    void        layoutMenuBar           ( QWidget *parent );
+    QWidget *   layoutRightPane    ( QWidget *parent );
+    void        layoutPkgList      ( QWidget *parent );
+    void        layoutDetailsViews ( QWidget *parent );
+    void        layoutButtons      ( QWidget *parent );
+    void        layoutMenuBar      ( QWidget *parent );
+
+
+    // Create the various filter views
+
+    void createSearchFilterView();
+    void createUpdateProblemsFilterView();
+    void createPatchFilterView();
+    void createUpdatesFilterView();
+    void createRepoFilterView();
+    void createServiceFilterView();
+    void createPatternsFilterView();
+    void createPkgClassificationFilterView();
+    void createLanguagesFilterView();
+    void createStatusFilterView();
+
 
     /**
      * Establish Qt signal / slot connections.
@@ -308,6 +323,11 @@ protected:
      * Connect the patch list. Caution: Possible bootstrap problem!
      **/
     void connectPatchList();
+
+    /**
+     * Connect the pattern list / filter view.
+     **/
+    void connectPatternList();
 
     /**
      * Set the status of all installed packages (all in the pool, not only
