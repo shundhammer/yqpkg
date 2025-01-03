@@ -471,47 +471,7 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 void
 YQPkgSelector::layoutPkgList( QWidget * parent )
 {
-#if 1
-    // FIXME: This doesn't belong here; it has nothing to do with
-    // the PACKAGE LIST as the function name implies.
-    // Move this out to a separate function!
-
-
-    // This is made visible when activating the repository filter
-
-    QWidget *_notificationsContainer = new QWidget( parent );
-    QVBoxLayout * layout = new QVBoxLayout( _notificationsContainer );
-
-    _repoUpgradingLabel = new QLabel( _notificationsContainer );
-    _repoUpgradingLabel->setTextFormat( Qt::RichText );
-    _repoUpgradingLabel->setWordWrap( true );
-    _repoUpgradingLabel->setVisible( false );
-
-    _repoUpgradeLabel = new QLabel( _notificationsContainer );
-    _repoUpgradeLabel->setTextFormat( Qt::RichText );
-    _repoUpgradeLabel->setWordWrap( true );
-    _repoUpgradeLabel->setVisible( false );
-    _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel" );
-
-    layout->addWidget( _repoUpgradingLabel );
-    layout->addWidget( _repoUpgradeLabel   );
-
-
-    // If the user clicks on a link on the label, we have to check
-    // which repository upgrade job to add or remove, for that
-    // we will encode the links as repoupgradeadd://alias and
-    // repoupgraderemove:://alias
-
-    // FIXME: Those slot names are ridiculously long. WTF?!
-
-    connect( _repoUpgradeLabel, SIGNAL( linkActivated                  ( QString ) ),
-             this,              SLOT  ( slotRepoUpgradeLabelLinkClicked( QString ) ) );
-
-    connect(_repoUpgradingLabel, SIGNAL( linkActivated                  ( QString ) ),
-            this,                SLOT  ( slotRepoUpgradeLabelLinkClicked( QString ) ) );
-
-    updateRepositoryUpgradeLabel();
-#endif
+    layoutNotifications( parent );
 
     _pkgList= new YQPkgList( parent );
     CHECK_NEW( _pkgList );
@@ -521,6 +481,43 @@ YQPkgSelector::layoutPkgList( QWidget * parent )
 
     connect( this,      SIGNAL( resetNotify()  ),
              _pkgList,  SLOT  ( resetContent() ) );
+}
+
+
+void
+YQPkgSelector::layoutNotifications( QWidget * parent )
+{
+    // This is made visible when activating the repository filter
+
+    QWidget *    _notifications       = new QWidget( parent );
+    QVBoxLayout * notificationsLayout = new QVBoxLayout( _notifications );
+
+    _switchToRepoLabel = new QLabel( _notifications );
+    _switchToRepoLabel->setTextFormat( Qt::RichText );
+    _switchToRepoLabel->setWordWrap( true );
+    _switchToRepoLabel->setVisible( false );
+
+    _cancelSwitchingToRepoLabel = new QLabel( _notifications );
+    _cancelSwitchingToRepoLabel->setTextFormat( Qt::RichText );
+    _cancelSwitchingToRepoLabel->setWordWrap( true );
+    _cancelSwitchingToRepoLabel->setVisible( false );
+
+    notificationsLayout->addWidget( _switchToRepoLabel   );
+    notificationsLayout->addWidget( _cancelSwitchingToRepoLabel );
+
+
+    // If the user clicks on a link on the label, we have to check
+    // which repository upgrade job to add or remove, for that
+    // we will encode the links as repoupgradeadd://alias and
+    // repoupgraderemove:://alias
+
+    connect( _switchToRepoLabel,          SIGNAL( linkActivated( QString ) ),
+             this,                        SLOT  ( switchToRepo ( QString ) ) );
+
+    connect( _cancelSwitchingToRepoLabel, SIGNAL( linkActivated( QString ) ),
+             this,                        SLOT  ( switchToRepo ( QString ) ) );
+
+    updateSwitchRepoLabels();
 }
 
 
@@ -1077,16 +1074,16 @@ YQPkgSelector::makeConnections()
     // Hide and show the upgrade label when tabs change, or when the user
     // selects repositories
 
-    connect( this,            SIGNAL( refresh()                      ),
-             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+    connect( this,            SIGNAL( refresh()                ),
+             this,            SLOT  ( updateSwitchRepoLabels() ) );
 
-    connect( _filters,        SIGNAL( currentChanged( QWidget * )    ),
-             this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+    connect( _filters,        SIGNAL( currentChanged( QWidget * ) ),
+             this,            SLOT  ( updateSwitchRepoLabels()    ) );
 
     if ( _repoFilterView )
     {
-        connect( _repoFilterView, SIGNAL( filterStart()                  ),
-                 this,            SLOT  ( updateRepositoryUpgradeLabel() ) );
+        connect( _repoFilterView, SIGNAL( filterStart()           ),
+                 this,            SLOT  ( updateSwitchRepoLabels() ) );
     }
 
 
@@ -1550,21 +1547,47 @@ YQPkgSelector::globalUpdatePkg( bool force )
 
 
 void
-YQPkgSelector::updateRepositoryUpgradeLabel()
+YQPkgSelector::updateSwitchRepoLabels()
 {
     if ( ! _repoFilterView || ! _repoFilterView->isVisible() )
     {
-        _repoUpgradeLabel->hide();
-        _repoUpgradingLabel->hide();
+        _switchToRepoLabel->hide();
+        _cancelSwitchingToRepoLabel->hide();
 
         return;
     }
 
-    zypp::ResPool::repository_iterator it;
-    _repoUpgradeLabel->setText("");
-    _repoUpgradingLabel->setText("");
+    _switchToRepoLabel->setText("");
+    _cancelSwitchingToRepoLabel->setText("");
 
-    // we iterate twice to show first the repo upgrades that
+    zypp::ResPool::repository_iterator it;
+
+    for ( it  = zypp::getZYpp()->pool().knownRepositoriesBegin();
+          it != zypp::getZYpp()->pool().knownRepositoriesEnd();
+          ++it )
+    {
+        zypp::Repository repo(*it);
+
+        // Add the option to upgrade to this repo packages if it is not the
+        // system repository and there is no upgrade job in the solver for it
+        // and the repo is the one selected right now
+
+        if ( ! zypp::getZYpp()->resolver()->upgradingRepo( repo ) &&
+             ! repo.isSystemRepo() &&
+             _repoFilterView->selectedRepo() == repo )
+        {
+            QString html = _( "<p><a href=\"repoupgradeadd:///%1\">"
+                              "Switch system packages</a> to the versions "
+                              "in this repository (%2)</p>" )
+                .arg( fromUTF8( repo.alias().c_str() ) )
+                .arg( fromUTF8( repo.name().c_str()  ) );
+
+            _switchToRepoLabel->setText( _switchToRepoLabel->text() + html );
+        }
+    }
+
+
+    // We iterate twice to show first the repo upgrades that
     // can be cancelled, and then the repo that can be added
 
     for ( it  = zypp::getZYpp()->pool().knownRepositoriesBegin();
@@ -1582,68 +1605,47 @@ YQPkgSelector::updateRepositoryUpgradeLabel()
                               "Cancel switching</a> system packages to versions "
                               "in repository %2</p>" )
                 .arg( fromUTF8( repo.alias().c_str() ) )
-                .arg( fromUTF8( repo.name().c_str() ) );
+                .arg( fromUTF8( repo.name().c_str()  ) );
 
-            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + html );
+            _cancelSwitchingToRepoLabel->setText( _cancelSwitchingToRepoLabel->text() + html );
         }
     }
 
-    for ( it  = zypp::getZYpp()->pool().knownRepositoriesBegin();
-          it != zypp::getZYpp()->pool().knownRepositoriesEnd();
-          ++it )
-    {
-        zypp::Repository repo(*it);
-
-        // Add the option to upgrade to this repo packages if it is not the
-        // system repository and there is no upgrade job in the solver for it
-        // and the repo is the one selected right now
-
-        if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) &&
-             ! repo.isSystemRepo() &&
-             _repoFilterView->selectedRepo() == repo )
-        {
-            QString html = _( "<p><a href=\"repoupgradeadd:///%1\">"
-                              "Switch system packages</a> to the versions "
-                              "in this repository (%2)</p>" )
-                .arg( fromUTF8(repo.alias().c_str()) )
-                .arg( fromUTF8(repo.name().c_str()) );
-
-            _repoUpgradeLabel->setText( _repoUpgradeLabel->text() + html );
-        }
-    }
-
-    _repoUpgradeLabel->setVisible  ( ! _repoUpgradeLabel->text().isEmpty()   );
-    _repoUpgradingLabel->setVisible( ! _repoUpgradingLabel->text().isEmpty() );
+    _switchToRepoLabel->setVisible( ! _switchToRepoLabel->text().isEmpty() );
+    _cancelSwitchingToRepoLabel->setVisible( ! _cancelSwitchingToRepoLabel->text().isEmpty() );
 }
 
 
 void
-YQPkgSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
+YQPkgSelector::switchToRepo( const QString & link )
 {
     logDebug() << "link " << link << " clicked on label" << endl;
 
-    QUrl url(link);
-    if (url.scheme() == "repoupgradeadd")
+    QUrl url( link );
+    if ( url.scheme() == "repoupgradeadd" )
     {
         logDebug() << "looking for repo " << url.path() << endl;
-        std::string alias(url.path().remove(0,1).toStdString());
-        zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
+
+        std::string alias( url.path().remove( 0, 1 ).toStdString() );
+        zypp::Repository repo( zypp::getZYpp()->pool().reposFind( alias ) );
+
         logDebug() << repo.name() << endl;
 
         if ( repo != zypp::Repository::noRepository )
         {
-            zypp::getZYpp()->resolver()->addUpgradeRepo(repo);
+            zypp::getZYpp()->resolver()->addUpgradeRepo( repo );
+
             // Do not complain about vendor change when switching repos (bsc##1149391)
-            zypp::getZYpp()->resolver()->dupSetAllowVendorChange(true);
+            zypp::getZYpp()->resolver()->dupSetAllowVendorChange( true );
         }
     }
-    else if (url.scheme() == "repoupgraderemove")
+    else if ( url.scheme() == "repoupgraderemove" )
     {
-        std::string alias(url.path().remove(0,1).toStdString());
-        zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
+        std::string alias( url.path().remove( 0, 1 ).toStdString() );
+        zypp::Repository repo( zypp::getZYpp()->pool().reposFind( alias ) );
 
         if (  repo != zypp::Repository::noRepository )
-            zypp::getZYpp()->resolver()->removeUpgradeRepo(repo);
+            zypp::getZYpp()->resolver()->removeUpgradeRepo( repo );
     }
     else
         logDebug() << "unknown link operation " << url.scheme() << endl;

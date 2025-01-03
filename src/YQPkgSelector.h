@@ -181,7 +181,7 @@ public slots:
     /**
      * hides or shows the repository upgrade message
      */
-    void updateRepositoryUpgradeLabel();
+    void updateSwitchRepoLabels();
 
     /**
      * Read the settings from the config file
@@ -243,14 +243,14 @@ protected slots:
     void showProducts();
 
     /**
-     * Show dialog for pkgmgr history
-     */
+     * Show dialog for package manager history
+     **/
     void showHistory();
 
     /**
      * a link in the repo upgrade label was clicked
-     */
-    void slotRepoUpgradeLabelLinkClicked(const QString &link);
+     **/
+    void switchToRepo( const QString & url );
 
     /**
      * Show the busy cursor (clock)
@@ -270,11 +270,12 @@ protected:
     void        basicLayout();
     void        createFilterViews();
 
-    QWidget *   layoutRightPane    ( QWidget *parent );
-    void        layoutPkgList      ( QWidget *parent );
-    void        layoutDetailsViews ( QWidget *parent );
-    void        layoutButtons      ( QWidget *parent );
-    void        layoutMenuBar      ( QWidget *parent );
+    QWidget *   layoutRightPane    ( QWidget * parent );
+    void        layoutPkgList      ( QWidget * parent );
+    void        layoutNotifications( QWidget * parent );
+    void        layoutDetailsViews ( QWidget * parent );
+    void        layoutButtons      ( QWidget * parent );
+    void        layoutMenuBar      ( QWidget * parent );
 
 
     // Create the various filter views
@@ -404,9 +405,9 @@ protected:
     YQPkgDependenciesView *             _pkgDependenciesView;
     YQPkgDescriptionView *              _pkgDescriptionView;
     YQPkgFileListView *                 _pkgFileListView;
-    QLabel *                            _repoUpgradeLabel;
-    QLabel *                            _repoUpgradingLabel;
-    QWidget *                           _notificationsContainer;
+    QWidget *                           _notifications;
+    QLabel *                            _switchToRepoLabel;
+    QLabel *                            _cancelSwitchingToRepoLabel;
     YQPkgRepoFilterView *               _repoFilterView;
     YQPkgServiceFilterView *            _serviceFilterView;
     YQPkgLangList *                     _langList;
