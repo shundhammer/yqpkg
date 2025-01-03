@@ -479,15 +479,19 @@ YQPkgSelector::layoutPkgList( QWidget * parent )
     CHECK_NEW( pkgListVBox );
     pkgListVBox->setContentsMargins( 0, 0, 0, 0 );
 
+
+    // Notifications
+
     layoutNotifications( pkgListPane );
     _notifications->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     pkgListVBox->addWidget( _notifications );
 
 
+    // Package list
+
     _pkgList= new YQPkgList( pkgListPane );
     CHECK_NEW( _pkgList );
     pkgListVBox->addWidget( _pkgList );
-
 
     connect( _pkgList,  SIGNAL( statusChanged()           ),
              this,      SLOT  ( autoResolveDependencies() ) );
@@ -504,6 +508,7 @@ YQPkgSelector::layoutNotifications( QWidget * parent )
 
     _notifications = new QWidget( parent );
     QVBoxLayout * notificationsLayout = new QVBoxLayout( _notifications );
+    notificationsLayout->setContentsMargins( 0, 5, 0, 5 ); // left / top / right / bottom
 
     _switchToRepoLabel = new QLabel( _notifications );
     _switchToRepoLabel->setTextFormat( Qt::RichText );
@@ -645,10 +650,7 @@ YQPkgSelector::layoutButtons( QWidget *parent )
     CHECK_NEW( layout );
 
     button_box->setLayout( layout );
-    layout->setContentsMargins( 2,      // left
-                                2,      // top
-                                2,      // right
-                                2 );    // bottom
+    layout->setContentsMargins( 2, 2, 2, 2 ); // left / right / top / bottom
     layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
