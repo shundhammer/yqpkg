@@ -1578,9 +1578,9 @@ YQPkgSelector::updateRepositoryUpgradeLabel()
 
         if ( zypp::getZYpp()->resolver()->upgradingRepo(repo) )
         {
-            QString html = _( "<p><small><a href=\"repoupgraderemove:///%1\">"
+            QString html = _( "<p><a href=\"repoupgraderemove:///%1\">"
                               "Cancel switching</a> system packages to versions "
-                              "in repository %2</small></p>" )
+                              "in repository %2</p>" )
                 .arg( fromUTF8( repo.alias().c_str() ) )
                 .arg( fromUTF8( repo.name().c_str() ) );
 
