@@ -114,6 +114,7 @@ protected:
     int                 _reposCount;
     int                 _refreshDoneCount;
 
+    QPixmap             _emptyIcon;
     QPixmap             _downloadOngoingIcon;
     QPixmap             _downloadDoneIcon;
 };

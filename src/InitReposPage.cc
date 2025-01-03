@@ -77,6 +77,7 @@ void InitReposPage::loadIcons()
 
     QSize iconSize( 40, 22 );
 
+    _emptyIcon           = QPixmap( ":/empty-40x22" );
     _downloadOngoingIcon = QIcon( ":/download-ongoing" ).pixmap( iconSize );
     _downloadDoneIcon    = QIcon( ":/download-done"    ).pixmap( iconSize );
 }
@@ -98,7 +99,10 @@ void InitReposPage::reset()
 void InitReposPage::foundRepo( const zypp::RepoInfo & repo )
 {
     _ui->progressBar->setMaximum( ++_reposCount );
-    _ui->reposList->addItem( new QListWidgetItem( fromUTF8( repo.name() ) ) );
+    QListWidgetItem * item = new QListWidgetItem( fromUTF8( repo.name() ) );
+    CHECK_NEW( item );
+    item->setIcon( _emptyIcon );
+    _ui->reposList->addItem( item );
 
     MainWindow::processEvents();
 }
