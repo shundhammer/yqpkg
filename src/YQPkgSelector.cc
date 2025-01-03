@@ -82,16 +82,11 @@
 #include "YQPkgSelector.h"
 
 #define USE_UPDATE_PROBLEM_FILTER_VIEW                  0
-#define CHECK_DEPENDENCIES_ON_STARTUP                   1
+#define CHECK_DEPENDENCIES_ON_STARTUP                   0
 #define DEPENDENCY_FEEDBACK_IF_OK                       1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT                 true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE   0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD            20
-#define ENABLE_SOURCE_RPMS                              0
-#define BRAINDEAD_LIB_NAMING_SCHEME                     1
-#define MARGIN                                          6       // around the widget
-#define SPACING_BELOW_MENU_BAR                          4
-#define SPLITTER_HALF_SPACING                           4
 
 #define DEFAULT_EXPORT_FILE_NAME        "user-packages.xml"
 #define FAST_SOLVER                     1
@@ -261,10 +256,10 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         // Don't do this right away - wait until all initializations are finished.
 #if 0
         QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
-#endif
-
+#else
         if ( _pkgConflictDialog && ! YQPkgApplication::isOptionSet( OptNoVerify ) )
             QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
+#endif
     }
 #endif
 
@@ -286,11 +281,11 @@ void YQPkgSelector::basicLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout( layout );
-    layout->setContentsMargins( MARGIN,         // left
-                                0,              // top
-                                MARGIN,         // right
-                                MARGIN );       // bottom
-    layout->setSpacing( SPACING_BELOW_MENU_BAR );
+    layout->setContentsMargins( 6,   // left
+                                0,   // top
+                                6,   // right
+                                6 ); // bottom
+    layout->setSpacing( 4 );
     layoutMenuBar( this );
 
     _filters = new YQPkgFilterTab( this );
@@ -452,10 +447,10 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 {
     QVBoxLayout * layout = new QVBoxLayout( parent );
     CHECK_NEW( layout );
-    layout->setContentsMargins( SPLITTER_HALF_SPACING,  // left
-                                0,                      // top
-                                0,                      // right
-                                0 );                    // bottom
+    layout->setContentsMargins( 4,   // left
+                                0,   // top
+                                0,   // right
+                                0 ); // bottom
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     CHECK_NEW( splitter );
@@ -736,23 +731,9 @@ YQPkgSelector::addMenus()
         _pkgMenu->addAction(_pkgList->actionSetCurrentUpdateForce);
         _pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
 
-#if ENABLE_SOURCE_RPMS
-        _pkgMenu->addSeparator();
-
-        _pkgMenu->addAction(_pkgList->actionInstallSourceRpm);
-        _pkgMenu->addAction(_pkgList->actionDontInstallSourceRpm);
-#endif
-
         _pkgMenu->addSeparator();
         QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
         CHECK_NEW( submenu );
-
-#if ENABLE_SOURCE_RPMS
-        submenu->addSeparator();
-
-        _pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
-        _pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
-#endif
 
         //
         // Submenu for all packages
@@ -868,9 +849,11 @@ YQPkgSelector::addMenus()
     _excludeDebugInfoPkgs->enable( false );
 
 
+#if 0
     _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
                                                        this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
-    _verifySystemModeAction->setCheckable(true);
+    _verifySystemModeAction->setCheckable( true );
+#endif
 
     // Widget styles can use the text information in the rendering for sections,
     // or can choose to ignore it and render sections like simple separators.
@@ -878,11 +861,11 @@ YQPkgSelector::addMenus()
 
     _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
                                                         this, SLOT( pkgCleanDepsOnRemoveChanged( bool ) ) );
-    _cleanDepsOnRemoveAction->setCheckable(true);
+    _cleanDepsOnRemoveAction->setCheckable( true );
 
     _allowVendorChangeAction = _optionsMenu->addAction( _( "&Allow vendor change" ),
                                                         this, SLOT( pkgAllowVendorChangeChanged( bool ) ) );
-    _allowVendorChangeAction->setCheckable(true);
+    _allowVendorChangeAction->setCheckable( true );
 
 
     //
@@ -900,12 +883,8 @@ YQPkgSelector::addMenus()
 
     _extrasMenu->addSeparator();
 
-#if BRAINDEAD_LIB_NAMING_SCHEME
-    // See bug #434042: libcddb2 vs. libcddb-devel
-#else
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
-#endif
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
@@ -1952,6 +1931,7 @@ YQPkgSelector::read_etc_sysconfig_yast()
 
     _autoDependenciesAction->setChecked(auto_check);
 
+#if 0
     bool verify_system = zypp::getZYpp()->resolver()->systemVerification();
     it = sysconfig.find( OPTION_VERIFY );
 
@@ -1960,6 +1940,7 @@ YQPkgSelector::read_etc_sysconfig_yast()
 
     _verifySystemModeAction->setChecked( verify_system );
     pkgVerifySytemModeChanged( verify_system );
+#endif
 
     bool install_recommended = ! zypp::getZYpp()->resolver()->onlyRequires();
     it = sysconfig.find( OPTION_RECOMMENDED );
@@ -1992,10 +1973,13 @@ YQPkgSelector::write_etc_sysconfig_yast()
                                                OPTION_AUTO_CHECK,
                                                ( _autoDependenciesAction->isChecked() ? "yes" : "no" ),
                                                "Automatic dependency checking");
+#if 0
         zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                OPTION_VERIFY,
                                                ( _verifySystemModeAction->isChecked() ? "yes" : "no" ),
                                                "System verification mode");
+#endif
+
         zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                OPTION_RECOMMENDED,
                                                ( _installRecommendedAction->isChecked() ? "yes" : "no" ),

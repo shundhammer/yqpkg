@@ -44,7 +44,6 @@ enum YQPkgAppOption
     OptDryRun          = 0x02,
     OptDownloadOnly    = 0x04,
     OptNoRepoRefresh   = 0x08,
-    OptNoVerify        = 0x10,
 
     // For debugging
 
