@@ -121,6 +121,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _detailsViews                = 0;
     _filters                     = 0;
     _langList                    = 0;
+    _notifications               = 0;
     _pkgClassificationFilterView = 0;
     _patchFilterView             = 0;
     _patchList                   = 0;
@@ -458,7 +459,7 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     CHECK_NEW( splitter );
-    layout->addWidget(splitter);
+    layout->addWidget( splitter );
 
     layoutPkgList( splitter );
     layoutDetailsViews( splitter );
@@ -471,10 +472,22 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 void
 YQPkgSelector::layoutPkgList( QWidget * parent )
 {
-    layoutNotifications( parent );
+    QWidget * pkgListPane = new QWidget( parent );
+    CHECK_NEW( pkgListPane );
 
-    _pkgList= new YQPkgList( parent );
+    QVBoxLayout * pkgListVBox = new QVBoxLayout( pkgListPane );
+    CHECK_NEW( pkgListVBox );
+    pkgListVBox->setContentsMargins( 0, 0, 0, 0 );
+
+    layoutNotifications( pkgListPane );
+    _notifications->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+    pkgListVBox->addWidget( _notifications );
+
+
+    _pkgList= new YQPkgList( pkgListPane );
     CHECK_NEW( _pkgList );
+    pkgListVBox->addWidget( _pkgList );
+
 
     connect( _pkgList,  SIGNAL( statusChanged()           ),
              this,      SLOT  ( autoResolveDependencies() ) );
@@ -489,7 +502,7 @@ YQPkgSelector::layoutNotifications( QWidget * parent )
 {
     // This is made visible when activating the repository filter
 
-    QWidget *    _notifications       = new QWidget( parent );
+    _notifications = new QWidget( parent );
     QVBoxLayout * notificationsLayout = new QVBoxLayout( _notifications );
 
     _switchToRepoLabel = new QLabel( _notifications );
@@ -1551,12 +1564,13 @@ YQPkgSelector::updateSwitchRepoLabels()
 {
     if ( ! _repoFilterView || ! _repoFilterView->isVisible() )
     {
-        _switchToRepoLabel->hide();
-        _cancelSwitchingToRepoLabel->hide();
+        if ( _notifications )
+            _notifications->hide();
 
         return;
     }
 
+    _notifications->show();
     _switchToRepoLabel->setText("");
     _cancelSwitchingToRepoLabel->setText("");
 
@@ -1613,6 +1627,9 @@ YQPkgSelector::updateSwitchRepoLabels()
 
     _switchToRepoLabel->setVisible( ! _switchToRepoLabel->text().isEmpty() );
     _cancelSwitchingToRepoLabel->setVisible( ! _cancelSwitchingToRepoLabel->text().isEmpty() );
+
+    _notifications->setVisible( _switchToRepoLabel->isVisible() ||
+                                _cancelSwitchingToRepoLabel->isVisible() );
 }
 
 
