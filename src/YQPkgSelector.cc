@@ -74,7 +74,6 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdatesFilterView.h"
 #include "YQPkgVersionsView.h"
-#include "YQSignalBlocker.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
 #include "utf8.h"

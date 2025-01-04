@@ -18,6 +18,7 @@
 #include <QButtonGroup>
 #include <QLabel>
 #include <QMessageBox>
+#include <QSignalBlocker>
 #include <QStyleOptionButton>
 #include <QStylePainter>
 #include <QTabWidget>
@@ -29,7 +30,6 @@
 #include "Logger.h"
 #include "YQIconPool.h"
 #include "YQPkgRepoList.h"
-#include "YQSignalBlocker.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -618,7 +618,7 @@ YQPkgMultiVersion::~YQPkgMultiVersion()
 void YQPkgMultiVersion::slotIconClicked()
 {
     {
-        YQSignalBlocker sigBlocker( this );
+        QSignalBlocker sigBlocker( this );
         setChecked( false );
     }
 

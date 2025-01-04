@@ -86,7 +86,6 @@ set( SOURCES
   YQPkgVersionsView.cc
 
   YQIconPool.cc
-  YQSignalBlocker.cc
   QY2ComboTabWidget.cc
   QY2CursorHelper.cc
   QY2DiskUsageList.cc

@@ -26,6 +26,7 @@
 #include <QList>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSignalBlocker>
 #include <QSplitter>
 #include <QTreeWidget>
 
@@ -35,7 +36,6 @@
 #include "QY2LayoutUtils.h"
 #include "YQIconPool.h"
 #include "YQPkgList.h"
-#include "YQSignalBlocker.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -204,7 +204,7 @@ YQPkgHistoryDialog::selectDate()
 
     if ( items.size() > 0 )
     {
-        YQSignalBlocker( this );
+        QSignalBlocker sigBlocker( this );
 
 	_actionsTree->expandItem( items.first() );
 	_actionsTree->setCurrentItem( items.first() );
@@ -228,7 +228,7 @@ YQPkgHistoryDialog::selectAction()
                                                             0 );
     if (  items.size() > 0 )
     {
-        YQSignalBlocker( this );
+        QSignalBlocker sigBlocker( this );
 	_datesTree->setCurrentItem( items.first());
     }
 }

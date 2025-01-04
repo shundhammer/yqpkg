@@ -32,7 +32,6 @@
 #include "Logger.h"
 #include "YQIconPool.h"
 #include "YQPkgDiskUsageList.h"
-#include "YQSignalBlocker.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgFilterTab.h"
@@ -323,7 +322,7 @@ void
 YQPkgFilterTab::showPage( YQPkgFilterPage * page )
 {
     CHECK_PTR( page );
-    YQSignalBlocker sigBlocker( tabBar() );
+    QSignalBlocker sigBlocker( tabBar() );
 
     if ( page->tabIndex < 0 ) // No corresponding tab yet?
     {
@@ -581,12 +580,12 @@ YQPkgFilterTab::swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 )
 
     if ( oldCurrentIndex == page1->tabIndex )
     {
-        YQSignalBlocker sigBlocker( tabBar() );
+        QSignalBlocker sigBlocker( tabBar() );
         tabBar()->setCurrentIndex( page2->tabIndex );
     }
     else if ( oldCurrentIndex == page2->tabIndex )
     {
-        YQSignalBlocker sigBlocker( tabBar() );
+        QSignalBlocker sigBlocker( tabBar() );
         tabBar()->setCurrentIndex( page1->tabIndex );
     }
 }
@@ -639,7 +638,7 @@ YQPkgFilterTab::readSettings()
     logDebug() << "Current page:   " << current << endl;
 
     {
-        QSignalBlocker blocker( this );
+        QSignalBlocker sigBlocker( this );
 
         foreach ( QString id, pages )
         {
