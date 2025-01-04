@@ -23,6 +23,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
+#include <QSignalBlocker>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTabBar>
@@ -637,14 +638,18 @@ YQPkgFilterTab::readSettings()
     logDebug() << "Restoring pages " << pages << endl;
     logDebug() << "Current page:   " << current << endl;
 
-    foreach ( QString id, pages )
     {
-        YQPkgFilterPage * page = findPage( id );
+        QSignalBlocker blocker( this );
 
-        if ( page )
-            showPage( page );
-        else
-            logWarning() << "No page with ID \"" << id << "\"" << endl;
+        foreach ( QString id, pages )
+        {
+            YQPkgFilterPage * page = findPage( id );
+
+            if ( page )
+                showPage( page );
+            else
+                logWarning() << "No page with ID \"" << id << "\"" << endl;
+        }
     }
 
     if ( ! current.isEmpty() )

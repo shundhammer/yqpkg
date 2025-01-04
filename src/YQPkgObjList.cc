@@ -751,9 +751,6 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
     if ( item )
     {
         bool exclude = false;
-#if VERBOSE_EXCLUDE_RULES
-        ExcludeRule * matchingRule = 0;
-#endif
 
         for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
               rule_it != _excludeRules.end() && ! exclude;
@@ -764,9 +761,6 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
             if ( rule->match( item ) )
             {
                 exclude = true;
-#if VERBOSE_EXCLUDE_RULES
-                matchingRule = rule;
-#endif
             }
         }
 
@@ -776,19 +770,6 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 
             if ( exclude )
                 _excludedItemsCount++;
-
-#if VERBOSE_EXCLUDE_RULES
-            if ( exclude )
-            {
-                logDebug() << "Rule \"" << matchingRule->regexp().pattern()
-                           << "\" matches: Excluding " << item->zyppObj()->name()
-                           << endl;
-            }
-            else
-            {
-                logDebug() << "Un-excluding " << item->zyppObj()->name() << endl;
-            }
-#endif
         }
     }
 }

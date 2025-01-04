@@ -955,9 +955,6 @@ YQPkgSelector::connectFilter( QWidget * filter,
              pkgList,   SLOT  ( selectSomething() ) );
 
     connect( filter,    SIGNAL( filterFinished()       ),
-             pkgList,   SLOT  ( logExcludeStatistics() ) );
-
-    connect( filter,    SIGNAL( filterFinished()       ),
              pkgList,   SLOT  ( maybeSetFocus() ) );
 
     connect( filter,    SIGNAL( filterFinished()       ),
@@ -1257,7 +1254,6 @@ YQPkgSelector::globalUpdatePkg( bool force )
         _statusFilterView->writeSettings();
         _statusFilterView->clear();
         _statusFilterView->showTransactions();
-        _statusFilterView->filter();
     }
 }
 
@@ -1418,7 +1414,6 @@ YQPkgSelector::installRecommendedPkgs()
     if ( _filters && _statusFilterView )
     {
         _filters->showPage( _statusFilterView );
-        _statusFilterView->filter();
     }
 
     YQPkgChangesDialog::showChangesDialog( this,
@@ -1575,7 +1570,6 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
     if ( _filters && _statusFilterView )
     {
         _filters->showPage( _statusFilterView );
-        _statusFilterView->filter();
     }
 
     YQPkgChangesDialog::showChangesDialog( this,
