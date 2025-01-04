@@ -69,10 +69,19 @@ protected:
 public slots:
 
     /**
-     * Reset all content in connected views.
-     * See also signal 'resetNotify()'.
+     * Reset all content in connected views and reset the resolver
+     * and send a resetNotify() signal.
      **/
     void reset();
+
+    /**
+     * Reset the resolver, in particular modes like "upgrade mode" (after a
+     * dist upgrade) or "update mode" after a package update).
+     *
+     * This is included in 'reset()'.
+     **/
+    void resetResolver();
+
 
     /**
      * Resolve dependencies (unconditionally) for all resolvables.

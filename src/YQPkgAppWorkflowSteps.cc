@@ -199,7 +199,7 @@ void YQPkgSelStep::activate( bool goingForward )
     // page with a 'gotoStep( "pkgSel")' call directly, and in that case
     // 'goingForward' is true.
 
-    _app->pkgSel()->reset();
+    _app->pkgSel()->reset(); // includes resetResolver()
 }
 
 
