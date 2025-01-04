@@ -27,6 +27,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
     _selectable = 0;
+    setFrameStyle( QFrame::NoFrame );
     _parentTab  = dynamic_cast<QTabWidget *>( parent );
 
     if ( _parentTab )
