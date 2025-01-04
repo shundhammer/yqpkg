@@ -555,8 +555,8 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,                  SIGNAL( currentItemChanged  ( ZyppSel ) ),
-             _pkgTechnicalDetailsView,  SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _pkgList,                 SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             _pkgTechnicalDetailsView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     //
@@ -569,8 +569,8 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,                  SIGNAL( currentItemChanged  ( ZyppSel ) ),
-             _pkgDependenciesView,      SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _pkgList,             SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             _pkgDependenciesView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
 
@@ -602,8 +602,8 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
         _detailsViews->addTab( _pkgFileListView, _( "File List" ) );
         _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-        connect( _pkgList,              SIGNAL( currentItemChanged  ( ZyppSel ) ),
-                 _pkgFileListView,      SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+        connect( _pkgList,         SIGNAL( currentItemChanged  ( ZyppSel ) ),
+                 _pkgFileListView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 
 
@@ -619,8 +619,8 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
         _detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
         _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-        connect( _pkgList,              SIGNAL( currentItemChanged  ( ZyppSel ) ),
-                 _pkgChangeLogView,     SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+        connect( _pkgList,          SIGNAL( currentItemChanged  ( ZyppSel ) ),
+                 _pkgChangeLogView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 }
 
