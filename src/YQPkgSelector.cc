@@ -942,7 +942,7 @@ YQPkgSelector::addMenus()
 void
 YQPkgSelector::connectFilter( QWidget * filter,
                               QWidget * pkgList,
-                              bool hasUpdateSignal )
+                              bool      hasUpdateSignal )
 {
     if ( ! filter  )    return;
     if ( ! pkgList )    return;
@@ -1001,19 +1001,25 @@ YQPkgSelector::makeConnections()
 #if USE_UPDATE_PROBLEM_FILTER_VIEW
     connectFilter( _updateProblemFilterView,     _pkgList, false );
 #endif
-    connectFilter( _patternList,                 _pkgList );
+    connectFilter( _searchFilterView,            _pkgList, false );
     connectFilter( _updatesFilterView,           _pkgList, false );
-    connectFilter( _langList,                    _pkgList );
     connectFilter( _repoFilterView,              _pkgList, false );
     connectFilter( _serviceFilterView,           _pkgList, false );
+    connectFilter( _patternList,                 _pkgList );
     connectFilter( _pkgClassificationFilterView, _pkgList, false );
+    connectFilter( _langList,                    _pkgList );
     connectFilter( _statusFilterView,            _pkgList, false );
-    connectFilter( _searchFilterView,            _pkgList, false );
 
     if ( _searchFilterView && _pkgList )
     {
         connect( _searchFilterView,     SIGNAL( message( const QString & ) ),
                  _pkgList,              SLOT  ( message( const QString & ) ) );
+    }
+
+    if ( _updatesFilterView )
+    {
+        connect( this,                  SIGNAL( loadData() ),
+                 _updatesFilterView,    SLOT  ( filter()   ) );
     }
 
     if ( _repoFilterView && _pkgList )
@@ -1030,12 +1036,11 @@ YQPkgSelector::makeConnections()
     }
 
 
-    if ( _updatesFilterView )
+    if ( _pkgClassificationFilterView )
     {
-        connect( this,                  SIGNAL( loadData() ),
-                 _updatesFilterView,    SLOT  ( filter()   ) );
+        connect( this,                         SIGNAL( loadData() ),
+                 _pkgClassificationFilterView, SLOT  ( filter()   ) );
     }
-
 
     if ( _langList )
     {
@@ -1046,13 +1051,6 @@ YQPkgSelector::makeConnections()
         connect( this,      SIGNAL( refresh()                 ),
                  _langList, SLOT  ( updateItemStates()        ) );
     }
-
-    if ( _pkgClassificationFilterView )
-    {
-        connect( this,                         SIGNAL( loadData() ),
-                 _pkgClassificationFilterView, SLOT  ( filter()   ) );
-    }
-
 
     if ( _pkgList && _filters->diskUsageList() )
     {
