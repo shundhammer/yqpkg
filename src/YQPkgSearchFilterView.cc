@@ -192,9 +192,9 @@ YQPkgSearchFilterView::setFocus()
 
 
 void
-YQPkgSearchFilterView::filterIfVisible()
+YQPkgSearchFilterView::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 
@@ -202,6 +202,8 @@ YQPkgSearchFilterView::filterIfVisible()
 void
 YQPkgSearchFilterView::filter()
 {
+    logVerbose() << "filtering" << endl;
+
     emit filterStart();
     int matchCount = 0;
 

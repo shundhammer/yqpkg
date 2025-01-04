@@ -68,11 +68,6 @@ public slots:
     void filter();
 
     /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
-
-    /**
      * Add a repository to the list.
      **/
     void addRepo( ZyppRepo repo );

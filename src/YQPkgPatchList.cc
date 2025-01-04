@@ -220,9 +220,9 @@ YQPkgPatchList::message( const QString & text )
 
 
 void
-YQPkgPatchList::filterIfVisible()
+YQPkgPatchList::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 

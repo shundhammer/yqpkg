@@ -60,11 +60,12 @@ YQPkgUpdateProblemFilterView::~YQPkgUpdateProblemFilterView()
     // NOP
 }
 
+
 void
-YQPkgUpdateProblemFilterView::filterIfVisible()
+YQPkgUpdateProblemFilterView::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
-	filter();
+    if ( newFilter == this )
+        filter();
 }
 
 

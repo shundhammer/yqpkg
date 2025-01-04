@@ -104,16 +104,18 @@ YQPkgClassificationFilterView::fillPkgClasses()
 
 
 void
-YQPkgClassificationFilterView::filterIfVisible()
+YQPkgClassificationFilterView::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
-	filter();
+    if ( newFilter == this )
+        filter();
 }
 
 
 void
 YQPkgClassificationFilterView::filter()
 {
+    logVerbose() << "filtering" << endl;
+
     emit filterStart();
 
     if ( selectedPkgClass() != YQPkgClassNone )

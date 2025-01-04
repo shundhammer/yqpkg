@@ -149,9 +149,9 @@ YQPkgStatusFilterView::minimumSizeHint() const
 
 
 void
-YQPkgStatusFilterView::filterIfVisible()
+YQPkgStatusFilterView::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 
@@ -159,6 +159,8 @@ YQPkgStatusFilterView::filterIfVisible()
 void
 YQPkgStatusFilterView::filter()
 {
+    logVerbose() << "Filtering" << endl;
+
     emit filterStart();
 
     for ( ZyppPoolIterator it = zyppPkgBegin();

@@ -66,11 +66,6 @@ public slots:
     void filter();
 
     /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
-
-    /**
      * Add a service to the list.
      **/
     void addService( ZyppService service,

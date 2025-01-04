@@ -53,6 +53,11 @@ public:
 public slots:
 
     /**
+     * Notification that a new filter is the one to be shown.
+     **/
+    void showFilter( QWidget * newFilter );
+
+    /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
      *    filterStart()
@@ -60,11 +65,6 @@ public slots:
      *    filterFinished()
      **/
     void filter();
-
-    /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
 
 
 signals:

@@ -54,12 +54,7 @@ YQPkgRepoFilterView::selectedRepo() const
 
 void YQPkgRepoFilterView::primaryFilter()
 {
+    logVerbose() << "filtering" << endl;
+
     _repoList->filter();
 }
-
-
-void YQPkgRepoFilterView::primaryFilterIfVisible()
-{
-    _repoList->filterIfVisible();
-}
-

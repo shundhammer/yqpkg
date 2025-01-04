@@ -105,33 +105,27 @@ int YQPkgRepoList::countEnabledRepositories()
 }
 
 
-void YQPkgRepoList::filterIfVisible()
-{
-    if ( isVisible() )
-	filter();
-}
-
-
 void YQPkgRepoList::filter()
 {
-    if ( ! selection() )
-        return;
-
     emit filterStart();
+
+    if ( ! selection() )
+    {
+        emit filterFinished();
+        return;
+    }
 
 
     //
     // Collect all packages of this repository
     //
 
-    QTreeWidgetItem * item;
-
-    QList<QTreeWidgetItem *>         items = selectedItems();
+    QList<QTreeWidgetItem *> items = selectedItems();
     QListIterator<QTreeWidgetItem *> it( items );
 
     while ( it.hasNext() )
     {
-        item = it.next();
+        QTreeWidgetItem *   item     = it.next();
         YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *>( item );
 
         if ( repoItem )

@@ -189,9 +189,9 @@ YQPkgPatternList::category( const QString & categoryName )
 
 
 void
-YQPkgPatternList::filterIfVisible()
+YQPkgPatternList::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 
@@ -199,6 +199,8 @@ YQPkgPatternList::filterIfVisible()
 void
 YQPkgPatternList::filter()
 {
+    logVerbose() << "filtering" << endl;
+
     emit filterStart();
 
     if ( selection() )  // The seleted QListViewItem

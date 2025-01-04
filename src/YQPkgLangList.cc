@@ -96,9 +96,9 @@ YQPkgLangList::fillList()
 
 
 void
-YQPkgLangList::filterIfVisible()
+YQPkgLangList::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 
@@ -106,6 +106,8 @@ YQPkgLangList::filterIfVisible()
 void
 YQPkgLangList::filter()
 {
+    logVerbose() << "filtering" << endl;
+
     emit filterStart();
 
     if ( selection() )

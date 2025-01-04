@@ -47,8 +47,11 @@ public:
 
 protected:
 
+    /**
+     * The actual filter method: Find the packages that belong to this repo.
+     **/
     virtual void primaryFilter();
-    virtual void primaryFilterIfVisible();
+
 
     // Data members
 

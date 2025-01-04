@@ -84,9 +84,9 @@ void YQPkgUpdatesFilterView::refreshList()
 
 
 void
-YQPkgUpdatesFilterView::filterIfVisible()
+YQPkgUpdatesFilterView::showFilter( QWidget * newFilter )
 {
-    if ( isVisible() )
+    if ( newFilter == this )
         filter();
 }
 
@@ -94,6 +94,8 @@ YQPkgUpdatesFilterView::filterIfVisible()
 void
 YQPkgUpdatesFilterView::filter()
 {
+    logVerbose() << "filtering" << endl;
+
     emit filterStart();
 
     for ( ZyppPoolIterator it = zyppPkgBegin();

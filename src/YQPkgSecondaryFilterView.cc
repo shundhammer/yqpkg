@@ -145,16 +145,18 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
 }
 
 
+void YQPkgSecondaryFilterView::showFilter( QWidget * newFilter )
+{
+    if ( newFilter == this )
+        filter();
+}
+
+
 void YQPkgSecondaryFilterView::filter()
 {
     primaryFilter();
 }
 
-
-void YQPkgSecondaryFilterView::filterIfVisible()
-{
-    primaryFilterIfVisible();
-}
 
 void YQPkgSecondaryFilterView::primaryFilterMatch( ZyppSel selectable,
                                                    ZyppPkg pkg )

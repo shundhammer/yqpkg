@@ -628,7 +628,7 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
         _detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
         _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-        connect( _pkgList,              SIGNAL( currentItemChanged    ( ZyppSel ) ),
+        connect( _pkgList,              SIGNAL( currentItemChanged  ( ZyppSel ) ),
                  _pkgChangeLogView,     SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 }
@@ -949,12 +949,9 @@ YQPkgSelector::connectFilter( QWidget * filter,
 
     if ( _filters )
     {
-        connect( _filters,      SIGNAL( currentChanged(QWidget *) ),
-                 filter,        SLOT  ( filterIfVisible()            ) );
+        connect( _filters, SIGNAL( currentChanged( QWidget * ) ),
+                 filter,   SLOT  ( showFilter    ( QWidget * ) ) );
     }
-
-    connect( this,      SIGNAL( refresh()         ),
-             filter,    SLOT  ( filterIfVisible() ) );
 
     connect( filter,    SIGNAL( filterStart()   ),
              pkgList,   SLOT  ( clear()         ) );
@@ -1047,9 +1044,6 @@ YQPkgSelector::makeConnections()
 
         connect( _langList, SIGNAL( statusChanged()           ),
                  this,      SLOT  ( autoResolveDependencies() ) );
-
-        connect( this,      SIGNAL( refresh()                 ),
-                 _langList, SLOT  ( updateItemStates()        ) );
     }
 
     if ( _pkgList && _filters->diskUsageList() )
@@ -1065,9 +1059,6 @@ YQPkgSelector::makeConnections()
 
     // Hide and show the upgrade label when tabs change, or when the user
     // selects repositories
-
-    connect( this,            SIGNAL( refresh()                ),
-             this,            SLOT  ( updateSwitchRepoLabels() ) );
 
     connect( _filters,        SIGNAL( currentChanged( QWidget * ) ),
              this,            SLOT  ( updateSwitchRepoLabels()    ) );
@@ -1238,10 +1229,6 @@ YQPkgSelector::connectPatchList()
             connect( _pkgConflictDialog,SIGNAL( updatePackages()   ),
                      _patchList,        SLOT  ( updateItemStates() ) );
         }
-
-        connect( this,                  SIGNAL( refresh()                       ),
-                 _patchList,            SLOT  ( updateItemStates()              ) );
-
     }
 }
 
@@ -1254,9 +1241,6 @@ YQPkgSelector::connectPatternList()
 
     connect( _patternList, SIGNAL( statusChanged()           ),
              this,         SLOT  ( autoResolveDependencies() ) );
-
-    connect( this,         SIGNAL( refresh()                 ),
-             _patternList, SLOT  ( updateItemStates()        ) );
 
     if ( _pkgConflictDialog )
     {
@@ -1391,8 +1375,6 @@ YQPkgSelector::pkgImport()
             //
             // Display result
             //
-
-            emit refresh();
 
             if ( _statusFilterView )
             {
@@ -1647,7 +1629,6 @@ YQPkgSelector::switchToRepo( const QString & link )
         logDebug() << "unknown link operation " << url.scheme() << endl;
 
     resolveDependencies();
-    emit refresh();
 }
 
 

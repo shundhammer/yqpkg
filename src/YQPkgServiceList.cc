@@ -55,7 +55,7 @@ YQPkgServiceList::YQPkgServiceList( QWidget * parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( itemSelectionChanged() ),
-             this, SLOT  ( filterIfVisible()      ) );
+             this, SLOT  ( filter()               ) );
 
     setIconSize( QSize( 32, 32) );
     fillList();
@@ -114,14 +114,6 @@ YQPkgServiceList::fillList()
 
 
 void
-YQPkgServiceList::filterIfVisible()
-{
-    if ( isVisible() )
-        filter();
-}
-
-
-void
 YQPkgServiceList::filter()
 {
     emit filterStart();
@@ -132,13 +124,12 @@ YQPkgServiceList::filter()
     // Collect all packages from repositories belonging to this service
     //
 
-    QTreeWidgetItem *        item;
     QList<QTreeWidgetItem *> items = selectedItems();
     QListIterator<QTreeWidgetItem *> it(items);
 
     while ( it.hasNext() )
     {
-        item = it.next();
+        QTreeWidgetItem * item = it.next();
         YQPkgServiceListItem * serviceItem = dynamic_cast<YQPkgServiceListItem *> (item);
 
         if ( serviceItem )

@@ -51,7 +51,6 @@ public:
 protected:
 
     virtual void primaryFilter();
-    virtual void primaryFilterIfVisible();
 
 
     // Data members

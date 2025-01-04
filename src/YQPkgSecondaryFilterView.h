@@ -27,9 +27,9 @@ class YQPkgStatusFilterView;
 
 
 /**
- * This is a base class for filter views containing a secondary filter
+ * Abstract base class for filter views containing a secondary filter
  */
-class YQPkgSecondaryFilterView : public QWidget
+class YQPkgSecondaryFilterView: public QWidget
 {
     Q_OBJECT
 
@@ -85,6 +85,11 @@ signals:
 public slots:
 
     /**
+     * Notification that a new filter is the one to be shown.
+     **/
+    void showFilter( QWidget * newFilter );
+
+    /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
      *    filterStart()
@@ -92,11 +97,6 @@ public slots:
      *    filterFinished()
      **/
     void filter();
-
-    /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
 
 
 protected slots:
@@ -129,8 +129,12 @@ protected:
     bool secondaryFilterMatch( ZyppSel selectable,
                                ZyppPkg pkg );
 
-    virtual void primaryFilter()          {}
-    virtual void primaryFilterIfVisible() {}
+    /**
+     * The actual filter method.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void primaryFilter() = 0;
 
 
     // Data members

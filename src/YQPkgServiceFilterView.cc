@@ -37,17 +37,14 @@ YQPkgServiceFilterView::~YQPkgServiceFilterView()
     // NOP
 }
 
+
 void YQPkgServiceFilterView::primaryFilter()
 {
     _serviceList->filter();
 }
 
-void YQPkgServiceFilterView::primaryFilterIfVisible()
-{
-    _serviceList->filterIfVisible();
-}
 
-// check if a libzypp service is present
+// Check if a libzypp service is present
 bool YQPkgServiceFilterView::any_service()
 {
     bool ret = std::any_of( ZyppRepositoriesBegin(),
