@@ -88,9 +88,6 @@
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE   0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD            20
 
-#define DEFAULT_EXPORT_FILE_NAME        "user-packages.xml"
-#define FAST_SOLVER                     1
-
 #define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
 #define OPTION_VERIFY                   "PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
@@ -184,7 +181,6 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         if ( _patchFilterView && _patchList )
         {
             _filters->showPage( _patchFilterView );
-            _patchList->filter();
         }
     }
     else if ( _repoFilterView && repoMode() )
@@ -192,14 +188,12 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         if ( YQPkgRepoList::countEnabledRepositories() > 1 )
         {
             _filters->showPage( _repoFilterView );
-            _repoFilterView->filter();
         }
     }
 #if USE_UPDATE_PROBLEM_FILTER_VIEW
     else if ( _updateProblemFilterView )
     {
         _filters->showPage( _updateProblemFilterView );
-        _updateProblemFilterView->filter();
     }
 #endif
     else if ( searchMode() && _searchFilterView )
@@ -230,14 +224,12 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
             // Normal case: Show the "Search" filter view.
 
             _filters->showPage( _searchFilterView );
-            _searchFilterView->filter();
             QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
         }
     }
     else if ( summaryMode() && _statusFilterView )
     {
         _filters->showPage( _statusFilterView );
-        _statusFilterView->filter();
         _pkgList->selectNextItem();
     }
 
@@ -700,15 +692,9 @@ YQPkgSelector::addMenus()
     CHECK_NEW( _fileMenu );
     QAction * action = _menuBar->addMenu( _fileMenu );
     action->setText( _( "&File" ));
-
-#if FIXME_IMPORT_EXPORT
-    _fileMenu->addAction( _( "&Import..." ),    this, SLOT( pkgImport() ) );
-    _fileMenu->addAction( _( "&Export..." ),    this, SLOT( pkgExport() ) );
-#endif
-
     _fileMenu->addSeparator();
 
-    _fileMenu->addAction( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
+    _fileMenu->addAction(          _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
     action = _fileMenu->addAction( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
     action->setEnabled( ! YQPkgApplication::readOnlyMode() );
 
@@ -1013,12 +999,6 @@ YQPkgSelector::makeConnections()
                  _pkgList,              SLOT  ( message( const QString & ) ) );
     }
 
-    if ( _updatesFilterView )
-    {
-        connect( this,                  SIGNAL( loadData() ),
-                 _updatesFilterView,    SLOT  ( filter()   ) );
-    }
-
     if ( _repoFilterView && _pkgList )
     {
         connect( _repoFilterView,       SIGNAL( filterNearMatch  ( ZyppSel, ZyppPkg ) ),
@@ -1032,12 +1012,6 @@ YQPkgSelector::makeConnections()
                  _pkgList,              SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
 
-
-    if ( _pkgClassificationFilterView )
-    {
-        connect( this,                         SIGNAL( loadData() ),
-                 _pkgClassificationFilterView, SLOT  ( filter()   ) );
-    }
 
     if ( _langList )
     {
@@ -1248,238 +1222,6 @@ YQPkgSelector::connectPatternList()
                  _patternList,       SLOT  ( updateItemStates() ) );
     }
 }
-
-
-
-#if FIXME_IMPORT_EXPORT
-
-void
-YQPkgSelector::pkgExport()
-{
-    QString filename = YQApplication::askForSaveFileName( QString( DEFAULT_EXPORT_FILE_NAME ),  // startsWith
-                                                          QString( "*.xml;;*" ),                // filter
-                                                          _( "Save Package List" ) );
-
-    if ( ! filename.isEmpty() )
-    {
-        zypp::syscontent::Writer writer;
-        const zypp::ResPool & pool = zypp::getZYpp()->pool();
-
-
-        // The ZYPP obfuscated C++ contest proudly presents:
-
-        for_each( pool.begin(), pool.end(),
-                  boost::bind( &zypp::syscontent::Writer::addIf,
-                               boost::ref( writer ),
-                               boost::placeholders::_1 ) );
-
-        // Yuck. What a mess.
-        //
-        // Does anybody seriously believe this kind of thing is easier to read,
-        // let alone use? Get real. This is an argument in favour of all C++
-        // haters. And it's one that is really hard to counter.
-        //
-        // -sh 2006-12-13
-
-        try
-        {
-            std::ofstream exportFile( toUTF8( filename ).c_str() );
-            exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
-            exportFile << writer;
-
-            logInfo() << "Package list exported to " << filename << endl;
-        }
-        catch ( std::exception & exception )
-        {
-            logWarning() << "Error exporting package list to " << filename << endl;
-
-            // The export might have left over a partially written file.
-            // Try to delete it. Don't care if it doesn't exist and unlink() fails.
-            QFile::remove(filename);
-
-            // Post error popup
-            QMessageBox::warning( this,                                         // parent
-                                  _( "Error" ),                                 // caption
-                                  _( "Error exporting package list to %1" ).arg( filename ),
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  Qt::NoButton,                                 // button1
-                                  Qt::NoButton );                               // button2
-        }
-    }
-}
-
-
-void
-YQPkgSelector::pkgImport()
-{
-    QString filename =  QFileDialog::getOpenFileName( this, _( "Load Package List" ), DEFAULT_EXPORT_FILE_NAME,
-                                                      "*.xml+;;*"// filter
-                                                      );
-
-    if ( ! filename.isEmpty() )
-    {
-        logInfo() << "Importing package list from " << filename << endl;
-
-        try
-        {
-            std::ifstream importFile( toUTF8( filename ).c_str() );
-            zypp::syscontent::Reader reader( importFile );
-
-            //
-            // Put reader contents into maps
-            //
-
-            typedef zypp::syscontent::Reader::Entry     ZyppReaderEntry;
-            typedef std::pair<string, ZyppReaderEntry>  ImportMapPair;
-
-            map<string, ZyppReaderEntry> importPkg;
-            map<string, ZyppReaderEntry> importPatterns;
-
-            for ( zypp::syscontent::Reader::const_iterator it = reader.begin();
-                  it != reader.end();
-                  ++ it )
-            {
-                string kind = it->kind();
-
-                if      ( kind == "package" )   importPkg.insert     ( ImportMapPair( it->name(), *it ) );
-                else if ( kind == "pattern" )   importPatterns.insert( ImportMapPair( it->name(), *it ) );
-            }
-
-            logDebug() << "Found "        << importPkg.size()
-                       <<" packages and " << importPatterns.size()
-                       << " patterns in " << filename
-                       << endl;
-
-
-            //
-            // Set status of all patterns and packages according to import map
-            //
-
-            for ( ZyppPoolIterator it = zyppPatternsBegin();
-                  it != zyppPatternsEnd();
-                  ++it )
-            {
-                ZyppSel selectable = *it;
-                importSelectable( *it, importPatterns.find( selectable->name() ) != importPatterns.end(), "pattern" );
-            }
-
-            for ( ZyppPoolIterator it = zyppPkgBegin();
-                  it != zyppPkgEnd();
-                  ++it )
-            {
-                ZyppSel selectable = *it;
-                importSelectable( *it, importPkg.find( selectable->name() ) != importPkg.end(), "package" );
-            }
-
-
-            //
-            // Display result
-            //
-
-            if ( _statusFilterView )
-            {
-                // Switch to "Installation Summary" filter view
-
-                _filters->showPage( _statusFilterView );
-                _statusFilterView->filter();
-            }
-
-        }
-        catch ( const zypp::Exception & exception )
-        {
-            logWarning() << "Error reading package list from " << filename << endl;
-
-            // Post error popup
-            QMessageBox::warning( this,                                         // parent
-                                  _( "Error" ),                                 // caption
-                                  _( "Error loading package list from %1" ).arg( filename ),
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  QMessageBox::NoButton,                        // button1
-                                  QMessageBox::NoButton );                      // button2
-        }
-    }
-}
-
-
-void
-YQPkgSelector::importSelectable( ZyppSel             selectable,
-                                 bool               isWanted,
-                                 const char *       kind )
-{
-    ZyppStatus oldStatus = selectable->status();
-    ZyppStatus newStatus = oldStatus;
-
-    if ( isWanted )
-    {
-        //
-        // Make sure this selectable does not get installed
-        //
-
-        switch ( oldStatus )
-        {
-            case S_Install:
-            case S_AutoInstall:
-            case S_KeepInstalled:
-            case S_Protected:
-            case S_Update:
-            case S_AutoUpdate:
-                newStatus = oldStatus;
-                break;
-
-            case S_Del:
-            case S_AutoDel:
-                newStatus = S_KeepInstalled;
-                logDebug() << "Keeping " << kind << " " << selectable->name() << endl;
-                break;
-
-            case S_NoInst:
-            case S_Taboo:
-
-                if ( selectable->hasCandidateObj() )
-                {
-                    newStatus = S_Install;
-                    logDebug() << "Adding " << kind << " " <<  selectable->name() << endl;
-                }
-                else
-                {
-                    logDebug() << "Can't add " << kind << " " << selectable->name()
-                               << ": No candidate" << endl;
-                }
-                break;
-        }
-    }
-    else // ! isWanted
-    {
-        //
-        // Make sure this selectable does not get installed
-        //
-
-        switch ( oldStatus )
-        {
-            case S_Install:
-            case S_AutoInstall:
-            case S_KeepInstalled:
-            case S_Protected:
-            case S_Update:
-            case S_AutoUpdate:
-                newStatus = S_Del;
-                logDebug() << "Deleting " << kind << " " << selectable->name() << endl;
-                break;
-
-            case S_Del:
-            case S_AutoDel:
-            case S_NoInst:
-            case S_Taboo:
-                newStatus = oldStatus;
-                break;
-        }
-    }
-
-    if ( oldStatus != newStatus )
-        selectable->setStatus( newStatus );
-}
-
-#endif // FIXME_IMPORT_EXPORT
 
 
 void

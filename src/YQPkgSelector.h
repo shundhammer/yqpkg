@@ -90,18 +90,6 @@ public slots:
      **/
     void autoResolveDependencies();
 
-#if FIXME_IMPORT_EXPORT
-    /**
-     * Export all current selection/package states
-     **/
-    void pkgExport();
-
-    /**
-     * Import selection/package states
-     **/
-    void pkgImport();
-#endif
-
     /**
      * Install any -devel package for packages that are installed or marked for
      * installation
@@ -332,18 +320,6 @@ protected:
      * package is not newer than the installed package.
      **/
     void globalUpdatePkg( bool force );
-
-
-#if FIXME_IMPORT_EXPORT
-    /**
-     * Import one selectable: Set its status according to 'isWanted'
-     * based on its old status.
-     * 'kind' is 'package' or 'pattern' (used only for debug logging).
-     **/
-    void importSelectable( ZyppSel      selectable,
-                           bool         isWanted,
-                           const char * kind );
-#endif
 
     /**
      * Return 'true' if any selectable has any retracted package version
