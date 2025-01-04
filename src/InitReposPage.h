@@ -92,10 +92,11 @@ protected:
     void loadIcons();
 
     /**
-     * Set the icon for the list widget item for 'repo' to 'icon'.
+     * Set the icon for the list widget item for 'repo' to 'icon' and return
+     * the item (or 0 if not found).
      **/
-    void setItemIcon( const zypp::RepoInfo & repo,
-                      const QPixmap &        icon );
+    QListWidgetItem * setItemIcon( const zypp::RepoInfo & repo,
+                                   const QPixmap &        icon );
 
     /**
      * Return the item for the specified repo in the repos list widget

@@ -112,7 +112,13 @@ void InitReposPage::refreshRepoStart( const zypp::RepoInfo & repo )
 {
     // logDebug() << "Repo refresh start for " << repo.name() << endl;
 
-    setItemIcon( repo, _downloadOngoingIcon );
+    QListWidgetItem * item = setItemIcon( repo, _downloadOngoingIcon );
+
+    if ( item )
+    {
+        _ui->reposList->setFocus();
+        _ui->reposList->setCurrentItem( item );
+    }
 
     MainWindow::processEvents();
 }
@@ -129,8 +135,9 @@ void InitReposPage::refreshRepoDone ( const zypp::RepoInfo & repo )
 }
 
 
-void InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
-                                 const QPixmap &        icon )
+QListWidgetItem *
+InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
+                            const QPixmap &        icon )
 {
     QListWidgetItem * item = findRepoItem( repo );
 
@@ -138,6 +145,8 @@ void InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
         item->setIcon( icon );
 
     _ui->reposList->scrollToItem( item );
+
+    return item;
 }
 
 
