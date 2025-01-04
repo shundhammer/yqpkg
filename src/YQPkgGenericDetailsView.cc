@@ -82,7 +82,7 @@ YQPkgGenericDetailsView::reloadTab( int newCurrent )
 {
     if ( _parentTab && _parentTab->widget( newCurrent ) == this )
     {
-	showDetailsIfVisible( _selectable );
+        showDetailsIfVisible( _selectable );
     }
 }
 
@@ -94,14 +94,14 @@ YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
 
     if ( _parentTab )  // Is this view embedded into a tab widget?
     {
-	if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
-	{
-	    showDetails( selectable );
-	}
+        if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
+        {
+            showDetails( selectable );
+        }
     }
     else  // No tab parent - simply show data unconditionally.
     {
-	showDetails( selectable );
+        showDetails( selectable );
     }
 }
 
@@ -133,12 +133,12 @@ QString
 YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 {
     if ( ! selectable )
-	return "";
+        return "";
 
     ZyppObj zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
-	return "";
+        return "";
 
     QString summary = fromUTF8( zyppObj->summary() );
 
@@ -146,14 +146,14 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
     html +=  " class=\"stats\"";
 
     html += "><tr><td><b>"
-	+ fromUTF8( zyppObj->name() )
-	+ "</b>";
+        + fromUTF8( zyppObj->name() )
+        + "</b>";
 
     if ( showVersion )
-	html += QString( "<b>-" ) + zyppObj->edition().asString().c_str() + "</b>";
+        html += QString( "<b>-" ) + zyppObj->edition().asString().c_str() + "</b>";
 
     if ( ! summary.isEmpty() )
-	html += " - " + summary;
+        html += " - " + summary;
 
     html += "</td></tr></table>";
 
