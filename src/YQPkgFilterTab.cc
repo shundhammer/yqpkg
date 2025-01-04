@@ -638,6 +638,11 @@ YQPkgFilterTab::readSettings()
     logDebug() << "Current page:   " << current << endl;
 
     {
+        // Prevent an event cascade as pages are added: Every one would cause
+        // the package list to get filled, only to get cleared and filled again
+        // by the next page.  The signals are unblocked as the sigBlocker goes
+        // out of scope.
+
         QSignalBlocker sigBlocker( this );
 
         foreach ( QString id, pages )
@@ -656,7 +661,7 @@ YQPkgFilterTab::readSettings()
         YQPkgFilterPage * page = findPage( current );
 
         if ( page )
-            showPage( page );
+            showPage( page ); // We want this to emit signals to fill the pkg list
         else
             logWarning() << "Can't restore current page with ID \"" << current << "\"" << endl;
     }
