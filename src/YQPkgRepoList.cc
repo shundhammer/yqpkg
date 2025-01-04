@@ -54,7 +54,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( itemSelectionChanged() ),
-	     this, SLOT  ( filterIfVisible()      ) );
+	     this, SLOT  ( filter()               ) );
 
     setIconSize( QSize( 32, 32 ) );
 
