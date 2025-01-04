@@ -493,9 +493,6 @@ YQPkgSelector::layoutPkgList( QWidget * parent )
 
     connect( _pkgList,  SIGNAL( statusChanged()           ),
              this,      SLOT  ( autoResolveDependencies() ) );
-
-    connect( this,      SIGNAL( resetNotify()  ),
-             _pkgList,  SLOT  ( resetContent() ) );
 }
 
 
