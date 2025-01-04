@@ -44,7 +44,9 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
 {
     _selectable          = 0;
     _isMixedMultiVersion = false;
-    _parentTab           = dynamic_cast<QTabWidget *>( parent );
+    setFrameStyle( QFrame::NoFrame );
+
+    _parentTab = dynamic_cast<QTabWidget *>( parent );
 
     if ( _parentTab )
     {
