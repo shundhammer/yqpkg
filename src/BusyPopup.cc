@@ -27,7 +27,7 @@ BusyPopup::BusyPopup( const QString & text,
     QLabel( text, parent, Qt::SplashScreen ),
     _posted( false )
 {
-    setMargin( 50 );
+    setContentsMargins( 50, 50, 50, 50 );
     setWindowTitle( " " );
 
     if ( autoPost )
