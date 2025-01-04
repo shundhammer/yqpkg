@@ -37,10 +37,6 @@
 #include "YQPkgFilterTab.h"
 
 
-#define MARGIN                     5 // inner margin between 3D borders and content
-#define TOP_EXTRA_MARGIN           3
-#define SPLITTER_HALF_SPACING      2
-
 typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
 
@@ -181,6 +177,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     //
     // Stretch factors for left and right pane
     //
+
     {
         QSplitter * sp = _priv->outerSplitter;
         sp->setStretchFactor( sp->indexOf( _priv->leftPaneSplitter ), 0 );
@@ -200,17 +197,27 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     // Cosmetics
     //
 
-    _priv->baseClassWidgetStack->setContentsMargins( MARGIN,                     // left
-                                                     MARGIN + TOP_EXTRA_MARGIN,  // top
-                                                     MARGIN,                     // right
-                                                     MARGIN );                   // bottom
+    // Inner margin between 3D borders and content
+    _priv->baseClassWidgetStack->setContentsMargins(  8,   // left
+                                                     11,   // top
+                                                      4,   // right
+                                                      4 ); // bottom
 
-    _priv->leftPaneSplitter->setContentsMargins  ( 0,                            // left
-                                                   0,                            // top
-                                                   SPLITTER_HALF_SPACING,        // right
-                                                   0 );                          // bottom
+    // Vertical spacing between left filter view pane and right package list / details pane
+    _priv->outerSplitter->setHandleWidth( 12 );
 
-    // _priv->rightPane->setContentsMargins() is set when widgets are added to the right pane
+    // Spacing between filter view and (mostly hidden) disk usage widget
+    _priv->leftPaneSplitter->setHandleWidth( 8 );
+
+    // Margin around the left pane (the filter view)
+    _priv->leftPaneSplitter->setContentsMargins  ( 0,    // left
+                                                   0,    // top
+                                                   0,    // right
+                                                   0 );  // bottom
+
+
+    // _priv->rightPane->setContentsMargins() is set when widgets are added to
+    // the right pane. See YQPkgSelector::layoutRightPane().
 }
 
 

@@ -285,7 +285,7 @@ void YQPkgSelector::basicLayout()
                                 0,   // top
                                 6,   // right
                                 6 ); // bottom
-    layout->setSpacing( 4 );
+    layout->setSpacing( 6 );
     layoutMenuBar( this );
 
     _filters = new YQPkgFilterTab( this );
@@ -447,14 +447,17 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 {
     QVBoxLayout * layout = new QVBoxLayout( parent );
     CHECK_NEW( layout );
-    layout->setContentsMargins( 4,   // left
+    layout->setContentsMargins( 0,   // left
                                 0,   // top
-                                0,   // right
-                                0 ); // bottom
+                                4,   // right
+                                4 ); // bottom
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     CHECK_NEW( splitter );
     layout->addWidget( splitter );
+
+    // Vertical spacing between package list and details views
+    splitter->setHandleWidth( 12 );
 
     layoutPkgList( splitter );
     layoutDetailsViews( splitter );
