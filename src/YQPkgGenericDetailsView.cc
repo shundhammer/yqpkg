@@ -35,6 +35,9 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
                  this,       SLOT  ( reloadTab     ( int ) ) );
     }
 
+    // DO NOT add anything like 'font-size: small' here; that makes the text
+    // unreadable for everybody over 40 years of age.
+
     QString css;
     css = "table.stats"
         "{text-align: center;"
