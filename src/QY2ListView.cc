@@ -71,7 +71,11 @@ QY2ListView::selectSomething()
 
 	if ( item && (item->flags() & Qt::ItemIsSelectable) )
 	{
-	    item->setSelected(true); // emits signal, too
+#if 1
+            logVerbose() << metaObject()->className() << ": Selecting "
+                         << item->text( 1 ) << endl;
+#endif
+            setCurrentItem( item ); // Sends a signal
 	    return;
 	}
 
