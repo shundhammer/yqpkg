@@ -638,10 +638,11 @@ YQPkgFilterTab::readSettings()
     logDebug() << "Current page:   " << current << endl;
 
     {
-        // Prevent an event cascade as pages are added: Every one would cause
+        // Prevent an event cascade as pages are added: Each one would cause
         // the package list to get filled, only to get cleared and filled again
-        // by the next page.  The signals are unblocked as the sigBlocker goes
-        // out of scope.
+        // by the next page.
+        //
+        // The signals are unblocked when the sigBlocker goes out of scope.
 
         QSignalBlocker sigBlocker( this );
 
