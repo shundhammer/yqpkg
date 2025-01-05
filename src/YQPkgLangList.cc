@@ -16,13 +16,16 @@
 
 
 #include <QHeaderView>
-
 #include <zypp/sat/LocaleSupport.h>
 
 #include "Logger.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgLangList.h"
+
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
 
 
 YQPkgLangList::YQPkgLangList( QWidget * parent )
@@ -106,7 +109,9 @@ YQPkgLangList::showFilter( QWidget * newFilter )
 void
 YQPkgLangList::filter()
 {
-    logVerbose() << "filtering" << endl;
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
 

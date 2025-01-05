@@ -18,10 +18,14 @@
 #include <QPixmap>
 #include <QHeaderView>
 #include <QMouseEvent>
-#include "QY2ListView.h"
 
 #include "Logger.h"
 #include "Exception.h"
+#include "QY2ListView.h"
+
+#ifndef VERBOSE_SELECT_SOMETHING
+#  define VERBOSE_SELECT_SOMETHING  0
+#endif
 
 
 QY2ListView::QY2ListView( QWidget * parent )
@@ -71,7 +75,8 @@ QY2ListView::selectSomething()
 
 	if ( item && (item->flags() & Qt::ItemIsSelectable) )
 	{
-#if 1
+#if VERBOSE_SELECT_SOMETHING
+
             logVerbose() << metaObject()->className() << ": Selecting "
                          << item->text( 1 ) << endl;
 #endif

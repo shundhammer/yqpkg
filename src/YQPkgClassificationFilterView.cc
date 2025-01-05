@@ -23,6 +23,9 @@
 #include "utf8.h"
 #include "YQPkgClassificationFilterView.h"
 
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
 
 using std::string;
 
@@ -114,7 +117,9 @@ YQPkgClassificationFilterView::showFilter( QWidget * newFilter )
 void
 YQPkgClassificationFilterView::filter()
 {
-    logVerbose() << "filtering" << endl;
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
 
@@ -127,9 +132,10 @@ YQPkgClassificationFilterView::filter()
 	    ZyppSel selectable = *it;
 	    bool match = false;
 
-	    // If there is an installed obj, check this first. The bits are set for the installed
-	    // obj only and the installed obj is not contained in the pick list if there in an
-	    // identical candidate available from a repo.
+	    // If there is an installed obj, check this first. The bits are set
+	    // for the installed obj only and the installed obj is not
+	    // contained in the pick list if there in an identical candidate
+	    // available from a repo.
 
 	    if ( selectable->installedObj() )
 	    {
@@ -140,8 +146,9 @@ YQPkgClassificationFilterView::filter()
 		match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) );
 	    }
 
-	    // And then check the pick list which contain all availables and all objects for multi
-	    // version packages and the installed obj if there isn't same version in a repo.
+	    // And then check the pick list which contain all availables and
+	    // all objects for multi version packages and the installed obj if
+	    // there isn't same version in a repo.
 
 	    if ( ! match )
 	    {

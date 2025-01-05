@@ -140,6 +140,20 @@ target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated-declarations" )
 target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
 
 
+#
+# For debugging
+#
+
+### Log filter views (left pane)
+# target_compile_definitions( ${TARGETBIN} PUBLIC VERBOSE_FILTER_VIEWS=1 )
+
+### Log details views (bottom right tabs)
+# target_compile_definitions( ${TARGETBIN} PUBLIC VERBOSE_DETAILS_VIEWS=1 )
+
+### Log initial list selection in QY2ListView (pkg, repo, pattern, lang lists)
+# target_compile_definitions( ${TARGETBIN} PUBLIC VERBOSE_SELECT_SOMETHING=1 )
+
+
 # Add this $TOPDIR/src directory as an include directory for headers generated
 # into $(TOPDIR)/build/src/yqpkg_autogen from .ui files by uic.  This is needed
 # when using custom widget classes in Qt Designer: They include the headers for

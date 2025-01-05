@@ -34,8 +34,12 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define ENABLE_DELETING_PATCHES 1
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
+
 #define VERBOSE_PATCHES         0
+#define ENABLE_DELETING_PATCHES 1
 
 
 using std::list;
@@ -230,6 +234,10 @@ YQPkgPatchList::showFilter( QWidget * newFilter )
 void
 YQPkgPatchList::filter()
 {
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
+
     emit filterStart();
 
     if ( selection() )

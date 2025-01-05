@@ -18,16 +18,18 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 
+#include "Exception.h"
+#include "Logger.h"
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
-
-#include "Logger.h"
-#include "Exception.h"
-
 #include "YQPkgSecondaryFilterView.h"
+
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
 
 
 YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )
@@ -147,8 +149,6 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
 
 void YQPkgSecondaryFilterView::showFilter( QWidget * newFilter )
 {
-    logVerbose() << metaObject()->className() << ": Filtering" << endl;
-
     if ( newFilter == this )
         filter();
 }
@@ -156,6 +156,10 @@ void YQPkgSecondaryFilterView::showFilter( QWidget * newFilter )
 
 void YQPkgSecondaryFilterView::filter()
 {
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << metaObject()->className() << ": Filtering" << endl;
+#endif
+
     primaryFilter();
 }
 

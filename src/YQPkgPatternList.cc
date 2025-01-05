@@ -31,6 +31,10 @@
 
 #include "YQPkgPatternList.h"
 
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
+
 #define VERBOSE_PATTERN_LIST   0
 
 using std::string;
@@ -199,7 +203,9 @@ YQPkgPatternList::showFilter( QWidget * newFilter )
 void
 YQPkgPatternList::filter()
 {
-    logVerbose() << "filtering" << endl;
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
 

@@ -92,7 +92,7 @@ void YQPkgSelectorBase::reset()
 {
     resetResolver();
 
-    logDebug() << "Sending resetNotify()" << endl;
+    // logDebug() << "Sending resetNotify()" << endl;
     emit resetNotify();
 }
 

@@ -20,9 +20,9 @@
 #include "YQPkgConflictDialog.h"
 #include "YQPkgUpdatesFilterView.h"
 
-
-#define SPACING                 6       // between subwidgets
-#define MARGIN                  4       // around the widget
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
 
 
 YQPkgUpdatesFilterView::YQPkgUpdatesFilterView( QWidget * parent )
@@ -94,7 +94,9 @@ YQPkgUpdatesFilterView::showFilter( QWidget * newFilter )
 void
 YQPkgUpdatesFilterView::filter()
 {
-    logVerbose() << "filtering" << endl;
+ #if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
 

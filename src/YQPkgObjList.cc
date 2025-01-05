@@ -32,16 +32,13 @@
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
-
 #include "YQPkgObjList.h"
 
+#define VERBOSE_EXCLUDE_RULES    0
 
 using std::list;
 using std::string;
 
-
-#define VERBOSE_EXCLUDE_RULES    0
-#define EXTRA_SOLVE_COLLECTIONS  0
 
 
 YQPkgObjList::YQPkgObjList( QWidget * parent )

@@ -22,7 +22,9 @@
 #include "utf8.h"
 #include "YQPkgGenericDetailsView.h"
 
-#define VERBOSE_DETAILS_VIEWS  1
+#ifndef VERBOSE_DETAILS_VIEWS
+#  define VERBOSE_DETAILS_VIEWS  0
+#endif
 
 
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )

@@ -32,6 +32,9 @@
 #include "utf8.h"
 #include "YQPkgStatusFilterView.h"
 
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
 
 #define SPACING                 6       // between subwidgets
 #define MARGIN                  4       // around the widget
@@ -159,7 +162,9 @@ YQPkgStatusFilterView::showFilter( QWidget * newFilter )
 void
 YQPkgStatusFilterView::filter()
 {
+#if VERBOSE_FILTER_VIEWS
     logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
 

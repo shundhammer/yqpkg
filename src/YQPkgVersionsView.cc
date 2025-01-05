@@ -35,7 +35,10 @@
 #include "utf8.h"
 #include "YQPkgVersionsView.h"
 
-#define VERBOSE_DETAILS_VIEWS  1
+
+#ifndef VERBOSE_DETAILS_VIEWS
+#  define VERBOSE_DETAILS_VIEWS  0
+#endif
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )

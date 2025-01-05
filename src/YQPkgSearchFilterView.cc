@@ -40,6 +40,10 @@
 
 #include "YQPkgSearchFilterView.h"
 
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
+
 
 using std::string;
 
@@ -202,7 +206,9 @@ YQPkgSearchFilterView::showFilter( QWidget * newFilter )
 void
 YQPkgSearchFilterView::filter()
 {
-    logVerbose() << "filtering" << endl;
+#if VERBOSE_FILTER_VIEWS
+    logVerbose() << "Filtering" << endl;
+#endif
 
     emit filterStart();
     int matchCount = 0;
