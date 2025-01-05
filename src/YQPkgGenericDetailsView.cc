@@ -22,6 +22,8 @@
 #include "utf8.h"
 #include "YQPkgGenericDetailsView.h"
 
+#define VERBOSE_DETAILS_VIEWS  1
+
 
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
@@ -96,6 +98,12 @@ YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
     {
         if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
         {
+#if VERBOSE_DETAILS_VIEWS
+
+            logVerbose() << metaObject()->className() << ": Showing "
+                         << ( selectable ? fromUTF8( selectable->name() ) : "NULL" )
+                         << endl;
+#endif
             showDetails( selectable );
         }
     }

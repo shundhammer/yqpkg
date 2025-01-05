@@ -147,6 +147,8 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
 
 void YQPkgSecondaryFilterView::showFilter( QWidget * newFilter )
 {
+    logVerbose() << metaObject()->className() << ": Filtering" << endl;
+
     if ( newFilter == this )
         filter();
 }

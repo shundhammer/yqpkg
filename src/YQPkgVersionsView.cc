@@ -35,6 +35,7 @@
 #include "utf8.h"
 #include "YQPkgVersionsView.h"
 
+#define VERBOSE_DETAILS_VIEWS  1
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
@@ -79,7 +80,15 @@ YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
     if ( _parentTab )   // Is this view embedded into a tab widget?
     {
         if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
+        {
+#if VERBOSE_DETAILS_VIEWS
+
+            logVerbose() << ": Showing "
+                         << ( selectable ? fromUTF8( selectable->name() ) : "NULL" )
+                         << endl;
+#endif
             showDetails( selectable );
+        }
     }
     else                // No tab parent - simply show data unconditionally.
     {
