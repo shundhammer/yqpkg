@@ -16,11 +16,12 @@
 
 
 #include <QCloseEvent>
-#include <QVBoxLayout>
 #include <QEventLoop>
+#include <QScreen>
+#include <QVBoxLayout>
 
-#include "Logger.h"
 #include "Exception.h"
+#include "Logger.h"
 #include "WindowSettings.h"
 #include "MainWindow.h"
 
@@ -35,8 +36,15 @@ MainWindow::MainWindow( QWidget * parent )
     _instance = this;
     basicLayout();
 
-     // Some reasonable initial size if there is nothing in the settings
-    resize( 1200, 950 );
+     // Set a reasonable initial size if there is nothing in the settings
+
+    QSize size = screen()->availableSize();
+
+    if ( size.width() > 1280 )
+        size *= 0.8;
+
+    resize( size );
+
     WindowSettings::read( this, "MainWindow" );
 }
 
