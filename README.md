@@ -159,7 +159,7 @@ updated or removed.
 
 ## Ready-Made Packages
 
-- The latest version from Git [yqpkg-git](https://software.opensuse.org/download/package?package=yqpkg&project=home%3Ashundhammer%3Ayqpkg-git)
+The latest version from Git: [yqpkg-git](https://software.opensuse.org/download/package?package=yqpkg&project=home%3Ashundhammer%3Ayqpkg-git)
 
 
 ## The Name: YQPkg
