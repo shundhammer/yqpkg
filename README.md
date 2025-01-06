@@ -11,50 +11,155 @@ GPL V2; see file LICENSE.
 
 ## Development Status
 
-Alpha.
+Late Alpha.
 
-It is usable, and it has most of the key features.
+It is now well usable and fairly feature complete.
 
-- You can run it as root with all functions, and as a normal user in read-only mode.
 
-- You can select packages and patterns for installation / update / removal.
+## Features
 
-- It does dependency resolution.
+### Features Taken over from YaST
 
-- You can commit the changes, and packages or patterns are actually
-being installed / updated / removed.
+- Repos are automatically refreshed at the start of the program with some
+  visual feedback what is going on.
 
-- You get a plain moving progress bar on the _commit_ page while the
-  transactions are performed.
+- Search for packages
+  - by name, summary, description
+  - by RPM provides and requires
+  - in their file list (installed packages only)
 
-- You can switch details on or off on the _commit_ page.
+- See package details:
+  - Package description
+  - Technical details (`rpm -qi`)
+  - Dependencies (RPM provides, pre-requires requires)
+  - Versions (installed and from all active repositories)
+  - File list (installed packages only)
+  - Change log (installed packages only)
 
-- You get a summary page from where you can go back to select more.
+- Install, update and remove packages
+- Pick a specific package version for installation or update
+- Install and remove patterns
+- Browse and select packages by repository
+- Browse and select language/locale-specific packages by language/locale
+- Browse and select packages by classification:
+  - Suggested packages
+  - Recommended packages
+  - Orphaned packages
+  - Unneeded packages
+  - Retracted packages
+  - Retracted installed packages
+  - All packages
 
-- There is a configurable countdown on the summary page to close the program
-  automatically. And a "Stop" button to halt the countdown, of course.
 
-Limitations:
+### New Features in YQPkg (No YaST Counterpart)
 
-- ~~No repo refresh yet. If needed, use `sudo zypper ref` before program start.~~
+- "Updates" view that shows packages that could be updated (where a newer
+  version than the installed one is available)
 
-  _Repo refresh is now implemented; now even with progress feedback.__
+- Update all packages that can be updated without a dependency problem (the
+  same as `zypper up`)
 
-- No GPG key import from repos, no failed package GPG signature fail prompt.
+- Dist Upgrade (the same as `zypper dup`): Take package splits and renames,
+  pattern updates and more into account and update all packages that can be
+  updated without a dependency problem
+
+- **Read-only mode** for non-root users: You can search packages, view their
+  details, even experiment what would happen if you tried to install or remove
+  them and see the dependency resolver results.
+
+  You can do everything except actually apply any changes.
+
+- During the commit phase (where packages are actually installed, updated or
+  removed), inaddition to the large progress bar, you can now also switch to a
+  details view to see which packages are waiting, downloaded, being processed,
+  or finished.
+
+- You can decide during the commit phase whether or not you want to see a
+  summary page as the next step. That summary page exits the program after a
+  selectable countdown (30 seconds by default), but you can go back to the
+  package selector to mark more packages for installation, update or removal.
+
+  It's now very easy to keep working with the package selection and install,
+  update or remove a few packages at a time and then do some more without fear
+  that a lot of work might be lost when you get into a large dependency problem
+  cycle.
+
+
+### Fixes
+
+- Improved performance during startup as well as during package selection.
+
+- Improved visual appearance; we don't need to "pixel pinch" anymore with
+  today's screen resolutions, unlike back when the YaST package selector
+  created.
+
+- The annoying tendency to get too narrow columns in the package list is now
+  fixed. You will find yourself very rarely adjusting the column widths
+  manually.
+
+- The package list is now filled automatically (as it should always have) when
+  appropriate; you don't need to click on the left "filter" pane anymore to
+  make that happen. See also [issue #10](https://github.com/shundhammer/yqpkg/issues/10).
+
+- Similar with the details views (bottom right): They are now shown
+  automatically when a package is selected, be it manually or
+  programmatically. Previously, you had to click on the automatically selected
+  package again to see anything there. This is also explained in
+  [issue #10](https://github.com/shundhammer/yqpkg/issues/10).
+
+- Reasonable initial window sizes for the main window as well as for the many
+  pop-up dialogs.
+
+
+
+## Limitations
+
+- No GPG key import from repos yet for repos that were just added and never
+  refreshed yet.
 
 - No repo operations like adding, removing, setting priority, enabling, disabling.
   You get the repo view, though, where you can view and select packages by repo.
 
-For details and screenshots, see [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
+
+### Work in Progress
+
+- Patches view. You can already use it if you hit the `[F2]` button (like in
+  all YaST versions since time immemorial), but it may still have some quirks
+  and bugs.
+
+  But since SUSE patches are only (mostly?) a collection of updated package
+  versions, the new "Updates" view and the "Package Update" button there is a
+  very adequate replacement. And of course only Leap has patches anyway;
+  Tumbleweed and Slowroll don't have any.
 
 
-### Caveat
 
-**_There be dragons._** And bugs.
+## Development Progress and Screenshots
 
-Nothing bad should happen, but don't use it on a critical production system for now.
+See [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
 
-_You've been warned._
+Scroll down all the way to see the latest news and screenshots.
+
+
+## Stability
+
+It's quite stable and usable now.
+
+Of course, since it's still in development, the occasional bug may appear, but
+it should now only be minor ones. See also the
+[open issues](https://github.com/shundhammer/yqpkg/issues)
+in the GitHub issue tracker.
+
+I have been using it exclusively since Christmas 2024 for all my package
+operations, including keeping my Slowroll laptop, my Leap 15.6 desktop PC and
+my Tumbleweed virtual machine up to date. There was _never_ real problem,
+especially not during the commit phase when packages are actually installed,
+updated or removed.
+
+
+## Ready-Made Packages
+
+- The latest version from Git [yqpkg-git](https://software.opensuse.org/download/package?package=yqpkg&project=home%3Ashundhammer%3Ayqpkg-git)
 
 
 ## The Name: YQPkg
