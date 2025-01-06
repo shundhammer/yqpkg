@@ -70,7 +70,7 @@ It is now well usable and fairly feature complete.
   You can do everything except actually apply any changes.
 
 - During the commit phase (where packages are actually installed, updated or
-  removed), inaddition to the large progress bar, you can now also switch to a
+  removed), in addition to the large progress bar, you can now also switch to a
   details view to see which packages are waiting, downloaded, being processed,
   or finished.
 
