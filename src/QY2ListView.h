@@ -18,13 +18,11 @@
 #ifndef QY2ListView_h
 #define QY2ListView_h
 
+#include <QColor>
+#include <QPoint>
 #include <QTreeWidget>
-#include <qtooltip.h>
-#include <qpoint.h>
-#include <qcolor.h>
-#include <vector>
 
-#define FIXME_TOOLTIP 0
+#include <vector>
 
 
 class QY2ListViewItem;
@@ -55,6 +53,7 @@ public slots:
 
     /**
      * Select a list entry (if there is any).
+     *
      * Usually this will be the first list entry, but don't rely on that - this
      * might change without notice. Emits signal selectionChanged().
      **/
@@ -97,18 +96,18 @@ signals:
     /**
      * Emitted for mouse clicks on an item
      **/
-    void columnClicked		( int			button,
-				  QTreeWidgetItem *	item,
-				  int			col,
-				  const QPoint &	pos );
+    void columnClicked          ( int               button,
+                                  QTreeWidgetItem * item,
+                                  int               col,
+                                  const QPoint &    pos );
 
     /**
      * Emitted for mouse double clicks on an item
      **/
-    void columnDoubleClicked	( int			button,
-				  QTreeWidgetItem *	item,
-				  int			col,
-				  const QPoint &	pos );
+    void columnDoubleClicked    ( int               button,
+                                  QTreeWidgetItem * item,
+                                  int               col,
+                                  const QPoint &    pos );
 
 
 public:
@@ -202,17 +201,17 @@ protected:
     // Data members
     //
 
-    QTreeWidgetItem *		_mousePressedItem;
-    int				_mousePressedCol;
-    Qt::MouseButton		_mousePressedButton;
+    QTreeWidgetItem *    _mousePressedItem;
+    int                  _mousePressedCol;
+    Qt::MouseButton      _mousePressedButton;
 
-    std::vector<int> 		_savedColumnWidth;
-    bool			_sortByInsertionSequence;
-    int				_nextSerial;
+    std::vector<int>     _savedColumnWidth;
+    bool                 _sortByInsertionSequence;
+    int                  _nextSerial;
 
-    QY2ListViewToolTip *	_toolTip;
-    bool			_mouseButton1PressedInHeader;
-    bool			_finalSizeChangeExpected;
+    QY2ListViewToolTip * _toolTip;
+    bool                 _mouseButton1PressedInHeader;
+    bool                 _finalSizeChangeExpected;
 };
 
 
@@ -227,15 +226,15 @@ public:
     /**
      * Constructor for toplevel items.
      **/
-    QY2ListViewItem( QY2ListView * 	parentListView,
-		     const QString &	text = QString() );
+    QY2ListViewItem( QY2ListView *   parentListView,
+                     const QString & text = QString() );
 
 
     /**
      * Constructor for deeper level items.
      **/
-    QY2ListViewItem( QTreeWidgetItem * 	parentItem,
-		     const QString &	text = QString() );
+    QY2ListViewItem( QTreeWidgetItem * parentItem,
+                     const QString &   text = QString() );
 
     /**
      * Destructor
@@ -303,10 +302,10 @@ protected:
     // Data members
     //
 
-    int		_serial;
+    int         _serial;
 
-    QColor	_textColor;
-    QColor	_backgroundColor;
+    QColor      _textColor;
+    QColor      _backgroundColor;
 };
 
 
@@ -321,15 +320,15 @@ public:
     /**
      * Constructor for toplevel items.
      **/
-    QY2CheckListItem( QY2ListView * 		parentListView,
-		      const QString &		text );
+    QY2CheckListItem( QY2ListView *             parentListView,
+                      const QString &           text );
 
 
     /**
      * Constructor for deeper level items.
      **/
-    QY2CheckListItem( QTreeWidgetItem * 		parentItem,
-		      const QString &		text );
+    QY2CheckListItem( QTreeWidgetItem *                 parentItem,
+                      const QString &           text );
 
     /**
      * Destructor
@@ -363,14 +362,14 @@ public:
      * For more specific purposes reimiplement paintCell().
      **/
     void setTextColor( const QColor & col )
-	{ _textColor = col; }
+        { _textColor = col; }
 
     /**
      * Set the text background color for all columns.
      * For more specific purposes reimiplement paintCell().
      **/
     void setBackgroundColor( const QColor & col )
-	{ _backgroundColor = col; }
+        { _backgroundColor = col; }
 
     /**
      * Returns a tool tip text for a specific column of this item.
@@ -387,49 +386,8 @@ protected:
     // Data members
     //
 
-    int		_serial;
+    int         _serial;
 };
 
-
-#if FIXME_TOOLTIP
-/**
- * Tool tip for a QY2ListView widget: Enables individual tool tips specific to
- * each list item and each column. Overwrite QY2ListViewItem::toolTip() to use
- * this.
- **/
-class QY2ListViewToolTip : public QToolTip
-{
-public:
-
-    /**
-     * Constructor.
-     **/
-    QY2ListViewToolTip( QY2ListView * parent )
-	: QToolTip( parent->viewport() )
-	, _listView( parent )  {}
-
-    /**
-     * Destructor (to make gcc 4.x happy)
-     **/
-    virtual ~QY2ListViewToolTip() {}
-
-
-protected:
-
-    /**
-     * Decide if there is a tool tip text at 'p' and display it if there is one.
-     *
-     * Reimplemented from QToolTip.
-     **/
-    virtual void maybeTip( const QPoint & p );
-
-
-    //
-    // Data members
-    //
-
-    QY2ListView * _listView;
-};
-#endif
 
 #endif // ifndef QY2ListView_h
