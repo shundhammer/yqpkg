@@ -95,7 +95,8 @@ SearchFilter::guessFilterMode( const QString & pattern )
 bool SearchFilter::matches( const QString & str ) const
 {
     Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive;
-    if (( _regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption ) == 0 )
+
+    if ( ( _regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption ) == 0 )
       caseSensitivity = Qt::CaseSensitive;
 
     switch ( _filterMode )

@@ -79,7 +79,7 @@ public:
      * Return 'true' if the matching is case sensitive, 'false if not.
      **/
     bool isCaseSensitive() const
-        { return ((_regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption) == 0); }
+        { return ( _regexp.patternOptions() & QRegularExpression::CaseInsensitiveOption) == 0; }
 
     /**
      * Set the match to case sensitive ('true') or case insensitive
@@ -111,10 +111,10 @@ protected:
 
     // Data members
 
-    QString    _pattern;
+    QString            _pattern;
     QRegularExpression _regexp;
-    FilterMode _filterMode;
-    FilterMode _defaultFilterMode;
+    FilterMode         _filterMode;
+    FilterMode         _defaultFilterMode;
 
 };  // class SearchFilter
 
