@@ -819,7 +819,7 @@ YQPkgSelector::addMenus()
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _showDevelAction = _optionsMenu->addAction( _( "Show -de&vel Packages" ),
                                                 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
-    _showDevelAction->setCheckable(true);
+    _showDevelAction->setCheckable( true );
 
     _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
     CHECK_NEW( _excludeDevelPkgs );
@@ -1604,13 +1604,13 @@ YQPkgSelector::readSettings()
     QSettings settings;
     settings.beginGroup( "PackageSelector" );
 
-    _showDevelAction->setChecked(settings.value( "showDevelPackages", true ).toBool());
-    _showDebugAction->setChecked(settings.value( "showDebugPackages", true ).toBool());
+    _showDevelAction->setChecked( settings.value( "showDevelPackages", false ).toBool());
+    _showDebugAction->setChecked( settings.value( "showDebugPackages", false ).toBool());
 
     settings.endGroup();
 
-    pkgExcludeDevelChanged(_showDevelAction->isChecked());
-    pkgExcludeDebugChanged(_showDebugAction->isChecked());
+    pkgExcludeDevelChanged( _showDevelAction->isChecked());
+    pkgExcludeDebugChanged( _showDebugAction->isChecked());
 
     read_etc_sysconfig_yast();
 }
@@ -1622,8 +1622,8 @@ YQPkgSelector::writeSettings()
     QSettings settings;
     settings.beginGroup( "PackageSelector" );
 
-    settings.setValue("showDevelPackages", _showDevelAction->isChecked() );
-    settings.setValue("showDebugPackages", _showDebugAction->isChecked() );
+    settings.setValue( "showDevelPackages", _showDevelAction->isChecked() );
+    settings.setValue( "showDebugPackages", _showDebugAction->isChecked() );
 
     settings.endGroup();
 
