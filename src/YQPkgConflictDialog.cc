@@ -64,8 +64,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     setStyleSheet( QString() );
 
-    _solveCount         = 0;
-    _totalSolveTime     = 0.0;
+    _solveCount     = 0;
+    _totalSolveTime = 0.0;
 
 
     // Set the dialog title.
