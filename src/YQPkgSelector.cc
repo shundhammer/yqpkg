@@ -1635,6 +1635,8 @@ YQPkgSelector::writeSettings()
 void
 YQPkgSelector::read_etc_sysconfig_yast()
 {
+    // FIXME: It's not YaST anymore; it shouldn't rely on this file. Use the own settings instead.
+
     map<string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
 
     bool auto_check = AUTO_CHECK_DEPENDENCIES_DEFAULT;
@@ -1678,6 +1680,9 @@ YQPkgSelector::read_etc_sysconfig_yast()
 void
 YQPkgSelector::write_etc_sysconfig_yast()
 {
+    // FIXME: It's not YaST anymore; it shouldn't write this file at all.
+    // Write to the own settings instead.
+
     if ( ! geteuid() == 0 )
         return;
 
