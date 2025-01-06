@@ -35,15 +35,14 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
 
     QStringList headers;
     int numCol = 0;
-    headers << ( "" );             _statusCol  = numCol++;
-    headers << _( "Product"     ); _nameCol    = numCol++;
-    headers <<  _( "Summary"    ); _summaryCol = numCol++;
-    headers <<  _( "Version"    ); _versionCol = numCol++;
-    headers <<  _( "Vendor"     ); _vendorCol  = numCol++;
+    headers <<  ( "" );        _statusCol  = numCol++;
+    headers << _( "Product" ); _nameCol    = numCol++;
+    headers << _( "Summary" ); _summaryCol = numCol++;
+    headers << _( "Version" ); _versionCol = numCol++;
+    headers << _( "Vendor"  ); _vendorCol  = numCol++;
 
     setColumnCount( numCol );
     setHeaderLabels( headers );
-
     setAllColumnsShowFocus( true );
 
     setSortingEnabled( true );
@@ -51,6 +50,11 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
 
     fillList();
     selectSomething();
+
+    setColumnWidth( _nameCol,    250 );
+    setColumnWidth( _summaryCol, 350 );
+    setColumnWidth( _versionCol, 150 );
+    setColumnWidth( _vendorCol,  200 );
 
     logDebug() << "Creating product list done" << endl;
 }

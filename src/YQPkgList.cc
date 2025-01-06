@@ -342,7 +342,7 @@ YQPkgList::optimizeColumnWidths()
 
         // Set new column widths
 
-        setColumnWidth( statusCol(),  statusIconColWidth                  );
+        setColumnWidth( statusCol(),  statusIconColWidth              );
         setColumnWidth( nameCol(),    _bestNameColWidth    + addSpace );
         setColumnWidth( summaryCol(), _bestSummaryColWidth + addSpace );
         setColumnWidth( versionCol(), _bestVersionColWidth + addSpace );

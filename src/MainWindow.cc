@@ -35,7 +35,8 @@ MainWindow::MainWindow( QWidget * parent )
     _instance = this;
     basicLayout();
 
-    resize( 1000, 800 ); // Some reasonable size if there is nothing in the settings
+     // Some reasonable initial size if there is nothing in the settings
+    resize( 1200, 950 );
     WindowSettings::read( this, "MainWindow" );
 }
 
@@ -53,7 +54,7 @@ void MainWindow::basicLayout()
     CHECK_NEW( _layout );
 
     // Don't let margins accumulate: The UI designer generated forms have their
-    // own, the manally created YQPackageManager doesn't need or want them
+    // own, the manually created YQPackageManager doesn't need or want them.
     _layout->setContentsMargins( 0, 0, 0, 0 ); // left, right, top, bottom
     _layout->setAlignment( Qt::AlignCenter );
 }

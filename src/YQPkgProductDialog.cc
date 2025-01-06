@@ -33,8 +33,8 @@
 #include "YQPkgProductDialog.h"
 
 
-#define SPACING   2  // between subwidgets
-#define MARGIN    4  // around the widget
+#define SPACING    4  // between subwidgets
+#define MARGIN    10  // around the widget
 
 
 YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
@@ -43,15 +43,14 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     // Dialog title
     setWindowTitle( _( "Products" ) );
 
-    // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
-    setMinimumSize( 550, 450 );
+    setMinimumSize( 950, 500 );
 
     // Layout for the dialog
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
-    setLayout(layout);
+    setLayout( layout );
     layout->setSpacing( SPACING );
     layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
 
@@ -129,7 +128,7 @@ YQPkgProductDialog::polish()
 QSize
 YQPkgProductDialog::sizeHint() const
 {
-    QRect available = this->screen()->availableGeometry();
+    QRect available = screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
     size = size.boundedTo( QSize( available.width(), available.height() ) );
 
