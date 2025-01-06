@@ -593,12 +593,7 @@ QTextStream & operator<<( QTextStream & str, const std::string & text )
 }
 
 
-// Un-deprecate strerror() just for this one call.
-#ifdef strerror
-#    undef strerror
-#endif
-
 QString formatErrno()
 {
-    return QString::fromUtf8( strerror( errno ) );
+    return QString( errno );
 }
