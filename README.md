@@ -152,7 +152,7 @@ in the GitHub issue tracker.
 
 I have been using it exclusively since Christmas 2024 for all my package
 operations, including keeping my Slowroll laptop, my Leap 15.6 desktop PC and
-my Tumbleweed virtual machine up to date. There was _never_ real problem,
+my Tumbleweed virtual machine up to date. There was _never_ any real problem,
 especially not during the commit phase when packages are actually installed,
 updated or removed.
 
