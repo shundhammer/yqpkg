@@ -44,7 +44,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     setWindowTitle( _( "Products" ) );
 
     setSizeGripEnabled( true );
-    setMinimumSize( 950, 500 );
+    setMinimumSize( 1020, 500 );
 
     // Layout for the dialog
 
