@@ -19,7 +19,6 @@
 Name:           yqpkg
 
 # If you change the version here, don't forget ../VERSION.cmake !
-# To increase only the last number, use  rake version:bump
 Version:        0.8.0
 Release:        0
 
@@ -40,7 +39,8 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  %{libzypp_devel_version}
 
-Requires:       xdg-utils  # xdg-su
+# xdg-su
+Requires:       xdg-utils
 
 Summary:        Standalone graphical package management based on libzypp
 License:        GPL-2.0
@@ -87,7 +87,7 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
-%files -n %{bin_name}
+%files
 %doc README.md
 %defattr(-,root,root)
 %{_bindir}/yqpkg
