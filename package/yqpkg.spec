@@ -19,7 +19,7 @@
 Name:           yqpkg
 
 # If you change the version here, don't forget ../VERSION.cmake !
-Version:        0.8.0
+Version:        0.8.01
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
