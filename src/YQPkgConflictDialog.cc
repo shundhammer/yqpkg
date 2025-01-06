@@ -189,8 +189,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // honor the size hints (KDM for example uses double the height we
     // request).
 
-    QSize size = _busyPopup->sizeHint();
-    QPixmap pixmap( 3 * size.width(), 3 * size.height() );
+    QSize popupSize = _busyPopup->sizeHint();
+    QPixmap pixmap( 3 * popupSize.width(), 3 * popupSize.height() );
 
     // Render the text - aligned top and left because otherwise it will of
     // course be centered inside the pixmap which is usually much larger than
@@ -213,6 +213,10 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // resized to nil (or a window manager dependent minimum size).
 
     _busyPopup->setFixedSize( _busyPopup->size() );
+
+
+    // Useful initial size if there is nothing in the settings yet
+    resize( MainWindow::instance()->size() * 0.8 );
 
     WindowSettings::read( this, "PkgConflictDialog" );
 }
