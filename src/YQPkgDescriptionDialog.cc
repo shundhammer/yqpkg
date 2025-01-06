@@ -141,9 +141,8 @@ YQPkgDescriptionDialog::isEmpty() const
 QSize
 YQPkgDescriptionDialog::sizeHint() const
 {
-    QRect available = this->screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
-    size = size.boundedTo( QSize( available.width(), available.height() ) );
+    size = size.boundedTo( screen()->availableGeometry().size() );
 
     return size;
 }
