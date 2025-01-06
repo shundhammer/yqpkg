@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan  6 16:15:38 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- First official packaged version
+- 0.8.01
+
+-------------------------------------------------------------------
 Wed Jan  1 19:58:53 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
 
 - All major features are now implemented
