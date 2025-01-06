@@ -438,7 +438,7 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
 {
     QVBoxLayout * layout = new QVBoxLayout( parent );
     CHECK_NEW( layout );
-    layout->setContentsMargins( 0,   // left
+    layout->setContentsMargins( 5,   // left
                                 0,   // top
                                 4,   // right
                                 4 ); // bottom
@@ -446,9 +446,6 @@ YQPkgSelector::layoutRightPane( QWidget * parent )
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     CHECK_NEW( splitter );
     layout->addWidget( splitter );
-
-    // Vertical spacing between package list and details views
-    splitter->setHandleWidth( 12 );
 
     layoutPkgList( splitter );
     layoutDetailsViews( splitter );
@@ -466,8 +463,10 @@ YQPkgSelector::layoutPkgList( QWidget * parent )
 
     QVBoxLayout * pkgListVBox = new QVBoxLayout( pkgListPane );
     CHECK_NEW( pkgListVBox );
-    pkgListVBox->setContentsMargins( 0, 0, 0, 0 );
-
+    pkgListVBox->setContentsMargins( 0,   // left
+                                     0,   // top
+                                     0,   // right
+                                     4 ); // bottom
 
     // Notifications
 
@@ -530,8 +529,19 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
 {
     bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
 
-    _detailsViews = new QTabWidget( parent );
+    QWidget * detailsPane = new QWidget( parent );
+    CHECK_NEW( detailsPane );
+
+    QVBoxLayout * detailsVBox = new QVBoxLayout( detailsPane );
+    CHECK_NEW( detailsVBox );
+    detailsVBox->setContentsMargins( 0,   // left
+                                     4,   // top
+                                     0,   // right
+                                     0 ); // bottom
+
+    _detailsViews = new QTabWidget( detailsPane );
     CHECK_NEW( _detailsViews );
+    detailsVBox->addWidget( _detailsViews );
 
     //
     // Description

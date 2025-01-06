@@ -200,14 +200,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     // Inner margin between 3D borders and content
     _priv->baseClassWidgetStack->setContentsMargins(  8,   // left
                                                      11,   // top
-                                                      4,   // right
+                                                      8,   // right
                                                       4 ); // bottom
-
-    // Vertical spacing between left filter view pane and right package list / details pane
-    _priv->outerSplitter->setHandleWidth( 12 );
-
-    // Spacing between filter view and (mostly hidden) disk usage widget
-    _priv->leftPaneSplitter->setHandleWidth( 8 );
 
     // Margin around the left pane (the filter view)
     _priv->leftPaneSplitter->setContentsMargins  ( 0,    // left
