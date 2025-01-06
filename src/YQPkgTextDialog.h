@@ -145,13 +145,13 @@ public slots:
      * Set the text contents.
      **/
     void setText( const QString & text );
-    void setText( const string  & text );
+    void setText( const std::string & text );
 
     /**
      * Show a text with a headline identifying a selectable (name+summary)
      **/
-    void setText( ZyppSel        selectable,
-                  const string & text );
+    void setText( ZyppSel             selectable,
+                  const std::string & text );
 
 protected:
 
