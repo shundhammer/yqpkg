@@ -59,9 +59,8 @@ This is a fork of the YQPackageSelector from the YaST libyui / libyui-qt-pkg.
 %setup -q -n %{name}-%{version}
 
 %build
-pushd %{name}
 mkdir build
-cd build
+pushd build
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
@@ -79,19 +78,22 @@ make %{?jobs:-j%jobs}
 popd
 
 %install
-pushd %{name}
-cd build
+pushd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
+
 %files
-%doc README.md
-%defattr(-,root,root)
 %{_bindir}/yqpkg
-%doc %dir %{_docdir}/%{bin_name}
-%license %{_docdir}/%{bin_name}/LICENSE*
+### %{_datadir}/applications/yqpkg-root.desktop
+### %{_datadir}/applications/yqpkg-user.desktop
+### %dir %{_datadir}/icons/hicolor
+### %dir %{_datadir}/icons/hicolor/32x32
+### %dir %{_datadir}/icons/hicolor/32x32/apps
+### %{_datadir}/icons/hicolor/32x32/apps/yqpkg.png
+### %license %{_docdir}/%{name}/LICENSE
+### %doc README.md
+# %doc doc/*.txt doc/*.md
+%defattr(-,root,root)
 
 %changelog
