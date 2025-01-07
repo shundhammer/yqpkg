@@ -140,7 +140,7 @@ This is the equivalent of the &quot;zypper up&quot; command.</string>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>53</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
@@ -216,7 +216,7 @@ This is the equivalent of the &quot;zypper dup&quot; command.</string>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>54</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
