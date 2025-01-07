@@ -145,9 +145,9 @@ int YQPkgSelectorBase::verifySystem()
 
     if ( result == QDialog::Accepted )
     {
-        QMessageBox::information( this, "",
-                                  _( "System dependencies verify OK." ),
-                                  QMessageBox::Ok );
+        QMessageBox::information( this, // parent
+                                  "",   // window title
+                                  _( "System dependencies verify OK." ) );
     }
 
     return result;
@@ -417,9 +417,9 @@ bool YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
 void YQPkgSelectorBase::notImplemented()
 {
-    QMessageBox::information( this, "",
-                              _( "Not implemented yet" ),
-                              QMessageBox::Ok );
+    QMessageBox::information( this, // parent
+                              "",   // window title
+                              _( "Not implemented yet" ) );
 }
 
 

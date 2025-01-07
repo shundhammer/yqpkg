@@ -1140,9 +1140,9 @@ YQPkgSelector::manualResolvePackageDependencies()
 
     if ( result == QDialog::Accepted )
     {
-        QMessageBox::information( this, "",
-                                  _( "All package dependencies are OK." ),
-                                  QMessageBox::Ok );
+        QMessageBox::information( this, // parent
+                                  "",   // window title
+                                  _( "All package dependencies are OK." ) );
     }
 #endif
 

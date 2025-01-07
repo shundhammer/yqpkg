@@ -260,7 +260,6 @@ void YQPkgRepoManager::notifyUserToRunZypperDup() const
 
     QMessageBox::warning( MainWindow::instance(), // parent
                           _( "Error" ),
-                          message,
-                          QMessageBox::Ok );
+                          message );
 }
 

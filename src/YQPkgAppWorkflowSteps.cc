@@ -168,8 +168,8 @@ void YQPkgInitReposStep::initRepos()
 
         QMessageBox::warning( 0, // parent
                               _( "Error" ),
-                              message,
-                              QMessageBox::Ok );
+                              message );
+
         throw;  // Nothing else that we can do here
     }
 
