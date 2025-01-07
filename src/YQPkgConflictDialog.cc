@@ -309,8 +309,6 @@ YQPkgConflictDialog::resetIgnoredDependencyProblems()
 }
 
 
-#if FIXME_SOLVER_TEST_CASE
-
 void
 YQPkgConflictDialog::askCreateSolverTestCase()
 {
@@ -340,31 +338,19 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 
     if ( success )
     {
-        msg =
-            _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
-               "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
-            button_no = QMessageBox::question( 0,                           // parent
-                                               _( "Success" ),              // caption
-                                               msg,
-                                               QMessageBox::Yes    | QMessageBox::Default,
-                                               QMessageBox::No,
-                                               QMessageBox::Cancel | QMessageBox::Escape );
+        msg = _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>" ).arg( testCaseDir );
 
-        if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
-        {
-            // YQUI::ui()->askSaveLogs();
-        }
+        QMessageBox::information( MainWindow::instance(),  // parent
+                                  _( "Success" ),          // caption
+                                  msg );
     }
     else // no success
     {
-        QMessageBox::warning( 0,                                        // parent
-                              _( "Error" ),                             // caption
-                              _( "<p><b>Error</b> creating dependency resolver test case</p>"
-                                 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
-                              QMessageBox::Ok | QMessageBox::Default,
-                              QMessageBox::NoButton,
-                              QMessageBox::NoButton );
+        msg = _( "<p><b>Error</b> creating dependency resolver test case</p>"
+                 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir );
+
+        QMessageBox::warning( MainWindow::instance(),  // parent
+                              _( "Error" ),            // caption
+                              msg );
     }
 }
-
-#endif

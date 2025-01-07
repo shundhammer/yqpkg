@@ -147,11 +147,6 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _filters->readSettings();
     bool pagesRestored = _filters->tabCount() > 0;
 
-#if 0
-    if ( _pkgList )
-        _pkgList->clear();
-#endif
-
     if ( ! pagesRestored )
     {
         logDebug() << "No page configuration saved, using fallbacks" << endl;
@@ -892,11 +887,12 @@ YQPkgSelector::addMenus()
 
     _extrasMenu->addSeparator();
 
-#ifdef FIXME_ASK_SOLVER_TEST_CASE
     if ( _pkgConflictDialog )
-        _extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
-                                _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
-#endif
+    {
+        QAction * action = _extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
+                                                   _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
+        action->setEnabled( YQPkgApplication::runningAsRoot() );
+    }
 
     if ( _actionResetIgnoredDependencyProblems )
         _extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
