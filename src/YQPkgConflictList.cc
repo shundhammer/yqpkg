@@ -21,6 +21,7 @@
 
 
 #include <QDateTime>
+#include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QRadioButton>
@@ -138,26 +139,25 @@ YQPkgConflictList::applyResolutions()
 }
 
 
-#if 0
 void
 YQPkgConflictList::askSaveToFile() const
 {
-    QString filename = YQApplication::askForSaveFileName( "conflicts.txt",      // startsWith
-                                                          "*.txt",              // filter
-                                                          _( "Save Conflicts List" ) );
+    QString filename =
+        QFileDialog::getSaveFileName( window(), // parent
+                                      _( "Save conflicts list" ),
+                                      "conflicts.txt" );
     if ( ! filename.isEmpty() )
         saveToFile( filename, true );
 }
-#endif
 
 
 void
 YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
     // Open file
-    QFile file(filename);
+    QFile file( filename );
 
-    if ( ! file.open(QIODevice::WriteOnly) )
+    if ( ! file.open( QIODevice::WriteOnly ) )
     {
         logError() << "Can't open file " << filename << endl;
 
@@ -165,13 +165,11 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
         {
             // Post error popup.
 
-            QMessageBox::warning( 0,                                            // parent
-                                  _( "Error" ),                                 // caption
-                                  _( "Cannot open file %1" ).arg( filename ),
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  QMessageBox::NoButton,                        // button1
-                                  QMessageBox::NoButton );                      // button2
+            QMessageBox::warning( window(),         // parent
+                                  _( "Error" ), // caption
+                                  _( "Cannot open file %1" ).arg( filename ) );
         }
+
         return;
     }
 

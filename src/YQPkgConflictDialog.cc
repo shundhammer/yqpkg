@@ -113,7 +113,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
              this,   SLOT  ( solveAndShowConflicts() ) );
 
 
-#if 0
     // "Expert" menu button
 
     button = new QPushButton( _( "&Expert" ), this );
@@ -131,7 +130,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     _expertMenu->addAction( _( "&Save This List to a File..." ),
                             _conflictList, SLOT( askSaveToFile() ) );
-#endif
 
 
     // "Cancel" button
