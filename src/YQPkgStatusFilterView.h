@@ -22,11 +22,6 @@
 #include "YQZypp.h"
 
 
-class QComboBox;
-class QCheckBox;
-class QPushButton;
-
-
 // Generated with 'uic' from a Qt designer .ui form: status-filter-view.ui
 //
 // Check out ../build/src/yqpkg_autogen/include/ui_status-filter-view.h

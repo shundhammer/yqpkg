@@ -28,9 +28,6 @@
 #  define VERBOSE_FILTER_VIEWS  0
 #endif
 
-#define SPACING                 6       // between subwidgets
-#define MARGIN                  4       // around the widget
-
 
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     : QWidget( parent )
@@ -65,13 +62,9 @@ YQPkgStatusFilterView::~YQPkgStatusFilterView()
 void YQPkgStatusFilterView::connectWidgets()
 {
     // Use Qt introspection to recursively find all the QCheckBox children of
-    // this filter view
+    // this filter view and bulk-connect them all to the same slot
 
-    QList<QCheckBox *> checkBoxes = this->findChildren<QCheckBox *>();
-
-    // Bulk-connect all the QCheckBox children
-
-    foreach ( QCheckBox * checkBox, checkBoxes )
+    foreach ( QCheckBox * checkBox, findChildren<QCheckBox *>() )
     {
         connect( checkBox,  SIGNAL( clicked() ),
                  this,      SLOT  ( filter()  ) );
