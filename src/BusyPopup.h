@@ -62,7 +62,7 @@ public:
     /**
      * Process events (except user input events) for the specified time.
      **/
-    void processEvents( int millisec );
+    void processEvents( int millisec = 500 );
 
     /**
      * Process a show event.

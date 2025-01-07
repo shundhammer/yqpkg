@@ -18,9 +18,6 @@
 #include "Logger.h"
 
 
-#define PROCESS_EVENTS_MILLISEC 500
-
-
 BusyPopup::BusyPopup( const QString & text,
 		      QWidget *	      parent,
 		      bool	      autoPost ):
@@ -47,7 +44,7 @@ void BusyPopup::post()
 	return;
 
     show();
-    processEvents( PROCESS_EVENTS_MILLISEC );
+    processEvents();
     _posted = true;
 }
 
