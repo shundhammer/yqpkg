@@ -46,13 +46,6 @@
 #define MARGIN   4       // around the widget
 
 
-// The busy dialog ("Checking Dependencies") will only be shown if solving
-// (on average) takes longer than this many seconds. The first one will be
-// shown in any case.
-
-#define SUPPRESS_BUSY_DIALOG_SECONDS    1.5
-
-
 YQPkgConflictDialog * YQPkgConflictDialog::_instance = 0;
 
 
@@ -61,12 +54,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 {
     if ( ! _instance )
         _instance = this;
-
-    setStyleSheet( QString() );
-
-    _solveCount     = 0;
-    _totalSolveTime = 0.0;
-
 
     // Set the dialog title.
     //
@@ -160,61 +147,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
 
 
-    // Busy popup
-
-    _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent );
-    Q_CHECK_PTR( _busyPopup );
-
-    _busyPopup->setWindowTitle( "" );
-    _busyPopup->resize( _busyPopup->sizeHint() );
-
-
-    // Here comes a real nasty hack.
-    //
-    // The busy popup is needed to indicate that the application is (you
-    // guessed right) busy. But as long as it is busy, it doesn't process X
-    // events, either, and I didn't manage to convince Qt to please paint this
-    // popup before the solver's calculations (which take quite a while) start
-    // - all combinations of show(), repaint(), XSync(), XFlush(),
-    // processEvents() etc. failed.
-    //
-    // So, let's do it the hard way: Give this popup a background pixmap into
-    // which we render the text to display. The X server draws background
-    // pixmaps immediately, so we don't have to wait until the X server, the
-    // window manager and this application are finished negotiating all their
-    // various events.
-
-    // Create a pixmap. Make it large enough so it isn't replicated (i.e. the
-    // text is displayed several times) if some window manager chooses not to
-    // honor the size hints (KDM for example uses double the height we
-    // request).
-
-    QSize popupSize = _busyPopup->sizeHint();
-    QPixmap pixmap( 3 * popupSize.width(), 3 * popupSize.height() );
-
-    // Render the text - aligned top and left because otherwise it will of
-    // course be centered inside the pixmap which is usually much larger than
-    // the popup, thus the text would be cut off.
-
-    QPainter painter( &pixmap );
-    painter.drawText( pixmap.rect(), Qt::AlignLeft | Qt::AlignTop, _busyPopup->text() );
-    painter.end();
-
-    // If the application manages to render the true contents of the label we
-    // just misused so badly, the real label will interfere with the background
-    // pixmap with (maybe) a few pixels offset (bug #25647). Fast or
-    // multiprocessor machines tend to have this problem.
-    // So let's get rid of the label text and solely rely on the background
-    // pixmap.
-
-    _busyPopup->setText( "" );
-
-    // Make sure the newly emptied text doesn't cause the busy dialog to be
-    // resized to nil (or a window manager dependent minimum size).
-
-    _busyPopup->setFixedSize( _busyPopup->size() );
-
-
     // Useful initial size if there is nothing in the settings yet
     resize( MainWindow::instance()->size() * 0.8 );
 
@@ -253,7 +185,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
 
 int
-YQPkgConflictDialog::verifySystem( bool showBusyPopup)
+YQPkgConflictDialog::verifySystem( bool showBusyPopup )
 {
     BusyPopup * busyPopup = 0;
 
@@ -331,30 +263,12 @@ YQPkgConflictDialog::prepareSolving()
 
     // Initialize for next round of solving.
     _conflictList->clear();
-
-    if ( _solveCount++ == 0 || averageSolveTime() > SUPPRESS_BUSY_DIALOG_SECONDS )
-    {
-        _busyPopup->show();
-
-        // No _busyPopup->repaint() - that doesn't help anyway: Qt doesn't do
-        // any actual painting until the window is mapped. We just rely on the
-        // background pixmap we provided in the constructor.
-
-        // Make sure show() gets processed - usually, a window manager catches
-        // the show() (XMap) events, positions and maybe resizes the window and
-        // only then sends off an event that makes the window appear. This
-        // event needs to be processed.
-        qApp->processEvents();
-    }
 }
 
 
 int
 YQPkgConflictDialog::processSolverResult( bool success )
 {
-    if ( _busyPopup->isVisible() )
-        _busyPopup->hide();
-
     // Package states may have changed: The solver may have set packages to
     // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
@@ -392,16 +306,6 @@ void
 YQPkgConflictDialog::resetIgnoredDependencyProblems()
 {
     zypp::getZYpp()->resolver()->undo();
-}
-
-
-double
-YQPkgConflictDialog::averageSolveTime() const
-{
-    if ( _solveCount < 1 )
-        return 0.0;
-
-    return _totalSolveTime / _solveCount;
 }
 
 

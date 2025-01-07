@@ -20,15 +20,9 @@
 
 
 #include <QDialog>
-#include <QMenu>
-#include <QLabel>
 
 class YQPkgConflictList;
-class PMManager;
-class QPushButton;
 class QMenu;
-class QLabel;
-class YQPkgConflictDialog;
 
 
 /**
@@ -72,22 +66,6 @@ public:
      * Reserve a reasonable amount of space.
      **/
     virtual QSize sizeHint() const;
-
-    /**
-     * Returns the average time in seconds used for solving or 0 if solving
-     * hasn't taken place yet.
-     **/
-    double averageSolveTime() const;
-
-    /**
-     * Returns the total amount of time in seconds used for solving.
-     **/
-    double totalSolveTime() const { return _totalSolveTime; }
-
-    /**
-     * Returns the times solving has taken place (with this dialog).
-     **/
-    int solveCount() const { return _solveCount; }
 
     /**
      * Reset all previously ignored dependency problems.
@@ -184,10 +162,6 @@ protected:
 
     YQPkgConflictList * _conflictList;
     QMenu *             _expertMenu;
-    QLabel *            _busyPopup;
-
-    double              _totalSolveTime;
-    int                 _solveCount;
 
     static YQPkgConflictDialog * _instance;
 };
