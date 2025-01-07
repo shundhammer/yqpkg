@@ -21,6 +21,7 @@
 
 
 #include <QDateTime>
+#include <QLabel>
 #include <QMessageBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
