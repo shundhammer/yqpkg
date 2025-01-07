@@ -19,8 +19,6 @@
 #define YQPkgStatusFilterView_h
 
 #include <QWidget>
-#include <QPixmap>
-#include <QScrollArea>
 #include "YQZypp.h"
 
 
@@ -29,10 +27,18 @@ class QCheckBox;
 class QPushButton;
 
 
+// Generated with 'uic' from a Qt designer .ui form: status-filter-view.ui
+//
+// Check out ../build/src/yqpkg_autogen/include/ui_status-filter-view.h
+// for the variable names of the widgets.
+
+#include "ui_status-filter-view.h"
+
+
 /**
  * Filter view for packages by status
  **/
-class YQPkgStatusFilterView : public QScrollArea
+class YQPkgStatusFilterView : public QWidget
 {
     Q_OBJECT
 
@@ -47,12 +53,6 @@ public:
      * Destructor
      **/
     virtual ~YQPkgStatusFilterView();
-
-    /**
-     * Returns the minimum size required for this widget.
-     * Inherited from QWidget.
-     **/
-    virtual QSize minimumSizeHint() const;
 
     /**
      * Check if pkg matches the filter criteria.
@@ -78,7 +78,7 @@ public slots:
     void filter();
 
     /**
-     * Reset all check boxes (set them all to "off")
+     * Reset all check boxes: Set them all to the default values.
      **/
     void clear();
 
@@ -120,28 +120,12 @@ signals:
 
 protected:
 
-    /**
-     * Add a check box
-     **/
-    QCheckBox * addStatusCheckBox( QWidget *       parent,
-                                   const QString & label,
-                                   const QPixmap & icon,
-                                   bool            initiallyChecked );
+    void connectWidgets();
+
 
     // Data members
 
-    QCheckBox *    _showAutoDel;
-    QCheckBox *    _showAutoInstall;
-    QCheckBox *    _showAutoUpdate;
-    QCheckBox *    _showDel;
-    QCheckBox *    _showInstall;
-    QCheckBox *    _showKeepInstalled;
-    QCheckBox *    _showNoInst;
-    QCheckBox *    _showTaboo;
-    QCheckBox *    _showProtected;
-    QCheckBox *    _showUpdate;
-
-    QPushButton * _refreshButton;
+    Ui::StatusFilterView * _ui;
 };
 
 

@@ -113,6 +113,7 @@ set( UI_FILES
      pkg-commit-page.ui
      progress-dialog.ui
      search-filter-view.ui
+     search-filter-view.ui
      summary-page.ui
      updates-filter-view.ui
    )
