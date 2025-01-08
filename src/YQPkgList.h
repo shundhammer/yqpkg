@@ -74,6 +74,13 @@ public:
     int globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly );
 
 
+    /**
+     * Reimplemented from QListView / QWidget:
+     * Reserve a reasonable amount of space.
+     **/
+    virtual QSize sizeHint() const;
+
+
 public slots:
 
     /**
@@ -97,13 +104,6 @@ public slots:
     void addPkgItem( ZyppSel selectable,
                      ZyppPkg zyppPkg,
                      bool    dimmed );
-
-
-    /**
-     * Reimplemented from QListView / QWidget:
-     * Reserve a reasonable amount of space.
-     **/
-    virtual QSize sizeHint() const;
 
 #if 0
     /**
