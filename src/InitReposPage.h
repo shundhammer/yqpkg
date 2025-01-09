@@ -29,7 +29,7 @@ class MyrlynRepoManager;
 
 // Generated with 'uic' from a Qt designer .ui form: init-repos-page.ui
 //
-// Check out ../build/src/yqpkg_autogen/include/ui_init-repos-page.h
+// Check out ../build/src/myr_autogen/include/ui_init-repos-page.h
 // for the variable names of the widgets.
 
 #include "ui_init-repos-page.h"

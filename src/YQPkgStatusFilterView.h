@@ -24,7 +24,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: status-filter-view.ui
 //
-// Check out ../build/src/yqpkg_autogen/include/ui_status-filter-view.h
+// Check out ../build/src/myr_autogen/include/ui_status-filter-view.h
 // for the variable names of the widgets.
 
 #include "ui_status-filter-view.h"

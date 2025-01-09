@@ -25,7 +25,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: progress-dialog.ui
 //
-// Check out ../build/src/yqpkg_autogen/include/ui_progress-dialog-page.h
+// Check out ../build/src/myr_autogen/include/ui_progress-dialog-page.h
 // for the variable names of the widgets.
 
 #include "ui_progress-dialog.h"

@@ -206,7 +206,7 @@ void PkgSelStep::activate( bool goingForward )
 //----------------------------------------------------------------------
 
 
-QWidget * YQPkgCommitStep::page()
+QWidget * PkgCommitStep::page()
 {
     _doProcessEvents = true;  // Make sure to display this page
 
@@ -214,7 +214,7 @@ QWidget * YQPkgCommitStep::page()
 }
 
 
-void YQPkgCommitStep::activate( bool goingForward )
+void PkgCommitStep::activate( bool goingForward )
 {
     if ( goingForward )
     {

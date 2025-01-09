@@ -32,7 +32,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: pkg-commit.ui
 //
-// Check out ../build/src/yqpkg_autogen/include/ui_pkg-commit-page.h
+// Check out ../build/src/myr_autogen/include/ui_pkg-commit-page.h
 // for the variable names of the widgets.
 
 #include "ui_pkg-commit-page.h"
