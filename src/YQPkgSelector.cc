@@ -925,7 +925,7 @@ YQPkgSelector::addMenus()
     // Program name and version in the top right corner
     //
 
-    QString txt( "YQPkg-" VERSION );
+    QString txt( "Myrlyn-" VERSION );
     _menuBar->setCornerWidget( new QLabel( txt ) );
 }
 
