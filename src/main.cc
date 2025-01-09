@@ -7,8 +7,8 @@
                                     |___/
     ------------------------------------------------------
 
-    Project:  YQPkg Package Selector
-    Copyright (c) 2024 SUSE LLC
+    Project:  Myrlyn Package Manager GUI
+    Copyright (c) 2024-25 SUSE LLC
     License:  GPL V2 - See file LICENSE for details.
 
     Textdomain "qt-pkg"
@@ -27,7 +27,7 @@
 
 using std::cerr;
 
-static const char * progName = "yqpkg";
+static const char * progName = "myr";
 
 
 void usage()
@@ -125,12 +125,12 @@ void logVersion()
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( "/tmp/yqpkg-$USER", "yqpkg.log" );
+    Logger logger( "/tmp/myrlin-$USER", "myr.log" );
     logVersion();
 
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "openSUSE" ); // ~/.cache/openSUSE
-    QCoreApplication::setApplicationName ( progName );   // ~/.cache/openSUSE/yqpkg
+    QCoreApplication::setApplicationName ( "Myrlyn" );   // ~/.cache/openSUSE/Myrlyn.conf
 
 
     // Create the QApplication first because it might remove some Qt-specific

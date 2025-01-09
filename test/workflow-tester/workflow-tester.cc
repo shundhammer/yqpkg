@@ -1,14 +1,6 @@
-/*  ------------------------------------------------------
-              __   _____  ____  _
-              \ \ / / _ \|  _ \| | ____ _
-               \ V / | | | |_) | |/ / _` |
-                | || |_| |  __/|   < (_| |
-                |_| \__\_\_|   |_|\_\__, |
-                                    |___/
-    ------------------------------------------------------
-
-    Project:  YQPkg Package Selector
-    Copyright (c) 2024 SUSE LLC
+/*
+    Project:  Myrlin Package Manager GUI
+    Copyright (c) 2024-25 SUSE LLC
     License:  GPL V2 - See file LICENSE for details.
 
     Textdomain "qt-pkg"
@@ -50,7 +42,7 @@ void TestWfStep::deactivate( bool goingForward )
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( "/tmp/yqpkg-$USER", "workflow-tester.log" );
+    Logger logger( "/tmp/myrlyn-$USER", "workflow-tester.log" );
 
     WorkflowStepList workflowSteps;
     workflowSteps << new TestWfStep( "Init Phase" )

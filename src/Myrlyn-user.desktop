@@ -2,7 +2,7 @@
 Type=Application
 Name=Myrlyn (read-only as a nonprivileged user)
 Exec=/usr/bin/myr
-Icon=myrlyn
+Icon=Myrlyn
 GenericName=Myrlyn Graphical Software Package Manager (read-only as a nonprivileged user)
 Terminal=false
 MimeType=

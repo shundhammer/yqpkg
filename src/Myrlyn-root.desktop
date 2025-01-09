@@ -2,7 +2,7 @@
 Type=Application
 Name=Myrlyn (root)
 Exec=xdg-su -c /usr/bin/myr
-Icon=myrlyn
+Icon=Myrlyn
 GenericName=Myrlyn Graphical Software Package Manager (with full root privileges)
 Terminal=false
 MimeType=
