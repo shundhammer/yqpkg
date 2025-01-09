@@ -16,56 +16,54 @@
 #
 
 
+%define         libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           myrlyn
-
 # If you change the version here, don't forget ../VERSION.cmake !
+# To increase only the last number, use  rake version:bump
 Version:        0.8.02
 Release:        0
-
-%define         libzypp_devel_version libzypp-devel >= 17.21.0
-
+Summary:        Myrlyn Linux Package Manager GUI
+License:        GPL-2.0-only
+Group:          System/Packages
+URL:            https://github.com/shundhammer/myrlyn
+Source:         %{name}-%{version}.tar.zst
+BuildRequires:  %{libzypp_devel_version}
+BuildRequires:  ImageMagick
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.17
-BuildRequires:  gcc-c++
-
+BuildRequires:  hicolor-icon-theme
 # Workaround for boost issue, see boo#1225861
-# FIXME: Is this still needed?
+# FIXME: Is this still needed (gcc-fortran)?
 BuildRequires:  gcc-fortran
-
-BuildRequires:  pkg-config
+BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  %{libzypp_devel_version}
 
-# xdg-su
-Requires:       xdg-utils
-
-Summary:        Graphical Software Package Manager
-License:        GPL-2.0
-URL:            http://github.com/shundhammer/myrlyn
-Source:         %{name}-%{version}.tar.bz2
-
+%if 0%{?suse_version} < 1600
+BuildRequires:  gcc13
+BuildRequires:  gcc13-c++
+%else
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+%endif
+Requires:	xdg-utils
 
 %description
-Myrlyn is a graphical package manager to select software packages and patterns
-for installation, update and removal. It uses libzypp as its backend and Qt
-as its GUI toolkit.
-
-This started in the 11/2024 SUSE Hack Week to make the SUSE YaST Qt package
-selector usable as a standalone Qt program without any YaST dependencies.
-
+Myrlyn is a graphical package manager to select software packages and patterns for installation, update and removal. It uses libzypp as its backend and Qt as its GUI toolkit.
 
 %prep
-%setup -q -n %{name}-%{version}
+%autosetup -p1
 
 %build
-mkdir build
-pushd build
-
-export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
-export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
+%if 0%{?suse_version} < 1600
+export CC=gcc-13
+export CXX=g++-13
+%endif
+export CFLAGS="%{optflags} -fPIE"
+export CXXFLAGS="%{optflags} -fPIE"
+export LDFLAGS="-pie"
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
@@ -73,29 +71,30 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
 CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %endif
 
-cmake .. \
+%cmake \
  $CMAKE_OPTS
-
-make %{?jobs:-j%jobs}
-popd
+%cmake_build
 
 %install
-pushd build
-make install DESTDIR="$RPM_BUILD_ROOT"
-popd
+%cmake_install
+
+# icons
+for s in 16 22 24 32 48 72 256; do
+   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps
+   install -Dm0644 src/artwork/Myrlyn-${s}x${s}.png %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/Myrlyn.png
+done
+
+# desktop file
+mkdir -p %{buildroot}%{_datadir}/applications
+install -m644 src/%{name}-root.desktop %{buildroot}%{_datadir}/applications/%{name}-root.desktop
+install -m644 src/%{name}-user.desktop %{buildroot}%{_datadir}/applications/%{name}-user.desktop
 
 
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/myrlyn
-### %{_datadir}/applications/myrlin-root.desktop
-### %{_datadir}/applications/myrlin-user.desktop
-### %dir %{_datadir}/icons/hicolor
-### %dir %{_datadir}/icons/hicolor/48x48
-### %dir %{_datadir}/icons/hicolor/48x48/apps
-### %{_datadir}/icons/hicolor/48x48/apps/myrlin.png
-### %license %{_docdir}/%{name}/LICENSE
-### %doc README.md
-# %doc doc/*.txt doc/*.md
-%defattr(-,root,root)
+%{_datadir}/applications/%{name}-*.desktop
+%{_datadir}/icons/hicolor/*/apps/Myrlyn.png
 
 %changelog
