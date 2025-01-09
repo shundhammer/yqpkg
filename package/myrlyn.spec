@@ -86,13 +86,13 @@ popd
 
 
 %files
-%{_bindir}/myr
+%{_bindir}/myrlyn
 ### %{_datadir}/applications/myrlin-root.desktop
 ### %{_datadir}/applications/myrlin-user.desktop
 ### %dir %{_datadir}/icons/hicolor
-### %dir %{_datadir}/icons/hicolor/32x32
-### %dir %{_datadir}/icons/hicolor/32x32/apps
-### %{_datadir}/icons/hicolor/32x32/apps/myrlin.png
+### %dir %{_datadir}/icons/hicolor/48x48
+### %dir %{_datadir}/icons/hicolor/48x48/apps
+### %{_datadir}/icons/hicolor/48x48/apps/myrlin.png
 ### %license %{_docdir}/%{name}/LICENSE
 ### %doc README.md
 # %doc doc/*.txt doc/*.md
