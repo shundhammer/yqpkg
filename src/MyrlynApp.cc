@@ -38,10 +38,10 @@
 
 
 MyrlynApp * MyrlynApp::_instance = 0;
-YQPkgAppOptions    MyrlynApp::_optFlags( OptNone );
+MyrlynAppOptions    MyrlynApp::_optFlags( OptNone );
 
 
-MyrlynApp::MyrlynApp( YQPkgAppOptions optFlags )
+MyrlynApp::MyrlynApp( MyrlynAppOptions optFlags )
     : QObject()
     , _mainWin(0)
     , _workflow(0)

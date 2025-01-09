@@ -25,8 +25,9 @@ set( CMAKE_AUTOUIC on ) # Automatically handle Qt Designer (.uic) files
 set( SOURCES
 
   main.cc
-  MyrApp.cc
-  MyrWorkflowSteps.cc
+  MyrlynApp.cc
+  MyrlynWorkflowSteps.cc
+  MyrlynRepoManager.cc
   BusyPopup.cc
   Logger.cc
   Exception.cc
@@ -73,7 +74,6 @@ set( SOURCES
   YQPkgProductList.cc
   YQPkgRepoFilterView.cc
   YQPkgRepoList.cc
-  YQPkgRepoManager.cc
   YQPkgSearchFilterView.cc
   YQPkgSecondaryFilterView.cc
   YQPkgSelMapper.cc

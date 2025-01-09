@@ -87,10 +87,10 @@ bool commandLineOption( const QString & longName,
 }
 
 
-YQPkgAppOptions
+MyrlynAppOptions
 parseCommandLineOptions( QStringList & argList )
 {
-    YQPkgAppOptions optFlags;
+    MyrlynAppOptions optFlags;
 
     if ( commandLineOption( "--read-only",          "-r", argList ) ) optFlags |= OptReadOnly;
     if ( commandLineOption( "--dry-run",            "-n", argList ) ) optFlags |= OptDryRun;
@@ -140,7 +140,7 @@ int main( int argc, char *argv[] )
 
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove the program name
-    YQPkgAppOptions optFlags = parseCommandLineOptions( argList );
+    MyrlynAppOptions optFlags = parseCommandLineOptions( argList );
 
     {
         // New scope to minimize the life time of this instance

@@ -37,7 +37,7 @@ typedef std::list<zypp::RepoInfo> RepoInfoList;
 typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
 
-enum YQPkgAppOption
+enum MyrlynAppOption
 {
     OptNone            = 0,
     OptReadOnly        = 0x01,
@@ -55,10 +55,10 @@ enum YQPkgAppOption
 
 // See https://doc.qt.io/qt-5/qflags.html
 //
-// YQPkgAppOption  is just the enum,
-// YQPkgAppOptions are several enum values OR'ed together.
-Q_DECLARE_FLAGS( YQPkgAppOptions, YQPkgAppOption )
-Q_DECLARE_OPERATORS_FOR_FLAGS( YQPkgAppOptions )
+// MyrlynAppOption  is just the enum,
+// MyrlynAppOptions are several enum values OR'ed together.
+Q_DECLARE_FLAGS( MyrlynAppOptions, MyrlynAppOption )
+Q_DECLARE_OPERATORS_FOR_FLAGS( MyrlynAppOptions )
 
 /**
  * Application class for yqpkg.
@@ -74,7 +74,7 @@ public:
      *
      * 'optFlags' are flags OR'ed together.
      **/
-    MyrlynApp( YQPkgAppOptions optFlags = OptNone );
+    MyrlynApp( MyrlynAppOptions optFlags = OptNone );
 
     /**
      * Destructor
@@ -111,12 +111,12 @@ public:
     /**
      * Return the whole option flags.
      **/
-    static YQPkgAppOptions optFlags() { return _optFlags; }
+    static MyrlynAppOptions optFlags() { return _optFlags; }
 
     /**
      * Return 'true' if option 'opt' is set.
      **/
-    static bool isOptionSet( YQPkgAppOption opt )
+    static bool isOptionSet( MyrlynAppOption opt )
         { return _optFlags.testFlag( opt ); }
 
     //
@@ -242,17 +242,17 @@ protected:
     // Data members
     //
 
-    MainWindow *        _mainWin;
-    Workflow *          _workflow;
-    YQPkgSelector *     _pkgSel;
-    PkgCommitPage *     _pkgCommitPage;
-    SummaryPage *       _summaryPage;
-    YQPkgRepoManager *  _yqPkgRepoManager;
-    ZyppLogger *        _zyppLogger;
-    PkgTasks *          _pkgTasks;
+    MainWindow *            _mainWin;
+    Workflow *              _workflow;
+    YQPkgSelector *         _pkgSel;
+    PkgCommitPage *         _pkgCommitPage;
+    SummaryPage *           _summaryPage;
+    YQPkgRepoManager *      _yqPkgRepoManager;
+    ZyppLogger *            _zyppLogger;
+    PkgTasks *              _pkgTasks;
 
-    static MyrlynApp *   _instance;
-    static YQPkgAppOptions      _optFlags;
+    static MyrlynApp *      _instance;
+    static MyrlynAppOptions _optFlags;
 };
 
 #endif // MyrlynApp_h
