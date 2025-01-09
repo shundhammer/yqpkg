@@ -12,7 +12,7 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 #  https://doc.qt.io/qt-5/cmake-get-started.html
 #
 
-set( TARGETBIN myr )
+set( TARGETBIN myrlyn )
 
 find_package( Qt5 5.15 COMPONENTS Core Gui Widgets REQUIRED )
 # find_library( zypp ) is pointless because there is a libzypp on every SUSE
@@ -158,7 +158,7 @@ target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
 
 
 # Add this $TOPDIR/src directory as an include directory for headers generated
-# into $(TOPDIR)/build/src/myr_autogen from .ui files by uic.  This is needed
+# into $(TOPDIR)/build/src/myrlyn_autogen from .ui files by uic.  This is needed
 # when using custom widget classes in Qt Designer: They include the headers for
 # those custom widget classes, but they are not in that build/.../..._autogen
 # directory, but in src/ where they belong.
@@ -198,7 +198,7 @@ target_compile_definitions( ${TARGETBIN} PUBLIC FIX_CMAKE_FILENAME_BUG=1 )
 # Libraries that are needed to build this executable
 #
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
-target_link_libraries( myr
+target_link_libraries( myrlyn
   zypp
   Qt5::Core
   Qt5::Gui

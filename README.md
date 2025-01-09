@@ -251,7 +251,7 @@ src/myrlyn
 After `sudo make install`:
 
 ```
-myr
+myrlyn
 ```
 
 (it's now in `/usr/bin/myrlyn`)

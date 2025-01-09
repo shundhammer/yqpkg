@@ -24,7 +24,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: summary-page.ui
 //
-// Check out ../build/src/myr_autogen/include/ui_summary-page.h
+// Check out ../build/src/myrlyn_autogen/include/ui_summary-page.h
 // for the variable names of the widgets.
 
 #include "ui_summary-page.h"

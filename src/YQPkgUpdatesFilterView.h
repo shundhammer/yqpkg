@@ -25,7 +25,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: updates-filter-view.ui
 //
-// Check out ../build/src/myr_autogen/include/ui_updates-filter-view.h
+// Check out ../build/src/myrlyn_autogen/include/ui_updates-filter-view.h
 // for the variable names of the widgets.
 
 #include "ui_updates-filter-view.h"

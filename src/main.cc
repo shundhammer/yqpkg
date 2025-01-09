@@ -27,7 +27,7 @@
 
 using std::cerr;
 
-static const char * progName = "myr";
+static const char * progName = "myrlyn";
 
 
 void usage()
@@ -125,7 +125,7 @@ void logVersion()
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( "/tmp/myrlin-$USER", "myr.log" );
+    Logger logger( "/tmp/myrlin-$USER", "myrlyn.log" );
     logVersion();
 
     // Set org/app name for QSettings
