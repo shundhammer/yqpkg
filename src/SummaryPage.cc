@@ -219,7 +219,7 @@ void SummaryPage::readSettings()
     QSettings settings;
     settings.beginGroup( "SummaryPage" );
 
-    _countdownSec = settings.value( "countdownSec", 10 ).toInt();
+    _countdownSec = settings.value( "countdownSec", 30 ).toInt();
 
     settings.endGroup();
 }
