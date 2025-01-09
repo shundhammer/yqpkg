@@ -1,5 +1,5 @@
 #
-# spec file for package yqpkg
+# spec file for package myrlyn
 #
 # Copyright (c) 2025 SUSE LLC
 #
@@ -16,10 +16,10 @@
 #
 
 
-Name:           yqpkg
+Name:           myrlyn
 
 # If you change the version here, don't forget ../VERSION.cmake !
-Version:        0.8.01
+Version:        0.8.02
 Release:        0
 
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
@@ -42,17 +42,19 @@ BuildRequires:  %{libzypp_devel_version}
 # xdg-su
 Requires:       xdg-utils
 
-Summary:        Standalone graphical package management based on libzypp
+Summary:        Graphical Software Package Manager
 License:        GPL-2.0
-URL:            http://github.com/shundhammer/yqpkg
+URL:            http://github.com/shundhammer/myrlyn
 Source:         %{name}-%{version}.tar.bz2
 
 
 %description
-This is the (formerly YaST) Qt package selector as a standalone program
-without any YaST dependencies, just Qt and libzypp.
+Myrlyn is a graphical package manager to select software packages and patterns
+for installation, update and removal. It uses libzypp as its backend and Qt
+as its GUI toolkit.
 
-This is a fork of the YQPackageSelector from the YaST libyui / libyui-qt-pkg.
+This started in the 11/2024 SUSE Hack Week to make the SUSE YaST Qt package
+selector usable as a standalone Qt program without any YaST dependencies.
 
 
 %prep
@@ -84,13 +86,13 @@ popd
 
 
 %files
-%{_bindir}/yqpkg
-### %{_datadir}/applications/yqpkg-root.desktop
-### %{_datadir}/applications/yqpkg-user.desktop
+%{_bindir}/myr
+### %{_datadir}/applications/myrlin-root.desktop
+### %{_datadir}/applications/myrlin-user.desktop
 ### %dir %{_datadir}/icons/hicolor
 ### %dir %{_datadir}/icons/hicolor/32x32
 ### %dir %{_datadir}/icons/hicolor/32x32/apps
-### %{_datadir}/icons/hicolor/32x32/apps/yqpkg.png
+### %{_datadir}/icons/hicolor/32x32/apps/myrlin.png
 ### %license %{_docdir}/%{name}/LICENSE
 ### %doc README.md
 # %doc doc/*.txt doc/*.md

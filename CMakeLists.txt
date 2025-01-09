@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 #
-# CMakeLists.txt for yqpkg
+# CMakeLists.txt for Myrlyn
 #
 # Usage:
 #
@@ -18,14 +18,14 @@
 #   make VERBOSE=1
 #
 
-cmake_minimum_required(VERSION 3.17)
-project(yqpkg LANGUAGES CXX)
+cmake_minimum_required( VERSION 3.17 )
+project( myrlyn LANGUAGES CXX )
 
 # Options usage:
 #
 #   cmake -DBUILD_TEST=off ..
 
-option( BUILD_SRC         "Build in src/ subdirectory"                on )
+option( BUILD_SRC         "Build in src/ subdirectory"                on  )
 option( BUILD_TEST        "Build in test/ subdirectory"               off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 

@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 #
-# CMakeLists.txt for yqpkg/test/workflow-tester
+# CMakeLists.txt for myrlyn/test/workflow-tester
 #
 # Building:
 #

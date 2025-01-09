@@ -1,7 +1,13 @@
-# YQPkg - Standalone Qt Package Selector
+# Myrlyn - Graphical Software Package Manager
 
-This is a fork of the YaST Qt package selector as a standalone Qt program
-without any YaST dependencies. It works directly with libzypp.
+_(Formerly known as YQPkg)_
+
+Myrlyn is a graphical package manager to select software packages and patterns
+for installation, update and removal. It uses _libzypp_ as its backend and Qt
+as its GUI toolkit.
+
+This started in the 11/2024 SUSE Hack Week to make the SUSE YaST Qt package
+selector usable as a standalone Qt program without any YaST dependencies.
 
 
 ## License
@@ -51,7 +57,7 @@ It is now well usable and fairly feature complete.
   - All packages
 
 
-### New Features in YQPkg (No YaST Counterpart)
+### New Features in Myrlyn (No YaST Counterpart)
 
 - "Updates" view that shows packages that could be updated (where a newer
   version than the installed one is available)
@@ -99,13 +105,13 @@ It is now well usable and fairly feature complete.
 
 - The package list is now filled automatically (as it should always have) when
   appropriate; you don't need to click on the left "filter" pane anymore to
-  make that happen. See also [issue #10](https://github.com/shundhammer/yqpkg/issues/10).
+  make that happen. See also [issue #10](https://github.com/shundhammer/myrlyn/issues/10).
 
 - Similar with the details views (bottom right): They are now shown
   automatically when a package is selected, be it manually or
   programmatically. Previously, you had to click on the automatically selected
   package again to see anything there. This is also explained in
-  [issue #10](https://github.com/shundhammer/yqpkg/issues/10).
+  [issue #10](https://github.com/shundhammer/myrlyn/issues/10).
 
 - Reasonable initial window sizes for the main window as well as for the many
   pop-up dialogs.
@@ -136,7 +142,7 @@ It is now well usable and fairly feature complete.
 
 ## Development Progress and Screenshots
 
-See [issue #1](https://github.com/shundhammer/yqpkg/issues/1).
+See [issue #1](https://github.com/shundhammer/myrlyn/issues/1).
 
 Scroll down all the way to see the latest news and screenshots.
 
@@ -147,7 +153,7 @@ It's quite stable and usable now.
 
 Of course, since it's still in development, the occasional bug may appear, but
 it should now only be minor ones. See also the
-[open issues](https://github.com/shundhammer/yqpkg/issues)
+[open issues](https://github.com/shundhammer/myrlyn/issues)
 in the GitHub issue tracker.
 
 I have been using it exclusively since Christmas 2024 for all my package
@@ -159,15 +165,7 @@ updated or removed.
 
 ## Ready-Made Packages
 
-The latest version from Git: [yqpkg-git](https://software.opensuse.org/download/package?package=yqpkg&project=home%3Ashundhammer%3Ayqpkg-git)
-
-
-## The Name: YQPkg
-
-_(Pronounced Y-Q-Package)_
-
-YQPkg is just a working title. Suggestions for a better one are welcome; see the
-[naming suggestions issue](https://github.com/shundhammer/yqpkg/issues/19).
+The latest version from Git: [myrlyn-git](https://software.opensuse.org/download/package?package=myrlyn&project=home%3Ashundhammer%3Amyrlyn-git)
 
 
 ## Motivation: Why?
@@ -243,21 +241,21 @@ From the build directory (without `sudo make install`):
 
 ```
 cd build
-src/yqpkg
+src/myr
 ```
 
 After `sudo make install`:
 
 ```
-yqpkg
+myr
 ```
 
-(it's now in `/usr/bin/yqpkg`)
+(it's now in `/usr/bin/myr`)
 
 
 ## Reference
 
-- Development status and screenshots: [issue #1](https://github.com/shundhammer/yqpkg/issues/1)
+- Development status and screenshots: [issue #1](https://github.com/shundhammer/myrlyn/issues/1)
 
 - [Original project](https://github.com/libyui/libyui) that this was forked from
 - [2024/11 SUSE Hack Week Project](https://hackweek.opensuse.org/24/projects/yqpkg-bringing-the-single-package-selection-back-to-life)

@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 #
-# CMakeLists.txt for yqpkg/test
+# CMakeLists.txt for myrlyn/test
 #
 # From the toplevel directory, use
 #   CMAKE -DBUILD_TEST=on ...

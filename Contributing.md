@@ -1,4 +1,4 @@
-# Contributing to YQPkg
+# Contributing to Myrlyn
 
 _(Taken from the QDirStat project)_
 
@@ -115,13 +115,13 @@ See separate document [GitHub-Workflow.md](https://github.com/shundhammer/qdirst
 
 - Use the Qt and libzypp reference documentation.
 - Install and study carefully the available Qt examples for reference.
-- Read the (extensive!) documentation in the YQPkg header files.
+- Read the (extensive!) documentation in the header files.
 - Use Stack Overflow.
 - Use Google.
 - Make sure you can build a basic Qt program.
 - Make sure you have the compiler and other developer tools set up correctly.
 - Make sure you have the relevant -devel (SUSE) or -dev (Ubuntu/Debian)
-  packages installed.
+  packages installed: See the `BuildRequires` lines in package/myrlyn.spec.
 
 If you did all of the above (and only then!) and still couldn't figure out
 what's wrong:
