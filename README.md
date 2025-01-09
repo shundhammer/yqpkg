@@ -2,7 +2,7 @@
 
 _(Formerly known as YQPkg)_
 
-[Myrlyn.png](https://raw.githubusercontent.com/shundhammer/yqpkg/refs/heads/master/src/artwork/Myrlyn-256x256.png)
+[!Myrlyn.png](https://raw.githubusercontent.com/shundhammer/yqpkg/refs/heads/master/src/artwork/Myrlyn-256x256.png)
 
 Myrlyn is a graphical package manager to select software packages and patterns
 for installation, update and removal. It uses _libzypp_ as its backend and Qt
@@ -243,7 +243,7 @@ From the build directory (without `sudo make install`):
 
 ```
 cd build
-src/myr
+src/myrlyn
 ```
 
 After `sudo make install`:
@@ -252,7 +252,7 @@ After `sudo make install`:
 myr
 ```
 
-(it's now in `/usr/bin/myr`)
+(it's now in `/usr/bin/myrlyn`)
 
 
 ## Reference
