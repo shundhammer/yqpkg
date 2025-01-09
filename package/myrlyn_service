@@ -3,7 +3,8 @@
   <service name="tar_scm">
     <param name="url">https://github.com/shundhammer/myrlyn.git</param>
     <param name="scm">git</param>
-    <param name="versionformat">@PARENT_TAG@+git%cd..%h</param>
+    <!--  <param name="versionformat">@PARENT_TAG@+git%cd.%h</param> -->
+    <param name="versionformat">0.8.02+git%cd.%h</param>
     <param name="exclude">.git</param>
     <param name="revision">master</param>
     <param name="filename">myrlyn</param>
