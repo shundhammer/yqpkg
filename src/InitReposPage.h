@@ -24,7 +24,7 @@
 
 #include <zypp/RepoInfo.h>
 
-class YQPkgRepoManager;
+class MyrlynRepoManager;
 
 
 // Generated with 'uic' from a Qt designer .ui form: init-repos-page.ui
@@ -36,7 +36,7 @@ class YQPkgRepoManager;
 
 
 /**
- * Workflow page to visualize what the YQPkgRepoManager is doing during the
+ * Workflow page to visualize what the MyrlynRepoManager is doing during the
  * "init repos" phase.
  **/
 class InitReposPage: public QWidget
@@ -48,7 +48,7 @@ public:
     /**
      * Constructor.
      **/
-    InitReposPage( YQPkgRepoManager * repoManager, QWidget * parent = 0 );
+    InitReposPage( MyrlynRepoManager * repoManager, QWidget * parent = 0 );
 
     /**
      * Destructor.
@@ -109,7 +109,7 @@ protected:
     // Data members
     //
 
-    YQPkgRepoManager *  _repoManager;
+    MyrlynRepoManager *  _repoManager;
     Ui::InitReposPage * _ui;       // See ui_init-repos-page.h
 
     int                 _reposCount;

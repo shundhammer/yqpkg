@@ -23,7 +23,7 @@
 #include "MainWindow.h"
 #include "PkgCommitPage.h"
 #include "SummaryPage.h"
-#include "YQPkgRepoManager.h"
+#include "MyrlynRepoManager.h"
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "MyrlynApp.h"
@@ -128,7 +128,7 @@ void MyrlynWorkflowStep::nextPage( bool goingForward )
 //----------------------------------------------------------------------
 
 
-void YQPkgInitReposStep::activate( bool goingForward )
+void InitReposStep::activate( bool goingForward )
 {
     MyrlynWorkflowStep::activate( goingForward ); // Show the page
 
@@ -139,7 +139,7 @@ void YQPkgInitReposStep::activate( bool goingForward )
 }
 
 
-QWidget * YQPkgInitReposStep::createPage()
+QWidget * InitReposStep::createPage()
 {
     _doProcessEvents = true; // This is a splash screen, so process events
 
@@ -147,14 +147,14 @@ QWidget * YQPkgInitReposStep::createPage()
 }
 
 
-void YQPkgInitReposStep::initRepos()
+void InitReposStep::initRepos()
 {
     if ( _reposInitialized )
         return;
 
     logDebug() << "Initializing zypp..." << endl;
 
-    YQPkgRepoManager * repoMan = _app->repoManager();
+    MyrlynRepoManager * repoMan = _app->repoManager();
     CHECK_PTR( repoMan );
 
     try
@@ -185,13 +185,13 @@ void YQPkgInitReposStep::initRepos()
 
 
 QWidget *
-YQPkgSelStep::page()
+PkgSelStep::page()
 {
     return _app->pkgSel();
 }
 
 
-void YQPkgSelStep::activate( bool goingForward )
+void PkgSelStep::activate( bool goingForward )
 {
     MyrlynWorkflowStep::activate( goingForward ); // Show the page
 
@@ -231,13 +231,13 @@ void YQPkgCommitStep::activate( bool goingForward )
 //----------------------------------------------------------------------
 
 
-QWidget * YQPkgSummaryStep::page()
+QWidget * SummaryStep::page()
 {
     return _app->summaryPage();
 }
 
 
-void YQPkgSummaryStep::activate( bool goingForward )
+void SummaryStep::activate( bool goingForward )
 {
     MyrlynWorkflowStep::activate( goingForward );
 
@@ -246,7 +246,7 @@ void YQPkgSummaryStep::activate( bool goingForward )
 }
 
 
-void YQPkgSummaryStep::deactivate( bool goingForward )
+void SummaryStep::deactivate( bool goingForward )
 {
     _app->summaryPage()->stopCountdown();
     MyrlynWorkflowStep::deactivate( goingForward );
@@ -258,7 +258,7 @@ void YQPkgSummaryStep::deactivate( bool goingForward )
 
 #if 0
 
-QWidget * YQPkgWizardStep::createPage()
+QWidget * WizardStep::createPage()
 {
     WizardPage * wizardPage = new WizardPage( _id );
     CHECK_NEW( wizardPage );

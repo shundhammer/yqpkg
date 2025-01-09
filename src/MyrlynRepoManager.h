@@ -15,8 +15,8 @@
  */
 
 
-#ifndef YQPkgRepoManager_h
-#define YQPkgRepoManager_h
+#ifndef MyrlynRepoManager_h
+#define MyrlynRepoManager_h
 
 #include <list>
 
@@ -31,9 +31,9 @@ typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
 
 /**
- * Handler for zypp Repos on the YQPkg side
+ * Handler for zypp Repos on the Myrlyn side
  **/
-class YQPkgRepoManager: public QObject
+class MyrlynRepoManager: public QObject
 {
     Q_OBJECT
 
@@ -41,12 +41,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRepoManager();
+    MyrlynRepoManager();
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgRepoManager();
+    virtual ~MyrlynRepoManager();
 
     /**
      * Connect to the package manager (libzypp).
@@ -149,9 +149,9 @@ protected:
     // Data members
     //
 
-    zypp::ZYpp::Ptr     _zypp_ptr;
-    RepoManager_Ptr     _repo_manager_ptr;
-    RepoInfoList        _repos;
+    zypp::ZYpp::Ptr _zypp_ptr;
+    RepoManager_Ptr _repo_manager_ptr;
+    RepoInfoList    _repos;
 };
 
-#endif // YQPkgRepoManager_h
+#endif // MyrlynRepoManager_h

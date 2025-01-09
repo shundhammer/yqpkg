@@ -18,12 +18,12 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "MainWindow.h"
-#include "YQPkgRepoManager.h"
+#include "MyrlynRepoManager.h"
 #include "utf8.h"
 #include "InitReposPage.h"
 
 
-InitReposPage::InitReposPage( YQPkgRepoManager * repoManager,
+InitReposPage::InitReposPage( MyrlynRepoManager * repoManager,
                               QWidget *          parent )
     : QWidget( parent )
     , _repoManager( repoManager )

@@ -28,26 +28,26 @@
 #include "MyrlynApp.h"
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YQPkgRepoManager.h"
+#include "MyrlynRepoManager.h"
 
 
-YQPkgRepoManager::YQPkgRepoManager()
+MyrlynRepoManager::MyrlynRepoManager()
 {
-    logDebug() << "Creating YQPkgRepoManager" << endl;
+    logDebug() << "Creating MyrlynRepoManager" << endl;
 }
 
 
-YQPkgRepoManager::~YQPkgRepoManager()
+MyrlynRepoManager::~MyrlynRepoManager()
 {
-    logDebug() << "Destroying YQPkgRepoManager..." << endl;
+    logDebug() << "Destroying MyrlynRepoManager..." << endl;
 
     shutdownZypp();
 
-    logDebug() << "Destroying YQPkgRepoManager done" << endl;
+    logDebug() << "Destroying MyrlynRepoManager done" << endl;
 }
 
 
-void YQPkgRepoManager::initTarget()
+void MyrlynRepoManager::initTarget()
 {
     logDebug() << "Creating the ZyppLogger" << endl;
     MyrlynApp::instance()->createZyppLogger();
@@ -61,7 +61,7 @@ void YQPkgRepoManager::initTarget()
 }
 
 
-void YQPkgRepoManager::shutdownZypp()
+void MyrlynRepoManager::shutdownZypp()
 {
     logDebug() << "Shutting down zypp..." << endl;
 
@@ -73,7 +73,7 @@ void YQPkgRepoManager::shutdownZypp()
 
 
 zypp::ZYpp::Ptr
-YQPkgRepoManager::zyppPtr()
+MyrlynRepoManager::zyppPtr()
 {
     if ( ! _zypp_ptr )
         _zypp_ptr = zyppConnectInternal();
@@ -83,7 +83,7 @@ YQPkgRepoManager::zyppPtr()
 
 
 RepoManager_Ptr
-YQPkgRepoManager::repoManager()
+MyrlynRepoManager::repoManager()
 {
     if ( ! _repo_manager_ptr )
     {
@@ -95,7 +95,7 @@ YQPkgRepoManager::repoManager()
 }
 
 
-void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
+void MyrlynRepoManager::zyppConnect( int attempts, int waitSeconds )
 {
     (void) zyppConnectInternal( attempts, waitSeconds );
 }
@@ -106,7 +106,7 @@ void YQPkgRepoManager::zyppConnect( int attempts, int waitSeconds )
 //
 
 zypp::ZYpp::Ptr
-YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
+MyrlynRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 {
     while ( _zypp_ptr == NULL && attempts > 0 )
     {
@@ -142,7 +142,7 @@ YQPkgRepoManager::zyppConnectInternal( int attempts, int waitSeconds )
 }
 
 
-void YQPkgRepoManager::attachRepos()
+void MyrlynRepoManager::attachRepos()
 {
     // TO DO: check and load services (?)
 
@@ -169,7 +169,7 @@ void YQPkgRepoManager::attachRepos()
 }
 
 
-void YQPkgRepoManager::findEnabledRepos()
+void MyrlynRepoManager::findEnabledRepos()
 {
     for ( zypp::RepoManager::RepoConstIterator it = repoManager()->repoBegin();
           it != repoManager()->repoEnd();
@@ -196,7 +196,7 @@ void YQPkgRepoManager::findEnabledRepos()
 }
 
 
-void YQPkgRepoManager::refreshRepos()
+void MyrlynRepoManager::refreshRepos()
 {
     if ( geteuid() != 0 )
     {
@@ -238,7 +238,7 @@ void YQPkgRepoManager::refreshRepos()
 }
 
 
-void YQPkgRepoManager::loadRepos()
+void MyrlynRepoManager::loadRepos()
 {
     for ( const zypp::RepoInfo & repo: _repos )
     {
@@ -249,7 +249,7 @@ void YQPkgRepoManager::loadRepos()
 }
 
 
-void YQPkgRepoManager::notifyUserToRunZypperDup() const
+void MyrlynRepoManager::notifyUserToRunZypperDup() const
 {
     logInfo() << "Run 'sudo zypper refresh' and restart the program." << endl;
 

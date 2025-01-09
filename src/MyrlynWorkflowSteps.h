@@ -31,9 +31,9 @@ class MyrlynWorkflowStep: public WorkflowStep
 {
 public:
 
-    MyrlynWorkflowStep( MyrlynApp * app,
-                          const QString &    id,
-                          const QString &    next );
+    MyrlynWorkflowStep( MyrlynApp *     app,
+                        const QString & id,
+                        const QString & next );
 
     virtual ~MyrlynWorkflowStep();
 
@@ -90,25 +90,25 @@ protected:
     // Data members
     //
 
-    MyrlynApp *  _app;
-    QPointer<QWidget>   _page;
-    bool                _doProcessEvents;
-    bool                _doDeletePage;
+    MyrlynApp *       _app;
+    QPointer<QWidget> _page;
+    bool              _doProcessEvents;
+    bool              _doDeletePage;
 };
 
 
 /**
  * The "init repos" step
  **/
-class YQPkgInitReposStep: public MyrlynWorkflowStep
+class InitReposStep: public MyrlynWorkflowStep
 {
 public:
 
-     YQPkgInitReposStep( MyrlynApp * app,
-                         const QString &    id,
-                         const QString &    next = QString() )
-         : MyrlynWorkflowStep( app, id, next )
-         , _reposInitialized( false )
+    InitReposStep( MyrlynApp *     app,
+                   const QString & id,
+                   const QString & next = QString() )
+        : MyrlynWorkflowStep( app, id, next )
+        , _reposInitialized( false )
         {
             setExcludeFromHistory();
         }
@@ -133,7 +133,7 @@ protected:
      *
      * Initialize and attach the repos:
      *
-     *   - Create the YQPkgRepoManager
+     *   - Create the MyrlynRepoManager
      *   - Connect to libzypp
      *   - initialize the target (load the resolvables from the RPMDB)
      *   - attach all active repos
@@ -149,13 +149,13 @@ protected:
 /**
  * The "package selection" step
  **/
-class YQPkgSelStep: public MyrlynWorkflowStep
+class PkgSelStep: public MyrlynWorkflowStep
 {
 public:
 
-    YQPkgSelStep( MyrlynApp * app,
-                  const QString &    id,
-                  const QString &    next = QString() )
+    PkgSelStep( MyrlynApp *     app,
+                const QString & id,
+                const QString & next = QString() )
         : MyrlynWorkflowStep( app, id, next )
         {}
 
@@ -180,13 +180,13 @@ protected:
 /**
  * The "package commit" step
  **/
-class YQPkgCommitStep: public MyrlynWorkflowStep
+class PkgCommitStep: public MyrlynWorkflowStep
 {
 public:
 
-    YQPkgCommitStep( MyrlynApp * app,
-                     const QString &    id,
-                     const QString &    next = QString() )
+    PkgCommitStep( MyrlynApp *     app,
+                   const QString & id,
+                   const QString & next = QString() )
         : MyrlynWorkflowStep( app, id, next )
         {
             setExcludeFromHistory();
@@ -208,13 +208,13 @@ protected:
 };
 
 
-class YQPkgSummaryStep: public MyrlynWorkflowStep
+class SummaryStep: public MyrlynWorkflowStep
 {
 public:
 
-    YQPkgSummaryStep( MyrlynApp * app,
-                      const QString &    id,
-                      const QString &    next = QString() )
+    SummaryStep( MyrlynApp * app,
+                 const QString &    id,
+                 const QString &    next = QString() )
         : MyrlynWorkflowStep( app, id, next )
         {}
 
@@ -238,13 +238,13 @@ protected:
 /**
  * A generic wizard step with "Back" and "Next" buttons
  **/
-class YQPkgWizardStep: public MyrlynWorkflowStep
+class WizardStep: public MyrlynWorkflowStep
 {
 public:
 
-    YQPkgWizardStep( MyrlynApp * app,
-                     const QString &    id,
-                     const QString &    next = QString() )
+    WizardStep( MyrlynApp *     app,
+                const QString & id,
+                const QString & next = QString() )
         : MyrlynWorkflowStep( app, id, next )
         {}
 

@@ -25,14 +25,14 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "MyrlynRepoManager.h"
+#include "MyrlynWorkflowSteps.h"
 #include "PkgCommitPage.h"
 #include "PkgTasks.h"
-#include "Workflow.h"
 #include "SummaryPage.h"
+#include "Workflow.h"
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
-#include "YQPkgRepoManager.h"
-#include "MyrlynWorkflowSteps.h"
 #include "ZyppLogger.h"
 #include "MyrlynApp.h"
 
@@ -48,7 +48,7 @@ MyrlynApp::MyrlynApp( MyrlynAppOptions optFlags )
     , _pkgSel(0)
     , _pkgCommitPage(0)
     , _summaryPage(0)
-    , _yqPkgRepoManager(0)
+    , _myrlynRepoManager(0)
     , _zyppLogger(0)
     , _pkgTasks(0)
 {
@@ -92,8 +92,8 @@ MyrlynApp::~MyrlynApp()
     if ( _mainWin )
         delete _mainWin;
 
-    if ( _yqPkgRepoManager )
-        delete _yqPkgRepoManager;
+    if ( _myrlynRepoManager )
+        delete _myrlynRepoManager;
 
     if ( _zyppLogger )
         delete _zyppLogger;
@@ -152,10 +152,10 @@ void MyrlynApp::createWorkflow()
     logDebug() << "Creating the application workflow" << endl;
 
     WorkflowStepList steps;
-    steps << new YQPkgInitReposStep( this, "initRepos" ) // excluded from history
-          << new YQPkgSelStep      ( this, "pkgSel"    )
-          << new YQPkgCommitStep   ( this, "pkgCommit" ) // excluded from history
-          << new YQPkgSummaryStep  ( this, "summary"   );
+    steps << new InitReposStep( this, "initRepos" ) // excluded from history
+          << new PkgSelStep   ( this, "pkgSel"    )
+          << new PkgCommitStep( this, "pkgCommit" ) // excluded from history
+          << new SummaryStep  ( this, "summary"   );
 
     _workflow = new Workflow( steps );
     CHECK_PTR( _workflow );
@@ -169,7 +169,7 @@ void MyrlynApp::setWindowTitle( QWidget * window )
 {
     if ( window )
     {
-        QString windowTitle( "YQPkg" );
+        QString windowTitle( "Myrlyn" );
 
         if ( runningAsRoot() )
             windowTitle += _( " [root]" );
@@ -262,23 +262,23 @@ void MyrlynApp::createSummaryPage()
 }
 
 
-YQPkgRepoManager *
+MyrlynRepoManager *
 MyrlynApp::repoManager()
 {
-    if ( ! _yqPkgRepoManager )
+    if ( ! _myrlynRepoManager )
         createRepoManager();
 
-    return _yqPkgRepoManager;
+    return _myrlynRepoManager;
 }
 
 
 void MyrlynApp::createRepoManager()
 {
-    if ( _yqPkgRepoManager )
+    if ( _myrlynRepoManager )
         return;
 
-    _yqPkgRepoManager = new YQPkgRepoManager();
-    CHECK_NEW( _yqPkgRepoManager );
+    _myrlynRepoManager = new MyrlynRepoManager();
+    CHECK_NEW( _myrlynRepoManager );
 }
 
 

@@ -30,7 +30,7 @@ class QEvent;
 class SummaryPage;
 class Workflow;
 class YQPkgSelector;
-class YQPkgRepoManager;
+class MyrlynRepoManager;
 class ZyppLogger;
 
 typedef std::list<zypp::RepoInfo> RepoInfoList;
@@ -155,11 +155,11 @@ public:
     PkgTasks * pkgTasks();
 
     /**
-     * Return the YQPkgRepoManager. Create it if it doesn't exist yet.
+     * Return the MyrlynRepoManager. Create it if it doesn't exist yet.
      *
      * Ownership remains with this class; do not delete it.
      **/
-    YQPkgRepoManager * repoManager();
+    MyrlynRepoManager * repoManager();
 
     /**
      * Return the ZyppLogger. Create it if it doesn't exist yet.
@@ -247,7 +247,7 @@ protected:
     YQPkgSelector *         _pkgSel;
     PkgCommitPage *         _pkgCommitPage;
     SummaryPage *           _summaryPage;
-    YQPkgRepoManager *      _yqPkgRepoManager;
+    MyrlynRepoManager *      _myrlynRepoManager;
     ZyppLogger *            _zyppLogger;
     PkgTasks *              _pkgTasks;
 
