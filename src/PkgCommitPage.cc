@@ -31,7 +31,7 @@
 #include "PkgTasks.h"
 #include "PkgTaskListWidget.h"
 #include "ProgressDialog.h"
-#include "MyrApp.h"
+#include "MyrlynApp.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -105,7 +105,7 @@ void PkgCommitPage::commit()
     _ui->totalProgressBar->setValue( 0 );
     PkgCommitSignalForwarder::instance()->reset();
 
-    if ( MyrApp::isOptionSet( OptFakeCommit ) )
+    if ( MyrlynApp::isOptionSet( OptFakeCommit ) )
         fakeCommit();
     else
         realCommit();
@@ -133,7 +133,7 @@ void PkgCommitPage::populateLists()
 PkgTasks * PkgCommitPage::pkgTasks()
 {
     if ( ! _pkgTasks )
-        _pkgTasks =  MyrApp::instance()->pkgTasks();
+        _pkgTasks =  MyrlynApp::instance()->pkgTasks();
 
     CHECK_PTR( _pkgTasks );
 
@@ -198,13 +198,13 @@ PkgCommitPage::commitPolicy() const
 {
     zypp::ZYppCommitPolicy policy;
 
-    if ( MyrApp::isOptionSet( OptDryRun ) )
+    if ( MyrlynApp::isOptionSet( OptDryRun ) )
     {
         logInfo() << "dry run" << endl;
         policy.dryRun( true );
     }
 
-    if ( MyrApp::isOptionSet( OptDownloadOnly ) )
+    if ( MyrlynApp::isOptionSet( OptDownloadOnly ) )
     {
         logInfo() << "download only" << endl;
         policy.downloadMode( zypp::DownloadOnly );
@@ -297,7 +297,7 @@ void PkgCommitPage::wmClose()
         // only after returning to event loop after some time has passed.
 
         QTimer::singleShot( 500, // millisec
-                            MyrApp::instance(), SLOT( quit() ) );
+                            MyrlynApp::instance(), SLOT( quit() ) );
     }
 }
 

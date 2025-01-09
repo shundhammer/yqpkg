@@ -26,8 +26,8 @@
 #include "YQPkgRepoManager.h"
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
-#include "MyrApp.h"
-#include "YQPkgAppWorkflowSteps.h"
+#include "MyrlynApp.h"
+#include "MyrlynWorkflowSteps.h"
 
 #if 0
 #include "WizardPage.h"
@@ -41,7 +41,7 @@
 #endif
 
 
-YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( MyrApp * app,
+MyrlynWorkflowStep::MyrlynWorkflowStep( MyrlynApp * app,
                                             const QString &    id,
                                             const QString &    next )
     : WorkflowStep( id, next )
@@ -54,7 +54,7 @@ YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( MyrApp * app,
 }
 
 
-YQPkgAppWorkflowStep::~YQPkgAppWorkflowStep()
+MyrlynWorkflowStep::~MyrlynWorkflowStep()
 {
     logDebug() << "Destroying step " << _id << "..." << endl;
 
@@ -68,7 +68,7 @@ YQPkgAppWorkflowStep::~YQPkgAppWorkflowStep()
 }
 
 
-void YQPkgAppWorkflowStep::ensurePage()
+void MyrlynWorkflowStep::ensurePage()
 {
     if ( _page )
         return;
@@ -95,7 +95,7 @@ void YQPkgAppWorkflowStep::ensurePage()
 }
 
 
-void YQPkgAppWorkflowStep::activate( bool goingForward )
+void MyrlynWorkflowStep::activate( bool goingForward )
 {
     Q_UNUSED( goingForward );
     logDebug() << "Activating step " << _id << endl;
@@ -108,7 +108,7 @@ void YQPkgAppWorkflowStep::activate( bool goingForward )
 }
 
 
-void YQPkgAppWorkflowStep::nextPage( bool goingForward )
+void MyrlynWorkflowStep::nextPage( bool goingForward )
 {
     // Automatically continue with the next step in the same direction
 
@@ -130,7 +130,7 @@ void YQPkgAppWorkflowStep::nextPage( bool goingForward )
 
 void YQPkgInitReposStep::activate( bool goingForward )
 {
-    YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+    MyrlynWorkflowStep::activate( goingForward ); // Show the page
 
     if ( goingForward )
         initRepos();  // Do the one-time work
@@ -193,7 +193,7 @@ YQPkgSelStep::page()
 
 void YQPkgSelStep::activate( bool goingForward )
 {
-    YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+    MyrlynWorkflowStep::activate( goingForward ); // Show the page
 
     // Reset not only if 'goingForward' is false: We get here from the summary
     // page with a 'gotoStep( "pkgSel")' call directly, and in that case
@@ -218,7 +218,7 @@ void YQPkgCommitStep::activate( bool goingForward )
 {
     if ( goingForward )
     {
-        YQPkgAppWorkflowStep::activate( goingForward ); // Show the page
+        MyrlynWorkflowStep::activate( goingForward ); // Show the page
         _app->pkgCommitPage()->reset();  // Reset the widgets on the page
 
         _app->pkgCommitPage()->commit(); // Do the package transactions
@@ -239,7 +239,7 @@ QWidget * YQPkgSummaryStep::page()
 
 void YQPkgSummaryStep::activate( bool goingForward )
 {
-    YQPkgAppWorkflowStep::activate( goingForward );
+    MyrlynWorkflowStep::activate( goingForward );
 
     _app->summaryPage()->updateSummary();
     _app->summaryPage()->startCountdown();
@@ -249,7 +249,7 @@ void YQPkgSummaryStep::activate( bool goingForward )
 void YQPkgSummaryStep::deactivate( bool goingForward )
 {
     _app->summaryPage()->stopCountdown();
-    YQPkgAppWorkflowStep::deactivate( goingForward );
+    MyrlynWorkflowStep::deactivate( goingForward );
 }
 
 

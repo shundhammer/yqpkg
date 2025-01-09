@@ -22,7 +22,7 @@
 
 #include "Logger.h"
 #include "Exception.h"
-#include "MyrApp.h"
+#include "MyrlynApp.h"
 
 
 using std::cerr;
@@ -145,11 +145,11 @@ int main( int argc, char *argv[] )
     {
         // New scope to minimize the life time of this instance
 
-        MyrApp app( optFlags );
+        MyrlynApp app( optFlags );
         app.run();
     }
 
-    logDebug() << "MyrApp finished." << endl;
+    logDebug() << "MyrlynApp finished." << endl;
 
     return 0;
 }

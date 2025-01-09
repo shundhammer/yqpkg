@@ -32,16 +32,16 @@
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
-#include "YQPkgAppWorkflowSteps.h"
+#include "MyrlynWorkflowSteps.h"
 #include "ZyppLogger.h"
-#include "MyrApp.h"
+#include "MyrlynApp.h"
 
 
-MyrApp * MyrApp::_instance = 0;
-YQPkgAppOptions    MyrApp::_optFlags( OptNone );
+MyrlynApp * MyrlynApp::_instance = 0;
+YQPkgAppOptions    MyrlynApp::_optFlags( OptNone );
 
 
-MyrApp::MyrApp( YQPkgAppOptions optFlags )
+MyrlynApp::MyrlynApp( YQPkgAppOptions optFlags )
     : QObject()
     , _mainWin(0)
     , _workflow(0)
@@ -52,7 +52,7 @@ MyrApp::MyrApp( YQPkgAppOptions optFlags )
     , _zyppLogger(0)
     , _pkgTasks(0)
 {
-    logDebug() << "Creating MyrApp" << endl;
+    logDebug() << "Creating MyrlynApp" << endl;
 
     _instance = this;
     _optFlags = optFlags;
@@ -66,13 +66,13 @@ MyrApp::MyrApp( YQPkgAppOptions optFlags )
     logDebug() << "_optFlags: 0x" << Qt::hex << _optFlags << Qt::dec << endl;
 
     createMainWin(); // Create this early to get early visual feedback
-    logDebug() << "Creating MyrApp done" << endl;
+    logDebug() << "Creating MyrlynApp done" << endl;
 }
 
 
-MyrApp::~MyrApp()
+MyrlynApp::~MyrlynApp()
 {
-    logDebug() << "Destroying MyrApp..." << endl;
+    logDebug() << "Destroying MyrlynApp..." << endl;
 
     if ( _pkgSel )
         delete _pkgSel;
@@ -100,11 +100,11 @@ MyrApp::~MyrApp()
 
     _instance = 0;
 
-    logDebug() << "Destroying MyrApp done" << endl;
+    logDebug() << "Destroying MyrlynApp done" << endl;
 }
 
 
-void MyrApp::run()
+void MyrlynApp::run()
 {
     logDebug() << endl;
 
@@ -126,7 +126,7 @@ void MyrApp::run()
 }
 
 
-void MyrApp::createMainWin()
+void MyrlynApp::createMainWin()
 {
     logDebug() << endl;
 
@@ -144,7 +144,7 @@ void MyrApp::createMainWin()
 }
 
 
-void MyrApp::createWorkflow()
+void MyrlynApp::createWorkflow()
 {
     if ( _workflow )
         return;
@@ -165,7 +165,7 @@ void MyrApp::createWorkflow()
 }
 
 
-void MyrApp::setWindowTitle( QWidget * window )
+void MyrlynApp::setWindowTitle( QWidget * window )
 {
     if ( window )
     {
@@ -183,7 +183,7 @@ void MyrApp::setWindowTitle( QWidget * window )
 
 
 YQPkgSelector *
-MyrApp::pkgSel()
+MyrlynApp::pkgSel()
 {
     if ( ! _pkgSel )
         createPkgSel(); // Created lazy because this takes a moment
@@ -191,7 +191,7 @@ MyrApp::pkgSel()
     return _pkgSel;
 }
 
-void MyrApp::createPkgSel()
+void MyrlynApp::createPkgSel()
 {
     if ( _pkgSel )
         return;
@@ -213,7 +213,7 @@ void MyrApp::createPkgSel()
 
 
 PkgCommitPage *
-MyrApp::pkgCommitPage()
+MyrlynApp::pkgCommitPage()
 {
     if ( ! _pkgCommitPage )
         createPkgCommitPage();
@@ -222,7 +222,7 @@ MyrApp::pkgCommitPage()
 }
 
 
-void MyrApp::createPkgCommitPage()
+void MyrlynApp::createPkgCommitPage()
 {
     if ( _pkgCommitPage )
         return;
@@ -236,7 +236,7 @@ void MyrApp::createPkgCommitPage()
 
 
 SummaryPage *
-MyrApp::summaryPage()
+MyrlynApp::summaryPage()
 {
     if ( ! _summaryPage )
         createSummaryPage();
@@ -245,7 +245,7 @@ MyrApp::summaryPage()
 }
 
 
-void MyrApp::createSummaryPage()
+void MyrlynApp::createSummaryPage()
 {
     if ( _summaryPage )
         return;
@@ -263,7 +263,7 @@ void MyrApp::createSummaryPage()
 
 
 YQPkgRepoManager *
-MyrApp::repoManager()
+MyrlynApp::repoManager()
 {
     if ( ! _yqPkgRepoManager )
         createRepoManager();
@@ -272,7 +272,7 @@ MyrApp::repoManager()
 }
 
 
-void MyrApp::createRepoManager()
+void MyrlynApp::createRepoManager()
 {
     if ( _yqPkgRepoManager )
         return;
@@ -283,7 +283,7 @@ void MyrApp::createRepoManager()
 
 
 ZyppLogger *
-MyrApp::zyppLogger()
+MyrlynApp::zyppLogger()
 {
     if ( ! _zyppLogger )
         createZyppLogger();
@@ -292,7 +292,7 @@ MyrApp::zyppLogger()
 }
 
 
-void MyrApp::createZyppLogger()
+void MyrlynApp::createZyppLogger()
 {
     if ( _zyppLogger )
         return;
@@ -303,7 +303,7 @@ void MyrApp::createZyppLogger()
 
 
 PkgTasks *
-MyrApp::pkgTasks()
+MyrlynApp::pkgTasks()
 {
     if ( ! _pkgTasks )
         createPkgTasks();
@@ -312,7 +312,7 @@ MyrApp::pkgTasks()
 }
 
 
-void MyrApp::createPkgTasks()
+void MyrlynApp::createPkgTasks()
 {
     if ( _pkgTasks )
         return;
@@ -322,7 +322,7 @@ void MyrApp::createPkgTasks()
 }
 
 
-bool MyrApp::runningAsRoot()
+bool MyrlynApp::runningAsRoot()
 {
     if ( isOptionSet( OptFakeRoot ) )
         return true;
@@ -335,7 +335,7 @@ bool MyrApp::runningAsRoot()
  * Catch some events from other QObjects to redirect them if needed:
  * For example WM_CLOSE triggers the same as "Cancel" in the package selector.
  **/
-bool MyrApp::eventFilter( QObject * watchedObj, QEvent * event )
+bool MyrlynApp::eventFilter( QObject * watchedObj, QEvent * event )
 {
     if ( _mainWin && watchedObj == _mainWin && _pkgSel
 	 && event && event->type() == QEvent::Close ) // WM_CLOSE (Alt-F4)
@@ -366,7 +366,7 @@ bool MyrApp::eventFilter( QObject * watchedObj, QEvent * event )
 }
 
 
-void MyrApp::next()
+void MyrlynApp::next()
 {
     CHECK_PTR( _workflow );
 
@@ -401,14 +401,14 @@ void MyrApp::next()
 }
 
 
-void MyrApp::finish()
+void MyrlynApp::finish()
 {
     logDebug() << "Quitting the program." << endl;
     quit();
 }
 
 
-void MyrApp::back()
+void MyrlynApp::back()
 {
     logDebug() << endl;
     CHECK_PTR( _workflow );
@@ -420,7 +420,7 @@ void MyrApp::back()
 }
 
 
-void MyrApp::restart()
+void MyrlynApp::restart()
 {
     logDebug() << endl;
     CHECK_PTR( _workflow );
@@ -432,7 +432,7 @@ void MyrApp::restart()
 }
 
 
-void MyrApp::skipCommit()
+void MyrlynApp::skipCommit()
 {
     // The user finished the package selection with "Accept", but there was no
     // change: Skip the "commit" phase and go straight to the summary screen.
@@ -447,7 +447,7 @@ void MyrApp::skipCommit()
 }
 
 
-void MyrApp::quit( bool askForConfirmation )
+void MyrlynApp::quit( bool askForConfirmation )
 {
     logDebug() << endl;
 
