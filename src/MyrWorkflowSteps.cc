@@ -26,7 +26,7 @@
 #include "YQPkgRepoManager.h"
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 #include "YQPkgAppWorkflowSteps.h"
 
 #if 0
@@ -41,7 +41,7 @@
 #endif
 
 
-YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( YQPkgApplication * app,
+YQPkgAppWorkflowStep::YQPkgAppWorkflowStep( MyrApp * app,
                                             const QString &    id,
                                             const QString &    next )
     : WorkflowStep( id, next )

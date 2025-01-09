@@ -25,7 +25,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgRepoManager.h"
@@ -50,7 +50,7 @@ YQPkgRepoManager::~YQPkgRepoManager()
 void YQPkgRepoManager::initTarget()
 {
     logDebug() << "Creating the ZyppLogger" << endl;
-    YQPkgApplication::instance()->createZyppLogger();
+    MyrApp::instance()->createZyppLogger();
 
     logDebug() << "Initializing zypp..." << endl;
 
@@ -204,7 +204,7 @@ void YQPkgRepoManager::refreshRepos()
         return;
     }
 
-    if ( YQPkgApplication::isOptionSet( OptNoRepoRefresh ) )
+    if ( MyrApp::isOptionSet( OptNoRepoRefresh ) )
         return;
 
     QElapsedTimer timer;
@@ -220,7 +220,7 @@ void YQPkgRepoManager::refreshRepos()
             repoManager()->refreshMetadata( repo, zypp::RepoManager::RefreshIfNeeded );
             repoManager()->buildCache     ( repo, zypp::RepoManager::BuildIfNeeded   );
 
-            if ( YQPkgApplication::isOptionSet( OptSlowRepoRefresh ) )
+            if ( MyrApp::isOptionSet( OptSlowRepoRefresh ) )
                 sleep( 2 );
 
             logInfo() << "Refreshing repo " << repo.name()

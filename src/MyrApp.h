@@ -15,8 +15,8 @@
  */
 
 
-#ifndef YQPkgApplication_h
-#define YQPkgApplication_h
+#ifndef MyrApp_h
+#define MyrApp_h
 
 #include <QObject>
 #include <QFlags>
@@ -63,7 +63,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( YQPkgAppOptions )
 /**
  * Application class for yqpkg.
  **/
-class YQPkgApplication: public QObject
+class MyrApp: public QObject
 {
     Q_OBJECT
 
@@ -74,12 +74,12 @@ public:
      *
      * 'optFlags' are flags OR'ed together.
      **/
-    YQPkgApplication( YQPkgAppOptions optFlags = OptNone );
+    MyrApp( YQPkgAppOptions optFlags = OptNone );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgApplication();
+    virtual ~MyrApp();
 
     /**
      * Return the instance of this class or 0 if there is none.
@@ -88,7 +88,7 @@ public:
      * this instance will remain alive, i.e. for most other classes related to
      * this.
      **/
-    static YQPkgApplication * instance() { return _instance; }
+    static MyrApp * instance() { return _instance; }
 
     /**
      * Run the application. This also handles the Qt event loop.
@@ -251,8 +251,8 @@ protected:
     ZyppLogger *        _zyppLogger;
     PkgTasks *          _pkgTasks;
 
-    static YQPkgApplication *   _instance;
+    static MyrApp *   _instance;
     static YQPkgAppOptions      _optFlags;
 };
 
-#endif // YQPkgApplication_h
+#endif // MyrApp_h

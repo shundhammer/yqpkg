@@ -21,7 +21,7 @@
 
 #include "Workflow.h"
 
-class YQPkgApplication;
+class MyrApp;
 
 
 /**
@@ -31,7 +31,7 @@ class YQPkgAppWorkflowStep: public WorkflowStep
 {
 public:
 
-    YQPkgAppWorkflowStep( YQPkgApplication * app,
+    YQPkgAppWorkflowStep( MyrApp * app,
                           const QString &    id,
                           const QString &    next );
 
@@ -90,7 +90,7 @@ protected:
     // Data members
     //
 
-    YQPkgApplication *  _app;
+    MyrApp *  _app;
     QPointer<QWidget>   _page;
     bool                _doProcessEvents;
     bool                _doDeletePage;
@@ -104,7 +104,7 @@ class YQPkgInitReposStep: public YQPkgAppWorkflowStep
 {
 public:
 
-     YQPkgInitReposStep( YQPkgApplication * app,
+     YQPkgInitReposStep( MyrApp * app,
                          const QString &    id,
                          const QString &    next = QString() )
          : YQPkgAppWorkflowStep( app, id, next )
@@ -153,7 +153,7 @@ class YQPkgSelStep: public YQPkgAppWorkflowStep
 {
 public:
 
-    YQPkgSelStep( YQPkgApplication * app,
+    YQPkgSelStep( MyrApp * app,
                   const QString &    id,
                   const QString &    next = QString() )
         : YQPkgAppWorkflowStep( app, id, next )
@@ -184,7 +184,7 @@ class YQPkgCommitStep: public YQPkgAppWorkflowStep
 {
 public:
 
-    YQPkgCommitStep( YQPkgApplication * app,
+    YQPkgCommitStep( MyrApp * app,
                      const QString &    id,
                      const QString &    next = QString() )
         : YQPkgAppWorkflowStep( app, id, next )
@@ -212,7 +212,7 @@ class YQPkgSummaryStep: public YQPkgAppWorkflowStep
 {
 public:
 
-    YQPkgSummaryStep( YQPkgApplication * app,
+    YQPkgSummaryStep( MyrApp * app,
                       const QString &    id,
                       const QString &    next = QString() )
         : YQPkgAppWorkflowStep( app, id, next )
@@ -242,7 +242,7 @@ class YQPkgWizardStep: public YQPkgAppWorkflowStep
 {
 public:
 
-    YQPkgWizardStep( YQPkgApplication * app,
+    YQPkgWizardStep( MyrApp * app,
                      const QString &    id,
                      const QString &    next = QString() )
         : YQPkgAppWorkflowStep( app, id, next )

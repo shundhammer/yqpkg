@@ -27,7 +27,7 @@
 #include "PkgTasks.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
@@ -228,7 +228,7 @@ void YQPkgSelectorBase::reject()
     bool changes = pendingChanges();
     bool confirm = false;
 
-    if ( ! YQPkgApplication::runningAsRoot() && changes )
+    if ( ! MyrApp::runningAsRoot() && changes )
     {
         logInfo() << "Read-only mode (no root privileges) - abandoning changes" << endl;
         changes = false;
@@ -256,7 +256,7 @@ void YQPkgSelectorBase::reject()
 
         logInfo() << "Quitting the application" << endl;
 
-        YQPkgApplication::instance()->quit();
+        MyrApp::instance()->quit();
     }
     else
     {
@@ -338,9 +338,9 @@ void YQPkgSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
         return;
 
-    YQPkgApplication::instance()->pkgTasks()->initFromZypp();
+    MyrApp::instance()->pkgTasks()->initFromZypp();
 
-    if ( ! YQPkgApplication::instance()->pkgTasks()->todo().isEmpty()
+    if ( ! MyrApp::instance()->pkgTasks()->todo().isEmpty()
          || pendingChanges() )
     {
         logInfo() << "Closing PackageSelector with 'commit'" << endl;

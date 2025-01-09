@@ -33,15 +33,15 @@
 #include "YQi18n.h"
 #include "YQPkgRepoManager.h"
 #include "YQPkgAppWorkflowSteps.h"
-#include "YQPkgApplication.h"
 #include "ZyppLogger.h"
+#include "MyrApp.h"
 
 
-YQPkgApplication * YQPkgApplication::_instance = 0;
-YQPkgAppOptions    YQPkgApplication::_optFlags( OptNone );
+MyrApp * MyrApp::_instance = 0;
+YQPkgAppOptions    MyrApp::_optFlags( OptNone );
 
 
-YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
+MyrApp::MyrApp( YQPkgAppOptions optFlags )
     : QObject()
     , _mainWin(0)
     , _workflow(0)
@@ -52,7 +52,7 @@ YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
     , _zyppLogger(0)
     , _pkgTasks(0)
 {
-    logDebug() << "Creating YQPkgApplication" << endl;
+    logDebug() << "Creating MyrApp" << endl;
 
     _instance = this;
     _optFlags = optFlags;
@@ -66,13 +66,13 @@ YQPkgApplication::YQPkgApplication( YQPkgAppOptions optFlags )
     logDebug() << "_optFlags: 0x" << Qt::hex << _optFlags << Qt::dec << endl;
 
     createMainWin(); // Create this early to get early visual feedback
-    logDebug() << "Creating YQPkgApplication done" << endl;
+    logDebug() << "Creating MyrApp done" << endl;
 }
 
 
-YQPkgApplication::~YQPkgApplication()
+MyrApp::~MyrApp()
 {
-    logDebug() << "Destroying YQPkgApplication..." << endl;
+    logDebug() << "Destroying MyrApp..." << endl;
 
     if ( _pkgSel )
         delete _pkgSel;
@@ -100,11 +100,11 @@ YQPkgApplication::~YQPkgApplication()
 
     _instance = 0;
 
-    logDebug() << "Destroying YQPkgApplication done" << endl;
+    logDebug() << "Destroying MyrApp done" << endl;
 }
 
 
-void YQPkgApplication::run()
+void MyrApp::run()
 {
     logDebug() << endl;
 
@@ -126,7 +126,7 @@ void YQPkgApplication::run()
 }
 
 
-void YQPkgApplication::createMainWin()
+void MyrApp::createMainWin()
 {
     logDebug() << endl;
 
@@ -144,7 +144,7 @@ void YQPkgApplication::createMainWin()
 }
 
 
-void YQPkgApplication::createWorkflow()
+void MyrApp::createWorkflow()
 {
     if ( _workflow )
         return;
@@ -165,7 +165,7 @@ void YQPkgApplication::createWorkflow()
 }
 
 
-void YQPkgApplication::setWindowTitle( QWidget * window )
+void MyrApp::setWindowTitle( QWidget * window )
 {
     if ( window )
     {
@@ -183,7 +183,7 @@ void YQPkgApplication::setWindowTitle( QWidget * window )
 
 
 YQPkgSelector *
-YQPkgApplication::pkgSel()
+MyrApp::pkgSel()
 {
     if ( ! _pkgSel )
         createPkgSel(); // Created lazy because this takes a moment
@@ -191,7 +191,7 @@ YQPkgApplication::pkgSel()
     return _pkgSel;
 }
 
-void YQPkgApplication::createPkgSel()
+void MyrApp::createPkgSel()
 {
     if ( _pkgSel )
         return;
@@ -213,7 +213,7 @@ void YQPkgApplication::createPkgSel()
 
 
 PkgCommitPage *
-YQPkgApplication::pkgCommitPage()
+MyrApp::pkgCommitPage()
 {
     if ( ! _pkgCommitPage )
         createPkgCommitPage();
@@ -222,7 +222,7 @@ YQPkgApplication::pkgCommitPage()
 }
 
 
-void YQPkgApplication::createPkgCommitPage()
+void MyrApp::createPkgCommitPage()
 {
     if ( _pkgCommitPage )
         return;
@@ -236,7 +236,7 @@ void YQPkgApplication::createPkgCommitPage()
 
 
 SummaryPage *
-YQPkgApplication::summaryPage()
+MyrApp::summaryPage()
 {
     if ( ! _summaryPage )
         createSummaryPage();
@@ -245,7 +245,7 @@ YQPkgApplication::summaryPage()
 }
 
 
-void YQPkgApplication::createSummaryPage()
+void MyrApp::createSummaryPage()
 {
     if ( _summaryPage )
         return;
@@ -263,7 +263,7 @@ void YQPkgApplication::createSummaryPage()
 
 
 YQPkgRepoManager *
-YQPkgApplication::repoManager()
+MyrApp::repoManager()
 {
     if ( ! _yqPkgRepoManager )
         createRepoManager();
@@ -272,7 +272,7 @@ YQPkgApplication::repoManager()
 }
 
 
-void YQPkgApplication::createRepoManager()
+void MyrApp::createRepoManager()
 {
     if ( _yqPkgRepoManager )
         return;
@@ -283,7 +283,7 @@ void YQPkgApplication::createRepoManager()
 
 
 ZyppLogger *
-YQPkgApplication::zyppLogger()
+MyrApp::zyppLogger()
 {
     if ( ! _zyppLogger )
         createZyppLogger();
@@ -292,7 +292,7 @@ YQPkgApplication::zyppLogger()
 }
 
 
-void YQPkgApplication::createZyppLogger()
+void MyrApp::createZyppLogger()
 {
     if ( _zyppLogger )
         return;
@@ -303,7 +303,7 @@ void YQPkgApplication::createZyppLogger()
 
 
 PkgTasks *
-YQPkgApplication::pkgTasks()
+MyrApp::pkgTasks()
 {
     if ( ! _pkgTasks )
         createPkgTasks();
@@ -312,7 +312,7 @@ YQPkgApplication::pkgTasks()
 }
 
 
-void YQPkgApplication::createPkgTasks()
+void MyrApp::createPkgTasks()
 {
     if ( _pkgTasks )
         return;
@@ -322,7 +322,7 @@ void YQPkgApplication::createPkgTasks()
 }
 
 
-bool YQPkgApplication::runningAsRoot()
+bool MyrApp::runningAsRoot()
 {
     if ( isOptionSet( OptFakeRoot ) )
         return true;
@@ -335,7 +335,7 @@ bool YQPkgApplication::runningAsRoot()
  * Catch some events from other QObjects to redirect them if needed:
  * For example WM_CLOSE triggers the same as "Cancel" in the package selector.
  **/
-bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
+bool MyrApp::eventFilter( QObject * watchedObj, QEvent * event )
 {
     if ( _mainWin && watchedObj == _mainWin && _pkgSel
 	 && event && event->type() == QEvent::Close ) // WM_CLOSE (Alt-F4)
@@ -366,7 +366,7 @@ bool YQPkgApplication::eventFilter( QObject * watchedObj, QEvent * event )
 }
 
 
-void YQPkgApplication::next()
+void MyrApp::next()
 {
     CHECK_PTR( _workflow );
 
@@ -401,14 +401,14 @@ void YQPkgApplication::next()
 }
 
 
-void YQPkgApplication::finish()
+void MyrApp::finish()
 {
     logDebug() << "Quitting the program." << endl;
     quit();
 }
 
 
-void YQPkgApplication::back()
+void MyrApp::back()
 {
     logDebug() << endl;
     CHECK_PTR( _workflow );
@@ -420,7 +420,7 @@ void YQPkgApplication::back()
 }
 
 
-void YQPkgApplication::restart()
+void MyrApp::restart()
 {
     logDebug() << endl;
     CHECK_PTR( _workflow );
@@ -432,7 +432,7 @@ void YQPkgApplication::restart()
 }
 
 
-void YQPkgApplication::skipCommit()
+void MyrApp::skipCommit()
 {
     // The user finished the package selection with "Accept", but there was no
     // change: Skip the "commit" phase and go straight to the summary screen.
@@ -447,7 +447,7 @@ void YQPkgApplication::skipCommit()
 }
 
 
-void YQPkgApplication::quit( bool askForConfirmation )
+void MyrApp::quit( bool askForConfirmation )
 {
     logDebug() << endl;
 

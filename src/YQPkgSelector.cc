@@ -46,7 +46,7 @@
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "WindowSettings.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgClassificationFilterView.h"
@@ -243,7 +243,7 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
 #if 0
         QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
 #else
-        if ( _pkgConflictDialog && ! YQPkgApplication::isOptionSet( OptNoVerify ) )
+        if ( _pkgConflictDialog && ! MyrApp::isOptionSet( OptNoVerify ) )
             QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
 #endif
     }
@@ -658,7 +658,7 @@ YQPkgSelector::layoutButtons( QWidget *parent )
     CHECK_NEW( accept_button );
     layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-    accept_button->setEnabled( ! YQPkgApplication::readOnlyMode() );
+    accept_button->setEnabled( ! MyrApp::readOnlyMode() );
 
     connect( accept_button, SIGNAL( clicked() ),
              this,          SLOT  ( accept()   ) );
@@ -700,7 +700,7 @@ YQPkgSelector::addMenus()
 
     _fileMenu->addAction(          _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
     action = _fileMenu->addAction( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
-    action->setEnabled( ! YQPkgApplication::readOnlyMode() );
+    action->setEnabled( ! MyrApp::readOnlyMode() );
 
     if ( _pkgList )
     {
@@ -891,7 +891,7 @@ YQPkgSelector::addMenus()
     {
         QAction * action = _extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
                                                    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
-        action->setEnabled( YQPkgApplication::runningAsRoot() );
+        action->setEnabled( MyrApp::runningAsRoot() );
     }
 
     if ( _actionResetIgnoredDependencyProblems )

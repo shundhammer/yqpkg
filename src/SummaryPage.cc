@@ -24,7 +24,7 @@
 #include "Logger.h"
 #include "MainWindow.h"
 #include "PkgTasks.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 #include "YQi18n.h"
 #include "SummaryPage.h"
 
@@ -239,7 +239,7 @@ void SummaryPage::writeSettings()
 PkgTasks * SummaryPage::pkgTasks()
 {
     if ( ! _pkgTasks )
-        _pkgTasks =  YQPkgApplication::instance()->pkgTasks();
+        _pkgTasks =  MyrApp::instance()->pkgTasks();
 
     CHECK_PTR( _pkgTasks );
 
@@ -249,7 +249,7 @@ PkgTasks * SummaryPage::pkgTasks()
 
 void SummaryPage::updateSummary()
 {
-    if ( YQPkgApplication::isOptionSet( OptFakeSummary ) )
+    if ( MyrApp::isOptionSet( OptFakeSummary ) )
         fakeDoneList();
 
     QString text;

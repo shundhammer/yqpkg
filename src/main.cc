@@ -22,7 +22,7 @@
 
 #include "Logger.h"
 #include "Exception.h"
-#include "YQPkgApplication.h"
+#include "MyrApp.h"
 
 
 using std::cerr;
@@ -145,11 +145,11 @@ int main( int argc, char *argv[] )
     {
         // New scope to minimize the life time of this instance
 
-        YQPkgApplication app( optFlags );
+        MyrApp app( optFlags );
         app.run();
     }
 
-    logDebug() << "YQPkgApplication finished." << endl;
+    logDebug() << "MyrApp finished." << endl;
 
     return 0;
 }
