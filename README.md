@@ -1,6 +1,8 @@
-# Myrlyn - Graphical Software Package Manager
+# Myrlyn - Package Manager GUI
 
 _(Formerly known as YQPkg)_
+
+[Myrlyn.png](<https://raw.githubusercontent.com/shundhammer/yqpkg/refs/heads/master/src/artwork/Myrlyn-256x256.png)
 
 Myrlyn is a graphical package manager to select software packages and patterns
 for installation, update and removal. It uses _libzypp_ as its backend and Qt
