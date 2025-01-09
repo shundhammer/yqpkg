@@ -1,4 +1,4 @@
-# Myrlyn Package Manager GUI
+# Myrlyn Linux Package Manager GUI
 
 _(Formerly known as YQPkg)_
 
