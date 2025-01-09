@@ -7,7 +7,7 @@
                                     |___/
     ------------------------------------------------------
 
-    Project:  YQPkg Package Selector
+    Project:  Myrlyn Package Manager GUI
     Copyright (c) 2025 SUSE LLC
     License:  GPL V2 - See file LICENSE for details.
 
