@@ -22,11 +22,12 @@
 #include "Logger.h"
 #include "MainWindow.h"
 #include "PkgCommitPage.h"
+#include "QY2CursorHelper.h"
 #include "SummaryPage.h"
-#include "MyrlynRepoManager.h"
 #include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "MyrlynApp.h"
+#include "MyrlynRepoManager.h"
 #include "MyrlynWorkflowSteps.h"
 
 #if 0
@@ -156,6 +157,7 @@ void InitReposStep::initRepos()
 
     MyrlynRepoManager * repoMan = _app->repoManager();
     CHECK_PTR( repoMan );
+    busyCursor();
 
     try
     {
@@ -163,6 +165,7 @@ void InitReposStep::initRepos()
     }
     catch ( ... )
     {
+        normalCursor();
         QString message = _( "Can't connect to the package manager!\n"
                              "It may be busy in another window.\n" );
 
@@ -175,6 +178,7 @@ void InitReposStep::initRepos()
 
     repoMan->initTarget();
     repoMan->attachRepos();
+    normalCursor();
 
     logDebug() << "Initializing zypp done" << endl;
     _reposInitialized = true;
@@ -187,7 +191,13 @@ void InitReposStep::initRepos()
 QWidget *
 PkgSelStep::page()
 {
-    return _app->pkgSel();
+    busyCursor();
+
+    // This might take a few seconds
+    QWidget * pg = _app->pkgSel();
+    normalCursor();
+
+    return pg;
 }
 
 
