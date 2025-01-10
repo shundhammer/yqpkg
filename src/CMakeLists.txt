@@ -3,7 +3,6 @@
 # CMakeLists.txt for myrlyn/src
 
 include( ../VERSION.cmake )
-include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 #
 # Qt-specific

@@ -91,7 +91,7 @@ install -m644 src/%{name}-user.desktop %{buildroot}%{_datadir}/applications/%{na
 
 
 %files
-%doc README.md
+%doc README.md Contributing.md
 %license LICENSE
 %{_bindir}/myrlyn
 %{_datadir}/applications/%{name}-*.desktop
