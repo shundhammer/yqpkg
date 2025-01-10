@@ -674,14 +674,14 @@ YQPkgSelector::layoutMenuBar( QWidget *parent )
     CHECK_NEW( _menuBar );
     parent->layout()->addWidget(_menuBar);
 
-    _fileMenu           = 0;
-    _optionsMenu        = 0;
-    _pkgMenu            = 0;
-    _patchMenu          = 0;
-    _extrasMenu         = 0;
-    _configMenu         = 0;
-    _dependencyMenu     = 0;
-    _helpMenu           = 0;
+    _fileMenu       = 0;
+    _optionsMenu    = 0;
+    _pkgMenu        = 0;
+    _patchMenu      = 0;
+    _extrasMenu     = 0;
+    _configMenu     = 0;
+    _dependencyMenu = 0;
+    _helpMenu       = 0;
 }
 
 
@@ -698,9 +698,10 @@ YQPkgSelector::addMenus()
     action->setText( _( "&File" ));
     _fileMenu->addSeparator();
 
-    _fileMenu->addAction(          _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    action = _fileMenu->addAction( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
+    action = _fileMenu->addAction( _( "&Accept Changes" ), this, SLOT( accept() ), Qt::CTRL + Qt::Key_A );
     action->setEnabled( ! MyrlynApp::readOnlyMode() );
+    _fileMenu->addAction( _( "&Quit - Discard Changes" ),  this, SLOT( reject() ), Qt::CTRL + Qt::Key_Q );
+
 
     if ( _pkgList )
     {
@@ -867,9 +868,9 @@ YQPkgSelector::addMenus()
     action = _menuBar->addMenu( _extrasMenu );
     action->setText(_( "E&xtras" ));
 
-    _extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts() ) );
-    _extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
-    _extrasMenu->addAction( _( "Show &History"          ), this, SLOT( showHistory() ) );
+    _extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts()    ) );
+    _extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ) );
+    _extrasMenu->addAction( _( "Show &History"          ), this, SLOT( showHistory()     ) );
 
     _extrasMenu->addSeparator();
 
