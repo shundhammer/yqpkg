@@ -20,6 +20,7 @@
 
 #include <QAction>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
@@ -108,15 +109,14 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     // "View" button
     //
 
-    QWidget * buttonBox = new QWidget( this );
-    CHECK_NEW( buttonBox );
-    setCornerWidget( buttonBox, Qt::TopRightCorner );
-    buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+    QLabel * logo = new QLabel( this );
+    CHECK_NEW( logo );
 
-    QHBoxLayout * buttonBoxLayout = new QHBoxLayout( buttonBox );
-    CHECK_NEW( buttonBoxLayout );
-    buttonBox->setLayout( buttonBoxLayout );
-    buttonBoxLayout->setContentsMargins( 0, 0, 0, 0 );
+    logo->setPixmap( QPixmap( ":/artwork/Myrlyn-alpha-32x32" ) );
+    logo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+    logo->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
+    setCornerWidget( logo, Qt::TopRightCorner );
+
 
     // Translators: Button with pop-up menu to open a new page (very much like
     // in a web browser) with another package filter view or to switch to an
