@@ -26,7 +26,7 @@ Summary:        Myrlyn Linux Package Manager GUI
 License:        GPL-2.0-only
 Group:          System/Packages
 URL:            https://github.com/shundhammer/myrlyn
-Source:         %{name}-%{version}.tar.zst
+Source:         %{name}-%{version}.tar.bz2
 BuildRequires:  %{libzypp_devel_version}
 BuildRequires:  ImageMagick
 BuildRequires:  boost-devel
