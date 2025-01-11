@@ -87,5 +87,5 @@ endif()
 # Install
 #
 
-install(FILES Contributing.md LICENSE README.md
-        DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install( FILES LICENSE README.md
+	 DESTINATION ${CMAKE_INSTALL_DOCDIR} )
