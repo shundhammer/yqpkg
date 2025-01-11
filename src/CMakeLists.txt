@@ -3,7 +3,6 @@
 # CMakeLists.txt for myrlyn/src
 
 include( ../VERSION.cmake )
-include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 #
 # Qt-specific
@@ -218,3 +217,8 @@ target_link_libraries( myrlyn
 #
 
 install(TARGETS ${TARGETBIN} RUNTIME DESTINATION bin)
+install(FILES myrlyn-root.desktop myrlyn-user.desktop DESTINATION ${DATADIR}/applications)
+foreach(resolution in [16 22 24 32 48 72 256])
+  install(FILES "artwork/Myrlyn-${resolution}x${resolution}.png"
+          DESTINATION "${DATADIR}/icons/hicolor/${resolution}x${resolution}/apps/Myrlyn.png")
+endforeach()

@@ -78,20 +78,8 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %install
 %cmake_install
 
-# icons
-for s in 16 22 24 32 48 72 256; do
-   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps
-   install -Dm0644 src/artwork/Myrlyn-${s}x${s}.png %{buildroot}%{_datadir}/icons/hicolor/${s}x${s}/apps/Myrlyn.png
-done
-
-# desktop file
-mkdir -p %{buildroot}%{_datadir}/applications
-install -m644 src/%{name}-root.desktop %{buildroot}%{_datadir}/applications/%{name}-root.desktop
-install -m644 src/%{name}-user.desktop %{buildroot}%{_datadir}/applications/%{name}-user.desktop
-
-
 %files
-%doc README.md
+%doc README.md Contributing.md
 %license LICENSE
 %{_bindir}/myrlyn
 %{_datadir}/applications/%{name}-*.desktop

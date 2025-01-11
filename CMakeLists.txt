@@ -53,6 +53,7 @@ endif()
 
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
 
+include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 set( CMAKE_INSTALL_MESSAGE LAZY ) # Suppress "up-to-date" messages during "make install"
 
@@ -81,3 +82,10 @@ endif()
 if ( BUILD_TEST )
   add_subdirectory( test )
 endif()
+
+#
+# Install
+#
+
+install(FILES Contributing.md LICENSE README.md
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
