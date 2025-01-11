@@ -82,7 +82,7 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 
 
 %files
-%doc README.md Contributing.md
+%doc README.md
 %license LICENSE
 %{_bindir}/myrlyn
 %{_datadir}/applications/%{name}-*.desktop
