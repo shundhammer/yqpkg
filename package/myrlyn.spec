@@ -53,8 +53,10 @@ Requires:	xdg-utils
 %description
 Myrlyn is a graphical package manager to select software packages and patterns for installation, update and removal. It uses libzypp as its backend and Qt as its GUI toolkit.
 
+
 %prep
 %autosetup -p1
+
 
 %build
 %if 0%{?suse_version} < 1600
@@ -77,6 +79,7 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 
 %install
 %cmake_install
+
 
 %files
 %doc README.md Contributing.md
