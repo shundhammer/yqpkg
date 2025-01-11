@@ -152,19 +152,15 @@ public slots:
 
 
     /**
-     * Display (generic) online help.
+     * Display online help.
+     * This opens the project's home page in an external web browser.
      **/
     void help();
 
     /**
-     * Display online help about symbols (package status icons).
+     * Display an about page.
      **/
-    void symbolHelp();
-
-    /**
-     * Display online help about magic keys.
-     **/
-    void keyboardHelp();
+    void about();
 
     /**
      * hides or shows the repository upgrade message
@@ -242,6 +238,20 @@ protected slots:
      * Show the standard cursor (arrow)
      */
     void normalCursor();
+
+    /**
+     * Open the URL stored in an action's statusTip property with an external
+     * browser.
+     **/
+    void openActionUrl();
+
+public:
+
+    /**
+     * Open a URL in the desktop's default browser
+     * (using the /usr/bin/xdg-open command).
+     **/
+    static void openInBrowser( const QString & url );
 
 
 protected:
@@ -326,21 +336,6 @@ protected:
      * installed.
      **/
     bool anyRetractedPkgInstalled();
-
-    /**
-     * Return HTML code describing a symbol (an icon).
-     **/
-    QString symHelp( const QString & imgFileName,
-                     const QString & summary,
-                     const QString & explanation        );
-
-
-    /**
-     * Return HTML code describing a key.
-     **/
-    QString keyHelp( const QString & key,
-                     const QString & summary,
-                     const QString & explanation        );
 
     /**
      * loads settings that are shared with other frontends

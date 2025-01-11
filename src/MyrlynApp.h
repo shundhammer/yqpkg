@@ -119,6 +119,7 @@ public:
     static bool isOptionSet( MyrlynAppOption opt )
         { return _optFlags.testFlag( opt ); }
 
+
     //
     // Access to some important member variables
     //

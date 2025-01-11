@@ -672,6 +672,8 @@ YQPkgSelector::layoutMenuBar( QWidget *parent )
 {
     _menuBar = new QMenuBar( parent );
     CHECK_NEW( _menuBar );
+
+    _menuBar->setContentsMargins( 12, 20, 12, 20 ); // left / top / right / bottom
     parent->layout()->addWidget(_menuBar);
 
     _fileMenu       = 0;
@@ -913,13 +915,9 @@ YQPkgSelector::addMenus()
     // to a separate source file YQPkgSelHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->addAction( _( "&Overview" ), this, SLOT( help()      ), Qt::Key_F1 );
-
-    // Menu entry for help about used symbols ( icons )
-    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp() ), Qt::SHIFT + Qt::Key_F1 );
-
-    // Menu entry for keyboard help
-    _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() ) );
+    _helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ), Qt::Key_F1 );
+    _helpMenu->addAction( _( "About Myrlyn" ), this, SLOT( about()   ) );
+    _helpMenu->addAction( _( "About Qt"     ), qApp, SLOT( aboutQt() ) );
 
 
     //
