@@ -221,14 +221,14 @@ target_link_libraries( myrlyn
 
 # message( "prefix: ${CMAKE_INSTALL_PREFIX}" )
 
-# Executable
+# Executable -> /usr/bin
 install( TARGETS ${TARGETBIN} RUNTIME DESTINATION bin )
 
-# .desktop files
+# .desktop files -> /usr/share/applications
 install( FILES
 	 myrlyn-root.desktop
 	 myrlyn-user.desktop
-	 DESTINATION applications )
+	 DESTINATION share/applications )
 
 
 #
