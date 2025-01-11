@@ -37,6 +37,8 @@
 #include "utf8.h"
 #include "YQPkgFilterTab.h"
 
+// Just temporary - let's see how people react
+#define USE_MYRLYN_LOGO  1
 
 typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
@@ -105,8 +107,9 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     _priv->baseClassWidgetStack->addWidget( _priv->outerSplitter );
 
 
+#if USE_MYRLYN_LOGO
     //
-    // "View" button
+    // Logo in the top right corner
     //
 
     QLabel * logo = new QLabel( this );
@@ -116,6 +119,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     logo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
     logo->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
     setCornerWidget( logo, Qt::TopRightCorner );
+#endif
 
 
     // Translators: Button with pop-up menu to open a new page (very much like
