@@ -36,6 +36,7 @@ It is now well usable and fairly feature complete.
 [<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-20-pkg-commit-default.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-20-pkg-commit-default.png)
 
 [<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-21-pkg-commit-details-1.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-21-pkg-commit-details-1.png)
+[<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-22-pkg-commit-details-2.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-22-pkg-commit-details-2.png)
 [<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-30-summary.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-30-summary.png)
 
 
