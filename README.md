@@ -48,16 +48,16 @@ It is now well usable and fairly feature complete.
 - Repos are automatically refreshed at the start of the program with some
   visual feedback what is going on.
 
-- Search for packages
+- Search for packages:
   - by name, summary, description
   - by RPM provides and requires
   - in their file list (installed packages only)
 
-- See package details:
+- Package details views:
   - Package description
   - Technical details (`rpm -qi`)
-  - Dependencies (RPM provides, pre-requires requires)
-  - Versions (installed and from all active repositories)
+  - Dependencies (RPM provides, requires, recommends, ...)
+  - Versions (installed and available ones from all active repositories)
   - File list (installed packages only)
   - Change log (installed packages only)
 
@@ -81,12 +81,12 @@ It is now well usable and fairly feature complete.
 - "Updates" view that shows packages that could be updated (where a newer
   version than the installed one is available)
 
-- Update all packages that can be updated without a dependency problem (the
-  same as `zypper up`)
+  - Update all packages that can be updated without a dependency problem (the
+    same as `zypper up`)
 
-- Dist Upgrade (the same as `zypper dup`): Take package splits and renames,
-  pattern updates and more into account and update all packages that can be
-  updated without a dependency problem
+  - Dist Upgrade (the same as `zypper dup`): Take package splits and renames,
+    pattern updates and more into account and update all packages that can be
+    updated without a dependency problem
 
 - **Read-only mode** for non-root users: You can search packages, view their
   details, even experiment what would happen if you tried to install or remove
@@ -124,16 +124,19 @@ It is now well usable and fairly feature complete.
 
 - The package list is now filled automatically (as it should always have) when
   appropriate; you don't need to click on the left "filter" pane anymore to
-  make that happen. See also [issue #10](https://github.com/shundhammer/myrlyn/issues/10).
+  make that happen. See also
+  [issue #10](https://github.com/shundhammer/myrlyn/issues/10).
 
 - Similar with the details views (bottom right): They are now shown
-  automatically when a package is selected, be it manually or
+  automatically when a package is selected, no matter if manually or
   programmatically. Previously, you had to click on the automatically selected
   package again to see anything there. This is also explained in
   [issue #10](https://github.com/shundhammer/myrlyn/issues/10).
 
 - Reasonable initial window sizes for the main window as well as for the many
   pop-up dialogs.
+
+- Lots of other small fixes everywhere.
 
 
 
@@ -142,8 +145,9 @@ It is now well usable and fairly feature complete.
 - No GPG key import from repos yet for repos that were just added and never
   refreshed yet.
 
-- No repo operations like adding, removing, setting priority, enabling, disabling.
-  You get the repo view, though, where you can view and select packages by repo.
+- No repo operations like adding, removing, setting priority, enabling,
+  disabling.  You get the repo view, though, where you can view and select
+  packages by repo.
 
 
 ### Work in Progress
@@ -155,20 +159,20 @@ It is now well usable and fairly feature complete.
   But since SUSE patches are only (mostly?) a collection of updated package
   versions, the new "Updates" view and the "Package Update" button there is a
   very adequate replacement. And of course only Leap has patches anyway;
-  Tumbleweed and Slowroll don't have any.
+  Tumbleweed and Slowroll receive updated packages.
 
 
 
-## Development Progress and Screenshots
+## Development Progress
 
 See [issue #1](https://github.com/shundhammer/myrlyn/issues/1).
 
-Scroll down all the way to see the latest news and screenshots.
+Scroll down all the way to for the latest news.
 
 
 ## Stability
 
-It's quite stable and usable now.
+It's very stable and usable now.
 
 Of course, since it's still in development, the occasional bug may appear, but
 it should now only be minor ones. See also the
@@ -214,9 +218,9 @@ where this project comes in.
 
 ## Is this an Official SUSE Project?
 
-Not yet. It started as a one-man project during the SUSE Hack Week in 11/2024,
-and it's been a mixture of private Open Source project and a SUSE-sponsored one
-at the same time.
+No. Maybe it will become one, though. It started as a one-man project during
+the SUSE Hack Week in 11/2024, and it's been a mixture of private Open Source
+project and a SUSE-sponsored one at the same time.
 
 Hopefully SUSE will recognize the importance of this and keep sponsoring it.
 
