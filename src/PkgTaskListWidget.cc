@@ -22,7 +22,7 @@
 
 void PkgTaskListWidget::addTaskItems( const PkgTaskList & taskList )
 {
-    foreach ( PkgTask * task, taskList )
+    for ( PkgTask * task: taskList )
         addTaskItem( task );
 }
 

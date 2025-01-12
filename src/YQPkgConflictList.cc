@@ -57,9 +57,7 @@ YQPkgConflictList::~YQPkgConflictList()
 void
 YQPkgConflictList::clear()
 {
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( YQPkgConflict * conflict: _conflicts )
     {
         _layout->removeWidget( conflict );
         delete conflict;
@@ -103,9 +101,7 @@ void YQPkgConflictList::relayout()
     _layout->getContentsMargins(&left, &top, &right, &bottom);
     QSize minSize = QSize( left + right, top + bottom );
 
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( const YQPkgConflict * conflict: _conflicts )
     {
         minSize = minSize.expandedTo( conflict->minimumSizeHint() );
         minSize.rheight() += conflict->minimumSizeHint().height() + _layout->spacing();
@@ -119,9 +115,8 @@ void
 YQPkgConflictList::applyResolutions()
 {
     ZyppSolutionList userChoices;
-    YQPkgConflict *  conflict;
 
-    foreach( conflict, _conflicts )
+    for ( YQPkgConflict * conflict: _conflicts )
     {
         ZyppSolution userChoice = conflict->userSelectedResolution();
 
@@ -177,9 +172,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     file.write(header.toUtf8());
 
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( const YQPkgConflict * conflict: _conflicts )
     {
         conflict->saveToFile( file );
     }

@@ -133,7 +133,7 @@ QWidget * MainWindow::findPage( const QString & pageName )
         return 0;
     }
 
-    foreach ( QWidgetPointer page, _pages )
+    for ( const QWidgetPointer & page: _pages )
     {
         // Notice that 'page' might easily be 0 if it has been deleted in the
         // meantime from the outside; for example if it was a local variable

@@ -361,7 +361,9 @@ void PkgCommitPage::initProgressData()
     _completedInstalledSize = 0;
     _completedTasksCount    = 0;
 
-    foreach ( PkgTask * task, pkgTasks()->todo() )
+    const PkgTaskList & tasks = pkgTasks()->todo();
+
+    for ( const PkgTask * task: tasks )
     {
         if ( ( task->action() & PkgAdd ) && task->downloadSize() > 0 )
             _totalDownloadSize += task->downloadSize();
@@ -1031,7 +1033,7 @@ void PkgCommitPage::fileConflictsCheckResult( const QStringList & conflicts )
 
     int count = 0;
 
-    foreach ( const QString & conflict, conflicts )
+    for ( const QString & conflict: conflicts )
     {
         logError() << "FILE CONFLICT: " << conflict.simplified() << endl;
 

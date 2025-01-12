@@ -314,7 +314,9 @@ static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
 		       const QString & msg )
 {
-    foreach ( QString line, msg.split( "\n" ) )
+    const QStringList & lines = msg.split( "\n" );
+
+    for ( QString line: lines )
     {
         // Remove utterly misleading message that will just dump a ton of bug
         // reports on the application maintainers just because some clueless
@@ -540,10 +542,10 @@ void Logger::logRotate( const QString & logDir,
 	}
     }
 
-    QStringList matches = dir.entryList( QStringList() << oldNamePattern( filename ),
-					 QDir::Files );
+    const QStringList & matches = dir.entryList( QStringList() << oldNamePattern( filename ),
+                                               QDir::Files );
 
-    foreach ( const QString & match, matches )
+    for ( const QString & match: matches )
     {
 	if ( ! keepers.contains( match ) )
 	{
