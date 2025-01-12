@@ -233,8 +233,10 @@ private:
 /**
  * Helper class for filter pages
  **/
-struct YQPkgFilterPage
+class YQPkgFilterPage
 {
+public:
+
     YQPkgFilterPage( const QString &    pageLabel,
                      QWidget *          content,
                      const QString &    internalName )
