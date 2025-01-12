@@ -257,7 +257,7 @@ install( FILES
 set( ICONS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/icons" )
 
 foreach( resolution 16 22 24 32 48 72 )
-  set( SRC_ICON  "artwork/Myrlyn-alpha-${resolution}x${resolution}.png" )
+  set( SRC_ICON  "artwork/Myrlyn-${resolution}x${resolution}.png" )
   set( DEST_ICON_DIR "${ICONS_INSTALL_DIR}/hicolor/${resolution}x${resolution}/apps" )
   install( FILES ${SRC_ICON} DESTINATION ${DEST_ICON_DIR} RENAME "Myrlyn.png" )
 endforeach()
