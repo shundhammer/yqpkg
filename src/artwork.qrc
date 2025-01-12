@@ -1,8 +1,11 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
   <qresource>
-    <file>artwork/Myrlyn-alpha-32x32.png</file>
-    <file>artwork/Myrlyn-alpha-48x48.png</file>
-    <file>artwork/Myrlyn-alpha-256x256.png</file>
+    <file>artwork/Myrlyn-16x16.png</file>
+    <file>artwork/Myrlyn-22x22.png</file>
+    <file>artwork/Myrlyn-24x24.png</file>
+    <file>artwork/Myrlyn-32x32.png</file>
+    <file>artwork/Myrlyn-48x48.png</file>
+    <file>artwork/Myrlyn-256x256.png</file>
   </qresource>
 </RCC>
