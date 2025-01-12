@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgConflictDialog_h
 #define YQPkgConflictDialog_h
 

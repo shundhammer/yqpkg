@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef PkgTaskListWidget_h
 #define PkgTaskListWidget_h
 

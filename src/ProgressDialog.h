@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef ProgressDialog_h
 #define ProgressDialog_h
 

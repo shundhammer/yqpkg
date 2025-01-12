@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgChangeLogView_h
 #define YQPkgChangeLogView_h
 

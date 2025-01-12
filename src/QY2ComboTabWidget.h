@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef QY2ComboTabWidget_h
 #define QY2ComboTabWidget_h
 

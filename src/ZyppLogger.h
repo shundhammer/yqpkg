@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef ZyppLogger_h
 #define ZyppLogger_h
 

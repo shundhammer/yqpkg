@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgProductDialog_h
 #define YQPkgProductDialog_h
 

@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgVersionsView_h
 #define YQPkgVersionsView_h
 

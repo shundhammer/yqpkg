@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef SummaryPage_h
 #define SummaryPage_h
 

@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef ImplPtr_h
 #define ImplPtr_h
 

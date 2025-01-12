@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgSecondaryFilterView_h
 #define YQPkgSecondaryFilterView_h
 

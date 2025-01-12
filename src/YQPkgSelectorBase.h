@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgSelectorBase_h
 #define YQPkgSelectorBase_h
 

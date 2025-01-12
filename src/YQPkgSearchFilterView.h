@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgSearchFilterView_h
 #define YQPkgSearchFilterView_h
 

@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef PkgCommitCallbacks_h
 #define PkgCommitCallbacks_h
 

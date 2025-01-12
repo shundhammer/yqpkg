@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQIconPool_h
 #define YQIconPool_h
 

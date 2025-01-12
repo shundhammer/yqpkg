@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgUpdatesFilterView_h
 #define YQPkgUpdatesFilterView_h
 

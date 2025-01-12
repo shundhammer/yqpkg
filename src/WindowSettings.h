@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef WindowSettings_h
 #define WindowSettings_h
 

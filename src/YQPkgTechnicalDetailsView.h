@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgTechnicalDetailsView_h
 #define YQPkgTechnicalDetailsView_h
 

@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef QY2ListView_h
 #define QY2ListView_h
 

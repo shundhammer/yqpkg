@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgRepoFilterView_h
 #define YQPkgRepoFilterView_h
 

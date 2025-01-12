@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef QY2IconLoader_h
 #define QY2IconLoader_h
 

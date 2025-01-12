@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgHistoryDialog_h
 #define YQPkgHistoryDialog_h
 

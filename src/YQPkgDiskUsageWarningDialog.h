@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgDiskUsageWarningDialog_h
 #define YQPkgDiskUsageWarningDialog_h
 

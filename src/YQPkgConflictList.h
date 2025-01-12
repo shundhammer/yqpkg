@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgConflictList_h
 #define YQPkgConflictList_h
 

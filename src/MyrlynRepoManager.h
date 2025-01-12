@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef MyrlynRepoManager_h
 #define MyrlynRepoManager_h
 

@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgChangesDialog_h
 #define YQPkgChangesDialog_h
 

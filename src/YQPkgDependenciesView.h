@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgDependenciesView_h
 #define YQPkgDependenciesView_h
 

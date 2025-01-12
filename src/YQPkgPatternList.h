@@ -15,7 +15,6 @@
  */
 
 
-
 #ifndef YQPkgPatternList_h
 #define YQPkgPatternList_h
 
