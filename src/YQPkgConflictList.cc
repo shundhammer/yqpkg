@@ -74,22 +74,19 @@ YQPkgConflictList::clear()
 
 
 void
-YQPkgConflictList::fill( ZyppProblemList problemList )
+YQPkgConflictList::fill( const ZyppProblemList problemList )
 {
     clear();
 
-    ZyppProblemList::iterator it = problemList.begin();
-
-    while ( it != problemList.end() )
+    for ( const ZyppProblem & problem: problemList )
     {
-        YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
+        YQPkgConflict *conflict = new YQPkgConflict( widget(), problem );
         Q_CHECK_PTR( conflict );
 
         connect( conflict, SIGNAL( expanded() ), SLOT( relayout() ) );
 
         _layout->addWidget( conflict );
         _conflicts.push_back( conflict );
-        ++it;
     }
 
     _layout->addStretch( 1 );
@@ -263,14 +260,12 @@ YQPkgConflict::addSolutions()
     hbox->addLayout( vbox );
     _layout->addLayout( hbox );
 
-    ZyppSolutionList solutions = problem()->solutions();
-    ZyppSolutionList::iterator it = solutions.begin();
+    const ZyppSolutionList solutions = problem()->solutions();
 
     int count = 0;
 
-    while ( it != solutions.end() )
+    for ( const ZyppSolution & solution: solutions )
     {
-        ZyppSolution solution = *it;
         QString      shortcut;
 
         if ( ++count < 10 )
@@ -309,8 +304,6 @@ YQPkgConflict::addSolutions()
             vbox->addLayout( hbox );
             _details[ detailsLabel ] = solution;
         }
-
-        ++it;
     }
 }
 

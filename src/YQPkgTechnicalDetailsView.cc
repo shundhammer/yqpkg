@@ -81,15 +81,13 @@ YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 {
     QString html = "<td align='top'>";
     QString line;
-    list<string> authors = pkg->authors();
-    list<string>::const_iterator it = authors.begin();
+    const std::list<std::string> authors = pkg->authors();
 
-    while ( it != authors.end() )
+    for (const std::string & author: authors )
     {
-        line = fromUTF8( *it );
+        line = fromUTF8( author );
         line = htmlEscape( line );
         html += line + "<br>";
-        ++it;
     }
 
     html += "</td>";
