@@ -116,7 +116,7 @@ It is now well usable and fairly feature complete.
 
 - Improved visual appearance; we don't need to "pixel pinch" anymore with
   today's screen resolutions, unlike back when the YaST package selector
-  created.
+  was created.
 
 - The annoying tendency to get too narrow columns in the package list is now
   fixed. You will find yourself very rarely adjusting the column widths
