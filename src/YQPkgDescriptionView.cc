@@ -137,11 +137,10 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     QString html_text = "<p>";
 
     QStringList lines = text.trimmed().split( '\n', Qt::KeepEmptyParts );
-    QStringList::const_iterator it = lines.begin();
 
-    while ( it != lines.end() )
+    for ( const QString& lineText : lines )
     {
-        QString line = htmlEscape( *it ).trimmed();
+        QString line = htmlEscape( lineText ).trimmed();
 
         if ( line.startsWith("* ") || line.startsWith("- ") || line.startsWith("# ") )
         {
@@ -166,8 +165,6 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
             else
                 html_text += " " + line;
         }
-
-        ++it;
     }
 
     if ( foundAuthorsList )
