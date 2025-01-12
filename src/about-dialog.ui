@@ -131,7 +131,7 @@ dependencies.</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="artwork.qrc">:/artwork/Myrlyn-alpha-256x256.png</pixmap>
+        <pixmap resource="artwork.qrc">:/artwork/Myrlyn-256x256.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignHCenter|Qt::AlignTop</set>

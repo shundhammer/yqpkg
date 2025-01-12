@@ -115,7 +115,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
     QLabel * logo = new QLabel( this );
     CHECK_NEW( logo );
 
-    logo->setPixmap( QPixmap( ":/artwork/Myrlyn-alpha-32x32" ) );
+    logo->setPixmap( QPixmap( ":/artwork/Myrlyn-32x32" ) );
     logo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
     logo->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
     setCornerWidget( logo, Qt::TopRightCorner );
