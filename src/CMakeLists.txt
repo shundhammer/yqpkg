@@ -112,6 +112,7 @@ set( QRC_FILES
 #
 
 set( UI_FILES
+     about-dialog.ui
      init-repos-page.ui
      pkg-commit-page.ui
      progress-dialog.ui

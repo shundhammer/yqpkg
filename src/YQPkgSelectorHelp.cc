@@ -24,6 +24,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include "ui_about-dialog.h"
 
 #include "YQPkgSelector.h"
 
@@ -36,7 +37,16 @@ void YQPkgSelector::help()
 
 void YQPkgSelector::about()
 {
-    
+    QDialog aboutDialog( this );
+    Ui::AboutDialog * ui( new Ui::AboutDialog );
+    ui->setupUi( &aboutDialog );
+
+    QString text = ui->heading->text();
+    text += QString( " %1" ).arg( VERSION );
+    ui->heading->setText( text );
+
+    aboutDialog.exec();
+    delete ui;
 }
 
 
