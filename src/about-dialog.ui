@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>731</width>
-    <height>506</height>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>17</height>
+           <height>8</height>
           </size>
          </property>
         </spacer>
@@ -62,8 +62,8 @@
        <item>
         <widget class="QLabel" name="bodyText">
          <property name="text">
-          <string>Myrlyn is a graphical package manager to select 
-software packages and patternsfor installation, 
+          <string>Myrlyn is a graphical package manager to select
+software packages and patterns for installation,
 update and removal.
 
 It uses libzypp as its backend and Qt as its
@@ -72,8 +72,7 @@ GUI toolkit.
 This started in the 11/2024 SUSE Hack Week
 to make the SUSE YaST Qt package selector usable
 as a standalone Qt program without any YaST
-dependencies.
-</string>
+dependencies.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::PlainText</enum>
@@ -97,7 +96,7 @@ dependencies.
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>12</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
