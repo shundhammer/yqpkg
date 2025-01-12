@@ -716,13 +716,13 @@ YQPkgSelector::addMenus()
         action = _menuBar->addMenu( _pkgMenu );
         action->setText(_( "&Package" ));
 
-        _pkgMenu->addAction(_pkgList->actionSetCurrentInstall);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentDontInstall);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentKeepInstalled);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentUpdateForce);
-        _pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
+        _pkgMenu->addAction( _pkgList->actionSetCurrentInstall       );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentDontInstall   );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentKeepInstalled );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentDelete        );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentUpdate        );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentUpdateForce   );
+        _pkgMenu->addAction( _pkgList->actionSetCurrentTaboo         );
 
         _pkgMenu->addSeparator();
         QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
