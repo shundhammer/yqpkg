@@ -136,9 +136,6 @@ QY2ListView::toolTip( QTreeWidgetItem * listViewItem, int column )
     if ( ! listViewItem )
         return QString();
 
-    QString text;
-
-
     // Try known item classes
 
     QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (listViewItem);

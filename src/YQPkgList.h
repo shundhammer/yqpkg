@@ -51,7 +51,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QMenu * addAllInListSubMenu( QMenu * menu );
+    virtual QMenu * addAllInListSubMenu( QMenu * menu ) override;
 
     /**
      * Returns 'true' if there are any installed packages.
@@ -78,7 +78,7 @@ public:
      * Reimplemented from QListView / QWidget:
      * Reserve a reasonable amount of space.
      **/
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
 
 public slots:
@@ -139,14 +139,14 @@ protected:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void createNotInstalledContextMenu();
+    virtual void createNotInstalledContextMenu() override;
 
     /**
      * Create the context menu for installed items.
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void createInstalledContextMenu();
+    virtual void createInstalledContextMenu() override;
 
     /**
      * Resets the optimal column width values.
@@ -173,7 +173,7 @@ protected:
      * Handler for resize events.
      * Triggers column width optimization.
      **/
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 
     //
