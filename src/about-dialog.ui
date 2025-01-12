@@ -63,7 +63,7 @@
         <widget class="QLabel" name="bodyText">
          <property name="text">
           <string>Myrlyn is a graphical package manager to select 
-software packages and patternsfor installation, 
+software packages and patterns for installation,
 update and removal.
 
 It uses libzypp as its backend and Qt as its
