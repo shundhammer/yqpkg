@@ -172,16 +172,9 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
 
     if ( _patchFilterView && onlineUpdateMode() )
     {
-        if ( _patchFilterView && _patchList )
+        if ( _patchList )
         {
             _filters->showPage( _patchFilterView );
-        }
-    }
-    else if ( _repoFilterView && repoMode() )
-    {
-        if ( YQPkgRepoList::countEnabledRepositories() > 1 )
-        {
-            _filters->showPage( _repoFilterView );
         }
     }
 #if USE_UPDATE_PROBLEM_FILTER_VIEW
@@ -190,43 +183,27 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
         _filters->showPage( _updateProblemFilterView );
     }
 #endif
-    else if ( searchMode() && _searchFilterView )
+
+    if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
     {
-        if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
-        {
-            // Exceptional case: If the system has any retracted package
-            // installed, switch to that filter view and show those packages.
-            // This should happen only very, very rarely.
+        // Exceptional case: If the system has any retracted package installed,
+        // switch to that filter view and show those packages.  This should
+        // happen only very, very rarely.
 
-            logInfo() << "Found installed retracted packages; switching to that view" << endl;
-            _filters->showPage( _pkgClassificationFilterView );
-            _pkgClassificationFilterView->showPkgClass( YQPkgClassRetractedInstalled );
+        logInfo() << "Found installed retracted packages; switching to that view" << endl;
+        _filters->showPage( _pkgClassificationFilterView );
+        _pkgClassificationFilterView->showPkgClass( YQPkgClassRetractedInstalled );
 
-            // Also show a pop-up warning?
-            //
-            // This could become very annoying really quickly because you'll
-            // get it with every start of the package selection as long as any
-            // retracted package version is installed (which might be a
-            // deliberate conscious decision by the user). It's also not easy
-            // to add a "Don't show this again" checkbox in such a pop-up;
-            // which retracted packages are installed might change between
-            // program runs, and we'd have to inform the user when such a
-            // change occurs.
-        }
-        else
-        {
-            // Normal case: Show the "Search" filter view.
-
-            _filters->showPage( _searchFilterView );
-            QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
-        }
+        // Also show a pop-up warning?
+        //
+        // No: This could become very annoying really quickly because you'll
+        // get it with every start of the package selection as long as any
+        // retracted package version is installed (which might be a deliberate
+        // conscious decision by the user). It's also not easy to add a "Don't
+        // show this again" checkbox in such a pop-up; which retracted packages
+        // are installed might change between program runs, and we'd have to
+        // inform the user when such a change occurs.
     }
-    else if ( summaryMode() && _statusFilterView )
-    {
-        _filters->showPage( _statusFilterView );
-        _pkgList->selectNextItem();
-    }
-
 
     if ( _filters->diskUsageList() )
         _filters->diskUsageList()->updateDiskUsage();
@@ -760,16 +737,16 @@ YQPkgSelector::addMenus()
         action = _menuBar->addMenu( _patchMenu );
         action->setText(_( "&Patch" ));
 
-        _patchMenu->addAction(_patchList->actionSetCurrentInstall);
-        _patchMenu->addAction(_patchList->actionSetCurrentDontInstall);
-        _patchMenu->addAction(_patchList->actionSetCurrentKeepInstalled);
+        _patchMenu->addAction( _patchList->actionSetCurrentInstall       );
+        _patchMenu->addAction( _patchList->actionSetCurrentDontInstall   );
+        _patchMenu->addAction( _patchList->actionSetCurrentKeepInstalled );
 
 #if ENABLE_DELETING_PATCHES
-        _patchMenu->addAction(_patchList->actionSetCurrentDelete);
+        _patchMenu->addAction( _patchList->actionSetCurrentDelete );
 #endif
-        _patchMenu->addAction(_patchList->actionSetCurrentUpdate);
-        _patchMenu->addAction(_patchList->actionSetCurrentUpdateForce);
-        _patchMenu->addAction(_patchList->actionSetCurrentTaboo);
+        _patchMenu->addAction( _patchList->actionSetCurrentUpdate      );
+        _patchMenu->addAction( _patchList->actionSetCurrentUpdateForce );
+        _patchMenu->addAction( _patchList->actionSetCurrentTaboo       );
 
         _patchMenu->addSeparator();
         _patchList->addAllInListSubMenu( _patchMenu );
@@ -1196,8 +1173,8 @@ YQPkgSelector::connectPatchList()
         connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
                  _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
 
-        connect( _patchList,            SIGNAL( statusChanged()           ),
-                 this,                  SLOT  ( autoResolveDependencies() ) );
+        connect( _patchList, SIGNAL( statusChanged()           ),
+                 this,       SLOT  ( autoResolveDependencies() ) );
 
         if ( _pkgConflictDialog )
         {
@@ -1232,16 +1209,18 @@ YQPkgSelector::reset()
 
     resetResolver();
 
+    if ( _patchList )
+        _patchList->reset();
+
     if ( _pkgList )
         _pkgList->clear();
 
     if ( _filters )
         _filters->reloadCurrentPage();
 
-    // This signal is intended for receivers other than filter views.
-    // Don't connect filter views to this one; they already reload their
-    // content with _filters->reloadCurrentPage() above or when the user
-    // switches to another filter tab.
+    // For all other connected QObjects that are not covered yet.
+    // Don't connect this signal to the standard filter views;
+    // they are already reset by reloadCurrentPage().
 
     emit resetNotify();
 }
