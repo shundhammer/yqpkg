@@ -39,8 +39,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgDescriptionView( QWidget * parent,
-                          bool      showSupportability = true );
+    YQPkgDescriptionView( QWidget * parent );
 
     /**
      * Destructor
@@ -104,8 +103,6 @@ private:
 
     QString _langWithCountry;
     QString _lang;
-    bool    _showSupportability;
-
 };
 
 

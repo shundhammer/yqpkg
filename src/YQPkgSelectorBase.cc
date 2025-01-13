@@ -41,10 +41,8 @@
 using std::string;
 
 
-YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent,
-                                      long      modeFlags )
+YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent )
     : QFrame( parent )
-    , _modeFlags( modeFlags )
     , _blockResolver( true )
 {
     _showChangesDialog          = false;
@@ -92,7 +90,7 @@ void YQPkgSelectorBase::resetResolver()
 {
     logInfo() << "Resetting resolver" << endl;
 
-    zypp::getZYpp()->resolver()->setUpdateMode( false );  // No package update  mode
+    zypp::getZYpp()->resolver()->setUpdateMode ( false ); // No package update  mode
     zypp::getZYpp()->resolver()->setUpgradeMode( false ); // No dist    upgrade mode
 }
 
@@ -297,35 +295,6 @@ void YQPkgSelectorBase::accept()
         }
     }
 
-    if ( confirmUnsupported() )
-    {
-        logInfo() << "Confirm unsupported packages enabled." << endl;
-        // Show which packages are unsupported
-
-        QString msg =
-            "<p><b>"
-            // Dialog header
-            + _( "Unsupported Packages" )
-            + "</b></p>"
-            // Detailed explanation ( automatic word wrap! )
-            + "<p>"
-            + _( "Please realize that the following selected software is either unsupported or"
-                 " requires an additional customer contract for support." )
-            + "<p>";
-
-        if ( YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( this,
-                                                                            msg,
-                                                                            _( "C&ontinue" ), _( "&Cancel" ),
-                                                                            YQPkgChangesDialog::FilterUser,
-                                                                            YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
-             == QDialog::Rejected )
-        {
-            return;
-        }
-    }
-
-
-    // Check disk usage
     if ( checkDiskUsage() == QDialog::Rejected )
         return;
 
@@ -351,8 +320,9 @@ bool YQPkgSelectorBase::showPendingLicenseAgreements()
 
     bool allConfirmed = true;
 
-    if ( onlineUpdateMode() )
-        allConfirmed = showPendingLicenseAgreements( zyppPatchesBegin(), zyppPatchesEnd() );
+#if 0
+    allConfirmed = showPendingLicenseAgreements( zyppPatchesBegin(), zyppPatchesEnd() );
+#endif
 
     allConfirmed = showPendingLicenseAgreements( zyppPkgBegin(), zyppPkgEnd() ) && allConfirmed;
 

@@ -201,7 +201,7 @@ void MyrlynApp::createPkgSel()
     if ( _mainWin )
         _mainWin->splashPage( &busyPage );
 
-    _pkgSel = new YQPkgSelector( 0, 0 );
+    _pkgSel = new YQPkgSelector( 0 );
     CHECK_NEW( _pkgSel );
 
     connect( _pkgSel, SIGNAL( commit() ),

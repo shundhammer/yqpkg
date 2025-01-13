@@ -46,7 +46,6 @@ class YQPkgLangList;
 class YQPkgList;
 class YQPkgClassificationFilterView;
 class YQPkgPatchFilterView;
-class YQPkgPatchList;
 class YQPkgPatternList;
 class YQPkgRepoFilterView;
 class YQPkgSearchFilterView;
@@ -54,7 +53,6 @@ class YQPkgSelList;
 class YQPkgServiceFilterView;
 class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
-class YQPkgUpdateProblemFilterView;
 class YQPkgUpdatesFilterView;
 class YQPkgVersionsView;
 
@@ -65,9 +63,9 @@ class YQPkgSelector : public YQPkgSelectorBase
 public:
 
     /**
-     * Constructor: Create an empty (!) package selector.
+     * Constructor.
      **/
-    YQPkgSelector( QWidget * parent, long modeFlags = 0 );
+    YQPkgSelector( QWidget * parent );
 
     /**
      * Destructor.
@@ -196,14 +194,9 @@ signals:
 protected slots:
 
     /**
-     * Add the "Patches" filter view, if it is not already there.
-     **/
-    void addPatchFilterView();
-
-    /**
      * Add the "Patches" filter view upon hotkey (F2).
      **/
-    void hotkeyInsertPatchFilterView();
+    void hotkeyAddPatchFilterView();
 
     /**
      * Set the status of all installed packages (all in the pool, not only
@@ -277,8 +270,7 @@ protected:
     // Create the various filter views
 
     void createSearchFilterView();
-    void createUpdateProblemsFilterView();
-    void createPatchFilterView();
+    void createPatchFilterView( bool force = false );
     void createUpdatesFilterView();
     void createRepoFilterView();
     void createServiceFilterView();
@@ -317,9 +309,9 @@ protected:
                         bool            hasUpdateSignal = true );
 
     /**
-     * Connect the patch list. Caution: Possible bootstrap problem!
+     * Connect the patch filter view. Caution: Possible bootstrap problem!
      **/
-    void connectPatchList();
+    void connectPatchFilterView();
 
     /**
      * Connect the pattern list / filter view.
@@ -386,11 +378,9 @@ protected:
     YQPkgSearchFilterView *             _searchFilterView;
     YQPkgStatusFilterView *             _statusFilterView;
     YQPkgTechnicalDetailsView *         _pkgTechnicalDetailsView;
-    YQPkgUpdateProblemFilterView *      _updateProblemFilterView;
     YQPkgUpdatesFilterView *            _updatesFilterView;
     YQPkgVersionsView *                 _pkgVersionsView;
     YQPkgPatchFilterView *              _patchFilterView;
-    YQPkgPatchList *                    _patchList;
 
     QMenuBar *                          _menuBar;
     QMenu *                             _fileMenu;

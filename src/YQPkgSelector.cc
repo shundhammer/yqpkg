@@ -80,7 +80,6 @@
 
 #include "YQPkgSelector.h"
 
-#define USE_UPDATE_PROBLEM_FILTER_VIEW                  0
 #define CHECK_DEPENDENCIES_ON_STARTUP                   0
 #define DEPENDENCY_FEEDBACK_IF_OK                       1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT                 true
@@ -92,19 +91,14 @@
 #define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
 #define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
 
-#if USE_UPDATE_PROBLEM_FILTER_VIEW
-#  include "YQPkgUpdateProblemFilterView.h"
-#endif
-
 using std::max;
 using std::string;
 using std::map;
 using std::pair;
 
 
-YQPkgSelector::YQPkgSelector( QWidget * parent,
-                              long      modeFlags )
-    : YQPkgSelectorBase( parent, modeFlags )
+YQPkgSelector::YQPkgSelector( QWidget * parent )
+    : YQPkgSelectorBase( parent )
 {
     _blockResolver               = true;
     _showChangesDialog           = true;
@@ -115,7 +109,6 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _notifications               = 0;
     _pkgClassificationFilterView = 0;
     _patchFilterView             = 0;
-    _patchList                   = 0;
     _patternList                 = 0;
     _pkgChangeLogView            = 0;
     _pkgDependenciesView         = 0;
@@ -128,15 +121,11 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _serviceFilterView           = 0;
     _searchFilterView            = 0;
     _statusFilterView            = 0;
-    _updateProblemFilterView     = 0;
     _updatesFilterView           = 0;
     _excludeDevelPkgs            = 0;
     _excludeDebugInfoPkgs        = 0;
 
     logDebug() << "Creating YQPkgSelector..." << endl;
-
-    if ( onlineUpdateMode() )   logInfo() << "Online update mode" << endl;
-    if ( updateMode() )         logInfo() << "Update mode" << endl;
 
     basicLayout();
     addMenus();         // Only after all widgets are created!
@@ -170,19 +159,10 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     // Move the desired tab to the foreground
     //
 
-    if ( _patchFilterView && onlineUpdateMode() )
+    if ( _patchFilterView )
     {
-        if ( _patchList )
-        {
-            _filters->showPage( _patchFilterView );
-        }
+        _filters->showPage( _patchFilterView );
     }
-#if USE_UPDATE_PROBLEM_FILTER_VIEW
-    else if ( _updateProblemFilterView )
-    {
-        _filters->showPage( _updateProblemFilterView );
-    }
-#endif
 
     if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
     {
@@ -212,18 +192,14 @@ YQPkgSelector::YQPkgSelector( QWidget * parent,
     _blockResolver = false;
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
-
-    if ( ! testMode() )
-    {
-        // Fire up the first dependency check in the main loop.
-        // Don't do this right away - wait until all initializations are finished.
-#if 0
-        QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
-#else
-        if ( _pkgConflictDialog && ! MyrlynApp::isOptionSet( OptNoVerify ) )
-            QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
-#endif
-    }
+    // Fire up the first dependency check in the main loop.
+    // Don't do this right away - wait until all initializations are finished.
+#  if 0
+    QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
+#  else
+    if ( _pkgConflictDialog && ! MyrlynApp::isOptionSet( OptNoVerify ) )
+        QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
+#  endif
 #endif
 
     logDebug() << "YQPkgSelector init done" << endl;
@@ -270,8 +246,7 @@ void YQPkgSelector::createFilterViews()
     // The order of creation is both the order in the "View" button's menu and
     // the order of tabs
 
-    createUpdateProblemsFilterView(); // Only if problematic packages present
-    createPatchFilterView();          // Patches - Online update or F2
+    createPatchFilterView();          // Patches - if patches available or F2
 
 
     // Standard views - visible by default
@@ -310,33 +285,17 @@ void YQPkgSelector::createUpdatesFilterView()
 }
 
 
-void YQPkgSelector::createUpdateProblemsFilterView()
+void YQPkgSelector::createPatchFilterView( bool force )
 {
-#if USE_UPDATE_PROBLEM_FILTER_VIEW
+    if ( zyppPool().empty<zypp::Patch>() && ! force )
+        return;
 
-    if ( updateMode() )
+    if ( ! _patchFilterView )
     {
-        if ( YQPkgUpdateProblemFilterView::haveProblematicPackages()
-             || testMode() )
-        {
-            _updateProblemFilterView = new YQPkgUpdateProblemFilterView( this );
-            CHECK_NEW( _updateProblemFilterView );
-            _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView, "update_problems" );
-        }
-    }
-#endif
-}
+        _patchFilterView = new YQPkgPatchFilterView( this );
+        CHECK_NEW( _patchFilterView );
 
-
-void YQPkgSelector::createPatchFilterView()
-{
-    if ( onlineUpdateMode()
-#if ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE
-         || ! zyppPool().empty<zypp::Patch>()
-#endif
-         )
-    {
-        addPatchFilterView();
+        _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
     }
 }
 
@@ -366,7 +325,7 @@ void YQPkgSelector::createServiceFilterView()
 
 void YQPkgSelector::createPatternsFilterView()
 {
-    if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
+    if ( ! zyppPool().empty<zypp::Pattern>() )
     {
         _patternList = new YQPkgPatternList( this );
         CHECK_NEW( _patternList );
@@ -519,7 +478,7 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     // Description
     //
 
-    _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews, confirmUnsupported() );
+    _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
     CHECK_NEW( _pkgDescriptionView );
 
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
@@ -726,30 +685,32 @@ YQPkgSelector::addMenus()
     }
 
 
-    if ( _patchList )
+    if ( _patchFilterView )
     {
         //
         // Patch menu
         //
+
+        YQPkgPatchList * patchList = _patchFilterView->patchList();
 
         _patchMenu = new QMenu( _menuBar );
         CHECK_NEW( _patchMenu );
         action = _menuBar->addMenu( _patchMenu );
         action->setText(_( "&Patch" ));
 
-        _patchMenu->addAction( _patchList->actionSetCurrentInstall       );
-        _patchMenu->addAction( _patchList->actionSetCurrentDontInstall   );
-        _patchMenu->addAction( _patchList->actionSetCurrentKeepInstalled );
+        _patchMenu->addAction( patchList->actionSetCurrentInstall       );
+        _patchMenu->addAction( patchList->actionSetCurrentDontInstall   );
+        _patchMenu->addAction( patchList->actionSetCurrentKeepInstalled );
 
 #if ENABLE_DELETING_PATCHES
-        _patchMenu->addAction( _patchList->actionSetCurrentDelete );
+        _patchMenu->addAction( patchList->actionSetCurrentDelete );
 #endif
-        _patchMenu->addAction( _patchList->actionSetCurrentUpdate      );
-        _patchMenu->addAction( _patchList->actionSetCurrentUpdateForce );
-        _patchMenu->addAction( _patchList->actionSetCurrentTaboo       );
+        _patchMenu->addAction( patchList->actionSetCurrentUpdate      );
+        _patchMenu->addAction( patchList->actionSetCurrentUpdateForce );
+        _patchMenu->addAction( patchList->actionSetCurrentTaboo       );
 
         _patchMenu->addSeparator();
-        _patchList->addAllInListSubMenu( _patchMenu );
+        patchList->addAllInListSubMenu( _patchMenu );
     }
 
 
@@ -959,9 +920,6 @@ YQPkgSelector::connectFilter( QWidget * filter,
 void
 YQPkgSelector::makeConnections()
 {
-#if USE_UPDATE_PROBLEM_FILTER_VIEW
-    connectFilter( _updateProblemFilterView,     _pkgList, false );
-#endif
     connectFilter( _searchFilterView,            _pkgList, false );
     connectFilter( _updatesFilterView,           _pkgList, false );
     connectFilter( _repoFilterView,              _pkgList, false );
@@ -970,6 +928,9 @@ YQPkgSelector::makeConnections()
     connectFilter( _pkgClassificationFilterView, _pkgList, false );
     connectFilter( _langList,                    _pkgList );
     connectFilter( _statusFilterView,            _pkgList, false );
+
+    connectPatchFilterView();
+    connectPatternList();
 
     if ( _searchFilterView && _pkgList )
     {
@@ -981,7 +942,6 @@ YQPkgSelector::makeConnections()
     {
         connect( _repoFilterView,       SIGNAL( filterNearMatch  ( ZyppSel, ZyppPkg ) ),
                  _pkgList,              SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
-
     }
 
     if ( _serviceFilterView && _pkgList )
@@ -993,27 +953,23 @@ YQPkgSelector::makeConnections()
 
     if ( _langList )
     {
-
         connect( _langList, SIGNAL( statusChanged()           ),
                  this,      SLOT  ( autoResolveDependencies() ) );
     }
 
     if ( _pkgList && _filters->diskUsageList() )
     {
-
         connect( _pkgList,                      SIGNAL( statusChanged()   ),
                  _filters->diskUsageList(),     SLOT  ( updateDiskUsage() ) );
     }
 
-    connectPatchList();
-    connectPatternList();
 
 
     // Hide and show the upgrade label when tabs change, or when the user
     // selects repositories
 
-    connect( _filters,        SIGNAL( currentChanged( QWidget * ) ),
-             this,            SLOT  ( updateSwitchRepoLabels()    ) );
+    connect( _filters, SIGNAL( currentChanged( QWidget * ) ),
+             this,     SLOT  ( updateSwitchRepoLabels()    ) );
 
     if ( _repoFilterView )
     {
@@ -1039,7 +995,6 @@ YQPkgSelector::makeConnections()
             connect( _pkgConflictDialog,        SIGNAL( updatePackages()   ),
                      _patternList,              SLOT  ( updateItemStates() ) );
         }
-
 
         if ( _filters->diskUsageList() )
         {
@@ -1067,7 +1022,7 @@ YQPkgSelector::makeConnections()
     // Hotkey to enable "patches" filter view on the fly
     //
 
-    QShortcut * accel = new QShortcut( Qt::Key_F2, this, SLOT( hotkeyInsertPatchFilterView() ) );
+    QShortcut * accel = new QShortcut( Qt::Key_F2, this, SLOT( hotkeyAddPatchFilterView() ) );
     CHECK_NEW( accel );
 
 
@@ -1081,10 +1036,10 @@ YQPkgSelector::makeConnections()
                  _pkgList,      SLOT  ( updateActions() ) );
     }
 
-    if ( _patchMenu && _patchList )
+    if ( _patchMenu && _patchFilterView )
     {
-        connect( _patchMenu,    SIGNAL( aboutToShow()   ),
-                 _patchList,    SLOT  ( updateActions() ) );
+        connect( _patchMenu,                    SIGNAL( aboutToShow()   ),
+                 _patchFilterView->patchList(), SLOT  ( updateActions() ) );
     }
 }
 
@@ -1127,59 +1082,39 @@ YQPkgSelector::manualResolvePackageDependencies()
 
 
 void
-YQPkgSelector::addPatchFilterView()
-{
-    if ( ! _patchFilterView )
-    {
-        createPatchFilterView();
-        _patchFilterView = new YQPkgPatchFilterView( this );
-        CHECK_NEW( _patchFilterView );
-        _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
-
-        _patchList = _patchFilterView->patchList();
-        CHECK_PTR( _patchList );
-    }
-}
-
-
-void
-YQPkgSelector::hotkeyInsertPatchFilterView()
+YQPkgSelector::hotkeyAddPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
         logInfo() << "Activating patches filter view" << endl;
 
-        addPatchFilterView();
-        connectPatchList();
+        createPatchFilterView( true ); // force
+        connectPatchFilterView();
+    }
 
-        _filters->showPage( _patchFilterView );
-        _pkgList->clear();
-        _patchList->filter();
-    }
-    else
-    {
-        _filters->showPage( _patchFilterView );
-    }
+    _filters->showPage( _patchFilterView );
 }
 
 
 void
-YQPkgSelector::connectPatchList()
+YQPkgSelector::connectPatchFilterView()
 {
-    if ( _pkgList && _patchList )
+    if ( _pkgList && _patchFilterView )
     {
-        connectFilter( _patchList, _pkgList );
+        YQPkgPatchList * patchList = _patchFilterView->patchList();
 
-        connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
-                 _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
+        connectFilter( patchList, _pkgList );
 
-        connect( _patchList, SIGNAL( statusChanged()           ),
-                 this,       SLOT  ( autoResolveDependencies() ) );
+        connect( patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+                 _pkgList,  SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
+
+        connect( patchList, SIGNAL( statusChanged()           ),
+                 this,      SLOT  ( autoResolveDependencies() ) );
 
         if ( _pkgConflictDialog )
         {
             connect( _pkgConflictDialog,SIGNAL( updatePackages()   ),
-                     _patchList,        SLOT  ( updateItemStates() ) );
+                     patchList,         SLOT  ( updateItemStates() ) );
         }
     }
 }
@@ -1209,8 +1144,8 @@ YQPkgSelector::reset()
 
     resetResolver();
 
-    if ( _patchList )
-        _patchList->reset();
+    if ( _patchFilterView )
+        _patchFilterView->reset();
 
     if ( _pkgList )
         _pkgList->clear();

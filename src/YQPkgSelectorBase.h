@@ -33,16 +33,6 @@ class YQPkgDiskUsageList;
 class YQPkgSelWmCloseHandler;
 
 
-#define YPkg_TestMode		1 << 0	// Test mode for debugging
-#define YPkg_OnlineUpdateMode	1 << 1	// Online update mode: Show patches
-#define YPkg_UpdateMode		1 << 2	// Start with "Update problems" filter view
-#define YPkg_SearchMode		1 << 3	// Start with "Search"  filter view
-#define YPkg_SummaryMode	1 << 4	// Start with "Summary" filter view
-#define YPkg_RepoMode		1 << 5	// Start with "Repositories" filter view
-#define YPkg_RepoMgr		1 << 6	// Add "Manage Repositories" to menu
-#define YPkg_ConfirmUnsupported	1 << 7	// Confirm unsupported packages
-
-
 /**
  * Abstract base class for package selectors.
  **/
@@ -58,7 +48,7 @@ protected:
      * Will initialize package and selection managers and create conflict
      * dialogs.
      **/
-    YQPkgSelectorBase( QWidget * parent, long modeFlags = 0 );
+    YQPkgSelectorBase( QWidget * parent );
 
     /**
      * Destructor
@@ -182,19 +172,6 @@ protected slots:
 
 protected:
 
-    //
-    // Checks for the various modes
-    //
-
-    bool testMode()		const { return _modeFlags & YPkg_TestMode;	   	}
-    bool onlineUpdateMode()	const { return _modeFlags & YPkg_OnlineUpdateMode; 	}
-    bool updateMode()		const { return _modeFlags & YPkg_UpdateMode;	   	}
-    bool searchMode() 		const { return _modeFlags & YPkg_SearchMode;	   	}
-    bool summaryMode()		const { return _modeFlags & YPkg_SummaryMode;	   	}
-    bool repoMode()		const { return _modeFlags & YPkg_RepoMode;         	}
-    bool repoMgrEnabled()	const { return _modeFlags & YPkg_RepoMgr;		}
-    bool confirmUnsupported()	const { return _modeFlags & YPkg_ConfirmUnsupported;	}
-
     /**
      * Show all license agreements the user has not confirmed yet
      * (for all packages that will be installed, and in YOU mode also for
@@ -212,7 +189,7 @@ protected:
      * zyppPatchesEnd().
      **/
     bool showPendingLicenseAgreements( ZyppPoolIterator begin,
-				       ZyppPoolIterator end );
+                                       ZyppPoolIterator end );
 
     /**
      * Event handler for keyboard input - for debugging and testing.
@@ -231,14 +208,12 @@ protected:
 
     // Data members
 
-    long                        _modeFlags;
-    bool                        _blockResolver;
-    bool			_showChangesDialog;
-    YQPkgConflictDialog *	_pkgConflictDialog;
-    YQPkgDiskUsageList *	_diskUsageList;
-    QAction *			_actionResetIgnoredDependencyProblems;
+    bool                  _blockResolver;
+    bool                  _showChangesDialog;
+    YQPkgConflictDialog * _pkgConflictDialog;
+    YQPkgDiskUsageList *  _diskUsageList;
+    QAction *             _actionResetIgnoredDependencyProblems;
 };
-
 
 
 #endif // YQPkgSelectorBase_h

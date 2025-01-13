@@ -42,10 +42,8 @@ using namespace zypp;
 
 
 
-YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent,
-                                            bool      showSupportability )
+YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
-    , _showSupportability ( showSupportability )
 {
     initLang();
 }
@@ -106,15 +104,8 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 
     Package::constPtr package = asKind<Package>( selectable->theObj() );
 
-    if ( _showSupportability && package )
-    {
-        html_text += "<p>";
-        // Translators: %1 contains the support level like "Level 3", "unsupported" or "unknown"
-        html_text += _("Supportability: %1").arg( fromUTF8( asUserString( package->vendorSupport() ).c_str() ) );
-        html_text += "</p>";
-    }
 
-    // show application names and icons from desktop files if available
+    // Show application names and icons from desktop files if available
 
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 
