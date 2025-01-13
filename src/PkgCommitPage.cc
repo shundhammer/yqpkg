@@ -24,7 +24,6 @@
 #include <QTimer>
 #include <QMessageBox>
 
-#include "BusyPopup.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
