@@ -19,7 +19,6 @@
 #define YQPkgPatchFilterView_h
 
 #include "YQZypp.h"
-#include "YQPkgSelMapper.h"
 #include <QLabel>
 
 
@@ -61,9 +60,9 @@ public:
 public slots:
 
     /**
-     * Update the "total download size" field.
+     * Reset this when going back after committing zypp changes.
      **/
-    void updateTotalDownloadSize();
+    void reset();
 
 
 protected slots:
@@ -85,11 +84,7 @@ protected:
     QComboBox *            _patchFilter;
     QTabWidget *           _detailsViews;
     YQPkgDescriptionView * _descriptionView;
-    QLabel *               _totalDownloadSize;
-
-    YQPkgSelMapper         _selMapper;
 };
-
 
 
 #endif // ifndef YQPkgPatchFilterView_h

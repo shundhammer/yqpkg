@@ -15,24 +15,17 @@
  */
 
 
+#include <QAction>
+#include <QHeaderView>
+#include <QMenu>
+
+#include "Exception.h"
+#include "Logger.h"
+#include "YQIconPool.h"
+#include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
-
-#include <zypp/base/Logger.h>
-#include <set>
-
-#include <QPainter>
-#include <QMenu>
-#include <QAction>
-#include <QEvent>
-#include <QHeaderView>
-
 #include "YQPkgPatchList.h"
-#include "YQPkgTextDialog.h"
-#include "YQIconPool.h"
-
-#include "Logger.h"
-#include "Exception.h"
 
 #ifndef VERBOSE_FILTER_VIEWS
 #  define VERBOSE_FILTER_VIEWS  0
@@ -40,10 +33,6 @@
 
 #define VERBOSE_PATCHES         0
 #define ENABLE_DELETING_PATCHES 1
-
-
-using std::list;
-using std::set;
 
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
@@ -519,7 +508,7 @@ YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
 
 
 YQPkgPatchCategory
-YQPkgPatchCategoryItem::patchCategory( const string & category )
+YQPkgPatchCategoryItem::patchCategory( const std::string & category )
 {
     return patchCategory( fromUTF8( category ) );
 }

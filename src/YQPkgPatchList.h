@@ -18,7 +18,6 @@
 #ifndef YQPkgPatchList_h
 #define YQPkgPatchList_h
 
-#include <string>
 #include "YQPkgObjList.h"
 #include <QTreeWidgetItem>
 #include <QEvent>

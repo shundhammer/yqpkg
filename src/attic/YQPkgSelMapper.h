@@ -69,7 +69,7 @@ public:
 
 protected:
 
-    typedef std::map<ZyppPkg, ZyppSel>	Cache;
+    typedef std::map <ZyppPkg, ZyppSel>	Cache;
     typedef std::pair<ZyppPkg, ZyppSel>	CachePair;
     typedef Cache::iterator 		CacheIterator;
 

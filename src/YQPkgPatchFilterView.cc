@@ -34,8 +34,6 @@
 #include "YQPkgPatchFilterView.h"
 
 
-#define ENABLE_TOTAL_DOWNLOAD_SIZE      0
-
 typedef zypp::Patch::Contents                   ZyppPatchContents;
 typedef zypp::Patch::Contents::const_iterator   ZyppPatchContentsIterator;
 
@@ -83,13 +81,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
-    connect( _patchList,        SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _patchList,        SIGNAL( currentItemChanged  ( ZyppSel ) ),
              _descriptionView,  SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
-
-    connect( _patchList,        SIGNAL( statusChanged()                 ),
-             this,              SLOT  ( updateTotalDownloadSize()       ) );
-
-    updateTotalDownloadSize();
 }
 
 
@@ -100,77 +93,9 @@ YQPkgPatchFilterView::~YQPkgPatchFilterView()
 
 
 void
-YQPkgPatchFilterView::updateTotalDownloadSize()
+YQPkgPatchFilterView::reset()
 {
-    std::set<ZyppSel> selectablesToInstall;
-
-    for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
-          patches_it != zyppPatchesEnd();
-          ++patches_it )
-    {
-        ZyppPatch patch = tryCastToZyppPatch( (*patches_it)->theObj() );
-
-        if ( patch )
-        {
-            ZyppPatchContents patchContents( patch->contents() );
-
-            for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
-                  contents_it != patchContents.end();
-                  ++contents_it )
-            {
-                ZyppPkg pkg =  zypp::make<zypp::Package>(*contents_it);
-                ZyppSel sel;
-
-                if ( pkg )
-                    sel = _selMapper.findZyppSel( pkg );
-
-                if ( sel )
-                {
-                    switch ( sel->status() )
-                    {
-                        case S_Install:
-                        case S_AutoInstall:
-                        case S_Update:
-                        case S_AutoUpdate:
-                            // Insert the patch contents selectables into a set,
-                            // don't immediately sum up their sizes: The same
-                            // package could be in more than one patch, but of
-                            // course it will be downloaded only once.
-
-                            selectablesToInstall.insert( sel );
-                            break;
-
-                        case S_Del:
-                        case S_AutoDel:
-                        case S_NoInst:
-                        case S_KeepInstalled:
-                        case S_Taboo:
-                        case S_Protected:
-                            break;
-
-                            // intentionally omitting 'default' branch so the compiler can
-                            // catch unhandled enum states
-                    }
-
-                }
-            }
-        }
-    }
-
-
-    FSize totalSize = 0;
-
-    for ( std::set<ZyppSel>::iterator it = selectablesToInstall.begin();
-          it != selectablesToInstall.end();
-          ++it )
-    {
-        if ( (*it)->candidateObj() )
-            totalSize += zypp::ByteCount::SizeType( (*it)->candidateObj()->installSize() );
-    }
-
-#if ENABLE_TOTAL_DOWNLOAD_SIZE
-    _totalDownloadSize->setText( totalSize.asString().c_str() );
-#endif
+    fillPatchList();
 }
 
 

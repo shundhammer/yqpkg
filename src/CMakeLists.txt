@@ -77,7 +77,6 @@ set( SOURCES
   YQPkgRepoList.cc
   YQPkgSearchFilterView.cc
   YQPkgSecondaryFilterView.cc
-  YQPkgSelMapper.cc
   YQPkgServiceFilterView.cc
   YQPkgServiceList.cc
   YQPkgStatusFilterView.cc
