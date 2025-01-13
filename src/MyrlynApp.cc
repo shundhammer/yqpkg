@@ -204,11 +204,11 @@ void MyrlynApp::createPkgSel()
     _pkgSel = new YQPkgSelector( 0, 0 );
     CHECK_NEW( _pkgSel );
 
-    QObject::connect( _pkgSel, SIGNAL( commit() ),
-                      this,    SLOT  ( next()   ) );
+    connect( _pkgSel, SIGNAL( commit() ),
+             this,    SLOT  ( next()   ) );
 
-    QObject::connect( _pkgSel, SIGNAL( finished()   ),   // "accept" without changes
-                      this,    SLOT  ( skipCommit() ) );
+    connect( _pkgSel, SIGNAL( finished()   ),   // "accept" without changes
+             this,    SLOT  ( skipCommit() ) );
 }
 
 

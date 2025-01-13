@@ -1226,6 +1226,28 @@ YQPkgSelector::connectPatternList()
 
 
 void
+YQPkgSelector::reset()
+{
+    logDebug() << "Reset" << endl;
+
+    resetResolver();
+
+    if ( _pkgList )
+        _pkgList->clear();
+
+    if ( _filters )
+        _filters->reloadCurrentPage();
+
+    // This signal is intended for receivers other than filter views.
+    // Don't connect filter views to this one; they already reload their
+    // content with _filters->reloadCurrentPage() above or when the user
+    // switches to another filter tab.
+
+    emit resetNotify();
+}
+
+
+void
 YQPkgSelector::globalUpdatePkg( bool force )
 {
     if ( ! _pkgList )

@@ -78,6 +78,11 @@ public:
 public slots:
 
     /**
+     * Reset the data in connected views and reset the resolver.
+     **/
+    void reset();
+
+    /**
      * Resolve package dependencies manually.
      *
      * Returns QDialog::Accepted or QDialog::Rejected.

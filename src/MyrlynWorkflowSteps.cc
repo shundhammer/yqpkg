@@ -205,11 +205,8 @@ void PkgSelStep::activate( bool goingForward )
 {
     MyrlynWorkflowStep::activate( goingForward ); // Show the page
 
-    // Reset not only if 'goingForward' is false: We get here from the summary
-    // page with a 'gotoStep( "pkgSel")' call directly, and in that case
-    // 'goingForward' is true.
-
-    _app->pkgSel()->reset(); // includes resetResolver()
+    if ( ! goingForward )
+        _app->pkgSel()->reset(); // includes resetResolver()
 }
 
 

@@ -23,7 +23,7 @@
 #include "QY2ListView.h"
 
 #ifndef VERBOSE_SELECT_SOMETHING
-#  define VERBOSE_SELECT_SOMETHING  1
+#  define VERBOSE_SELECT_SOMETHING  0
 #endif
 
 

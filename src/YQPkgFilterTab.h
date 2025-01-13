@@ -151,6 +151,12 @@ public slots:
     void showPage( int tabIndex );
 
     /**
+     * Reload the current page: Send a currentChange() signal with the current
+     * page as argument so it will filter again.
+     **/
+    void reloadCurrentPage();
+
+    /**
      * Close the current page unless this is the last visible page.
      **/
     void closeCurrentPage();

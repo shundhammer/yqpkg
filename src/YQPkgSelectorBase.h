@@ -69,12 +69,6 @@ protected:
 public slots:
 
     /**
-     * Reset all content in connected views and reset the resolver
-     * and send a resetNotify() signal.
-     **/
-    void reset();
-
-    /**
      * Reset the resolver, in particular modes like "upgrade mode" (after a
      * dist upgrade) or "update mode" after a package update).
      *
@@ -144,15 +138,6 @@ public slots:
 signals:
 
     /**
-     * Notification to reset all content, for example because we just went back
-     * in the workflow after a package commit, and now the new states of the
-     * packages need to be displayed; what was 'install' before the package
-     * commit is now 'installed', which is different. Connected views should
-     * use this to reload their content.
-     **/
-    void resetNotify();
-
-    /**
      * Emitted when package resolving is started.
      * This can be used for some kind of "busy display".
      **/
@@ -174,6 +159,17 @@ signals:
      * No package actions to commit.
      **/
     void finished();
+
+    /**
+     * Emitted when all data of connected widgets should be reset.
+     *
+     * Do NOT connect this to the filter views' filter() slot:
+     * The YQPkgSelector already does that with
+     * YQPkgFilteTab::reloadCurrentPage(). This resetNotify() signal is
+     * intended for other widgets / QObjects that don't fit into this schema
+     * like the YQPkgSelMapper.
+     **/
+    void resetNotify();
 
 
 protected slots:

@@ -354,6 +354,20 @@ YQPkgFilterTab::closeAllPages()
 
 
 void
+YQPkgFilterTab::reloadCurrentPage()
+{
+    int currentIndex = tabBar()->currentIndex();
+    YQPkgFilterPage * currentPage = findPage( currentIndex );
+
+    if ( currentPage )
+    {
+        logDebug() << "Reloading page " << currentPage->id << endl;
+        emit currentChanged( currentPage->content );
+    }
+}
+
+
+void
 YQPkgFilterTab::closeCurrentPage()
 {
     if ( tabBar()->count() > 1 )
