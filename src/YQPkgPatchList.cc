@@ -18,6 +18,7 @@
 #include <QAction>
 #include <QHeaderView>
 #include <QMenu>
+#include <QTreeWidgetItem>
 
 #include "Exception.h"
 #include "Logger.h"

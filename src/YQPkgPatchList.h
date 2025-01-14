@@ -18,14 +18,13 @@
 #ifndef YQPkgPatchList_h
 #define YQPkgPatchList_h
 
-#include "YQPkgObjList.h"
+
 #include <QTreeWidgetItem>
-#include <QEvent>
 #include <QMenu>
+#include "YQPkgObjList.h"
 
-
-using std::string;
-
+class QMenu;
+class QTreeWidetItem;
 class YQPkgPatchListItem;
 class YQPkgPatchCategoryItem;
 
@@ -323,8 +322,8 @@ public:
     /**
      * Maps a string patch category to the corresponding enum.
      **/
-    static YQPkgPatchCategory patchCategory( const QString & category );
-    static YQPkgPatchCategory patchCategory( const string  & category );
+    static YQPkgPatchCategory patchCategory( const QString      & category );
+    static YQPkgPatchCategory patchCategory( const std::string  & category );
     /**
      * Converts a patch category to a user-readable (translated) string.
      **/
