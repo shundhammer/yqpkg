@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Jan 14 16:22:09 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use transparent artwork consistently
+- Added "About" dialog
+- Rely on project home pagei via browser a online help
+- Added and cleaned up "Patches" view
+- Show number of patches / updates in the tab labels
+- 0.8.03
+
+-------------------------------------------------------------------
 Thu Jan  9 13:46:35 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Initial version
