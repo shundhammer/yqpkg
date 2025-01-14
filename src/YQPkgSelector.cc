@@ -132,18 +132,42 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
     addMenus();         // Only after all widgets are created!
     readSettings();     // Only after menus are created!
     makeConnections();
-    emit loadData();
-
     _filters->readSettings();
-    bool pagesRestored = _filters->tabCount() > 0;
 
-    if ( ! pagesRestored )
+    if ( _filters->tabCount() == 0 )
     {
         logDebug() << "No page configuration saved, using fallbacks" << endl;
+        showFallbackPages();
+    }
 
-        //
-        // Add a number of default tabs in the desired order
-        //
+    overrideInitialPage(); // Only for very important special cases!
+
+    if ( _filters->diskUsageList() )
+        _filters->diskUsageList()->updateDiskUsage();
+
+    _blockResolver = false;
+    firstSolverRun();
+
+    logDebug() << "YQPkgSelector init done" << endl;
+}
+
+
+YQPkgSelector::~YQPkgSelector()
+{
+    logDebug() << "Destroying YQPkgSelector..." << endl;
+
+    writeSettings();
+
+    logDebug() << "Destroying YQPkgSelector done." << endl;
+}
+
+
+void YQPkgSelector::showFallbackPages()
+{
+    {
+        // New scope for the signal blocker:
+        // Prevent a signal cascade for each page as it is shown.
+        QSignalBlocker sigBlocker( _filters );
 
         if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
         if ( _patchFilterView   ) _filters->showPage( _patchFilterView   );
@@ -154,10 +178,18 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
         if ( _statusFilterView  ) _filters->showPage( _statusFilterView  );
     }
 
+    // Signals are no longer blocked; now trigger one for the first page
 
+    _filters->showPage( 0 );
+}
+
+
+void YQPkgSelector::overrideInitialPage()
+{
+    // Override the initial page for very important special cases.
     //
-    // Move the desired tab to the foreground
-    //
+    // Don't add any generic fallback here; that would kill the effect of
+    // writing and reading the page configuration to and from the settings.
 
     if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
     {
@@ -186,18 +218,11 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
         _patchFilterView->patchList()->selectSomething();
     }
 #endif
-    else if ( _searchFilterView )
-    {
-        _filters->showPage( _searchFilterView  );
-    }
+}
 
-    // ----------------------------------------------------------------------
 
-    if ( _filters->diskUsageList() )
-        _filters->diskUsageList()->updateDiskUsage();
-
-    _blockResolver = false;
-
+void YQPkgSelector::firstSolverRun()
+{
 #if CHECK_DEPENDENCIES_ON_STARTUP
     // Fire up the first dependency check in the main loop.
     // Don't do this right away - wait until all initializations are finished.
@@ -208,18 +233,6 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
         QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
 #  endif
 #endif
-
-    logDebug() << "YQPkgSelector init done" << endl;
-}
-
-
-YQPkgSelector::~YQPkgSelector()
-{
-    logDebug() << "Destroying YQPkgSelector..." << endl;
-
-    writeSettings();
-
-    logDebug() << "Destroying YQPkgSelector done." << endl;
 }
 
 
@@ -1559,15 +1572,18 @@ YQPkgSelector::installSubPkgs( const QString & suffix )
 bool
 YQPkgSelector::anyRetractedPkgInstalled()
 {
-    logInfo() << "Checking for retracted installed packages..." << endl;
+    // logVerbose() << "Checking for retracted installed packages..." << endl;
 
     for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
     {
         if ( (*it)->hasRetractedInstalled() )
+        {
+            logInfo() << "Found a retracted installed package" << endl;
             return true;
+        }
     }
 
-    logInfo() << "No retracted packages installed." << endl;
+    logDebug() << "No retracted packages installed." << endl;
 
     return false;
 }

@@ -196,7 +196,10 @@ void
 YQPkgPatternList::showFilter( QWidget * newFilter )
 {
     if ( newFilter == this )
+    {
         filter();
+        selectSomething();
+    }
 }
 
 

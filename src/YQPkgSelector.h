@@ -131,28 +131,26 @@ public slots:
     void pkgExcludeDevelChanged( bool on );
 
 
-    /*
+    /**
      * Enable or disable verify system mode of the solver
-     */
+     **/
     void pkgVerifySytemModeChanged( bool on );
 
-    /*
+    /**
      * Install recommended packages
-     */
+     **/
     void pkgInstallRecommendedChanged( bool on );
 
-    /*
+    /**
      * Enable or disable CleandepsOnRemove of the solver
      * (= Cleanup when deleting packages)
-     */
+     **/
     void pkgCleanDepsOnRemoveChanged( bool on );
 
-    /*
+    /**
      * Enable or disable vendor change allowed of the solver
-     */
+     **/
     void pkgAllowVendorChangeChanged( bool on );
-
-
 
     /**
      * Display online help.
@@ -179,16 +177,6 @@ public slots:
      * Write the settings to the config file
      */
     void writeSettings();
-
-
-signals:
-
-    /**
-     * Emitted once (!) when the dialog is about to be shown, when all widgets
-     * are created and all signal/slot connections are set up - when it makes
-     * sense to load data.
-     **/
-    void loadData();
 
 
 protected slots:
@@ -253,6 +241,24 @@ public:
 
 
 protected:
+
+    /**
+     * Show a number of fallback filter view pages if none were read from the
+     * settings.
+     **/
+    void showFallbackPages();
+
+    /**
+     * Regardless of user proferences (saved pages), override the initial page
+     * for very important special cases.
+     **/
+    void overrideInitialPage();
+
+    /**
+     * Trigger the first dependency resolver run with a single-shot timer.
+     **/
+    void firstSolverRun();
+
 
     // Layout methods - create and layout widgets
 
