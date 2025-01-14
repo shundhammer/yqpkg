@@ -331,7 +331,7 @@ YQPkgPatternList::selectSomething()
 
         if ( ! categoryItem ) // Select a real pattern, not a category
         {
-            item->setSelected( true ); // emits signal, too
+            setCurrentItem( item ); // Sends a signal
             return;
         }
 

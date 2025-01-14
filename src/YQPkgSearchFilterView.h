@@ -39,8 +39,6 @@ class QCheckBox;
 class QPushButton;
 class QRadioButton;
 
-using std::string;
-
 
 /**
  * Filter view for searching within packages

@@ -31,7 +31,13 @@
 #include "YQPkgDescriptionView.h"
 #include "YQPkgPatchList.h"
 #include "YQi18n.h"
+
 #include "YQPkgPatchFilterView.h"
+
+#ifndef VERBOSE_FILTER_VIEWS
+#  define VERBOSE_FILTER_VIEWS  0
+#endif
+
 
 
 typedef zypp::Patch::Contents                   ZyppPatchContents;
@@ -96,6 +102,21 @@ void
 YQPkgPatchFilterView::reset()
 {
     fillPatchList();
+}
+
+
+void
+YQPkgPatchFilterView::showFilter( QWidget * newFilter )
+{
+    if ( newFilter == this )
+    {
+#if VERBOSE_FILTER_VIEWS
+        logVerbose() << "Filtering" << endl;
+#endif
+        _patchList->filter();
+        _patchList->selectSomething();
+    }
+
 }
 
 

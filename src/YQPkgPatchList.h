@@ -123,6 +123,13 @@ public slots:
      **/
     virtual void message( const QString & text );
 
+    /**
+     * Select the first selectable list entry that is not a pattern category.
+     *
+     * Reimplemented from QY2ListView.
+     **/
+    virtual void selectSomething() override;
+
 
 public:
 
@@ -170,14 +177,6 @@ signals:
      **/
     void filterMatch( ZyppSel selectable,
                       ZyppPkg pkg );
-
-    /**
-     * Emitted during filtering for non-pkg items:
-     * pre-script, post-script, files
-     **/
-    void filterMatch( const QString & name,
-                      const QString & summary,
-                      FSize           size );
 
     /**
      * Emitted when filtering is finished.
@@ -310,6 +309,7 @@ protected:
     ZyppPatch          _zyppPatch;
     YQPkgPatchCategory _patchCategory;
 };
+
 
 class YQPkgPatchCategoryItem: public QY2ListViewItem
 {

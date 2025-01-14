@@ -117,7 +117,7 @@ public slots:
      *
      * Reimplemented from QY2ListView.
      **/
-    virtual void selectSomething();
+    virtual void selectSomething() override;
 
 
 public:

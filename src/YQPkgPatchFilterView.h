@@ -60,6 +60,11 @@ public:
 public slots:
 
     /**
+     * Notification that a new filter is the one to be shown.
+     **/
+    void showFilter( QWidget * newFilter );
+
+    /**
      * Reset this when going back after committing zypp changes.
      **/
     void reset();

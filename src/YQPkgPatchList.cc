@@ -437,6 +437,27 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 }
 
 
+void
+YQPkgPatchList::selectSomething()
+{
+    QTreeWidgetItemIterator it( this );
+
+    while ( *it )
+    {
+        YQPkgPatchListItem * patchItem =
+            dynamic_cast<YQPkgPatchListItem *>( *it );
+
+        if ( patchItem ) // Select a real patch, not a category
+        {
+            setCurrentItem( patchItem ); // Sends a signal
+            return;
+        }
+
+        ++it;
+    }
+}
+
+
 
 
 YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *         patchList,

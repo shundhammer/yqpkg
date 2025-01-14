@@ -81,7 +81,7 @@
 #include "YQPkgSelector.h"
 
 #define CHECK_DEPENDENCIES_ON_STARTUP                   0
-#define FORCE_SHOW_NEEDED_PATCHES                       1
+#define FORCE_SHOW_NEEDED_PATCHES                       0
 #define DEPENDENCY_FEEDBACK_IF_OK                       1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT                 true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE   0
@@ -1111,9 +1111,6 @@ YQPkgSelector::connectPatchFilterView()
 
         connectFilter( patchList, _pkgList );
 
-        connect( patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
-                 _pkgList,  SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
-
         connect( patchList, SIGNAL( statusChanged()           ),
                  this,      SLOT  ( autoResolveDependencies() ) );
 
@@ -1122,6 +1119,12 @@ YQPkgSelector::connectPatchFilterView()
             connect( _pkgConflictDialog, SIGNAL( updatePackages()   ),
                      patchList,          SLOT  ( updateItemStates() ) );
         }
+    }
+
+    if ( _filters && _patchFilterView )
+    {
+        connect( _filters,         SIGNAL( currentChanged( QWidget * ) ),
+                 _patchFilterView, SLOT  ( showFilter    ( QWidget * ) ) );
     }
 }
 
