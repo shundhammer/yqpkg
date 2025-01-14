@@ -152,7 +152,8 @@ It is now well usable and fairly feature complete.
 
 ### Work in Progress
 
-- ~Patches view~ _This is now implemented_. See issue #2 for details.
+- ~Patches view~ _This is now implemented_.
+See [issue #2](https://github.com/shundhammer/myrlyn/issues/2) for details.
 
 
 ## Development Progress
