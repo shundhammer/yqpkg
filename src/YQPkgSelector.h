@@ -279,6 +279,19 @@ protected:
     void createLanguagesFilterView();
     void createStatusFilterView();
 
+    /**
+     * Update the tab labels of filter views that can have a numeric value with
+     * that number: "Patches (4)", "Updates (17)"
+     **/
+    void updatePageLabels();
+
+    /**
+     * Update the tab label of a filter view page with a number. Leave it empty
+     * if the number is < 1:  "Patches (4)", "Updates (17)".
+     **/
+    void updatePageLabel( const QString & rawLabel,
+                          QWidget *       page,
+                          int             count );
 
     /**
      * Establish Qt signal / slot connections.

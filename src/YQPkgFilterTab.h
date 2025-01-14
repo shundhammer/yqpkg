@@ -151,6 +151,12 @@ public slots:
     void showPage( int tabIndex );
 
     /**
+     * Set a new label for a page.
+     * This can be used to add a numeric value like "Patches (17)".
+     **/
+    void setPageLabel( QWidget * pageContent, const QString & newLabel );
+
+    /**
      * Reload the current page: Send a currentChange() signal with the current
      * page as argument so it will filter again.
      **/

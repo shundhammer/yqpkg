@@ -337,6 +337,19 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
 
 
 void
+YQPkgFilterTab::setPageLabel( QWidget * pageContent, const QString & newLabel )
+{
+    YQPkgFilterPage * page = findPage( pageContent );
+
+    if ( page )
+    {
+        page->label = newLabel;
+        tabBar()->setTabText( page->tabIndex, newLabel );
+    }
+}
+
+
+void
 YQPkgFilterTab::closeAllPages()
 {
     while ( tabBar()->count() > 0 )

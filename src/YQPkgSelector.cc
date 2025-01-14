@@ -239,6 +239,7 @@ void YQPkgSelector::basicLayout()
 
     layout->addWidget( _filters );
     createFilterViews();
+    updatePageLabels();
     _filters->showPage( 0 );
 
     layoutRightPane( _filters->rightPane() );
@@ -1158,11 +1159,36 @@ YQPkgSelector::reset()
     if ( _filters )
         _filters->reloadCurrentPage();
 
+    updatePageLabels();
+
     // For all other connected QObjects that are not covered yet.
     // Don't connect this signal to the standard filter views;
     // they are already reset by reloadCurrentPage().
 
     emit resetNotify();
+}
+
+
+void
+YQPkgSelector::updatePageLabels()
+{
+    updatePageLabel( _( "P&atches" ), _patchFilterView,   YQPkgPatchList::countNeededPatches()   );
+    updatePageLabel( _( "&Updates" ), _updatesFilterView, YQPkgUpdatesFilterView::countUpdates() );
+}
+
+
+void
+YQPkgSelector::updatePageLabel( const QString & rawLabel, QWidget * page, int count )
+{
+    if ( page && _filters )
+    {
+        QString label = rawLabel;
+
+        if ( count > 0 )
+            label += QString( " (%1)" ).arg( count );
+
+        _filters->setPageLabel( page, label );
+    }
 }
 
 
