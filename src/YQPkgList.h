@@ -18,9 +18,10 @@
 #ifndef YQPkgList_h
 #define YQPkgList_h
 
-#include "YQPkgObjList.h"
+
 #include <QMenu>
 #include <QResizeEvent>
+#include "YQPkgObjList.h"
 
 class YQPkgListItem;
 

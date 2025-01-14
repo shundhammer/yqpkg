@@ -19,7 +19,6 @@
 #include <QFontMetrics>
 #include <QHeaderView>
 #include <QMenu>
-#include <QTreeView>
 
 #include "Exception.h"
 #include "Logger.h"
