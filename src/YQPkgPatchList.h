@@ -36,6 +36,7 @@ enum YQPkgPatchCategory // This is also the sort order
     YQPkgSecurityPatch,
     YQPkgRecommendedPatch,
     YQPkgOptionalPatch,
+    YQPkgFeaturePatch,
     YQPkgDocumentPatch,
 };
 

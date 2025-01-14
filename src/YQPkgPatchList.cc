@@ -523,6 +523,7 @@ YQPkgPatchCategoryItem::patchCategory( const QString & cat )
     if ( category == "security"    ) return YQPkgSecurityPatch;
     if ( category == "recommended" ) return YQPkgRecommendedPatch;
     if ( category == "optional"    ) return YQPkgOptionalPatch;
+    if ( category == "feature"     ) return YQPkgFeaturePatch;
     if ( category == "document"    ) return YQPkgDocumentPatch;
 
     logWarning() << "Unknown patch category \"" << category << "\"" << endl;
@@ -541,6 +542,7 @@ YQPkgPatchCategoryItem::asString( YQPkgPatchCategory category )
         case YQPkgSecurityPatch:    return _( "security"    );
         case YQPkgRecommendedPatch: return _( "recommended" );
         case YQPkgOptionalPatch:    return _( "optional"    );
+        case YQPkgFeaturePatch:     return _( "feature"    );
         case YQPkgDocumentPatch:    return _( "document"    );
     }
 
