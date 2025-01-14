@@ -4,6 +4,7 @@ Name=Myrlyn
 Exec=xdg-su -c /usr/bin/myrlyn
 Icon=Myrlyn.png
 GenericName=Myrlyn Graphical Software Package Manager
+Comment=Full root access
 Terminal=false
 MimeType=
 Categories=System;Settings
