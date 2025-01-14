@@ -7,7 +7,8 @@ for installation, update and removal. It uses _libzypp_ as its backend and Qt
 as its GUI toolkit.
 
 This started in the 11/2024 SUSE Hack Week to make the SUSE YaST Qt package
-selector usable as a standalone Qt program without any YaST dependencies.
+selector usable as a standalone Qt program without any YaST dependencies,
+but it has grown beyond that since then.
 
 [<img src="https://raw.githubusercontent.com/shundhammer/yqpkg/refs/heads/master/src/artwork/Myrlyn-256x256.png">](https://raw.githubusercontent.com/shundhammer/yqpkg/refs/heads/master/src/artwork/Myrlyn-256x256.png)
 
