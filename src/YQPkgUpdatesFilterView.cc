@@ -106,22 +106,56 @@ YQPkgUpdatesFilterView::filter()
     {
         ZyppSel selectable = *it;
 
-        const ZyppObj candidate = selectable->candidateObj();
-        const ZyppObj installed = selectable->installedObj();
-
-        if ( candidate && installed )
+        if ( isUpdateAvailableFor( selectable ) )
         {
-            if ( installed->edition() < candidate->edition() )
-            {
-                ZyppPkg zyppPkg = tryCastToZyppPkg( installed );
+            ZyppObj installed = selectable->installedObj();
+            ZyppPkg zyppPkg   = tryCastToZyppPkg( installed );
 
-                if ( zyppPkg )
-                    emit filterMatch( selectable, zyppPkg );
-            }
+            if ( zyppPkg )
+                emit filterMatch( selectable, zyppPkg );
         }
     }
 
     emit filterFinished();
+}
+
+
+int
+YQPkgUpdatesFilterView::countUpdates()
+{
+    int count = 0;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+          it != zyppPkgEnd();
+          ++it )
+    {
+        if ( isUpdateAvailableFor( *it ) )
+            ++count;
+    }
+
+    return count;
+}
+
+
+bool
+YQPkgUpdatesFilterView::isUpdateAvailableFor( ZyppSel selectable )
+{
+    bool haveUpdate = false;
+    const ZyppObj candidate = selectable->candidateObj();
+    const ZyppObj installed = selectable->installedObj();
+
+    if ( candidate && installed )
+    {
+        if ( installed->edition() < candidate->edition() )
+        {
+            ZyppPkg zyppPkg = tryCastToZyppPkg( installed );
+
+            if ( zyppPkg )
+                haveUpdate = true;
+        }
+    }
+
+    return haveUpdate;
 }
 
 

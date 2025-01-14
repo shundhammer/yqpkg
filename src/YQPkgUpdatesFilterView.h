@@ -52,6 +52,20 @@ public:
      **/
     virtual ~YQPkgUpdatesFilterView();
 
+
+    /**
+     * Return the number of packages in the pool that have an update available,
+     * i.e. that are installed and that have a candidate object that is newer
+     * than the installed one.
+     **/
+    static int countUpdates();
+
+    /**
+     * Return 'true' if the specified selectable is installed and has a
+     * candidate object that is newer than the installed one.
+     **/
+    static bool isUpdateAvailableFor( ZyppSel selectable );
+
     /**
      * Return the preferred size of this widget.
      *
