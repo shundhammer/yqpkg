@@ -64,6 +64,7 @@ It is now well usable and fairly feature complete.
 - Install, update and remove packages
 - Pick a specific package version for installation or update
 - Install and remove patterns
+- Install and remove patches
 - Browse and select packages by repository
 - Browse and select language/locale-specific packages by language/locale
 - Browse and select packages by classification:
