@@ -81,6 +81,7 @@
 #include "YQPkgSelector.h"
 
 #define CHECK_DEPENDENCIES_ON_STARTUP                   0
+#define FORCE_SHOW_NEEDED_PATCHES                       1
 #define DEPENDENCY_FEEDBACK_IF_OK                       1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT                 true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE   0
@@ -145,24 +146,18 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
         //
 
         if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
+        if ( _patchFilterView   ) _filters->showPage( _patchFilterView   );
         if ( _updatesFilterView ) _filters->showPage( _updatesFilterView );
         if ( _repoFilterView    ) _filters->showPage( _repoFilterView    );
+        if ( _serviceFilterView ) _filters->showPage( _serviceFilterView );
         if ( _patternList       ) _filters->showPage( _patternList       );
         if ( _statusFilterView  ) _filters->showPage( _statusFilterView  );
-
-        // Select the active page
-        if ( _searchFilterView  ) _filters->showPage( _searchFilterView  );
     }
 
 
     //
     // Move the desired tab to the foreground
     //
-
-    if ( _patchFilterView )
-    {
-        _filters->showPage( _patchFilterView );
-    }
 
     if ( _pkgClassificationFilterView && anyRetractedPkgInstalled() )
     {
@@ -184,10 +179,22 @@ YQPkgSelector::YQPkgSelector( QWidget * parent )
         // are installed might change between program runs, and we'd have to
         // inform the user when such a change occurs.
     }
+#if FORCE_SHOW_NEEDED_PATCHES
+    else if ( _patchFilterView && YQPkgPatchList::haveNeededPatches() )
+    {
+        _filters->showPage( _patchFilterView );
+        _patchFilterView->patchList()->selectSomething();
+    }
+#endif
+    else if ( _searchFilterView )
+    {
+        _filters->showPage( _searchFilterView  );
+    }
+
+    // ----------------------------------------------------------------------
 
     if ( _filters->diskUsageList() )
         _filters->diskUsageList()->updateDiskUsage();
-
 
     _blockResolver = false;
 
@@ -246,12 +253,8 @@ void YQPkgSelector::createFilterViews()
     // The order of creation is both the order in the "View" button's menu and
     // the order of tabs
 
-    createPatchFilterView();          // Patches - if patches available or F2
-
-
-    // Standard views - visible by default
-
     createSearchFilterView();         // Package search
+    createPatchFilterView();          // Patches - if patches available or F2
     createUpdatesFilterView();        // Package update
     createRepoFilterView();
     createServiceFilterView();        // Only if services available
@@ -692,6 +695,7 @@ YQPkgSelector::addMenus()
         //
 
         YQPkgPatchList * patchList = _patchFilterView->patchList();
+        CHECK_PTR( patchList );
 
         _patchMenu = new QMenu( _menuBar );
         CHECK_NEW( _patchMenu );
@@ -1102,6 +1106,7 @@ YQPkgSelector::connectPatchFilterView()
     if ( _pkgList && _patchFilterView )
     {
         YQPkgPatchList * patchList = _patchFilterView->patchList();
+        CHECK_PTR( patchList );
 
         connectFilter( patchList, _pkgList );
 
@@ -1113,8 +1118,8 @@ YQPkgSelector::connectPatchFilterView()
 
         if ( _pkgConflictDialog )
         {
-            connect( _pkgConflictDialog,SIGNAL( updatePackages()   ),
-                     patchList,         SLOT  ( updateItemStates() ) );
+            connect( _pkgConflictDialog, SIGNAL( updatePackages()   ),
+                     patchList,          SLOT  ( updateItemStates() ) );
         }
     }
 }
