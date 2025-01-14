@@ -152,15 +152,7 @@ It is now well usable and fairly feature complete.
 
 ### Work in Progress
 
-- Patches view. You can already use it if you hit the `[F2]` button (like in
-  all YaST versions since time immemorial), but it may still have some quirks
-  and bugs.
-
-  But since SUSE patches are only (mostly?) a collection of updated package
-  versions, the new "Updates" view and the "Package Update" button there is a
-  very adequate replacement. And of course only Leap has patches anyway;
-  Tumbleweed and Slowroll receive updated packages.
-
+- ~Patches view~ _This is now implemented_. See issue #2 for details.
 
 
 ## Development Progress
