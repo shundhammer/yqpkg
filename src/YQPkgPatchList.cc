@@ -115,6 +115,70 @@ YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
 }
 
 
+bool
+YQPkgPatchList::haveAnyPatches()
+{
+    return ! zyppPool().empty<zypp::Patch>();
+}
+
+
+bool
+YQPkgPatchList::haveNeededPatches()
+{
+    for ( ZyppPoolIterator it = zyppPatchesBegin();
+          it != zyppPatchesEnd();
+          ++it )
+    {
+        ZyppSel   selectable = *it;
+        ZyppPatch zyppPatch  = tryCastToZyppPatch( selectable->theObj() );
+
+        if ( isNeeded( selectable, zyppPatch ) )
+            return true;
+    }
+
+    return false; // No needed patches found
+}
+
+
+int
+YQPkgPatchList::countNeededPatches()
+{
+    int count = 0;
+
+    for ( ZyppPoolIterator it = zyppPatchesBegin();
+          it != zyppPatchesEnd();
+          ++it )
+    {
+        ZyppSel   selectable = *it;
+        ZyppPatch zyppPatch  = tryCastToZyppPatch( selectable->theObj() );
+
+        if ( isNeeded( selectable, zyppPatch ) )
+            ++count;
+    }
+
+    return count;
+}
+
+
+bool YQPkgPatchList::isNeeded( ZyppSel selectable, ZyppPatch zyppPatch )
+{
+    if ( zyppPatch )
+    {
+        if ( selectable->hasCandidateObj() &&
+             selectable->candidateObj().isRelevant() )
+        {
+            if ( ! selectable->candidateObj().isSatisfied() ||
+                 selectable->candidateObj().status().isToBeInstalled() )
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 void
 YQPkgPatchList::fillList()
 {
@@ -131,7 +195,7 @@ YQPkgPatchList::fillList()
           ++it )
     {
         ZyppSel   selectable = *it;
-        ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+        ZyppPatch zyppPatch  = tryCastToZyppPatch( selectable->theObj() );
 
         if ( zyppPatch )
         {
@@ -140,19 +204,7 @@ YQPkgPatchList::fillList()
             switch ( _filterCriteria )
             {
                 case RelevantPatches:   // needed + broken + satisfied (but not installed)
-
-                    // only shows patches relevant to the system
-                    if ( selectable->hasCandidateObj() &&
-                         selectable->candidateObj().isRelevant() )
-                    {
-                        // and only those that are needed
-                        if ( ! selectable->candidateObj().isSatisfied() ||
-                             // maybe it's satisfied because it's preselected
-                             selectable->candidateObj().status().isToBeInstalled() )
-                        {
-                            displayPatch = true;
-                        }
-                    }
+                    displayPatch = isNeeded( selectable, zyppPatch );
                     break;
 
                 case RelevantAndInstalledPatches:       // patches we dont need

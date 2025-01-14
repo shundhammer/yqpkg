@@ -19,8 +19,6 @@
 #define YQPkgPatchList_h
 
 
-#include <QTreeWidgetItem>
-#include <QMenu>
 #include "YQPkgObjList.h"
 
 class QMenu;
@@ -66,6 +64,28 @@ public:
         RelevantAndInstalledPatches,    // unneeded
         AllPatches                      // all
     };
+
+
+    /**
+     * Check if there are any patches at all.
+     *
+     * Some distros like openSUSE Tumbleweed or Slowroll don't provide any
+     * patches; they are kept up to date with updated packages only.
+     * OTOH openSUSE Leap or SLE do get patches.
+     **/
+    static bool haveAnyPatches();
+
+    /**
+     * Check if there are any needed patches in the pool, i.e. patches that are
+     * relevant and not installed or satisfied yet.
+     **/
+    static bool haveNeededPatches();
+
+    /**
+     * Return the number of needed patches in the pool, i.e. patches that are
+     * relevant and not installed or satisfied yet.
+     **/
+    static int countNeededPatches();
 
 
 public slots:
@@ -166,10 +186,20 @@ signals:
 
 
 protected:
+
     /**
      * returns or creates a category item for a defined category
      */
     YQPkgPatchCategoryItem * category( YQPkgPatchCategory category );
+
+    /**
+     * Return 'true' if 'zyppPatch' is non-null and a needed patch, i.e. a
+     * relevant patch that is not installed or satisfied yet.
+     *
+     * A patch is relevant if the packages that it consists of are installed,
+     * but in older versions than the ones that the patch brings.
+     **/
+    static bool isNeeded( ZyppSel selectable, ZyppPatch zyppPatch );
 
     /**
      * Create the context menu for items that are not installed.

@@ -276,27 +276,27 @@ void YQPkgSelector::createSearchFilterView()
 }
 
 
+void YQPkgSelector::createPatchFilterView( bool force )
+{
+    if ( YQPkgPatchList::haveAnyPatches() || force )
+    {
+        if ( ! _patchFilterView )
+        {
+            _patchFilterView = new YQPkgPatchFilterView( this );
+            CHECK_NEW( _patchFilterView );
+
+            _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
+        }
+    }
+}
+
+
 void YQPkgSelector::createUpdatesFilterView()
 {
     _updatesFilterView = new YQPkgUpdatesFilterView( this );
     CHECK_NEW( _updatesFilterView );
 
     _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates" );
-}
-
-
-void YQPkgSelector::createPatchFilterView( bool force )
-{
-    if ( zyppPool().empty<zypp::Patch>() && ! force )
-        return;
-
-    if ( ! _patchFilterView )
-    {
-        _patchFilterView = new YQPkgPatchFilterView( this );
-        CHECK_NEW( _patchFilterView );
-
-        _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
-    }
 }
 
 
