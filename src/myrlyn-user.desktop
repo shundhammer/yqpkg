@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Myrlyn (read-only as a nonprivileged user)
+Name=Myrlyn (read-only)
 Exec=/usr/bin/myrlyn
 Icon=Myrlyn.png
-GenericName=Myrlyn Graphical Software Package Manager (read-only as a nonprivileged user)
+GenericName=Myrlyn Graphical Software Package Manager (read-only)
 Terminal=false
 MimeType=
 Categories=System;Settings
