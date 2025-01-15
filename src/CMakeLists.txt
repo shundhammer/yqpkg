@@ -30,6 +30,7 @@ set( SOURCES
   MyrlynWorkflowSteps.cc
   MyrlynRepoManager.cc
   BusyPopup.cc
+  LicenseCache.cc
   Logger.cc
   Exception.cc
   FSize.cc

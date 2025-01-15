@@ -26,7 +26,9 @@
 #include <zypp/ZYppFactory.h>
 
 #include "Exception.h"
+#include "LicenseCache.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "YQIconPool.h"
 #include "YQPkgTextDialog.h"
@@ -1225,15 +1227,22 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
     if ( licenseText.empty() )
         return true;
 
+    if ( LicenseCache::confirmed()->contains( licenseText ) )
+    {
+        logInfo() << "License verbatim confirmed before: " << sel->name() << endl;
+        return true;
+    }
+
     logDebug() << "Showing license agreement for " << sel->name() << endl;
 
-    bool confirmed = YQPkgTextDialog::confirmText( 0, // parent
+    bool confirmed = YQPkgTextDialog::confirmText( MainWindow::instance(), // parent
                                                    sel, licenseText );
 
     if ( confirmed )
     {
         logInfo() << "User confirmed license agreement for " << sel->name() << endl;
         sel->setLicenceConfirmed( true );
+        LicenseCache::confirmed()->add( licenseText );
     }
     else
     {

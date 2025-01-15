@@ -23,6 +23,7 @@
 #include <QKeyEvent>
 
 #include "Exception.h"
+#include "LicenseCache.h"
 #include "Logger.h"
 #include "PkgTasks.h"
 #include "QY2CursorHelper.h"
@@ -351,17 +352,19 @@ bool YQPkgSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
                     if ( ! licenseText.empty() )
                     {
-                        logInfo() << "Resolvable " << sel->name() << " has a license agreement" << endl;
-
-                        if( ! sel->hasLicenceConfirmed() )
-                        {
-                            logDebug() << "Showing license agreement for resolvable " << sel->name() << endl;
-                            allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
-                        }
-                        else
+                        if (  sel->hasLicenceConfirmed() )
                         {
                             logInfo() << "Resolvable " << sel->name()
                                       << "'s  license is already confirmed" << endl;
+                        }
+                        else if ( LicenseCache::confirmed()->contains( licenseText ) )
+                        {
+                            logInfo() << "License verbatim confirmed before: " << sel->name() << endl;
+                        }
+                        else
+                        {
+                            logDebug() << "Showing license agreement for resolvable " << sel->name() << endl;
+                            allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
                         }
                     }
                 }

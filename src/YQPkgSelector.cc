@@ -42,6 +42,7 @@
 #include <QVBoxLayout>
 
 #include "Exception.h"
+#include "LicenseCache.h"
 #include "Logger.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
@@ -1165,6 +1166,7 @@ YQPkgSelector::reset()
     logDebug() << "Reset" << endl;
 
     resetResolver();
+    LicenseCache::confirmed()->clear();
 
     if ( _patchFilterView )
         _patchFilterView->reset();

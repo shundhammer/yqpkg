@@ -25,6 +25,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -38,7 +39,7 @@ using std::string;
 
 
 YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     buildDialog( text, parent, _( "&OK" ) );
 }
@@ -48,7 +49,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text,
                                   QWidget *       parent,
                                   const QString & acceptButtonLabel,
                                   const QString & rejectButtonLabel )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     buildDialog( text,
                  parent,
@@ -142,7 +143,7 @@ void YQPkgTextDialog::buildDialog( const QString & text,
 QSize
 YQPkgTextDialog::sizeHint() const
 {
-    return limitToScreenSize( this, 500, 450 );
+    return limitToScreenSize( this, 550, 600 );
 }
 
 
