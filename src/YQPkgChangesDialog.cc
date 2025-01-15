@@ -26,6 +26,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "QY2LayoutUtils.h"
@@ -39,7 +40,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *       parent,
                                         const QString & message,
                                         const QString & acceptButtonLabel,
                                         const QString & rejectButtonLabel )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
     , _filter(0)
 {
     // Dialog title

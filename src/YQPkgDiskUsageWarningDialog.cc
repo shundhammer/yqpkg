@@ -21,6 +21,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "QY2LayoutUtils.h"
@@ -39,7 +40,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *       parent
                                                           int             thresholdPercent,
                                                           const QString & acceptButtonLabel,
                                                           const QString & rejectButtonLabel )
-: QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     setWindowTitle( _( "Disk Space Warning" ) );
 

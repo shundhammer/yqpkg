@@ -28,7 +28,6 @@
 #include "Exception.h"
 #include "LicenseCache.h"
 #include "Logger.h"
-#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "YQIconPool.h"
 #include "YQPkgTextDialog.h"
@@ -1235,7 +1234,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 
     logDebug() << "Showing license agreement for " << sel->name() << endl;
 
-    bool confirmed = YQPkgTextDialog::confirmText( MainWindow::instance(), // parent
+    bool confirmed = YQPkgTextDialog::confirmText( 0, // parent
                                                    sel, licenseText );
 
     if ( confirmed )

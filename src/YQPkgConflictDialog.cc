@@ -50,7 +50,7 @@ YQPkgConflictDialog * YQPkgConflictDialog::_instance = 0;
 
 
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     if ( ! _instance )
         _instance = this;

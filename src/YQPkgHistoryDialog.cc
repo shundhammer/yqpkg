@@ -32,6 +32,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "YQIconPool.h"
@@ -50,7 +51,7 @@
 
 
 YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     // Dialog title
     setWindowTitle( _( "Package History" ) );

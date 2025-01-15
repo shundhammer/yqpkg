@@ -26,6 +26,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "QY2LayoutUtils.h"
 #include "YQPkgList.h"
@@ -41,7 +42,7 @@
 
 YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget *       parent,
                                                 const QString & pkgName )
-    : QDialog( parent )
+    : QDialog( parent ? parent : MainWindow::instance() )
 {
     // Dialog title
     setWindowTitle( _( "Package Description" ) );
