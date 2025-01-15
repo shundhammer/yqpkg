@@ -204,13 +204,13 @@ struct PkgDownloadCallback:
     public zypp::callback::ReceiveReport<zypp::repo::DownloadResolvableReport>
 {
 
-    virtual void start( ZyppRes zyppRes, const Url & /*url*/ )
+    virtual void start( ZyppRes zyppRes, const Url & /*url*/ ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgDownloadStart( zyppRes );
         }
 
 
-    virtual bool progress( int value, ZyppRes zyppRes)
+    virtual bool progress( int value, ZyppRes zyppRes) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgDownloadProgress( zyppRes, value );
 
@@ -220,18 +220,16 @@ struct PkgDownloadCallback:
 
     virtual void finish( ZyppRes zyppRes,
                          PkgDownloadError    error,
-                         const std::string & reason )
+                         const std::string & reason )  override
         {
             PkgCommitSignalForwarder::instance()->sendPkgDownloadEnd( zyppRes );
         }
 
 
     virtual PkgDownloadAction problem( ZyppRes zyppRes,
-                                       PkgDownloadError  error,
-                                       const std::string description )
+                                       PkgDownloadError    error,
+                                       const std::string & description ) override
         {
-            std::cerr << "ERROR downloading package " << zyppRes->name() << ": " << description << std::endl;
-            
             PkgCommitSignalForwarder::instance()->setReply( AbortReply );
             PkgCommitSignalForwarder::instance()->sendPkgDownloadError( zyppRes, fromUTF8( description ) );
 
@@ -249,7 +247,7 @@ struct PkgDownloadCallback:
      * This will be the only trigger for an already cached package.
      **/
     virtual void infoInCache( ZyppRes zyppRes,
-                              const Pathname & /*localfile*/ )
+                              const Pathname & /*localfile*/ )  override
         {
             PkgCommitSignalForwarder::instance()->sendPkgCachedNotify( zyppRes );
         }
@@ -258,34 +256,34 @@ struct PkgDownloadCallback:
 #if 0
     // FIXME: TO DO later (much later...)
 
-    virtual void pkgGpgCheck( const UserData & userData_r = UserData() )
+    virtual void pkgGpgCheck( const UserData & userData_r = UserData() )  override
         {}
 
     virtual void startDeltaDownload( const Pathname  & /*filename*/,
-                                     const ByteCount & /*downloadSize*/ )
+                                     const ByteCount & /*downloadSize*/ )  override
         {}
 
-    virtual bool progressDeltaDownload( int /*value*/ )
+    virtual bool progressDeltaDownload( int /*value*/ )  override
         {
             return ! PkgCommitSignalForwarder::instance()->doAbort();
         }
 
-    virtual void problemDeltaDownload( const std::string & /*description*/ )
+    virtual void problemDeltaDownload( const std::string & /*description*/ )  override
         {}
 
-    virtual void finishDeltaDownload()
+    virtual void finishDeltaDownload()  override
         {}
 
-    virtual void startDeltaApply( const Pathname & /*filename*/ )
+    virtual void startDeltaApply( const Pathname & /*filename*/ ) override
         {}
 
-    virtual void progressDeltaApply( int /*value*/ )
+    virtual void progressDeltaApply( int /*value*/ ) override
         {}
 
-    virtual void problemDeltaApply( const std::string & /*description*/ )
+    virtual void problemDeltaApply( const std::string & /*description*/ ) override
         {}
 
-    virtual void finishDeltaApply()
+    virtual void finishDeltaApply() override
         {}
 #endif
 
@@ -300,13 +298,13 @@ typedef zypp::target::rpm::InstallResolvableReport::Error   PkgInstallError;
 struct PkgInstallCallback:
     public zypp::callback::ReceiveReport<zypp::target::rpm::InstallResolvableReport>
 {
-    virtual void start( ZyppRes zyppRes )
+    virtual void start( ZyppRes zyppRes ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgInstallStart( zyppRes );
         }
 
 
-    virtual bool progress( int value, ZyppRes zyppRes )
+    virtual bool progress( int value, ZyppRes zyppRes ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgInstallProgress( zyppRes, value );
 
@@ -317,7 +315,7 @@ struct PkgInstallCallback:
     virtual void finish( ZyppRes zyppRes,
                          PkgInstallError error,
                          const std::string & /*reason*/,
-                         RpmLevel /*level*/ )
+                         RpmLevel /*level*/ ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgInstallEnd( zyppRes );
         }
@@ -326,7 +324,7 @@ struct PkgInstallCallback:
     virtual PkgInstallAction problem( ZyppRes zyppRes,
                                       PkgInstallError error,
                                       const std::string & description,
-                                      RpmLevel /*level*/ )
+                                      RpmLevel /*level*/ )  override
         {
             PkgCommitSignalForwarder::instance()->setReply( AbortReply );
             PkgCommitSignalForwarder::instance()->sendPkgInstallError( zyppRes, fromUTF8( description ) );
@@ -350,13 +348,13 @@ typedef zypp::target::rpm::RemoveResolvableReport::Error   PkgRemoveError;
 struct PkgRemoveCallback:
     public zypp::callback::ReceiveReport<zypp::target::rpm::RemoveResolvableReport>
 {
-    virtual void start( ZyppRes zyppRes )
+    virtual void start( ZyppRes zyppRes ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgRemoveStart( zyppRes );
         }
 
 
-    virtual bool progress( int value, ZyppRes zyppRes )
+    virtual bool progress( int value, ZyppRes zyppRes ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgRemoveProgress( zyppRes, value );
 
@@ -366,7 +364,7 @@ struct PkgRemoveCallback:
 
     virtual void finish( ZyppRes zyppRes,
                          PkgRemoveError error,
-                         const std::string & /*reason*/ )
+                         const std::string & /*reason*/ ) override
         {
             PkgCommitSignalForwarder::instance()->sendPkgRemoveEnd( zyppRes );
         }
@@ -374,7 +372,7 @@ struct PkgRemoveCallback:
 
     virtual PkgRemoveAction problem( ZyppRes zyppRes,
                                      PkgRemoveError error,
-                                     const std::string & description )
+                                     const std::string & description ) override
         {
             PkgCommitSignalForwarder::instance()->setReply( AbortReply );
             PkgCommitSignalForwarder::instance()->sendPkgRemoveError( zyppRes, fromUTF8( description ) );
@@ -402,7 +400,7 @@ struct FileConflictsCheckCallback:
      *
      * Return 'true' to continue, 'false' to abort.
      **/
-    virtual bool start( const zypp::ProgressData & progress )
+    virtual bool start( const zypp::ProgressData & progress ) override
         {
             PkgCommitSignalForwarder::instance()->sendFileConflictsCheckStart();
 
@@ -419,7 +417,7 @@ struct FileConflictsCheckCallback:
      * Return 'true' to continue, 'false' to abort.
      **/
     virtual bool progress( const zypp::ProgressData & progress,
-                           const zypp::sat::Queue &   skippedSolvables )
+                           const zypp::sat::Queue &   skippedSolvables ) override
         {
             Q_UNUSED( skippedSolvables );
 
@@ -448,7 +446,7 @@ struct FileConflictsCheckCallback:
      **/
     virtual bool result( const zypp::ProgressData &       progress,
                          const zypp::sat::Queue &         skippedSolvables,
-                         const zypp::sat::FileConflicts & conflicts )
+                         const zypp::sat::FileConflicts & conflicts ) override
         {
             Q_UNUSED( skippedSolvables );
 
