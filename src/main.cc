@@ -125,7 +125,7 @@ void logVersion()
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( "/tmp/myrlin-$USER", "myrlyn.log" );
+    Logger logger( "/tmp/myrlyn-$USER", "myrlyn.log" );
     logVersion();
 
     // Set org/app name for QSettings

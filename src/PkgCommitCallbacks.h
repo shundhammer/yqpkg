@@ -19,6 +19,7 @@
 #define PkgCommitCallbacks_h
 
 
+#include <iostream>  // cerr
 #include <QObject>
 #include <QStringList>
 
@@ -229,6 +230,8 @@ struct PkgDownloadCallback:
                                        PkgDownloadError  error,
                                        const std::string description )
         {
+            std::cerr << "ERROR downloading package " << zyppRes->name() << ": " << description << std::endl;
+            
             PkgCommitSignalForwarder::instance()->setReply( AbortReply );
             PkgCommitSignalForwarder::instance()->sendPkgDownloadError( zyppRes, fromUTF8( description ) );
 
