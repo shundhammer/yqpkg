@@ -654,7 +654,7 @@ void PkgCommitPage::pkgCachedNotify( ZyppRes zyppRes )
 void PkgCommitPage::pkgDownloadError( ZyppRes zyppRes, const QString & errorMsg )
 {
     pkgActionError( zyppRes, errorMsg,
-                    _( "Error while downloading package %1:" ),
+                    _( "Error downloading package %1" ),
                     __FUNCTION__ );
 }
 
@@ -702,7 +702,7 @@ void PkgCommitPage::pkgInstallEnd( ZyppRes zyppRes )
 void PkgCommitPage::pkgInstallError( ZyppRes zyppRes, const QString & errorMsg )
 {
     pkgActionError( zyppRes, errorMsg,
-                    _( "Error installing package %1:" ),
+                    _( "Error installing package %1" ),
                     __FUNCTION__ );
 }
 
@@ -731,7 +731,7 @@ void PkgCommitPage::pkgRemoveEnd( ZyppRes zyppRes )
 void PkgCommitPage::pkgRemoveError( ZyppRes zyppRes, const QString & errorMsg )
 {
     pkgActionError( zyppRes, errorMsg,
-                    _( "Error installing package %1:" ),
+                    _( "Error installing package %1" ),
                     __FUNCTION__ );
 }
 
@@ -906,30 +906,30 @@ void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
 
 
 void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
-                                    const QString & errorMsg,
+                                    const QString & zyppErrorMsg,
                                     const QString & msgHeader,
                                     const char *    caller     )
 {
     CHECK_PTR( zyppRes );
 
-    logError() << caller << "(): " << zyppRes << ": " << errorMsg << endl;
+    logError() << caller << "(): " << zyppRes << ": " << zyppErrorMsg << endl;
 
     QString msg;
 
     if ( msgHeader.contains( "%1" ) )
-    {
         msg = msgHeader.arg( fromUTF8( zyppRes->name() ) );
-        msg += "\n\n";
-    }
 
-    msg += errorMsg;
+    msg = QString( "<b>%1</b>\n\n" ).arg( msg );
 
-    int result = QMessageBox::warning( this, // parent widget
-                                       "",   // Window title
-                                       msg,
-                                       _( "&Abort" ), _( "&Retry" ), _( "&Ignore" ),
-                                       0,   // defaultButtonNumber (from 0)
-                                       1 ); // escapeButtonNumber
+    QMessageBox msgBox( this );
+    msgBox.setText( msg );
+    msgBox.setDetailedText( zyppErrorMsg );
+    msgBox.setIcon( QMessageBox::Warning );
+    msgBox.addButton( _( "&Abort"  ), QMessageBox::ActionRole );
+    msgBox.addButton( _( "&Retry"  ), QMessageBox::ActionRole );
+    msgBox.addButton( _( "&Ignore" ), QMessageBox::ActionRole );
+
+    int buttonNo = msgBox.exec();
 
     // Using the PkgCommitSignalForwarder::setReply() kludge since we can't
     // simply return a value from a Qt slot. But this only works with direct Qt
@@ -941,7 +941,29 @@ void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
     // user clicks on an answer button, and to set the reply before we return
     // here. None of this would work with multiple Qt threads.
 
-    PkgCommitSignalForwarder::instance()->setReply( (ErrorReply) result );
+    PkgCommitSignalForwarder::instance()->setReply( (ErrorReply) buttonNo);
+
+
+    if ( buttonNo != 1 ) // Retry
+    {
+        PkgTask * task = pkgTasks()->downloads().find( zyppRes );
+
+        if ( task )
+            PkgTasks::moveTask( task, pkgTasks()->downloads(), pkgTasks()->failed() );
+        else
+        {
+            task = pkgTasks()->doing().find( zyppRes );
+
+            if ( task )
+                PkgTasks::moveTask( task, pkgTasks()->doing(), pkgTasks()->failed() );
+        }
+
+        if ( ! task )
+        {
+            logError() << caller << "(): "
+                       << "Can't find task for " << zyppRes << endl;
+        }
+    }
 }
 
 
