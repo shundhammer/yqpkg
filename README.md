@@ -144,8 +144,9 @@ It is now well usable and fairly feature complete.
 
 ## Limitations
 
-- No GPG key import from repos yet for repos that were just added and never
-  refreshed yet.
+- ~~No GPG key import from repos yet for repos that were just added and never
+  refreshed yet.~~  _This is now implemented_. See 
+  [issue #6](https://github.com/shundhammer/myrlyn/issues/6) for details.
 
 - No repo operations like adding, removing, setting priority, enabling,
   disabling.  You get the repo view, though, where you can view and select
