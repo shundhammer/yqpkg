@@ -21,6 +21,9 @@
 #include <iostream>        // cerr
 #include <zypp/KeyRing.h>
 
+#include "RepoGpgKeyImportDialog.h"
+
+
 //
 // Classes for handling GPG keys in the libzypp key ring
 //
@@ -37,8 +40,19 @@ struct KeyRingReceiveCallback:
     virtual ZyppKeyTrust askUserToAcceptKey( const zypp::PublicKey  & key,
                                              const zypp::KeyContext & context ) override
         {
-            std::cerr << "Untrusted key " << key << std::endl;
-            return ZyppKeyTrust::KEY_DONT_TRUST;
+#if 0
+            std::cerr << "** Untrusted key **"
+                      << "\nFingerprint: "  << zypp::str::gapify( key.fingerprint(), 4 )
+                      << "\nRepo: " << context.repoInfo().name()
+                      << "\nURL:  " << context.repoInfo().url()
+                      << std::endl;
+#endif
+            RepoGpgKeyImportDialog dialog( key, context.repoInfo() );
+            int result = dialog.exec();
+
+            return result == QDialog::Accepted ?
+                ZyppKeyTrust::KEY_TRUST_AND_IMPORT :
+                ZyppKeyTrust::KEY_DONT_TRUST;
         }
 
 

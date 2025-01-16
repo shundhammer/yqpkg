@@ -42,6 +42,7 @@ set( SOURCES
   PkgTasks.cc
   PkgTaskListWidget.cc
   ProgressDialog.cc
+  RepoGpgKeyImportDialog.cc
   SearchFilter.cc
   SummaryPage.cc
   WindowSettings.cc
@@ -117,6 +118,7 @@ set( UI_FILES
      init-repos-page.ui
      pkg-commit-page.ui
      progress-dialog.ui
+     repo-gpg-key-import-dialog.ui
      search-filter-view.ui
      search-filter-view.ui
      summary-page.ui

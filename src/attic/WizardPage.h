@@ -23,7 +23,7 @@
 
 // Generated with 'uic' from a Qt designer .ui form: wizard-page.ui
 //
-// Check out ../build/src/yqpkg_autogen/include/ui_wizard-page.h
+// Check out ../build/src/myrlyn_autogen/include/ui_wizard-page.h
 // for the variable names of the widgets.
 
 #include "ui_wizard-page.h"
@@ -80,7 +80,7 @@ signals:
 
 protected:
 
-    Ui::WizardPage * _ui;       // See ui_wizard_page.h
+    Ui::WizardPage * _ui;       // See ui_wizard-page.h
 };
 
 
