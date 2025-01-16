@@ -746,6 +746,12 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
     CHECK_PTR( zyppRes );
     PkgTask * task = 0;
 
+    // If we are already starting installing or removing packages,
+    // the time for checking file conflicts is definitely over;
+    // close the dialog. It doesn't hurt if it's already closed.
+
+    fileConflictsProgressDialog()->hide();
+
     if ( action & PkgAdd ) // PkgInstall | PkgUpdate
     {
         task = pkgTasks()->downloads().find( zyppRes );
