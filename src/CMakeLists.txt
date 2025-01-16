@@ -35,6 +35,7 @@ set( SOURCES
   Exception.cc
   FSize.cc
   InitReposPage.cc
+  KeyRingCallbacks.cc
   MainWindow.cc
   PkgCommitCallbacks.cc
   PkgCommitPage.cc

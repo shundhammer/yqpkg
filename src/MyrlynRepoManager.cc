@@ -23,6 +23,7 @@
 #include <zypp/ZYppFactory.h>
 
 #include "Exception.h"
+#include "KeyRingCallbacks.h"
 #include "Logger.h"
 #include "MainWindow.h"
 #include "MyrlynApp.h"
@@ -207,7 +208,8 @@ void MyrlynRepoManager::refreshRepos()
     if ( MyrlynApp::isOptionSet( OptNoRepoRefresh ) )
         return;
 
-    QElapsedTimer timer;
+    KeyRingCallbacks keyRingCallbacks;
+    QElapsedTimer    timer;
 
     for ( const zypp::RepoInfo & repo: _repos )
     {
