@@ -15,10 +15,13 @@
  */
 
 
+#include <QMessageBox>
+
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
 #include "utf8.h"
+#include "YQi18n.h"
 #include "RepoGpgKeyImportDialog.h"
 
 
@@ -27,6 +30,7 @@ RepoGpgKeyImportDialog::RepoGpgKeyImportDialog( const zypp::PublicKey & key,
                                                 QWidget *               parent   )
     : QDialog( parent ? parent : MainWindow::instance() )
     , _ui( new Ui::RepoGpgKeyImportDialog ) // Use the Qt designer .ui form (XML)
+    , _repoInfo( repoInfo )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -76,9 +80,11 @@ void RepoGpgKeyImportDialog::accept()
     QDialog::accept();
 }
 
+
 void RepoGpgKeyImportDialog::reject()
 {
     logResult( "Rejecting" );
+    disableRepo();
 
     qApp->restoreOverrideCursor();
     QDialog::reject();
@@ -97,4 +103,18 @@ void RepoGpgKeyImportDialog::logResult( const QString & result )
 void RepoGpgKeyImportDialog::setText( QLabel * label, const std::string & text )
 {
     label->setText( fromUTF8( text ) );
+}
+
+
+void RepoGpgKeyImportDialog::disableRepo()
+{
+    QString msg = _( "Repository \"%1\" will be temporarily disabled." ).arg( fromUTF8( _repoInfo.name()  ) );
+
+    QMessageBox msgBox( this );
+    msgBox.setText( msg );
+    msgBox.setIcon( QMessageBox::Warning );
+    msgBox.addButton( QMessageBox::Ok );
+    msgBox.exec();
+
+    _repoInfo.setEnabled( false );
 }

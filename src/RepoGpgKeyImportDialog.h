@@ -67,8 +67,16 @@ protected:
      **/
     void setText( QLabel * label, const std::string & text );
 
+    /**
+     * Disable the repo and tellt he user about it.
+     **/
+    void disableRepo();
+
+
+    // Data members
 
     Ui::RepoGpgKeyImportDialog * _ui; // See ui_repo-gpg-key-import-dialog.ui
+    zypp::RepoInfo               _repoInfo;
 };
 
 #endif // RepoGpgKeyImportDialog_h

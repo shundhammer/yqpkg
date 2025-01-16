@@ -211,7 +211,7 @@ void MyrlynRepoManager::refreshRepos()
     KeyRingCallbacks keyRingCallbacks;
     QElapsedTimer    timer;
 
-    for ( const zypp::RepoInfo & repo: _repos )
+    for ( zypp::RepoInfo & repo: _repos )
     {
         try
         {
@@ -231,10 +231,13 @@ void MyrlynRepoManager::refreshRepos()
 
             emit refreshRepoDone( repo );
         }
-        catch ( const zypp::repo::RepoMetadataException & exception )
+        catch ( const zypp::repo::RepoException & exception )
         {
             Q_UNUSED( exception );
             logWarning() << "CAUGHT zypp exception for repo " << repo.name() << endl;
+
+            logInfo() << "Disabling repo " << repo.name() << endl;
+            repo.setEnabled( false );
         }
     }
 }
@@ -244,9 +247,15 @@ void MyrlynRepoManager::loadRepos()
 {
     for ( const zypp::RepoInfo & repo: _repos )
     {
-        logDebug() << "Loading resolvables from " << repo.name() << endl;
-
-	repoManager()->loadFromCache( repo );
+        if ( repo.enabled() )
+        {
+            logDebug() << "Loading resolvables from " << repo.name() << endl;
+            repoManager()->loadFromCache( repo );
+        }
+        else
+        {
+            logInfo() << "Skipping disabled repo " << repo.name() << endl;
+        }
     }
 }
 
