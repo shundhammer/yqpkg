@@ -16,11 +16,9 @@
 
 
 #include <unistd.h>	// getpid()
-#include <iostream>     // std::cerr
 #include <QString>
 
 #include "Logger.h"
-#include "Exception.h"
 #include "utf8.h"
 #include "ZyppLogger.h"
 

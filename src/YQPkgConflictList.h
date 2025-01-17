@@ -23,16 +23,11 @@
 #include <QFile>
 #include <QScrollArea>
 
-#include <zypp/Resolver.h>
-#include <zypp/ResolverProblem.h>
-#include <zypp/ProblemSolution.h>
+#include <zypp/ProblemTypes.h>
 
 class QVBoxLayout;
 class QRadioButton;
-class QAction;
 class YQPkgConflict;
-class YQPkgConflictResolution;
-class YQPkgConflictDialog;
 
 typedef zypp::ResolverProblem_Ptr  ZyppProblem;
 typedef zypp::ResolverProblemList  ZyppProblemList;

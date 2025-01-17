@@ -23,10 +23,7 @@
 #include <QWidget>
 
 #include <zypp/ZYppCommitPolicy.h>
-#include <zypp/ByteCount.h>
 
-#include "utf8.h"
-#include "Logger.h"
 #include "YQZypp.h"     // ZyppRes
 
 
@@ -38,7 +35,6 @@
 #include "ui_pkg-commit-page.h"
 
 
-class PkgTasks;
 class ProgressDialog;
 using zypp::ByteCount;
 

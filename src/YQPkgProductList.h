@@ -19,7 +19,9 @@
 #define YQPkgProductList_h
 
 #include <string>
+
 #include "YQPkgObjList.h"
+#include "YQZypp.h"
 
 using std::string;
 

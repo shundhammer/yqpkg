@@ -20,13 +20,13 @@
 
 #include <QObject>
 #include <QFlags>
-#include <zypp/ZYpp.h>
+#include <zypp/RepoInfo.h>
 
 
 class MainWindow;
 class PkgCommitPage;
 class PkgTasks;
-class QEvent;
+class QWidget;
 class SummaryPage;
 class Workflow;
 class YQPkgSelector;

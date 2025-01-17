@@ -20,8 +20,6 @@
 #include <QWidget>
 
 #include "QY2LayoutUtils.h"
-#include "Logger.h"
-#include "Exception.h"
 
 
 

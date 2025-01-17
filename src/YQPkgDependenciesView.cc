@@ -14,11 +14,15 @@
     Textdomain "qt-pkg"
  */
 
+#include <zypp/Capability.h>
+#include <zypp/Dep.h>
+#include <zypp/Edition.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ResObject.h>
+#include <zypp/ResTraits.h>
+#include <zypp/ui/Selectable.h>
 
-
-#include "Logger.h"
 #include "YQi18n.h"
-#include "utf8.h"
 #include "YQPkgDependenciesView.h"
 
 

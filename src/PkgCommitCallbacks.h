@@ -19,22 +19,20 @@
 #define PkgCommitCallbacks_h
 
 
-#include <iostream>  // cerr
 #include <QObject>
 #include <QStringList>
 
-#include <zypp/Resolvable.h>
-#include <zypp/Url.h>
+#include <zypp/Callback.h>
+#include <zypp/ResTraits.h>
 #include <zypp/ZYppCallbacks.h>
 #include <zypp/sat/FileConflicts.h>
+#include <zypp-core/ui/progressdata.h>
 
 #include "utf8.h"
 #include "YQZypp.h"     // ZyppRes
 
 #define TEST_FILE_CONFLICTS     0
 
-
-class PkgCommitSignalForwarder;
 
 using zypp::Pathname;
 using zypp::Url;

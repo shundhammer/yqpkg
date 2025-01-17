@@ -19,7 +19,6 @@
 #define YQPkgRepoList_h
 
 #include <zypp/Repository.h>
-#include <zypp/Product.h>
 
 #include "YQZypp.h"
 #include "QY2ListView.h"

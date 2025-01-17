@@ -23,6 +23,9 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
+#include <zypp/ResTraits.h>
+#include <zypp/ui/Selectable.h>
+
 #include "YQZypp.h"
 
 
@@ -30,7 +33,6 @@ class QTabWidget;
 class QVBoxLayout;
 class QButtonGroup;
 class YQPkgMultiVersion;
-class YQPkgVersion;
 
 
 /**

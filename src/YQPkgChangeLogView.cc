@@ -14,12 +14,13 @@
     Textdomain "qt-pkg"
  */
 
+#include <zypp/Package.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ui/Selectable.h>
 
-#include "Logger.h"
 #include "YQPkgChangeLogView.h"
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YQPkgDescriptionDialog.h"
 
 
 static const int MAX_ENTRIES = 512;

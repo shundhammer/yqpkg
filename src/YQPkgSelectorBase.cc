@@ -22,19 +22,16 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
-#include "Exception.h"
 #include "LicenseCache.h"
 #include "Logger.h"
 #include "PkgTasks.h"
 #include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
 #include "MyrlynApp.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgObjList.h"
-#include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 
 #include "YQPkgSelectorBase.h"

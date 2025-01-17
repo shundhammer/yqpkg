@@ -313,12 +313,6 @@ private:
 };
 
 
-class QSizeF;
-class QRectF;
-class QPointF;
-class QSize;
-
-
 QTextStream & operator<<( QTextStream & str, bool val );
 QTextStream & operator<<( QTextStream & str, const QStringList & stringList );
 QTextStream & operator<<( QTextStream & str, const std::string & text );

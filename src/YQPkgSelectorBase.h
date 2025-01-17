@@ -23,14 +23,12 @@
 #include "YQZypp.h"
 
 
-class QY2ComboTabWidget;
+class QObject;
+class QWidget;
 class QAction;
-class QCloseEvent;
-class QKeyEvent;
 
 class YQPkgConflictDialog;
 class YQPkgDiskUsageList;
-class YQPkgSelWmCloseHandler;
 
 
 /**

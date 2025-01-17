@@ -23,13 +23,16 @@
 #include <QMenu>
 #include <QEvent>
 
-#include <map>
 #include <list>
+#include <string>
+
+#include <zypp/ResTraits.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/ui/Status.h>
 
 #include "FSize.h"
 #include "QY2ListView.h"
 #include "YQZypp.h"
-#include <zypp/Edition.h>
 
 
 class YQPkgObjListItem;

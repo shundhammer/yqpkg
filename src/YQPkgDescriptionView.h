@@ -20,6 +20,8 @@
 
 
 #include <QUrl>
+
+#include "YQZypp.h"
 #include "YQPkgGenericDetailsView.h"
 
 using std::list;

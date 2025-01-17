@@ -36,9 +36,6 @@ typedef enum
 } YQPkgClass;
 
 
-class YQPkgClassItem;
-
-
 /**
  * Filter view for package classes (categories) like suggested, recommended,
  * orphaned etc. packages. See enum YPkgClass.

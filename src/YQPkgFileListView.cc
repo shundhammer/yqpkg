@@ -15,11 +15,9 @@
  */
 
 
-#include "Logger.h"
 #include "YQPkgFileListView.h"
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YQPkgDescriptionDialog.h"
 
 
 #define MAX_LINES 500

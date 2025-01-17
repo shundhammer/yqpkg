@@ -25,7 +25,6 @@
 
 #include <zypp/ZYppFactory.h>
 
-#include "Exception.h"
 #include "LicenseCache.h"
 #include "Logger.h"
 #include "QY2CursorHelper.h"

@@ -24,18 +24,11 @@
 #include "YQPkgSelectorBase.h"
 #include "YQPkgObjList.h"
 
-class QCheckBox;
-class QComboBox;
 class QLabel;
-class QListWidget;
-class QProgressBar;
 class QPushButton;
-class QSplitter;
 class QTabWidget;
 class QMenu;
 class QMenuBar;
-
-class QY2ComboTabWidget;
 
 class YQPkgChangeLogView;
 class YQPkgDependenciesView;
@@ -49,7 +42,6 @@ class YQPkgPatchFilterView;
 class YQPkgPatternList;
 class YQPkgRepoFilterView;
 class YQPkgSearchFilterView;
-class YQPkgSelList;
 class YQPkgServiceFilterView;
 class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;

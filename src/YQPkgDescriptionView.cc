@@ -21,10 +21,13 @@
 #include <QRegularExpression>
 #include <QSettings>
 
-#include <zypp/VendorSupportOptions.h>
+#include <zypp/Package.h>
+#include <zypp/Patch.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ResObject.h>
+#include <zypp/ui/Selectable.h>
 
 #include "Logger.h"
-#include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "YQi18n.h"
 #include "utf8.h"

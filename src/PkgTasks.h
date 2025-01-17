@@ -24,7 +24,7 @@
 #include <QTextStream>
 #include <QMutex>
 
-#include <zypp/ByteCount.h>
+#include <zypp-core/ByteCount.h>
 #include "YQZypp.h"     // ZyppRes
 
 

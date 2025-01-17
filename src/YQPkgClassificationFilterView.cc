@@ -17,10 +17,18 @@
 
 #include <QApplication>
 
+#include <zypp/Package.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ResStatus.h>
+#include <zypp/ResTraits.h>
+#include <zypp/Resolver.h>
+#include <zypp/ZYpp.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/sat/Pool.h>
+#include <zypp/ui/Selectable.h>
+
 #include "Logger.h"
-#include "YQPkgSelector.h"
 #include "YQi18n.h"
-#include "utf8.h"
 #include "YQPkgClassificationFilterView.h"
 
 #ifndef VERBOSE_FILTER_VIEWS

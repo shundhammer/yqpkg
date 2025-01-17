@@ -17,18 +17,19 @@
 
 #include <QHeaderView>
 
-#include <zypp/ZYppFactory.h>
-#include <zypp/Resolver.h>
+#include <zypp-core/Pathname.h>
+#include <zypp-core/base/String.h>
+#include <zypp/Package.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ResTraits.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/ui/Status.h>
 
-#include "Exception.h"
 #include "Logger.h"
-#include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "YQIconPool.h"
-#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
-
 #include "YQPkgPatternList.h"
 
 #ifndef VERBOSE_FILTER_VIEWS

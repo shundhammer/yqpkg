@@ -14,10 +14,7 @@
     Textdomain "qt-pkg"
  */
 
-
-#include "YQi18n.h"
-#include "utf8.h"
-
+#include <zypp/ZYpp.h>
 #include <zypp/ZYppFactory.h>
 #include <boost/multiprecision/cpp_int.hpp> // arbitrary precision integer
 
@@ -26,11 +23,13 @@
 #include <QEvent>
 #include <QtGlobal>
 
+#include "FSize.h"
+#include "utf8.h"
+#include "YQi18n.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 
 #include "Logger.h"
-#include "Exception.h"
 
 
 using std::set;

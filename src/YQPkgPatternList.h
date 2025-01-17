@@ -18,8 +18,13 @@
 #ifndef YQPkgPatternList_h
 #define YQPkgPatternList_h
 
-#include "YQPkgObjList.h"
 #include <QMap>
+
+#include <zypp/Pattern.h>
+
+#include "QY2ListView.h"
+#include "YQPkgObjList.h"
+#include "YQZypp.h"
 
 
 class YQPkgPatternListItem;

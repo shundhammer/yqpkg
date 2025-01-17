@@ -20,7 +20,6 @@
 
 #include <QString>
 
-class QSettings;
 class QWidget;
 
 

@@ -21,9 +21,15 @@
 
 #include <QMenu>
 #include <QResizeEvent>
-#include "YQPkgObjList.h"
 
-class YQPkgListItem;
+#include <zypp/Package.h>
+
+#include "YQPkgObjList.h"
+#include "YQZypp.h"
+
+
+class QObject;
+class QWidget;
 
 
 /**

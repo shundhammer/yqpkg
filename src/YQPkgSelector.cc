@@ -15,13 +15,18 @@
  */
 
 
-#include <fstream>
 #include <algorithm>
-#include <boost/bind/bind.hpp>
 
-#include <zypp/SysContent.h>
-#include <zypp/base/String.h>
-#include <zypp/base/Sysconfig.h>
+#include <zypp-core/parser/sysconfig.h>
+#include <zypp/PoolItem.h>
+#include <zypp/Repository.h>
+#include <zypp/ResPool.h>
+#include <zypp/Resolver.h>
+#include <zypp/ZYpp.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/ui/Status.h>
+
 
 #include <QAction>
 #include <QApplication>
@@ -45,18 +50,14 @@
 #include "LicenseCache.h"
 #include "Logger.h"
 #include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
-#include "WindowSettings.h"
 #include "MyrlynApp.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgClassificationFilterView.h"
 #include "YQPkgConflictDialog.h"
-#include "YQPkgConflictList.h"
 #include "YQPkgDependenciesView.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
-#include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
 #include "YQPkgFilterTab.h"
 #include "YQPkgHistoryDialog.h"
@@ -67,12 +68,10 @@
 #include "YQPkgPatternList.h"
 #include "YQPkgProductDialog.h"
 #include "YQPkgRepoFilterView.h"
-#include "YQPkgRepoList.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgServiceFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
-#include "YQPkgTextDialog.h"
 #include "YQPkgUpdatesFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "YQZypp.h"

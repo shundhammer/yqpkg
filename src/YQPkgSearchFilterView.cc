@@ -32,9 +32,6 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "SearchFilter.h"
-#include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
-#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
 

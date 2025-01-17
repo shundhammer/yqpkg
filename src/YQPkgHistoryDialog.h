@@ -19,12 +19,12 @@
 #define YQPkgHistoryDialog_h
 
 #include <QDialog>
-#include <zypp/parser/HistoryLogReader.h>
+#include <zypp/HistoryLogData.h>
 
-
-class YQPkgList;
-class YQPkgHistoryView;
+class QObject;
 class QTreeWidget;
+class QTreeWidgetItem;
+class QWidget;
 
 
 /**

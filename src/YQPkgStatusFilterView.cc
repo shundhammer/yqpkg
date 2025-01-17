@@ -19,9 +19,6 @@
 
 #include "Exception.h"
 #include "Logger.h"
-#include "QY2CursorHelper.h"
-#include "YQi18n.h"
-#include "utf8.h"
 #include "YQPkgStatusFilterView.h"
 
 #ifndef VERBOSE_FILTER_VIEWS
