@@ -19,12 +19,9 @@
 #include <QBoxLayout>
 #include <QPushButton>
 
-#include "Exception.h"
-#include "Logger.h"
 #include "MainWindow.h"
 #include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQi18n.h"
 

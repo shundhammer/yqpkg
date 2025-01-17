@@ -24,9 +24,6 @@
 #include "QY2ListView.h"
 
 
-class QY2DiskUsageListItem;
-
-
 /**
  * Generic scrollable list of disk usage for any number of partitions.
  **/

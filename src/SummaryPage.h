@@ -32,7 +32,6 @@
 
 class QAction;
 class QActionGroup;
-class PkgTasks;
 
 
 /**

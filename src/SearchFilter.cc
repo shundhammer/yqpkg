@@ -8,7 +8,6 @@
  */
 
 #include "Logger.h"
-#include "Exception.h"
 #include "utf8.h"
 #include "SearchFilter.h"
 

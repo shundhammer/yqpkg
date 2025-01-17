@@ -19,7 +19,6 @@
 #define YQPkgServiceList_h
 
 #include <string>
-#include <zypp/Product.h>
 #include "QY2ListView.h"
 #include "YQZypp.h"
 

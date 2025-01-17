@@ -16,7 +16,6 @@
 
 
 #include <unistd.h>             // usleep()
-#include <stdlib.h>             // abs()
 
 #include <zypp/target/TargetException.h>
 

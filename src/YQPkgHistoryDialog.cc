@@ -15,10 +15,6 @@
  */
 
 
-#include <zypp/Date.h>
-#include <zypp/Edition.h>
-#include <boost/ref.hpp>
-
 #include <QBoxLayout>
 #include <QEventLoop>
 #include <QHBoxLayout>
@@ -30,13 +26,17 @@
 #include <QSplitter>
 #include <QTreeWidget>
 
-#include "Exception.h"
+#include <zypp-core/Date.h>
+#include <zypp-core/Pathname.h>
+#include <zypp-core/Url.h>
+#include <zypp-core/base/Exception.h>
+#include <zypp/parser/HistoryLogReader.h>
+#include <zypp/Edition.h>
+
 #include "Logger.h"
 #include "MainWindow.h"
 #include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
 #include "YQIconPool.h"
-#include "YQPkgList.h"
 #include "YQi18n.h"
 #include "utf8.h"
 

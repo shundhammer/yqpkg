@@ -19,11 +19,6 @@
 #include <QProcess>
 
 #include "Logger.h"
-#include "QY2CursorHelper.h"
-#include "QY2IconLoader.h"
-#include "YQPkgTextDialog.h"
-#include "YQi18n.h"
-#include "utf8.h"
 #include "ui_about-dialog.h"
 
 #include "YQPkgSelector.h"

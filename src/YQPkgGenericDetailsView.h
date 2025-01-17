@@ -19,7 +19,7 @@
 #define YQPkgGenericDetailsView_h
 
 
-#include <zypp/Date.h>
+#include <zypp-core/Date.h>
 
 #include "YQZypp.h"
 #include <QTextBrowser>

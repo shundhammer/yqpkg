@@ -16,6 +16,8 @@
 
 
 #include <QCursor>
+#include <QGuiApplication>
+
 #include "QY2CursorHelper.h"
 
 

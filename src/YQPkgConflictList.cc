@@ -15,10 +15,11 @@
  */
 
 
-#include <errno.h>
-
+#include <zypp/ProblemSolution.h>
+#include <zypp/Resolver.h>
+#include <zypp/ResolverProblem.h>
+#include <zypp/ZYpp.h>
 #include <zypp/ZYppFactory.h>
-
 
 #include <QDateTime>
 #include <QFileDialog>
@@ -27,11 +28,8 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
-#include "Exception.h"
 #include "Logger.h"
-#include "QY2CursorHelper.h"
 #include "YQIconPool.h"
-#include "YQPkgConflictDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgConflictList.h"

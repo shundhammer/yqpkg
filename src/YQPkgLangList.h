@@ -19,7 +19,7 @@
 #define YQPkgLangList_h
 
 #include "YQPkgObjList.h"
-
+#include "YQZypp.h"
 
 class YQPkgLangListItem;
 

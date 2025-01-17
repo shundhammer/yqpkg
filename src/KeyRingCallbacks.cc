@@ -15,8 +15,6 @@
  */
 
 
-#include "Exception.h"
-#include "Logger.h"
 #include "KeyRingCallbacks.h"
 
 

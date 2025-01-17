@@ -17,8 +17,12 @@
 
 #include <QTabWidget>
 
+#include <zypp/Edition.h>
+#include <zypp/PoolItem.h>
+#include <zypp/ResObject.h>
+#include <zypp/ui/Selectable.h>
+
 #include "Logger.h"
-#include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgGenericDetailsView.h"
 

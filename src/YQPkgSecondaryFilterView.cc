@@ -21,7 +21,6 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "QY2ComboTabWidget.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"

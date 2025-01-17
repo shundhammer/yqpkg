@@ -23,11 +23,7 @@
 #include <QSplitter>
 #include <QTabWidget>
 
-#include "Exception.h"
-#include "Logger.h"
 #include "MainWindow.h"
-#include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgDependenciesView.h"
 #include "YQPkgProductList.h"
 #include "YQi18n.h"

@@ -19,6 +19,7 @@
 #define YQPkgTechnicalDetailsView_h
 
 #include "YQPkgGenericDetailsView.h"
+#include "YQZypp.h"
 
 
 /**

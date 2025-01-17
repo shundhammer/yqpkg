@@ -22,8 +22,8 @@
 #include <string>
 #include <QMutex>
 
-#include <zypp/base/Logger.h>
-#include <zypp/base/LogControl.h>
+#include <zypp-core/base/Logger.h>
+#include <zypp-core/base/LogControl.h>
 
 
 class ZyppLogger;

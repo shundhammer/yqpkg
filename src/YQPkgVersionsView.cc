@@ -24,12 +24,20 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 
-#include <zypp/Repository.h>
 
-#include "Exception.h"
+#include <zypp/Arch.h>
+#include <zypp/Edition.h>
+#include <zypp/IdStringType.h>
+#include <zypp/PoolItem.h>
+#include <zypp/RepoInfo.h>
+#include <zypp/Repository.h>
+#include <zypp/ResObject.h>
+#include <zypp/Resolvable.h>
+#include <zypp/sat/SolvableType.h>
+#include <zypp/ui/Status.h>
+
 #include "Logger.h"
 #include "YQIconPool.h"
-#include "YQPkgRepoList.h"
 #include "YQZypp.h"
 #include "YQi18n.h"
 #include "utf8.h"

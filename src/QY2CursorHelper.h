@@ -18,8 +18,6 @@
 #ifndef QY2CursorHelper_h
 #define QY2CursorHelper_h
 
-#include <QGuiApplication>
-
 void busyCursor();
 void normalCursor();
 

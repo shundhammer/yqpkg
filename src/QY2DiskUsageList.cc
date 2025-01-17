@@ -20,9 +20,6 @@
 #include <QPainter>
 #include <QItemDelegate>
 
-#include "Logger.h"
-#include "Exception.h"
-
 
 /**
  * Stolen from KDirStat::KDirTreeView with the author's permission.

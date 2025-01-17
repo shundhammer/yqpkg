@@ -15,8 +15,8 @@
  */
 
 
+#include <utility>
 #include <vector>
-#include <algorithm> // std::swap()
 
 #include <QAction>
 #include <QHBoxLayout>
@@ -34,7 +34,6 @@
 #include "YQIconPool.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQi18n.h"
-#include "utf8.h"
 #include "YQPkgFilterTab.h"
 
 // Just temporary - let's see how people react

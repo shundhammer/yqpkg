@@ -20,10 +20,8 @@
 #include <QMenu>
 #include <QTreeWidgetItem>
 
-#include "Exception.h"
 #include "Logger.h"
 #include "YQIconPool.h"
-#include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgPatchList.h"

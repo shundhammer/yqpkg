@@ -17,8 +17,8 @@
 
 #include "QY2CursorHelper.h"
 #include "YQi18n.h"
-#include "utf8.h"
 
+#include <zypp/ZYpp.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 
@@ -33,7 +33,6 @@
 #include <QBoxLayout>
 
 #include "BusyPopup.h"
-#include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
 #include "QY2LayoutUtils.h"

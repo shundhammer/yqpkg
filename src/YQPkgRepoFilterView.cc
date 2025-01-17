@@ -17,10 +17,7 @@
 
 
 #include "Exception.h"
-#include "Logger.h"
 #include "YQPkgRepoList.h"
-#include "YQZypp.h"
-#include "YQi18n.h"
 #include "YQPkgRepoFilterView.h"
 
 

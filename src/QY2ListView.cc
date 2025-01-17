@@ -19,7 +19,6 @@
 #include <QMouseEvent>
 
 #include "Logger.h"
-#include "Exception.h"
 #include "QY2ListView.h"
 
 #ifndef VERBOSE_SELECT_SOMETHING

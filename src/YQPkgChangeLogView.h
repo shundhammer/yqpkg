@@ -20,6 +20,7 @@
 
 #include <zypp/Changelog.h>
 #include "YQPkgGenericDetailsView.h"
+#include "YQZypp.h"
 
 
 using std::list;

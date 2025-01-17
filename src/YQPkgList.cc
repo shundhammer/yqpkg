@@ -20,10 +20,8 @@
 #include <QHeaderView>
 #include <QMenu>
 
-#include "Exception.h"
 #include "Logger.h"
 #include "QY2CursorHelper.h"
-#include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
 

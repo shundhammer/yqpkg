@@ -24,16 +24,14 @@
 #include <QList>
 #include <QBoxLayout>
 
-#include "Exception.h"
-#include "Logger.h"
 #include "MainWindow.h"
 #include "QY2CursorHelper.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgList.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
+#include "YQZypp.h"
 
 
 #define SPACING  2      // between subwidgets

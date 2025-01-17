@@ -22,8 +22,6 @@
 
 #include <QFrame>
 
-#include "Logger.h"
-#include "Exception.h"
 #include "QY2ComboTabWidget.h"
 
 using std::string;

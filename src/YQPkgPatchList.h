@@ -18,11 +18,17 @@
 #ifndef YQPkgPatchList_h
 #define YQPkgPatchList_h
 
+#include <zypp/Patch.h>
 
+#include <string>
+
+#include "QY2ListView.h"
 #include "YQPkgObjList.h"
+#include "YQZypp.h"
 
 class QMenu;
-class QTreeWidetItem;
+class QObject;
+class QWidget;
 class YQPkgPatchListItem;
 class YQPkgPatchCategoryItem;
 

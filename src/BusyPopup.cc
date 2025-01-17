@@ -15,7 +15,6 @@
 #include <QScreen>
 
 #include "BusyPopup.h"
-#include "Logger.h"
 
 
 BusyPopup::BusyPopup( const QString & text,

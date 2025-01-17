@@ -24,10 +24,7 @@
 
 #include <zypp/Patch.h>
 
-#include "Exception.h"
-#include "FSize.h"
 #include "Logger.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgPatchList.h"
 #include "YQi18n.h"

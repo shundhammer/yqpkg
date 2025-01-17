@@ -19,8 +19,8 @@
 #include <zypp/sat/LocaleSupport.h>
 
 #include "Logger.h"
+#include "QY2ListView.h"
 #include "YQi18n.h"
-#include "utf8.h"
 #include "YQPkgLangList.h"
 
 #ifndef VERBOSE_FILTER_VIEWS

@@ -25,7 +25,6 @@
 #include <vector>
 
 
-class QY2ListViewItem;
 class QY2ListViewToolTip;
 
 

@@ -28,7 +28,6 @@
 #include <zypp/ServiceInfo.h>
 
 #include "Logger.h"
-#include "QY2CursorHelper.h"
 #include "QY2IconLoader.h"
 #include "YQPkgFilters.h"
 #include "YQi18n.h"

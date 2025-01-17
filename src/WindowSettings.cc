@@ -19,8 +19,6 @@
 #include <QWidget>
 
 #include "WindowSettings.h"
-#include "Exception.h"
-#include "Logger.h"
 
 
 void WindowSettings::read( QWidget *       widget,

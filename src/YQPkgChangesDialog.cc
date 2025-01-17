@@ -16,15 +16,17 @@
 
 
 #include <QBoxLayout>
+#include <QGuiApplication>
 #include <QLabel>
 #include <QScreen>
 #include <QPushButton>
 
+#include <zypp/Package.h>
+#include <zypp/PoolItem.h>
 #include <zypp/ResStatus.h>
-#include <zypp/VendorSupportOptions.h>
+#include <zypp/ui/Selectable.h>
 #include <zypp/ui/UserWantedPackages.h>
 
-#include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
 #include "QY2CursorHelper.h"

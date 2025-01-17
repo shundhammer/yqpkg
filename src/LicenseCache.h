@@ -21,8 +21,6 @@
 #include <string>
 #include <set>
 
-class LicenseCache;
-
 /**
  * A cache for licenses to check which ones have already been confirmed.
  **/

@@ -18,14 +18,12 @@
 #ifndef YQPkgPatchFilterView_h
 #define YQPkgPatchFilterView_h
 
-#include "YQZypp.h"
 #include <QLabel>
 
 
 class YQPkgPatchList;
 class YQPkgDescriptionView;
 class QComboBox;
-class QLabel;
 class QSplitter;
 class QTabWidget;
 

@@ -21,9 +21,6 @@
 #include <QDialog>
 
 
-class YQPkgDiskUsageList;
-
-
 /**
  * Warning dialog about partitions that are getting full or overflowing.
  **/
