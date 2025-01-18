@@ -126,7 +126,7 @@ PkgTaskList::find( const QString &  name,
                    PkgTaskAction    action,
                    PkgTaskRequester requester ) const
 {
-    foreach ( PkgTask * task, *this )
+    for ( PkgTask * task: *this )
     {
         if ( task && task->matches( name, action, requester ) )
             return task;
@@ -139,7 +139,7 @@ PkgTaskList::find( const QString &  name,
 PkgTask *
 PkgTaskList::find( const PkgTask & filter ) const
 {
-    foreach ( PkgTask * task, *this )
+    for ( PkgTask * task: *this )
     {
         if ( task && task->matches( filter ) )
             return task;
@@ -154,7 +154,7 @@ PkgTaskList::find( ZyppRes zyppRes ) const
 {
     QString resName = fromUTF8( zyppRes->name() );
 
-    foreach ( PkgTask * task, *this )
+    for ( PkgTask * task: *this )
     {
         if ( task && task->name() == resName )
             return task;
@@ -170,7 +170,7 @@ PkgTaskList::filtered( PkgTaskAction    filterAction,
 {
     PkgTaskList result( QString( "filtered %1" ).arg( _name ) );
 
-    foreach( const PkgTask * task, *this )
+    for ( const PkgTask * task: *this )
     {
         if ( ( task->action()    & filterAction    ) &&
              ( task->requester() & filterRequester )    )
@@ -188,7 +188,7 @@ PkgTaskList::downloadSizeSum() const
 {
     ByteCount sum(0);
 
-    foreach( const PkgTask * task, *this )
+    for ( const PkgTask * task: *this )
     {
         if ( ( task->action() & PkgAdd )    &&
              task->downloadSize()      > 0  &&
@@ -207,7 +207,7 @@ PkgTaskList::installedSizeSum() const
 {
     ByteCount sum(0);
 
-    foreach( const PkgTask * task, *this )
+    for ( const PkgTask * task: *this )
     {
         if ( task->installedSize() > 0 && task->completedPercent() > 0 )
             sum += task->installedSize() * ( task->completedPercent() / 100.0 );

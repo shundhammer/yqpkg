@@ -38,7 +38,7 @@ Workflow::Workflow( const WorkflowStepList & steps )
 
     checkDuplicateIds();
 
-    foreach ( WorkflowStep * step, _steps )
+    for ( WorkflowStep * step: _steps )
     {
         CHECK_PTR( step );
         step->setWorkflow( this );
@@ -57,7 +57,7 @@ void Workflow::checkDuplicateIds()
     QSet<QString> ids;
     QStringList duplicates;
 
-    foreach ( WorkflowStep * step, _steps )
+    for ( const WorkflowStep * step: _steps )
     {
         CHECK_PTR( step );
 
@@ -78,7 +78,7 @@ void Workflow::checkDuplicateIds()
 WorkflowStep *
 Workflow::step( const QString & id ) const
 {
-    foreach ( WorkflowStep * step, _steps )
+    for ( WorkflowStep * step: _steps )
     {
         if ( step->id() == id )
             return step;

@@ -57,9 +57,7 @@ YQPkgConflictList::~YQPkgConflictList()
 void
 YQPkgConflictList::clear()
 {
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( YQPkgConflict * conflict: _conflicts )
     {
         _layout->removeWidget( conflict );
         delete conflict;
@@ -74,22 +72,19 @@ YQPkgConflictList::clear()
 
 
 void
-YQPkgConflictList::fill( ZyppProblemList problemList )
+YQPkgConflictList::fill( const ZyppProblemList problemList )
 {
     clear();
 
-    ZyppProblemList::iterator it = problemList.begin();
-
-    while ( it != problemList.end() )
+    for ( const ZyppProblem & problem: problemList )
     {
-        YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
+        YQPkgConflict *conflict = new YQPkgConflict( widget(), problem );
         Q_CHECK_PTR( conflict );
 
         connect( conflict, SIGNAL( expanded() ), SLOT( relayout() ) );
 
         _layout->addWidget( conflict );
         _conflicts.push_back( conflict );
-        ++it;
     }
 
     _layout->addStretch( 1 );
@@ -106,9 +101,7 @@ void YQPkgConflictList::relayout()
     _layout->getContentsMargins(&left, &top, &right, &bottom);
     QSize minSize = QSize( left + right, top + bottom );
 
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( const YQPkgConflict * conflict: _conflicts )
     {
         minSize = minSize.expandedTo( conflict->minimumSizeHint() );
         minSize.rheight() += conflict->minimumSizeHint().height() + _layout->spacing();
@@ -122,9 +115,8 @@ void
 YQPkgConflictList::applyResolutions()
 {
     ZyppSolutionList userChoices;
-    YQPkgConflict *  conflict;
 
-    foreach( conflict, _conflicts )
+    for ( YQPkgConflict * conflict: _conflicts )
     {
         ZyppSolution userChoice = conflict->userSelectedResolution();
 
@@ -180,9 +172,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     file.write(header.toUtf8());
 
-    YQPkgConflict * conflict;
-
-    foreach( conflict, _conflicts )
+    for ( const YQPkgConflict * conflict: _conflicts )
     {
         conflict->saveToFile( file );
     }
@@ -263,14 +253,12 @@ YQPkgConflict::addSolutions()
     hbox->addLayout( vbox );
     _layout->addLayout( hbox );
 
-    ZyppSolutionList solutions = problem()->solutions();
-    ZyppSolutionList::iterator it = solutions.begin();
+    const ZyppSolutionList solutions = problem()->solutions();
 
     int count = 0;
 
-    while ( it != solutions.end() )
+    for ( const ZyppSolution & solution: solutions )
     {
-        ZyppSolution solution = *it;
         QString      shortcut;
 
         if ( ++count < 10 )
@@ -309,8 +297,6 @@ YQPkgConflict::addSolutions()
             vbox->addLayout( hbox );
             _details[ detailsLabel ] = solution;
         }
-
-        ++it;
     }
 }
 

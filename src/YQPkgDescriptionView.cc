@@ -130,7 +130,7 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = text.trimmed().split( '\n', Qt::KeepEmptyParts );
+    const QStringList lines = text.trimmed().split( '\n', Qt::KeepEmptyParts );
 
     for ( const QString& lineText : lines )
     {

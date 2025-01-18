@@ -60,8 +60,9 @@ void YQPkgStatusFilterView::connectWidgets()
 {
     // Use Qt introspection to recursively find all the QCheckBox children of
     // this filter view and bulk-connect them all to the same slot
+    const QList<QCheckBox *> & children = findChildren<QCheckBox *>();
 
-    foreach ( QCheckBox * checkBox, findChildren<QCheckBox *>() )
+    for ( QCheckBox * checkBox: children )
     {
         connect( checkBox,  SIGNAL( clicked() ),
                  this,      SLOT  ( filter()  ) );
