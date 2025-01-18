@@ -15,6 +15,7 @@
  */
 
 
+#include "Logger.h"
 #include "Exception.h"
 #include "PkgCommitCallbacks.h"
 

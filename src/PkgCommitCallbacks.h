@@ -19,12 +19,13 @@
 #define PkgCommitCallbacks_h
 
 
+#include <iostream>  // cerr
 #include <QObject>
 #include <QStringList>
 
-#include <zypp/ZYppCallbacks.h>
 #include <zypp/Resolvable.h>
-#include <zypp/ProgressData.h>
+#include <zypp/Url.h>
+#include <zypp/ZYppCallbacks.h>
 #include <zypp/sat/FileConflicts.h>
 
 #include "utf8.h"
