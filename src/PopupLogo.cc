@@ -16,6 +16,8 @@
 
 
 #include <QBitmap>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 #include "Logger.h"
 #include "Exception.h"
@@ -91,6 +93,16 @@ LogoPopup::~LogoPopup()
 void LogoPopup::mousePressEvent( QMouseEvent * event )
 {
     if ( event->buttons() == Qt::LeftButton )
+    {
+        hide();
+    }
+}
+
+
+void LogoPopup::keyPressEvent( QKeyEvent * event )
+{
+    if ( event->modifiers() == Qt::NoModifier &&
+         event->key() == Qt::Key_Escape )
     {
         hide();
     }

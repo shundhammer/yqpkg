@@ -20,9 +20,10 @@
 
 
 #include <QLabel>
-#include <QMouseEvent>
 
 class LogoPopup;
+class QMouseEvent;
+class QKeyEvent;
 
 
 /**
@@ -112,6 +113,13 @@ protected:
      * Reimplemented from QWidget.
      **/
     void mousePressEvent( QMouseEvent * event ) override;
+
+    /**
+     * Key event handler: Close the popup.
+     *
+     * Reimplemented from QWidget.
+     **/
+    void keyPressEvent( QKeyEvent * event ) override;
 };
 
 
