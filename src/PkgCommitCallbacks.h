@@ -22,11 +22,10 @@
 #include <QObject>
 #include <QStringList>
 
-#include <zypp/Callback.h>
-#include <zypp/ResTraits.h>
 #include <zypp/ZYppCallbacks.h>
+#include <zypp/Resolvable.h>
+#include <zypp/ProgressData.h>
 #include <zypp/sat/FileConflicts.h>
-#include <zypp-core/ui/progressdata.h>
 
 #include "utf8.h"
 #include "YQZypp.h"     // ZyppRes
