@@ -20,7 +20,6 @@
 
 #include <QAction>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
@@ -31,12 +30,12 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "PopupLogo.h"
 #include "YQIconPool.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQi18n.h"
 #include "YQPkgFilterTab.h"
 
-// Just temporary - let's see how people react
 #define USE_MYRLYN_LOGO  1
 
 typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
@@ -107,16 +106,13 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
 
 
 #if USE_MYRLYN_LOGO
-    //
+
     // Logo in the top right corner
     //
 
-    QLabel * logo = new QLabel( this );
+    PopupLogo * logo = new PopupLogo( ":/artwork/Myrlyn-32x32",
+                                     ":/artwork/Myrlyn-256x256" );
     CHECK_NEW( logo );
-
-    logo->setPixmap( QPixmap( ":/artwork/Myrlyn-32x32" ) );
-    logo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-    logo->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
     setCornerWidget( logo, Qt::TopRightCorner );
 #endif
 

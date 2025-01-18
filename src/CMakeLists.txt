@@ -41,6 +41,7 @@ set( SOURCES
   PkgCommitPage.cc
   PkgTasks.cc
   PkgTaskListWidget.cc
+  PopupLogo.cc
   ProgressDialog.cc
   RepoGpgKeyImportDialog.cc
   SearchFilter.cc
