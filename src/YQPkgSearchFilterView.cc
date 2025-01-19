@@ -196,7 +196,10 @@ void
 YQPkgSearchFilterView::showFilter( QWidget * newFilter )
 {
     if ( newFilter == this )
+    {
         filter();
+        _ui->searchText->setFocus();
+    }
 }
 
 
