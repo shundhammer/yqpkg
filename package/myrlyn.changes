@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Jan 20 10:47:20 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed OBS build for Leap 15.6
+- Implemented repo GPG key import
+- Better error handling for download / install errors
+- Fixed initial filter page
+- 0.8.04
+
+-------------------------------------------------------------------
 Tue Jan 14 16:22:09 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use transparent artwork consistently
