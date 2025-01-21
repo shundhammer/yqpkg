@@ -82,9 +82,8 @@
 
 #define CHECK_DEPENDENCIES_ON_STARTUP                   0
 #define FORCE_SHOW_NEEDED_PATCHES                       0
+#define ENABLE_PATCH_MENU                               0
 #define DEPENDENCY_FEEDBACK_IF_OK                       1
-#define AUTO_CHECK_DEPENDENCIES_DEFAULT                 true
-#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE   0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD            20
 
 #define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
@@ -710,6 +709,8 @@ YQPkgSelector::addMenus()
     }
 
 
+#if ENABLE_PATCH_MENU
+
     if ( _patchFilterView )
     {
         //
@@ -738,6 +739,7 @@ YQPkgSelector::addMenus()
         _patchMenu->addSeparator();
         patchList->addAllInListSubMenu( _patchMenu );
     }
+#endif
 
 
 #ifdef FIXME_REPO_MGMT
@@ -751,8 +753,7 @@ YQPkgSelector::addMenus()
         CHECK_NEW( _configMenu );
         action = _menuBar->addMenu( _configMenu );
         action->setText(_( "Confi&guration" ));
-        _configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
-        _configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
+        _configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ) );
     }
 #endif
 
@@ -873,7 +874,7 @@ YQPkgSelector::addMenus()
     CHECK_NEW( _helpMenu );
     _menuBar->addSeparator();
     action = _menuBar->addMenu( _helpMenu );
-    action->setText(_( "He&lp" ));
+    action->setText(_( "H&elp" ));
 
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPkgSelHelp.cc
@@ -1639,7 +1640,7 @@ YQPkgSelector::read_etc_sysconfig_yast()
 
     map<string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
 
-    bool auto_check = AUTO_CHECK_DEPENDENCIES_DEFAULT;
+    bool auto_check = true;
     auto it = sysconfig.find( OPTION_AUTO_CHECK );
 
     if ( it != sysconfig.end() )

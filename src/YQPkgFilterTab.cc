@@ -22,6 +22,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
+#include <QShortcut>
 #include <QSignalBlocker>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -283,7 +284,7 @@ void
 YQPkgFilterTab::addPage( const QString &      pageLabel,
                          QWidget *            pageContent,
                          const QString &      internalName,
-                         const QKeySequence & hotKey   )
+                         const QKeySequence & hotkey   )
 {
     YQPkgFilterPage * page = new YQPkgFilterPage( pageLabel,
                                                   pageContent,
@@ -299,14 +300,8 @@ YQPkgFilterTab::addPage( const QString &      pageLabel,
         CHECK_NEW( page->action );
         page->action->setData( QVariant::fromValue( pageContent ) );
 
-        if ( ! hotKey.isEmpty() )
-        {
-            page->shortcut = new QShortcut( hotKey, this,
-                                            SLOT( showPageByShortcut() ),
-                                            SLOT( showPageByShortcut() ) );
-            CHECK_NEW( page->shortcut );
-            page->action->setShortcut( page->shortcut->key() );
-        }
+        if ( ! hotkey.isEmpty() )
+            page->action->setShortcut( hotkey );
 
         _priv->viewButton->menu()->addAction( page->action );
     }
@@ -373,23 +368,6 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
     _priv->tabContextMenuPage = page;
 
     emit currentChanged( page->content );
-}
-
-
-void
-YQPkgFilterTab::showPageByShortcut()
-{
-    logDebug() << endl;
-    QShortcut * senderObj = qobject_cast<QShortcut *>( sender() );
-
-    for ( YQPkgFilterPage * page: constPages() )
-    {
-        if ( page->shortcut == senderObj )
-        {
-            showPage( page );
-            break;
-        }
-    }
 }
 
 

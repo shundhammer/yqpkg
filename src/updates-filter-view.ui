@@ -95,7 +95,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Package &amp;Update</string>
+        <string>Pac&amp;kage Update</string>
        </property>
       </widget>
      </item>
@@ -169,7 +169,7 @@ This is the equivalent of the &quot;zypper up&quot; command.</string>
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&amp;Dist-Upgrade</string>
+        <string>D&amp;ist-Upgrade</string>
        </property>
       </widget>
      </item>
@@ -239,7 +239,7 @@ This is the equivalent of the &quot;zypper dup&quot; command.</string>
      <item>
       <widget class="QPushButton" name="refreshListButton">
        <property name="text">
-        <string>&amp;Refresh List</string>
+        <string>Refresh List</string>
        </property>
       </widget>
      </item>

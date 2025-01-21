@@ -22,7 +22,6 @@
 #include <QAction>
 #include <QHash>
 #include <QKeySequence>
-#include <QShortcut>
 #include <QWidget>
 #include <QTabWidget>
 
@@ -92,7 +91,7 @@ public:
     void addPage( const QString &      pageLabel,
                   QWidget *            pageContent,
                   const QString &      internalName,
-                  const QKeySequence & hotKey = QKeySequence() );
+                  const QKeySequence & hotkey = QKeySequence() );
 
     /**
      * Return the right pane.
@@ -199,11 +198,6 @@ protected slots:
     void showPage( QAction * action );
 
     /**
-     * Show the page with the shortcut of the signal sender of this slot.
-     **/
-    void showPageByShortcut();
-
-    /**
      * Move the current tab page one position to the left.
      **/
     void movePageLeft();
@@ -277,16 +271,12 @@ public:
         , closeEnabled( true )
         , tabIndex( -1 )
         , action( 0 )
-        , shortcut( 0 )
         {}
 
     virtual ~YQPkgFilterPage()
         {
             if ( action )
                 delete action;
-
-            if ( shortcut )
-                delete shortcut;
         }
 
 
@@ -296,7 +286,6 @@ public:
     bool        closeEnabled;
     int         tabIndex;       // index of the corresponding tab or -1 if none
     QAction *   action;
-    QShortcut * shortcut;
 };
 
 

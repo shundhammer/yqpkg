@@ -84,7 +84,7 @@
       <item>
        <widget class="QCheckBox" name="searchInName">
         <property name="text">
-         <string>N&amp;ame</string>
+         <string>&amp;Name</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -209,7 +209,7 @@
    <item>
     <widget class="QCheckBox" name="caseSensitive">
      <property name="text">
-      <string>Case Sensiti&amp;ve</string>
+      <string>Case Sens&amp;itive</string>
      </property>
     </widget>
    </item>
