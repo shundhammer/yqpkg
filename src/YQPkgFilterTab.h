@@ -19,8 +19,11 @@
 #define YQPkgFilterTab_h
 
 
-#include <QWidget>
+#include <QAction>
 #include <QHash>
+#include <QKeySequence>
+#include <QShortcut>
+#include <QWidget>
 #include <QTabWidget>
 
 #include "ImplPtr.h"
@@ -28,7 +31,6 @@
 class YQPkgFilterTabPrivate;
 class YQPkgFilterPage;
 class YQPkgDiskUsageList;
-class QAction;
 
 typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
@@ -83,12 +85,14 @@ public:
 
     /**
      * Add a page with a user-visible "pageLabel", a widget with the page
-     * content and an internal name (or ID).
+     * content, an internal name (or ID) and an optional hotkey.
+     *
      * 'pageContent' will be reparented to a subwidget of this class.
      **/
-    void addPage( const QString & pageLabel,
-                  QWidget *       pageContent,
-                  const QString & internalName );
+    void addPage( const QString &      pageLabel,
+                  QWidget *            pageContent,
+                  const QString &      internalName,
+                  const QKeySequence & hotKey = QKeySequence() );
 
     /**
      * Return the right pane.
@@ -195,6 +199,11 @@ protected slots:
     void showPage( QAction * action );
 
     /**
+     * Show the page with the shortcut of the signal sender of this slot.
+     **/
+    void showPageByShortcut();
+
+    /**
      * Move the current tab page one position to the left.
      **/
     void movePageLeft();
@@ -267,13 +276,27 @@ public:
         , id( internalName )
         , closeEnabled( true )
         , tabIndex( -1 )
+        , action( 0 )
+        , shortcut( 0 )
         {}
 
-    QWidget * content;
-    QString   label;          // user visible text
-    QString   id;             // internal name
-    bool      closeEnabled;
-    int       tabIndex;       // index of the corresponding tab or -1 if none
+    virtual ~YQPkgFilterPage()
+        {
+            if ( action )
+                delete action;
+
+            if ( shortcut )
+                delete shortcut;
+        }
+
+
+    QWidget *   content;
+    QString     label;          // user visible text
+    QString     id;             // internal name
+    bool        closeEnabled;
+    int         tabIndex;       // index of the corresponding tab or -1 if none
+    QAction *   action;
+    QShortcut * shortcut;
 };
 
 

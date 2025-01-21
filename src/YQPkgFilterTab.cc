@@ -18,12 +18,10 @@
 #include <utility>
 #include <vector>
 
-#include <QAction>
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
-#include <QShortcut>
 #include <QSignalBlocker>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -282,9 +280,10 @@ YQPkgFilterTab::diskUsageList() const
 
 
 void
-YQPkgFilterTab::addPage( const QString & pageLabel,
-                         QWidget *       pageContent,
-                         const QString & internalName )
+YQPkgFilterTab::addPage( const QString &      pageLabel,
+                         QWidget *            pageContent,
+                         const QString &      internalName,
+                         const QKeySequence & hotKey   )
 {
     YQPkgFilterPage * page = new YQPkgFilterPage( pageLabel,
                                                   pageContent,
@@ -294,14 +293,22 @@ YQPkgFilterTab::addPage( const QString & pageLabel,
     pages().push_back( page );
     _priv->filtersWidgetStack->addWidget( pageContent );
 
-
     if ( _priv->viewButton && _priv->viewButton->menu() )
     {
-        QAction * action = new QAction( pageLabel, this );
-        CHECK_NEW( action );
-        action->setData( QVariant::fromValue( pageContent ) );
+        page->action = new QAction( pageLabel, YQPkgSelector::instance() );
+        CHECK_NEW( page->action );
+        page->action->setData( QVariant::fromValue( pageContent ) );
 
-        _priv->viewButton->menu()->addAction( action );
+        if ( ! hotKey.isEmpty() )
+        {
+            page->shortcut = new QShortcut( hotKey, this,
+                                            SLOT( showPageByShortcut() ),
+                                            SLOT( showPageByShortcut() ) );
+            CHECK_NEW( page->shortcut );
+            page->action->setShortcut( page->shortcut->key() );
+        }
+
+        _priv->viewButton->menu()->addAction( page->action );
     }
 }
 
@@ -366,6 +373,23 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
     _priv->tabContextMenuPage = page;
 
     emit currentChanged( page->content );
+}
+
+
+void
+YQPkgFilterTab::showPageByShortcut()
+{
+    logDebug() << endl;
+    QShortcut * senderObj = qobject_cast<QShortcut *>( sender() );
+
+    for ( YQPkgFilterPage * page: constPages() )
+    {
+        if ( page->shortcut == senderObj )
+        {
+            showPage( page );
+            break;
+        }
+    }
 }
 
 
@@ -536,6 +560,12 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 void
 YQPkgFilterTab::closePage()
 {
+    if ( tabBar()->count() == 1 )
+    {
+        logWarning() << "Can't close the last page" << endl;
+        return;
+    }
+
     YQPkgFilterPage * currentPage  = 0;
     int               currentIndex = -1;
 

@@ -293,7 +293,8 @@ void YQPkgSelector::createSearchFilterView()
     _searchFilterView = new YQPkgSearchFilterView( this );
     CHECK_NEW( _searchFilterView );
 
-    _filters->addPage( _( "S&earch" ), _searchFilterView, "search" );
+    _filters->addPage( _( "&Search" ), _searchFilterView,
+                       "search", Qt::CTRL + Qt::Key_S );
 }
 
 
@@ -306,7 +307,8 @@ void YQPkgSelector::createPatchFilterView( bool force )
             _patchFilterView = new YQPkgPatchFilterView( this );
             CHECK_NEW( _patchFilterView );
 
-            _filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
+            _filters->addPage( _( "Patc&hes" ), _patchFilterView,
+                               "patches", Qt::CTRL + Qt::Key_H  );
         }
     }
 }
@@ -317,7 +319,7 @@ void YQPkgSelector::createUpdatesFilterView()
     _updatesFilterView = new YQPkgUpdatesFilterView( this );
     CHECK_NEW( _updatesFilterView );
 
-    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates" );
+    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates", Qt::CTRL + Qt::Key_U );
 }
 
 
@@ -326,7 +328,7 @@ void YQPkgSelector::createRepoFilterView()
     _repoFilterView = new YQPkgRepoFilterView( this );
     CHECK_NEW( _repoFilterView );
 
-    _filters->addPage( _( "&Repositories" ), _repoFilterView, "repos" );
+    _filters->addPage( _( "&Repositories" ), _repoFilterView, "repos", Qt::CTRL + Qt::Key_R );
 
 }
 
@@ -338,8 +340,7 @@ void YQPkgSelector::createServiceFilterView()
         _serviceFilterView = new YQPkgServiceFilterView( this );
         CHECK_NEW( _serviceFilterView );
 
-        // TRANSLATORS: Menu item
-        _filters->addPage( _( "&Services" ), _serviceFilterView, "services" );
+        _filters->addPage( _( "Ser&vices" ), _serviceFilterView, "services" );
     }
 }
 
@@ -351,7 +352,8 @@ void YQPkgSelector::createPatternsFilterView()
         _patternList = new YQPkgPatternList( this );
         CHECK_NEW( _patternList );
 
-        _filters->addPage( _( "P&atterns" ), _patternList, "patterns" );
+        _filters->addPage( _( "Pa&tterns" ), _patternList,
+                           "patterns", Qt::CTRL + Qt::Key_T );
     }
 }
 
@@ -360,7 +362,8 @@ void YQPkgSelector::createPkgClassificationFilterView()
 {
     _pkgClassificationFilterView = new YQPkgClassificationFilterView( this );
     CHECK_NEW( _pkgClassificationFilterView );
-    _filters->addPage( _( "Package &Classification" ), _pkgClassificationFilterView, "package_classification" );
+    _filters->addPage( _( "Package Classi&fication" ), _pkgClassificationFilterView,
+                       "package_classification", Qt::CTRL + Qt::Key_F );
 }
 
 
@@ -378,7 +381,8 @@ void YQPkgSelector::createStatusFilterView()
 {
     _statusFilterView = new YQPkgStatusFilterView( this );
     CHECK_NEW( _statusFilterView );
-    _filters->addPage( _( "&Installation Summary" ), _statusFilterView, "inst_summary" );
+    _filters->addPage( _( "Installation Su&mmary" ), _statusFilterView,
+                       "inst_summary", Qt::CTRL + Qt::Key_M );
 }
 
 
@@ -502,7 +506,7 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
     CHECK_NEW( _pkgDescriptionView );
 
-    _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
+    _detailsViews->addTab( _pkgDescriptionView, _( "Description" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
     connect( _pkgList,                  SIGNAL( currentItemChanged  ( ZyppSel ) ),
@@ -515,7 +519,7 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
     CHECK_NEW( _pkgTechnicalDetailsView );
 
-    _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
+    _detailsViews->addTab( _pkgTechnicalDetailsView, _( "Technical Data" ) );
 
     connect( _pkgList,                 SIGNAL( currentItemChanged  ( ZyppSel ) ),
              _pkgTechnicalDetailsView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
@@ -543,7 +547,7 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     _pkgVersionsView = new YQPkgVersionsView( _detailsViews );
     CHECK_NEW( _pkgVersionsView );
 
-    _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
+    _detailsViews->addTab( _pkgVersionsView, _( "Versions" ) );
 
     connect( _pkgList,          SIGNAL( currentItemChanged  ( ZyppSel ) ),
              _pkgVersionsView,  SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
@@ -718,7 +722,7 @@ YQPkgSelector::addMenus()
         _patchMenu = new QMenu( _menuBar );
         CHECK_NEW( _patchMenu );
         action = _menuBar->addMenu( _patchMenu );
-        action->setText(_( "&Patch" ));
+        action->setText(_( "Patch" ));
 
         _patchMenu->addAction( patchList->actionSetCurrentInstall       );
         _patchMenu->addAction( patchList->actionSetCurrentDontInstall   );
@@ -869,7 +873,7 @@ YQPkgSelector::addMenus()
     CHECK_NEW( _helpMenu );
     _menuBar->addSeparator();
     action = _menuBar->addMenu( _helpMenu );
-    action->setText(_( "&Help" ));
+    action->setText(_( "He&lp" ));
 
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPkgSelHelp.cc
@@ -1193,7 +1197,7 @@ YQPkgSelector::reset()
 void
 YQPkgSelector::updatePageLabels()
 {
-    updatePageLabel( _( "P&atches" ), _patchFilterView,   YQPkgPatchList::countNeededPatches()   );
+    updatePageLabel( _( "Patc&hes" ), _patchFilterView,   YQPkgPatchList::countNeededPatches()   );
     updatePageLabel( _( "&Updates" ), _updatesFilterView, YQPkgUpdatesFilterView::countUpdates() );
 }
 
