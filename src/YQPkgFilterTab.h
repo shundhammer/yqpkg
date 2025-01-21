@@ -38,7 +38,7 @@ typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
  * Widget for "tabbed browsing" in packages:
  *
  *               /------\/------\/------\
- *     [View v]  | Tab1 || Tab2 || Tab3 |               [Close]
+ *     [View v]  | Tab1 || Tab2 || Tab3 |                [logo]
  *     +-----------------+------------------------------------+
  *     |                 |                                    |
  *     | QStackedWidget: |    Right pane                      |
