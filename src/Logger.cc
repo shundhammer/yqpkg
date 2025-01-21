@@ -15,10 +15,6 @@
 #include <QDir>
 #include <QDateTime>
 #include <QString>
-#include <QRectF>
-#include <QPointF>
-#include <QSizeF>
-#include <QSize>
 #include <QStringList>
 
 #include <stdio.h>	// stderr, fprintf()
