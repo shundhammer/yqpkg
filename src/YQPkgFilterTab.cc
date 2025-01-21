@@ -23,6 +23,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
+#include <QShortcut>
 #include <QSignalBlocker>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -33,12 +34,11 @@
 #include "PopupLogo.h"
 #include "YQIconPool.h"
 #include "YQPkgDiskUsageList.h"
+#include "YQPkgSelector.h"
 #include "YQi18n.h"
 #include "YQPkgFilterTab.h"
 
 #define USE_MYRLYN_LOGO  1
-
-typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
 
 struct YQPkgFilterTabPrivate
@@ -191,6 +191,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
 
     tabBar()->installEventFilter( this ); // for tab context menu
 
+    createActions();
+
 
     //
     // Cosmetics
@@ -218,15 +220,51 @@ YQPkgFilterTab::~YQPkgFilterTab()
 {
     writeSettings();
 
-    for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-          it != _priv->pages.end();
-          ++it )
-    {
-        delete (*it);
-    }
+    for ( YQPkgFilterPage * page: constPages() )
+        delete page;
 
     _priv->pages.clear();
 }
+
+
+void YQPkgFilterTab::createActions()
+{
+    QWidget * actionParent = YQPkgSelector::instance();
+
+    _priv->actionMovePageLeft  = new QAction( YQIconPool::arrowLeft(), _( "Move page &left"  ), actionParent );
+    CHECK_NEW( _priv->actionMovePageLeft );
+
+    QShortcut * shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_Left ), this, SLOT( movePageLeft() ) );
+    CHECK_NEW( shortcut );
+    _priv->actionMovePageLeft->setShortcut( shortcut->key() );
+
+
+    _priv->actionMovePageRight = new QAction( YQIconPool::arrowRight(), _( "Move page &right" ), actionParent );
+    CHECK_NEW( _priv->actionMovePageRight );
+
+    shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_Right ), this, SLOT( movePageRight() ) );
+    CHECK_NEW( shortcut );
+    _priv->actionMovePageRight->setShortcut( shortcut->key() );
+
+
+    _priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), actionParent );
+    CHECK_NEW( _priv->actionClosePage );
+
+    shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ), this, SLOT( closePage() ) );
+    CHECK_NEW( shortcut );
+    _priv->actionClosePage->setShortcut( shortcut->key() );
+
+
+    connect( _priv->actionMovePageLeft,  SIGNAL( triggered()    ),
+             this,                       SLOT  ( movePageLeft() ) );
+
+    connect( _priv->actionMovePageRight, SIGNAL( triggered()     ),
+             this,                       SLOT  ( movePageRight() ) );
+
+    connect( _priv->actionClosePage,     SIGNAL( triggered()     ),
+             this,                       SLOT  ( closePage()     ) );
+}
+
 
 
 QWidget *
@@ -253,7 +291,7 @@ YQPkgFilterTab::addPage( const QString & pageLabel,
                                                   internalName );
     CHECK_NEW( page );
 
-    _priv->pages.push_back( page );
+    pages().push_back( page );
     _priv->filtersWidgetStack->addWidget( pageContent );
 
 
@@ -332,6 +370,20 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
 
 
 void
+YQPkgFilterTab::reloadCurrentPage()
+{
+    int currentIndex = tabBar()->currentIndex();
+    YQPkgFilterPage * currentPage = findPage( currentIndex );
+
+    if ( currentPage )
+    {
+        logDebug() << "Reloading page " << currentPage->id << endl;
+        emit currentChanged( currentPage->content );
+    }
+}
+
+
+void
 YQPkgFilterTab::setPageLabel( QWidget * pageContent, const QString & newLabel )
 {
     YQPkgFilterPage * page = findPage( pageContent );
@@ -352,70 +404,18 @@ YQPkgFilterTab::closeAllPages()
         tabBar()->removeTab( 0 );
     }
 
-    for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-          it != _priv->pages.end();
-          ++it )
-    {
-        (*it)->tabIndex = -1;
-    }
-}
-
-
-void
-YQPkgFilterTab::reloadCurrentPage()
-{
-    int currentIndex = tabBar()->currentIndex();
-    YQPkgFilterPage * currentPage = findPage( currentIndex );
-
-    if ( currentPage )
-    {
-        logDebug() << "Reloading page " << currentPage->id << endl;
-        emit currentChanged( currentPage->content );
-    }
-}
-
-
-void
-YQPkgFilterTab::closeCurrentPage()
-{
-    if ( tabBar()->count() > 1 )
-    {
-        int currentIndex = tabBar()->currentIndex();
-        YQPkgFilterPage * currentPage = findPage( currentIndex );
-
-        if ( currentPage )
-            currentPage->tabIndex = -1;
-
-        tabBar()->removeTab( currentIndex );
-
-        //
-        // Adjust tab index of the active pages to the right of that page
-        //
-
-        for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-              it != _priv->pages.end();
-              ++it )
-        {
-            YQPkgFilterPage * page = *it;
-
-            if ( page->tabIndex >= currentIndex )
-                page->tabIndex--;
-        }
-
-        showPage( tabBar()->currentIndex() );
-    }
+    for ( YQPkgFilterPage * page: constPages() )
+        page->tabIndex = -1;
 }
 
 
 YQPkgFilterPage *
-YQPkgFilterTab::findPage( QWidget * pageContent )
+YQPkgFilterTab::findPage( QWidget * pageContent ) const
 {
-    for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-          it != _priv->pages.end();
-          ++it )
+    for ( YQPkgFilterPage * page: constPages() )
     {
-        if ( (*it)->content == pageContent )
-            return *it;
+        if ( page->content == pageContent )
+            return page;
     }
 
     return 0;
@@ -423,14 +423,12 @@ YQPkgFilterTab::findPage( QWidget * pageContent )
 
 
 YQPkgFilterPage *
-YQPkgFilterTab::findPage( const QString & internalName )
+YQPkgFilterTab::findPage( const QString & internalName ) const
 {
-    for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-          it != _priv->pages.end();
-          ++it )
+    for ( YQPkgFilterPage * page: constPages() )
     {
-        if ( (*it)->id == internalName )
-            return *it;
+        if ( page->id == internalName )
+            return page;
     }
 
     return 0;
@@ -438,17 +436,15 @@ YQPkgFilterTab::findPage( const QString & internalName )
 
 
 YQPkgFilterPage *
-YQPkgFilterTab::findPage( int tabIndex )
+YQPkgFilterTab::findPage( int tabIndex ) const
 {
     if ( tabIndex < 0 )
         return 0;
 
-    for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-          it != _priv->pages.end();
-          ++it )
+    for ( YQPkgFilterPage * page: constPages() )
     {
-        if ( (*it)->tabIndex == tabIndex )
-            return *it;
+        if ( page->tabIndex == tabIndex )
+            return page;
     }
 
     return 0;
@@ -459,6 +455,20 @@ int
 YQPkgFilterTab::tabCount() const
 {
     return tabBar()->count();
+}
+
+
+const YQPkgFilterPageVector &
+YQPkgFilterTab::constPages() const
+{
+    return _priv->pages;
+}
+
+
+YQPkgFilterPageVector &
+YQPkgFilterTab::pages()
+{
+    return _priv->pages;
 }
 
 
@@ -485,7 +495,11 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 {
     int tabIndex = tabBar()->tabAt( pos );
 
-    if ( tabIndex >= 0 ) // -1 means "no tab at that position"
+    if ( tabIndex < 0 )  // no tab at that position
+    {
+        _priv->tabContextMenuPage = 0;
+    }
+    else
     {
         _priv->tabContextMenuPage = findPage( tabIndex );
 
@@ -497,38 +511,6 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 
                 _priv->tabContextMenu = new QMenu( this );
                 CHECK_NEW( _priv->tabContextMenu );
-
-                // bool reverseLayout = YUI::yApp()->reverseLayout();
-                // FIXME
-                bool reverseLayout = false;
-
-
-                // Translators: Change this to "right" for Arabic and Hebrew
-                _priv->actionMovePageLeft  = new QAction( reverseLayout ?
-                                                          YQIconPool::arrowRight() : YQIconPool::arrowLeft(),
-                                                          _( "Move page &left"  ), this );
-                CHECK_NEW( _priv->actionMovePageLeft );
-
-                connect( _priv->actionMovePageLeft, SIGNAL( triggered()           ),
-                         this,                      SLOT  ( contextMovePageLeft() ) );
-
-
-                // Translators: Change this to "left" for Arabic and Hebrew
-                _priv->actionMovePageRight = new QAction(  reverseLayout ?
-                                                           YQIconPool::arrowLeft() : YQIconPool::arrowRight(),
-                                                           _( "Move page &right" ), this );
-                CHECK_NEW( _priv->actionMovePageRight );
-
-                connect( _priv->actionMovePageRight, SIGNAL( triggered()            ),
-                         this,                       SLOT  ( contextMovePageRight() ) );
-
-
-                _priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), this );
-                CHECK_NEW( _priv->actionClosePage );
-
-                connect( _priv->actionClosePage, SIGNAL( triggered()        ),
-                         this,                   SLOT  ( contextClosePage() ) );
-
 
                 _priv->tabContextMenu->addAction( _priv->actionMovePageLeft  );
                 _priv->tabContextMenu->addAction( _priv->actionMovePageRight );
@@ -552,33 +534,92 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 
 
 void
-YQPkgFilterTab::contextMovePageLeft()
+YQPkgFilterTab::closePage()
 {
+    YQPkgFilterPage * currentPage  = 0;
+    int               currentIndex = -1;
+
     if ( _priv->tabContextMenuPage )
     {
-        int contextPageIndex = _priv->tabContextMenuPage->tabIndex;
-        int otherPageIndex   = contextPageIndex-1;
+        currentPage  = _priv->tabContextMenuPage;
+        currentIndex = _priv->tabContextMenuPage->tabIndex;
+    }
+    else
+    {
+        currentIndex = tabBar()->currentIndex();
+        currentPage  = findPage( currentIndex );
+    }
 
-        if ( otherPageIndex >= 0 )
-        {
-            swapTabs( _priv->tabContextMenuPage, findPage( otherPageIndex ) );
-        }
+    if ( currentPage )
+        currentPage->tabIndex = -1;
+
+    if ( currentIndex >= 0 )
+        tabBar()->removeTab( currentIndex );
+
+    //
+    // Adjust tab index of the active pages to the right of that page
+    //
+
+    for ( YQPkgFilterPage * page: constPages() )
+    {
+        if ( page->tabIndex >= currentIndex )
+            page->tabIndex--;
+    }
+
+    showPage( tabBar()->currentIndex() ); // display the new current page
+}
+
+
+void
+YQPkgFilterTab::movePageLeft()
+{
+    YQPkgFilterPage * currentPage  = 0;
+    int               currentIndex = -1;
+
+    if ( _priv->tabContextMenuPage )
+    {
+        currentPage  = _priv->tabContextMenuPage;
+        currentIndex = _priv->tabContextMenuPage->tabIndex;
+    }
+    else
+    {
+        currentIndex = tabBar()->currentIndex();
+        currentPage  = findPage( currentIndex );
+    }
+
+    int otherPageIndex = currentIndex - 1;
+
+    if ( otherPageIndex >= 0 )
+    {
+        YQPkgFilterPage * otherPage = findPage( otherPageIndex );
+        swapTabs( currentPage, otherPage );
     }
 }
 
 
 void
-YQPkgFilterTab::contextMovePageRight()
+YQPkgFilterTab::movePageRight()
 {
+    YQPkgFilterPage * currentPage  = 0;
+    int               currentIndex = -1;
+
     if ( _priv->tabContextMenuPage )
     {
-        int contextPageIndex = _priv->tabContextMenuPage->tabIndex;
-        int otherPageIndex   = contextPageIndex+1;
+        currentPage  = _priv->tabContextMenuPage;
+        currentIndex = _priv->tabContextMenuPage->tabIndex;
+    }
+    else
+    {
+        currentIndex = tabBar()->currentIndex();
+        currentPage  = findPage( currentIndex );
+    }
 
-        if ( otherPageIndex < tabBar()->count() )
-        {
-            swapTabs( _priv->tabContextMenuPage, findPage( otherPageIndex ) );
-        }
+    int otherPageIndex = currentIndex + 1;
+
+    if ( otherPageIndex < tabBar()->count() )
+    {
+        YQPkgFilterPage * otherPage = findPage( otherPageIndex );
+        swapTabs( currentPage, otherPage );
     }
 }
 
@@ -598,44 +639,15 @@ YQPkgFilterTab::swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 )
     // If one of the two pages was the currently displayed one,
     // make sure the same page is still displayed.
 
+    QSignalBlocker sigBlocker( tabBar() );
+
     if ( oldCurrentIndex == page1->tabIndex )
     {
-        QSignalBlocker sigBlocker( tabBar() );
         tabBar()->setCurrentIndex( page2->tabIndex );
     }
     else if ( oldCurrentIndex == page2->tabIndex )
     {
-        QSignalBlocker sigBlocker( tabBar() );
         tabBar()->setCurrentIndex( page1->tabIndex );
-    }
-}
-
-
-void
-YQPkgFilterTab::contextClosePage()
-{
-    if ( _priv->tabContextMenuPage )
-    {
-        int pageIndex = _priv->tabContextMenuPage->tabIndex;
-        _priv->tabContextMenuPage->tabIndex = -1;
-        tabBar()->removeTab( pageIndex );
-
-
-        //
-        // Adjust tab index of the active pages to the right of that page
-        //
-
-        for ( YQPkgFilterPageVector::iterator it = _priv->pages.begin();
-              it != _priv->pages.end();
-              ++it )
-        {
-            YQPkgFilterPage * page = *it;
-
-            if ( page->tabIndex >= pageIndex )
-                page->tabIndex--;
-        }
-
-        showPage( tabBar()->currentIndex() ); // display the new current page
     }
 }
 
@@ -648,14 +660,13 @@ YQPkgFilterTab::readSettings()
     QSettings settings;
     settings.beginGroup( "Pages" );
 
-    const QStringList & pages = settings.value( "OpenPages" ).toStringList();
-    QString current   = settings.value( "CurrentPage" ).toString();
+    const QStringList & savedPages = settings.value( "OpenPages" ).toStringList();
+    QString currentPageId = settings.value( "CurrentPage" ).toString();
 
     settings.endGroup();
 
-
-    logDebug() << "Restoring pages " << pages << endl;
-    logDebug() << "Current page:   " << current << endl;
+    logInfo() << "Restoring pages " << savedPages << endl;
+    logInfo() << "Current page:   " << currentPageId << endl;
 
     {
         // Prevent an event cascade as pages are added: Each one would cause
@@ -666,25 +677,25 @@ YQPkgFilterTab::readSettings()
 
         QSignalBlocker sigBlocker( this );
 
-        for ( const QString& id: pages )
+        for ( QString pageId: savedPages )
         {
-            YQPkgFilterPage * page = findPage( id );
+            YQPkgFilterPage * page = findPage( pageId );
 
             if ( page )
                 showPage( page );
             else
-                logWarning() << "No page with ID \"" << id << "\"" << endl;
+                logWarning() << "No page with ID \"" << pageId << "\"" << endl;
         }
     }
 
-    if ( ! current.isEmpty() )
+    if ( ! currentPageId.isEmpty() )
     {
-        YQPkgFilterPage * page = findPage( current );
+        YQPkgFilterPage * page = findPage( currentPageId );
 
         if ( page )
             showPage( page ); // We want this to emit signals to fill the pkg list
         else
-            logWarning() << "Can't restore current page with ID \"" << current << "\"" << endl;
+            logWarning() << "Can't restore current page with ID \"" << currentPageId << "\"" << endl;
     }
 }
 
@@ -692,7 +703,7 @@ YQPkgFilterTab::readSettings()
 void
 YQPkgFilterTab::writeSettings()
 {
-    QStringList pages;
+    QStringList openPages;
 
     for ( int i=0; i < tabBar()->count(); i++ )
     {
@@ -703,7 +714,7 @@ YQPkgFilterTab::writeSettings()
             if ( page->id.isEmpty() )
                 logWarning() << "No ID for tab page \"" << page->label << "\"" << endl;
             else
-                pages << page->id;
+                openPages << page->id;
         }
     }
 
@@ -713,7 +724,7 @@ YQPkgFilterTab::writeSettings()
     QSettings settings;
     settings.beginGroup( "Pages" );
 
-    settings.setValue( "OpenPages", pages );
+    settings.setValue( "OpenPages", openPages );
 
     if ( currentPage )
         settings.setValue( "CurrentPage", currentPage->id );

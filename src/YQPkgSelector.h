@@ -64,6 +64,15 @@ public:
      **/
     ~YQPkgSelector();
 
+    /**
+     * Return the instance of this class or 0 if there is none.
+     *
+     * This is not a singleton, but in each normal application there is no more
+     * than one instance, and during the lifetime of any widgets inside the
+     * YQPkgSelector it is safe to assume that the YQPkgSelector also exists.
+     **/
+    static YQPkgSelector * instance() { return _instance; }
+
 
 public slots:
 
@@ -412,6 +421,8 @@ protected:
 
     YQPkgObjList::ExcludeRule *         _excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *         _excludeDebugInfoPkgs;
+
+    static YQPkgSelector *              _instance;
 };
 
 

@@ -95,12 +95,15 @@
 using std::max;
 using std::string;
 using std::map;
-using std::pair;
+
+
+YQPkgSelector * YQPkgSelector::_instance = 0;
 
 
 YQPkgSelector::YQPkgSelector( QWidget * parent )
     : YQPkgSelectorBase( parent )
 {
+    _instance                    = this;
     _blockResolver               = true;
     _showChangesDialog           = true;
     _autoDependenciesAction      = 0;
@@ -157,6 +160,7 @@ YQPkgSelector::~YQPkgSelector()
     logDebug() << "Destroying YQPkgSelector..." << endl;
 
     writeSettings();
+    _instance = 0;
 
     logDebug() << "Destroying YQPkgSelector done." << endl;
 }
@@ -871,7 +875,7 @@ YQPkgSelector::addMenus()
     // to a separate source file YQPkgSelHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ), Qt::Key_F1 );
+    _helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ) );
     _helpMenu->addAction( _( "About Myrlyn" ), this, SLOT( about()   ) );
     _helpMenu->addAction( _( "About Qt"     ), qApp, SLOT( aboutQt() ) );
 

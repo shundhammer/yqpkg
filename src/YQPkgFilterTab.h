@@ -30,6 +30,8 @@ class YQPkgFilterPage;
 class YQPkgDiskUsageList;
 class QAction;
 
+typedef std::vector<YQPkgFilterPage *> YQPkgFilterPageVector;
+
 
 /**
  * Widget for "tabbed browsing" in packages:
@@ -103,19 +105,19 @@ public:
      * to addPage() ).
      * Return 0 if there is no such page.
      **/
-    YQPkgFilterPage * findPage( QWidget * pageContent );
+    YQPkgFilterPage * findPage( QWidget * pageContent ) const;
 
     /**
      * Find a filter page by its internal name.
      * Return 0 if there is no such page.
      **/
-    YQPkgFilterPage * findPage( const QString & internalName );
+    YQPkgFilterPage * findPage( const QString & internalName ) const;
 
     /**
      * Find a filter page by its tab index.
      * Return 0 if there is no such page.
      **/
-    YQPkgFilterPage * findPage( int tabIndex );
+    YQPkgFilterPage * findPage( int tabIndex ) const;
 
     /**
      * Return the number of open tabs.
@@ -129,7 +131,7 @@ public:
      *
      * Reimplemented from QObject.
      **/
-    virtual bool eventFilter ( QObject * watchedObj, QEvent * event );
+    virtual bool eventFilter ( QObject * watchedObj, QEvent * event ) override;
 
 
 signals:
@@ -163,11 +165,6 @@ public slots:
     void reloadCurrentPage();
 
     /**
-     * Close the current page unless this is the last visible page.
-     **/
-    void closeCurrentPage();
-
-    /**
      * Load settings, including which tabs are to be opened and in which order.
      * Return 'true' if settings could be loaded, 'false' if not.
      *
@@ -198,24 +195,37 @@ protected slots:
     void showPage( QAction * action );
 
     /**
-     * Move the current tab page (from the context menu) one position to the
-     * left.
+     * Move the current tab page one position to the left.
      **/
-    void contextMovePageLeft();
+    void movePageLeft();
 
     /**
-     * Move the current tab page (from the context menu) one position to the
-     * right.
+     * Move the current tab page one position to the right.
      **/
-    void contextMovePageRight();
+    void movePageRight();
 
     /**
-     * Close the current tab page (from the context menu).
+     * Close the current tab page.
      **/
-    void contextClosePage();
+    void closePage();
 
 
 protected:
+
+    /**
+     * Const access to the pages container
+     **/
+    const YQPkgFilterPageVector & constPages() const;
+
+    /**
+     * Read/write access to the pages container
+     **/
+    YQPkgFilterPageVector & pages();
+
+    /**
+     * Create and connec the actions for the tab context menu.
+     **/
+    void createActions();
 
     /**
      * Show a page.
