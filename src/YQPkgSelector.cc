@@ -340,6 +340,9 @@ void YQPkgSelector::createServiceFilterView()
         CHECK_NEW( _serviceFilterView );
 
         _filters->addPage( _( "Ser&vices" ), _serviceFilterView, "services" );
+
+        // No shortcut - this isn't used nearly much enough to waste another
+        // key combination on it. There are only 26 to choose from.
     }
 }
 
@@ -361,6 +364,7 @@ void YQPkgSelector::createPkgClassificationFilterView()
 {
     _pkgClassificationFilterView = new YQPkgClassificationFilterView( this );
     CHECK_NEW( _pkgClassificationFilterView );
+
     _filters->addPage( _( "Package Classi&fication" ), _pkgClassificationFilterView,
                        "package_classification", Qt::CTRL + Qt::Key_F );
 }
@@ -370,9 +374,9 @@ void YQPkgSelector::createLanguagesFilterView()
 {
     _langList = new YQPkgLangList( this );
     CHECK_NEW( _langList );
-
-    _filters->addPage( _( "&Languages" ), _langList, "languages" );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
+
+    _filters->addPage( _( "&Languages" ), _langList, "languages", Qt::CTRL + Qt::Key_L );
 }
 
 
@@ -380,6 +384,7 @@ void YQPkgSelector::createStatusFilterView()
 {
     _statusFilterView = new YQPkgStatusFilterView( this );
     CHECK_NEW( _statusFilterView );
+
     _filters->addPage( _( "Installation Su&mmary" ), _statusFilterView,
                        "inst_summary", Qt::CTRL + Qt::Key_M );
 }
