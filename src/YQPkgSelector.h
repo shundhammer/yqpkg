@@ -412,8 +412,6 @@ protected:
 
     YQPkgObjList::ExcludeRule *         _excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *         _excludeDebugInfoPkgs;
-
-    QColor                              _normalButtonBackground;
 };
 
 
