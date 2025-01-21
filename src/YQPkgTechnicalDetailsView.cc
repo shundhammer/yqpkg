@@ -79,11 +79,12 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 QString
 YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 {
-    QString html = "<td align='top'>";
-    QString line;
     const std::list<std::string> authors = pkg->authors();
 
-    for (const std::string & author: authors )
+    QString html = "<td align='top'>";
+    QString line;
+
+    for ( const std::string & author: authors )
     {
         line = fromUTF8( author );
         line = htmlEscape( line );
@@ -116,11 +117,11 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
     html += row( hcell( _( "Vendor:"            ) ) + cell( pkg->vendor()                  ) );
     html += row( hcell( _( "Packager:"          ) ) + cell( pkg->packager()                ) );
     html += row( hcell( _( "Architecture:"      ) ) + cell( pkg->arch().asString()         ) );
-    html += row( hcell( _( "Build Host:"        ) ) + cell( pkg->buildhost()               ) );
     html += row( hcell( _( "URL:"               ) ) + cell( pkg->url()                     ) );
     html += row( hcell( _( "Source Package:"    ) ) + cell( pkg->sourcePkgName() + "-" + pkg->sourcePkgEdition().asString() ) );
-    html += row( hcell( _( "Media No.:"         ) ) + cell( pkg->mediaNr()                 ) );
-    html += row( hcell( _( "Authors:"           ) ) + authorsListCell( pkg                 ) );
+
+    if ( ! pkg->authors().empty() )
+        html += row( hcell( _( "Authors:"       ) ) + authorsListCell( pkg                 ) );
 
     html = "<br>" + table( html );
 
@@ -148,18 +149,17 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel selectable,
     html += row( hcell( _( "Install Time:"      ) ) + cell( p1->installtime()             ) + cell( p2->installtime()             ) );
     html += row( hcell( _( "License:"           ) ) + cell( p1->license()                 ) + cell( p2->license()                 ) );
     html += row( hcell( _( "Installed Size:"    ) ) + cell( p1->installSize().asString()  ) + cell( p2->installSize().asString()  ) );
-    html += row( hcell( _( "Download Size:"     ) ) + cell( p1->downloadSize().asString() ) + cell( p2->downloadSize().asString() ) );
+    html += row( hcell( _( "Download Size:"     ) ) + cell( p1->downloadSize().asString() ) );
     html += row( hcell( _( "Distribution:"      ) ) + cell( p1->distribution()            ) + cell( p2->distribution()            ) );
     html += row( hcell( _( "Vendor:"            ) ) + cell( p1->vendor()                  ) + cell( p2->vendor()                  ) );
     html += row( hcell( _( "Packager:"          ) ) + cell( p1->packager()                ) + cell( p2->packager()                ) );
     html += row( hcell( _( "Architecture:"      ) ) + cell( p1->arch().asString()         ) + cell( p2->arch().asString()         ) );
-    html += row( hcell( _( "Build Host:"        ) ) + cell( p1->buildhost()               ) + cell( p2->buildhost()               ) );
     html += row( hcell( _( "URL:"               ) ) + cell( p1->url()                     ) + cell( p2->url()                     ) );
     html += row( hcell( _( "Source Package:"    ) ) + cell( p1->sourcePkgName() + "-" + p1->sourcePkgEdition().asString() )
                                                     + cell( p2->sourcePkgName() + "-" + p2->sourcePkgEdition().asString()         ) );
-    html += row( hcell( _( "Media No.:"         ) ) + cell( p1->mediaNr()                 ) + cell( p2->mediaNr()                 ) );
-    html += row( hcell( _( "Authors:"           ) ) + authorsListCell( p1                 ) + authorsListCell( p2                 ) );
 
+    if ( ! ( p1->authors().empty() && p2->authors().empty() ) )
+         html += row( hcell( _( "Authors:"      ) ) + authorsListCell( p1                 ) + authorsListCell( p2                 ) );
 
     html = "<br>" + table( html );
 
