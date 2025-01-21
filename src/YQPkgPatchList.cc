@@ -306,8 +306,6 @@ YQPkgPatchList::filter()
         }
 
     }
-    else
-        logWarning() << "selection empty" << endl;
 
     emit filterFinished();
 }
