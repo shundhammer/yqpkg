@@ -318,7 +318,8 @@ void YQPkgSelector::createUpdatesFilterView()
     _updatesFilterView = new YQPkgUpdatesFilterView( this );
     CHECK_NEW( _updatesFilterView );
 
-    _filters->addPage( _( "&Updates" ), _updatesFilterView, "updates", Qt::CTRL + Qt::SHIFT + Qt::Key_U );
+    _filters->addPage( _( "&Updates" ), _updatesFilterView,
+                       "updates", Qt::CTRL + Qt::SHIFT + Qt::Key_U );
 }
 
 
@@ -327,7 +328,8 @@ void YQPkgSelector::createRepoFilterView()
     _repoFilterView = new YQPkgRepoFilterView( this );
     CHECK_NEW( _repoFilterView );
 
-    _filters->addPage( _( "&Repositories" ), _repoFilterView, "repos", Qt::CTRL + Qt::SHIFT + Qt::Key_R );
+    _filters->addPage( _( "&Repositories" ), _repoFilterView,
+                       "repos", Qt::CTRL + Qt::SHIFT + Qt::Key_R );
 
 }
 
@@ -341,7 +343,7 @@ void YQPkgSelector::createServiceFilterView()
 
         _filters->addPage( _( "Ser&vices" ), _serviceFilterView, "services" );
 
-        // No shortcut - this isn't used nearly much enough to waste another
+        // No shortcut - this isn't used nearly enough to waste another
         // key combination on it. There are only 26 to choose from.
     }
 }
@@ -376,7 +378,8 @@ void YQPkgSelector::createLanguagesFilterView()
     CHECK_NEW( _langList );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 
-    _filters->addPage( _( "&Languages" ), _langList, "languages", Qt::CTRL + Qt::SHIFT + Qt::Key_L );
+    _filters->addPage( _( "&Languages" ), _langList,
+                       "languages", Qt::CTRL + Qt::SHIFT + Qt::Key_L );
 }
 
 
@@ -747,22 +750,6 @@ YQPkgSelector::addMenus()
 #endif
 
 
-#ifdef FIXME_REPO_MGMT
-    //
-    // Configuration menu
-    //
-
-    if ( repoMgrEnabled() )
-    {
-        _configMenu = new QMenu( _menuBar );
-        CHECK_NEW( _configMenu );
-        action = _menuBar->addMenu( _configMenu );
-        action->setText(_( "Confi&guration" ));
-        _configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ) );
-    }
-#endif
-
-
     //
     // Dependency menu
     //
@@ -839,6 +826,12 @@ YQPkgSelector::addMenus()
     CHECK_NEW( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
     action->setText(_( "E&xtras" ));
+
+
+#if 0
+    _extrasMenu->addAction( _( "Configure &Repositories..."  ), this, SLOT( configRepos() ) );
+    _extrasMenu->addSeparator();
+#endif
 
     _extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts()    ) );
     _extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ) );
@@ -1197,6 +1190,15 @@ YQPkgSelector::reset()
     // they are already reset by reloadCurrentPage().
 
     emit resetNotify();
+}
+
+
+void
+YQPkgSelector::configRepos()
+{
+    logDebug() << endl;
+
+    notImplemented();
 }
 
 

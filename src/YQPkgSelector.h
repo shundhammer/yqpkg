@@ -82,6 +82,11 @@ public slots:
     void reset();
 
     /**
+     * Start the repo configuration.
+     **/
+    void configRepos();
+
+    /**
      * Resolve package dependencies manually.
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
