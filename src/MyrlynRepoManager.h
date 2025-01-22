@@ -55,8 +55,8 @@ public:
      * them. This will throw if a connection cannot be established, for example
      * because the package manager is already busy in another window.
      **/
-    void zyppConnect( int attempts    = 5,
-                      int waitSeconds = 3);
+    void zyppConnect( int attempts    = 3,
+                      int waitSeconds = 2 );
 
     /**
      * Initialize the target (the installed system): Add it as a repos
@@ -113,8 +113,8 @@ protected:
      * ptr. Throw if this wasn't successful after 'attempts' number of attempts
      * with 'waitSeconds' waiting time between them.
      **/
-    zypp::ZYpp::Ptr zyppConnectInternal( int attempts    = 5,
-                                         int waitSeconds = 3 );
+    zypp::ZYpp::Ptr zyppConnectInternal( int attempts    = 3,
+                                         int waitSeconds = 2 );
 
     /**
      * Shut down all the zypp objects that we created in the correct order.
