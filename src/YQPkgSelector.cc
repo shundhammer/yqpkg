@@ -83,7 +83,7 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP          0
 #define FORCE_SHOW_NEEDED_PATCHES              0
 #define ENABLE_PATCH_MENU                      0
-#define ENABLE_VERIFY_SYSTEM_MODE_ACTION       1
+#define ENABLE_VERIFY_SYSTEM_MODE_ACTION       0
 #define DEPENDENCY_FEEDBACK_IF_OK              1
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD  20
 
@@ -97,32 +97,39 @@ YQPkgSelector * YQPkgSelector::_instance = 0;
 
 YQPkgSelector::YQPkgSelector( QWidget * parent )
     : YQPkgSelectorBase( parent )
+    , _pkgList(0)
+    , _filters(0)
+    , _searchFilterView(0)
+    , _patchFilterView(0)
+    , _updatesFilterView(0)
+    , _repoFilterView(0)
+    , _serviceFilterView(0)
+    , _pkgClassificationFilterView(0)
+    , _patternList(0)
+    , _statusFilterView(0)
+    , _langList(0)
+    , _pkgVersionsView(0)
+    , _notificationsArea(0)
+    , _switchToRepoLabel(0)
+    , _cancelSwitchingToRepoLabel(0)
+    , _menuBar(0)
+    , _pkgMenu(0)
+    , _patchMenu(0)
+    , _autoDependenciesAction(0)
+    , _showDevelAction(0)
+    , _showDebugAction(0)
+    , _verifySystemModeAction(0)
+    , _installRecommendedAction(0)
+    , _cleanDepsOnRemoveAction(0)
+    , _allowVendorChangeAction(0)
+    , _excludeDevelPkgs(0)
+    , _excludeDebugInfoPkgs(0)
 {
-    _instance                    = this;
-    _blockResolver               = true;
-    _showChangesDialog           = true;
-    _autoDependenciesAction      = 0;
-    _detailsViews                = 0;
-    _filters                     = 0;
-    _langList                    = 0;
-    _notifications               = 0;
-    _pkgClassificationFilterView = 0;
-    _patchFilterView             = 0;
-    _patternList                 = 0;
-    _pkgChangeLogView            = 0;
-    _pkgDependenciesView         = 0;
-    _pkgDescriptionView          = 0;
-    _pkgFileListView             = 0;
-    _pkgList                     = 0;
-    _pkgTechnicalDetailsView     = 0;
-    _pkgVersionsView             = 0;
-    _repoFilterView              = 0;
-    _serviceFilterView           = 0;
-    _searchFilterView            = 0;
-    _statusFilterView            = 0;
-    _updatesFilterView           = 0;
-    _excludeDevelPkgs            = 0;
-    _excludeDebugInfoPkgs        = 0;
+    _instance = this;
+
+    // Inherited from YQPkgSelectorBase
+    _blockResolver     = true;
+    _showChangesDialog = true;
 
     logDebug() << "Creating YQPkgSelector..." << endl;
 
@@ -428,8 +435,8 @@ YQPkgSelector::layoutPkgList( QWidget * parent )
     // Notifications
 
     layoutNotifications( pkgListPane );
-    _notifications->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    pkgListVBox->addWidget( _notifications );
+    _notificationsArea->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+    pkgListVBox->addWidget( _notificationsArea );
 
 
     // Package list
@@ -448,16 +455,16 @@ YQPkgSelector::layoutNotifications( QWidget * parent )
 {
     // This is made visible when activating the repository filter
 
-    _notifications = new QWidget( parent );
-    QVBoxLayout * notificationsLayout = new QVBoxLayout( _notifications );
+    _notificationsArea = new QWidget( parent );
+    QVBoxLayout * notificationsLayout = new QVBoxLayout( _notificationsArea );
     notificationsLayout->setContentsMargins( 0, 5, 0, 5 ); // left / top / right / bottom
 
-    _switchToRepoLabel = new QLabel( _notifications );
+    _switchToRepoLabel = new QLabel( _notificationsArea );
     _switchToRepoLabel->setTextFormat( Qt::RichText );
     _switchToRepoLabel->setWordWrap( true );
     _switchToRepoLabel->setVisible( false );
 
-    _cancelSwitchingToRepoLabel = new QLabel( _notifications );
+    _cancelSwitchingToRepoLabel = new QLabel( _notificationsArea );
     _cancelSwitchingToRepoLabel->setTextFormat( Qt::RichText );
     _cancelSwitchingToRepoLabel->setWordWrap( true );
     _cancelSwitchingToRepoLabel->setVisible( false );
@@ -496,48 +503,49 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
                                      0,   // right
                                      0 ); // bottom
 
-    _detailsViews = new QTabWidget( detailsPane );
-    CHECK_NEW( _detailsViews );
-    detailsVBox->addWidget( _detailsViews );
+    QTabWidget * detailsViews = new QTabWidget( detailsPane );
+    CHECK_NEW( detailsViews );
+
+    detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+    detailsVBox->addWidget( detailsViews );
+
 
     //
     // Description
     //
 
-    _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
-    CHECK_NEW( _pkgDescriptionView );
+    YQPkgDescriptionView * pkgDescriptionView = new YQPkgDescriptionView( detailsViews );
+    CHECK_NEW( pkgDescriptionView );
 
-    _detailsViews->addTab( _pkgDescriptionView, _( "Description" ) );
-    _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+    detailsViews->addTab( pkgDescriptionView, _( "Description" ) );
 
     connect( _pkgList,                  SIGNAL( currentItemChanged  ( ZyppSel ) ),
-             _pkgDescriptionView,       SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+             pkgDescriptionView,        SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     //
     // Technical details
     //
 
-    _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
-    CHECK_NEW( _pkgTechnicalDetailsView );
+    YQPkgTechnicalDetailsView * pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( detailsViews );
+    CHECK_NEW( pkgTechnicalDetailsView );
 
-    _detailsViews->addTab( _pkgTechnicalDetailsView, _( "Technical Data" ) );
+    detailsViews->addTab( pkgTechnicalDetailsView, _( "Technical Data" ) );
 
-    connect( _pkgList,                 SIGNAL( currentItemChanged  ( ZyppSel ) ),
-             _pkgTechnicalDetailsView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _pkgList,                SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             pkgTechnicalDetailsView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     //
     // Dependencies
     //
 
-    _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
-    CHECK_NEW( _pkgDependenciesView );
+    YQPkgDependenciesView * pkgDependenciesView = new YQPkgDependenciesView( detailsViews );
+    CHECK_NEW( pkgDependenciesView );
 
-    _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
-    _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+    detailsViews->addTab( pkgDependenciesView, _( "Dependencies" ) );
 
-    connect( _pkgList,             SIGNAL( currentItemChanged  ( ZyppSel ) ),
-             _pkgDependenciesView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    connect( _pkgList,            SIGNAL( currentItemChanged  ( ZyppSel ) ),
+             pkgDependenciesView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
 
@@ -545,10 +553,10 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
     // Versions
     //
 
-    _pkgVersionsView = new YQPkgVersionsView( _detailsViews );
+    _pkgVersionsView = new YQPkgVersionsView( detailsViews );
     CHECK_NEW( _pkgVersionsView );
 
-    _detailsViews->addTab( _pkgVersionsView, _( "Versions" ) );
+    detailsViews->addTab( _pkgVersionsView, _( "Versions" ) );
 
     connect( _pkgList,          SIGNAL( currentItemChanged  ( ZyppSel ) ),
              _pkgVersionsView,  SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
@@ -563,14 +571,13 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
 
     if ( haveInstalledPkgs )    // file list information is only available for installed pkgs
     {
-        _pkgFileListView = new YQPkgFileListView( _detailsViews );
-        CHECK_NEW( _pkgFileListView );
+        YQPkgFileListView * pkgFileListView = new YQPkgFileListView( detailsViews );
+        CHECK_NEW( pkgFileListView );
 
-        _detailsViews->addTab( _pkgFileListView, _( "File List" ) );
-        _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+        detailsViews->addTab( pkgFileListView, _( "File List" ) );
 
-        connect( _pkgList,         SIGNAL( currentItemChanged  ( ZyppSel ) ),
-                 _pkgFileListView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+        connect( _pkgList,        SIGNAL( currentItemChanged  ( ZyppSel ) ),
+                 pkgFileListView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 
 
@@ -580,14 +587,13 @@ YQPkgSelector::layoutDetailsViews( QWidget * parent )
 
     if ( haveInstalledPkgs )    // change log information is only available for installed pkgs
     {
-        _pkgChangeLogView = new YQPkgChangeLogView( _detailsViews );
-        CHECK_NEW( _pkgChangeLogView );
+        YQPkgChangeLogView * pkgChangeLogView = new YQPkgChangeLogView( detailsViews );
+        CHECK_NEW( pkgChangeLogView );
 
-        _detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
-        _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+        detailsViews->addTab( pkgChangeLogView, _( "Change Log" ) );
 
-        connect( _pkgList,          SIGNAL( currentItemChanged  ( ZyppSel ) ),
-                 _pkgChangeLogView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+        connect( _pkgList,         SIGNAL( currentItemChanged  ( ZyppSel ) ),
+                 pkgChangeLogView, SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 }
 
@@ -638,14 +644,10 @@ YQPkgSelector::layoutMenuBar( QWidget *parent )
     _menuBar->setContentsMargins( 12, 20, 12, 20 ); // left / top / right / bottom
     parent->layout()->addWidget(_menuBar);
 
-    _fileMenu       = 0;
-    _optionsMenu    = 0;
+#if 0
     _pkgMenu        = 0;
     _patchMenu      = 0;
-    _extrasMenu     = 0;
-    _configMenu     = 0;
-    _dependencyMenu = 0;
-    _helpMenu       = 0;
+#endif
 }
 
 
@@ -656,15 +658,15 @@ YQPkgSelector::addMenus()
     // File menu
     //
 
-    _fileMenu = new QMenu( _menuBar );
-    CHECK_NEW( _fileMenu );
-    QAction * action = _menuBar->addMenu( _fileMenu );
+    QMenu * fileMenu = new QMenu( _menuBar );
+    CHECK_NEW( fileMenu );
+    QAction * action = _menuBar->addMenu( fileMenu );
     action->setText( _( "&File" ));
-    _fileMenu->addSeparator();
+    fileMenu->addSeparator();
 
-    action = _fileMenu->addAction( _( "&Accept Changes" ), this, SLOT( accept() ), Qt::CTRL + Qt::Key_A );
+    action = fileMenu->addAction( _( "&Accept Changes" ), this, SLOT( accept() ), Qt::CTRL + Qt::Key_A );
     action->setEnabled( ! MyrlynApp::readOnlyMode() );
-    _fileMenu->addAction( _( "&Quit - Discard Changes" ),  this, SLOT( reject() ), Qt::CTRL + Qt::Key_Q );
+    fileMenu->addAction( _( "&Quit - Discard Changes" ),  this, SLOT( reject() ), Qt::CTRL + Qt::Key_Q );
 
 
     if ( _pkgList )
@@ -748,19 +750,19 @@ YQPkgSelector::addMenus()
     // Dependency menu
     //
 
-    _dependencyMenu = new QMenu( _menuBar );
-    CHECK_NEW( _dependencyMenu );
-    action = _menuBar->addMenu( _dependencyMenu );
+    QMenu * dependencyMenu = new QMenu( _menuBar );
+    CHECK_NEW( dependencyMenu );
+    action = _menuBar->addMenu( dependencyMenu );
     action->setText(_( "&Dependencies" ));
 
-    _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
+    dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
 
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
-    _dependencyMenu->addAction( _autoDependenciesAction );
+    dependencyMenu->addAction( _autoDependenciesAction );
 
-    _installRecommendedAction = _dependencyMenu->addAction( _("Install &Recommended Packages"),
-                                                            this, SLOT( pkgInstallRecommendedChanged( bool ) ) );
+    _installRecommendedAction = dependencyMenu->addAction( _("Install &Recommended Packages"),
+                                                           this, SLOT( pkgInstallRecommendedChanged( bool ) ) );
     _installRecommendedAction->setCheckable( true );
 
 
@@ -768,14 +770,14 @@ YQPkgSelector::addMenus()
     // View menu
     //
 
-    _optionsMenu = new QMenu( _menuBar );
-    CHECK_NEW( _optionsMenu );
-    action = _menuBar->addMenu( _optionsMenu );
+    QMenu * optionsMenu = new QMenu( _menuBar );
+    CHECK_NEW( optionsMenu );
+    action = _menuBar->addMenu( optionsMenu );
     // Translators: Menu for view options (Use a noun, not a verb!)
     action->setText(_( "&Options" ));
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    _showDevelAction = _optionsMenu->addAction( _( "Show -de&vel Packages" ),
+    _showDevelAction = optionsMenu->addAction( _( "Show -de&vel Packages" ),
                                                 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
     _showDevelAction->setCheckable( true );
 
@@ -784,7 +786,7 @@ YQPkgSelector::addMenus()
     _excludeDevelPkgs->enable( false );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-    _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
+    _showDebugAction = optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
                                                 this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
     _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
@@ -793,20 +795,20 @@ YQPkgSelector::addMenus()
 
 
 #if ENABLE_VERIFY_SYSTEM_MODE_ACTION
-    _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
+    _verifySystemModeAction = optionsMenu->addAction( _( "&System Verification Mode" ),
                                                        this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
     _verifySystemModeAction->setCheckable( true );
 #endif
 
     // Widget styles can use the text information in the rendering for sections,
     // or can choose to ignore it and render sections like simple separators.
-    _optionsMenu->addSection( _( "Options for this run only..." ) );
+    optionsMenu->addSection( _( "Options for this run only..." ) );
 
-    _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
+    _cleanDepsOnRemoveAction = optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
                                                         this, SLOT( pkgCleanDepsOnRemoveChanged( bool ) ) );
     _cleanDepsOnRemoveAction->setCheckable( true );
 
-    _allowVendorChangeAction = _optionsMenu->addAction( _( "&Allow vendor change" ),
+    _allowVendorChangeAction = optionsMenu->addAction( _( "&Allow vendor change" ),
                                                         this, SLOT( pkgAllowVendorChangeChanged( bool ) ) );
     _allowVendorChangeAction->setCheckable( true );
 
@@ -815,65 +817,65 @@ YQPkgSelector::addMenus()
     // Extras menu
     //
 
-    _extrasMenu = new QMenu( _menuBar );
-    CHECK_NEW( _extrasMenu );
-    action = _menuBar->addMenu( _extrasMenu );
+    QMenu * extrasMenu = new QMenu( _menuBar );
+    CHECK_NEW( extrasMenu );
+    action = _menuBar->addMenu( extrasMenu );
     action->setText(_( "E&xtras" ));
 
 
 #if 0
-    _extrasMenu->addAction( _( "Configure &Repositories..."  ), this, SLOT( configRepos() ) );
-    _extrasMenu->addSeparator();
+    extrasMenu->addAction( _( "Configure &Repositories..."  ), this, SLOT( configRepos() ) );
+    extrasMenu->addSeparator();
 #endif
 
-    _extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts()    ) );
-    _extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ) );
-    _extrasMenu->addAction( _( "Show &History"          ), this, SLOT( showHistory()     ) );
+    extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts()    ) );
+    extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ) );
+    extrasMenu->addAction( _( "Show &History"          ), this, SLOT( showHistory()     ) );
 
-    _extrasMenu->addSeparator();
+    extrasMenu->addSeparator();
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    _extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-    _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
 
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
-    _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
 
-    _extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
+    extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
                             this, SLOT( installRecommendedPkgs() ) );
 
-    _extrasMenu->addSeparator();
+    extrasMenu->addSeparator();
 
     if ( _pkgConflictDialog )
     {
-        QAction * action = _extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
+        QAction * action = extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
                                                    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
         action->setEnabled( MyrlynApp::runningAsRoot() );
     }
 
     if ( _actionResetIgnoredDependencyProblems )
-        _extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
+        extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
 
 
     //
     // Help menu
     //
 
-    _helpMenu = new QMenu( _menuBar );
-    CHECK_NEW( _helpMenu );
+    QMenu * helpMenu = new QMenu( _menuBar );
+    CHECK_NEW( helpMenu );
     _menuBar->addSeparator();
-    action = _menuBar->addMenu( _helpMenu );
+    action = _menuBar->addMenu( helpMenu );
     action->setText(_( "H&elp" ));
 
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPkgSelHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ) );
-    _helpMenu->addAction( _( "About Myrlyn" ), this, SLOT( about()   ) );
-    _helpMenu->addAction( _( "About Qt"     ), qApp, SLOT( aboutQt() ) );
+    helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ) );
+    helpMenu->addAction( _( "About Myrlyn" ), this, SLOT( about()   ) );
+    helpMenu->addAction( _( "About Qt"     ), qApp, SLOT( aboutQt() ) );
 
 
     //
@@ -1260,13 +1262,13 @@ YQPkgSelector::updateSwitchRepoLabels()
 {
     if ( ! _repoFilterView || ! _repoFilterView->isVisible() )
     {
-        if ( _notifications )
-            _notifications->hide();
+        if ( _notificationsArea )
+            _notificationsArea->hide();
 
         return;
     }
 
-    _notifications->show();
+    _notificationsArea->show();
     _switchToRepoLabel->setText("");
     _cancelSwitchingToRepoLabel->setText("");
 
@@ -1324,8 +1326,8 @@ YQPkgSelector::updateSwitchRepoLabels()
     _switchToRepoLabel->setVisible( ! _switchToRepoLabel->text().isEmpty() );
     _cancelSwitchingToRepoLabel->setVisible( ! _cancelSwitchingToRepoLabel->text().isEmpty() );
 
-    _notifications->setVisible( _switchToRepoLabel->isVisible() ||
-                                _cancelSwitchingToRepoLabel->isVisible() );
+    _notificationsArea->setVisible( _switchToRepoLabel->isVisible() ||
+                                    _cancelSwitchingToRepoLabel->isVisible() );
 }
 
 
@@ -1425,26 +1427,22 @@ YQPkgSelector::installRecommendedPkgs()
 void
 YQPkgSelector::pkgExcludeDebugChanged( bool on )
 {
-    if ( _optionsMenu && _pkgList )
-    {
-        if ( _excludeDebugInfoPkgs )
-            _excludeDebugInfoPkgs->enable( ! on );
+    if ( _excludeDebugInfoPkgs )
+        _excludeDebugInfoPkgs->enable( ! on );
 
+    if ( _pkgList )
         _pkgList->applyExcludeRules();
-    }
 }
 
 
 void
 YQPkgSelector::pkgExcludeDevelChanged( bool on )
 {
-    if ( _optionsMenu && _pkgList )
-    {
-        if ( _excludeDevelPkgs )
-            _excludeDevelPkgs->enable( ! on );
+    if ( _excludeDevelPkgs )
+        _excludeDevelPkgs->enable( ! on );
 
+    if ( _pkgList )
         _pkgList->applyExcludeRules();
-    }
 }
 
 
@@ -1642,9 +1640,9 @@ YQPkgSelector::readResolverSettings()
 
     bool autoCheckDependencies = true;
     bool installRecommended    = ! resolver->onlyRequires();
+    bool verifySystem          = resolver->systemVerification();
     bool allowVendorChange     = resolver->allowVendorChange();
     bool cleanDepsOnRemove     = resolver->cleandepsOnRemove();
-    bool verifySystem          = resolver->systemVerification();
 
 
     QSettings settings;
@@ -1652,9 +1650,13 @@ YQPkgSelector::readResolverSettings()
 
     autoCheckDependencies = settings.value( "autoCheckDependencies", autoCheckDependencies ).toBool();
     installRecommended    = settings.value( "installRecommended",    installRecommended    ).toBool();
+    verifySystem          = settings.value( "verifySystem",          verifySystem          ).toBool();
+
+#if 0
+    // Intentionally not persistent
     allowVendorChange     = settings.value( "allowVendorChange",     allowVendorChange     ).toBool();
     cleanDepsOnRemove     = settings.value( "cleanDepsOnRemove",     cleanDepsOnRemove     ).toBool();
-    verifySystem          = settings.value( "verifySystem",          verifySystem          ).toBool();
+#endif
 
     settings.endGroup();
 
@@ -1689,11 +1691,15 @@ YQPkgSelector::writeResolverSettings()
 
     settings.setValue( "autoCheckDependencies", _autoDependenciesAction->isChecked()   );
     settings.setValue( "installRecommended",    _installRecommendedAction->isChecked() );
-    settings.setValue( "allowVendorChange",     _allowVendorChangeAction->isChecked()  );
-    settings.setValue( "cleanDepsOnRemove",     _cleanDepsOnRemoveAction->isChecked()  );
 
     if ( _verifySystemModeAction )
         settings.setValue( "verifySystem",      _verifySystemModeAction->isChecked()   );
+
+#if 0
+    // Intentionally not persistent
+    settings.setValue( "allowVendorChange",     _allowVendorChangeAction->isChecked()  );
+    settings.setValue( "cleanDepsOnRemove",     _cleanDepsOnRemoveAction->isChecked()  );
+#endif
 
     settings.endGroup();
 }

@@ -382,43 +382,37 @@ protected:
     static QString listItem( const QString & text );
 
 
+    //
     // Data members
+    //
 
-    QAction *                           _autoDependenciesAction;
-    QPushButton *                       _checkDependenciesButton;
-    QTabWidget *                        _detailsViews;
-
+    YQPkgList *                         _pkgList;
     YQPkgFilterTab *                    _filters;
-    YQPkgChangeLogView *                _pkgChangeLogView;
-    YQPkgDependenciesView *             _pkgDependenciesView;
-    YQPkgDescriptionView *              _pkgDescriptionView;
-    YQPkgFileListView *                 _pkgFileListView;
-    QWidget *                           _notifications;
-    QLabel *                            _switchToRepoLabel;
-    QLabel *                            _cancelSwitchingToRepoLabel;
+
+    // Filter Views
+    YQPkgSearchFilterView *             _searchFilterView;
+    YQPkgPatchFilterView *              _patchFilterView;
+    YQPkgUpdatesFilterView *            _updatesFilterView;
     YQPkgRepoFilterView *               _repoFilterView;
     YQPkgServiceFilterView *            _serviceFilterView;
-    YQPkgLangList *                     _langList;
-    YQPkgList *                         _pkgList;
-    YQPkgPatternList *                  _patternList;
     YQPkgClassificationFilterView *     _pkgClassificationFilterView;
-    YQPkgSearchFilterView *             _searchFilterView;
+    YQPkgPatternList *                  _patternList;
     YQPkgStatusFilterView *             _statusFilterView;
-    YQPkgTechnicalDetailsView *         _pkgTechnicalDetailsView;
-    YQPkgUpdatesFilterView *            _updatesFilterView;
-    YQPkgVersionsView *                 _pkgVersionsView;
-    YQPkgPatchFilterView *              _patchFilterView;
+    YQPkgLangList *                     _langList;
 
+    // Other widgets
+    YQPkgVersionsView *                 _pkgVersionsView;
+    QWidget *                           _notificationsArea;
+    QLabel *                            _switchToRepoLabel;
+    QLabel *                            _cancelSwitchingToRepoLabel;
+
+    // Menus
     QMenuBar *                          _menuBar;
-    QMenu *                             _fileMenu;
     QMenu *                             _pkgMenu;
     QMenu *                             _patchMenu;
-    QMenu *                             _configMenu;
-    QMenu *                             _dependencyMenu;
-    QMenu *                             _optionsMenu;
-    QMenu *                             _extrasMenu;
-    QMenu *                             _helpMenu;
 
+    // Actions
+    QAction *                           _autoDependenciesAction;
     QAction *                           _showDevelAction;
     QAction *                           _showDebugAction;
     QAction *                           _verifySystemModeAction;
