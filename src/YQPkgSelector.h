@@ -360,14 +360,16 @@ protected:
     bool anyRetractedPkgInstalled();
 
     /**
-     * loads settings that are shared with other frontends
-     */
-    void read_etc_sysconfig_yast();
+     * Read settings for the resolver from the config file
+     * (~/.config/openSUSE/Myrlyn.conf)
+     **/
+    void readResolverSettings();
 
     /**
-     * saves settings that are shared with other frontends
-     */
-    void write_etc_sysconfig_yast();
+     * Write resolver settings to the config file
+     * (~/.config/openSUSE/Myrlyn.conf)
+     **/
+    void writeResolverSettings();
 
     /**
      * Basic HTML formatting: Embed text into <p> ... </p>

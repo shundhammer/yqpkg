@@ -80,16 +80,12 @@
 
 #include "YQPkgSelector.h"
 
-#define CHECK_DEPENDENCIES_ON_STARTUP                   0
-#define FORCE_SHOW_NEEDED_PATCHES                       0
-#define ENABLE_PATCH_MENU                               0
-#define DEPENDENCY_FEEDBACK_IF_OK                       1
-#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD            20
-
-#define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
-#define OPTION_VERIFY                   "PKGMGR_VERIFY_SYSTEM"
-#define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
-#define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
+#define CHECK_DEPENDENCIES_ON_STARTUP          0
+#define FORCE_SHOW_NEEDED_PATCHES              0
+#define ENABLE_PATCH_MENU                      0
+#define ENABLE_VERIFY_SYSTEM_MODE_ACTION       1
+#define DEPENDENCY_FEEDBACK_IF_OK              1
+#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD  20
 
 using std::max;
 using std::string;
@@ -227,14 +223,12 @@ void YQPkgSelector::overrideInitialPage()
 void YQPkgSelector::firstSolverRun()
 {
 #if CHECK_DEPENDENCIES_ON_STARTUP
+
     // Fire up the first dependency check in the main loop.
     // Don't do this right away - wait until all initializations are finished.
-#  if 0
-    QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
-#  else
+
     if ( _pkgConflictDialog && ! MyrlynApp::isOptionSet( OptNoVerify ) )
         QTimer::singleShot( 0, _pkgConflictDialog, SLOT( verifySystemWithBusyPopup() ) );
-#  endif
 #endif
 }
 
@@ -765,9 +759,8 @@ YQPkgSelector::addMenus()
     _autoDependenciesAction->setCheckable( true );
     _dependencyMenu->addAction( _autoDependenciesAction );
 
-    _installRecommendedAction = _dependencyMenu->addAction(
-                                                           _("Install &Recommended Packages"),
-                                                           this, SLOT (pkgInstallRecommendedChanged(bool)));
+    _installRecommendedAction = _dependencyMenu->addAction( _("Install &Recommended Packages"),
+                                                            this, SLOT( pkgInstallRecommendedChanged( bool ) ) );
     _installRecommendedAction->setCheckable( true );
 
 
@@ -799,7 +792,7 @@ YQPkgSelector::addMenus()
     _excludeDebugInfoPkgs->enable( false );
 
 
-#if 0
+#if ENABLE_VERIFY_SYSTEM_MODE_ACTION
     _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
                                                        this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
     _verifySystemModeAction->setCheckable( true );
@@ -1612,15 +1605,15 @@ YQPkgSelector::readSettings()
     QSettings settings;
     settings.beginGroup( "PackageSelector" );
 
-    _showDevelAction->setChecked( settings.value( "showDevelPackages", false ).toBool());
-    _showDebugAction->setChecked( settings.value( "showDebugPackages", false ).toBool());
+    _showDevelAction->setChecked( settings.value( "showDevelPackages", false ).toBool() );
+    _showDebugAction->setChecked( settings.value( "showDebugPackages", false ).toBool() );
 
     settings.endGroup();
 
     pkgExcludeDevelChanged( _showDevelAction->isChecked());
     pkgExcludeDebugChanged( _showDebugAction->isChecked());
 
-    read_etc_sysconfig_yast();
+    readResolverSettings();
 }
 
 
@@ -1635,88 +1628,76 @@ YQPkgSelector::writeSettings()
 
     settings.endGroup();
 
-    write_etc_sysconfig_yast();
-}
-
-
-
-void
-YQPkgSelector::read_etc_sysconfig_yast()
-{
-    // FIXME: It's not YaST anymore; it shouldn't rely on this file. Use the own settings instead.
-
-    map<string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
-
-    bool auto_check = true;
-    auto it = sysconfig.find( OPTION_AUTO_CHECK );
-
-    if ( it != sysconfig.end() )
-        auto_check = it->second == "yes";
-
-    _autoDependenciesAction->setChecked(auto_check);
-
-#if 0
-    bool verify_system = zypp::getZYpp()->resolver()->systemVerification();
-    it = sysconfig.find( OPTION_VERIFY );
-
-    if ( it != sysconfig.end() )
-        verify_system = it->second == "yes";
-
-    _verifySystemModeAction->setChecked( verify_system );
-    pkgVerifySytemModeChanged( verify_system );
-#endif
-
-    bool install_recommended = ! zypp::getZYpp()->resolver()->onlyRequires();
-    it = sysconfig.find( OPTION_RECOMMENDED );
-
-    if (it != sysconfig.end())
-        install_recommended = it->second == "yes";
-
-    _installRecommendedAction->setChecked( install_recommended );
-    pkgInstallRecommendedChanged(install_recommended);
-
-    bool allow_vendor_change = zypp::getZYpp()->resolver()->allowVendorChange();
-    _allowVendorChangeAction->setChecked( allow_vendor_change );
-    pkgAllowVendorChangeChanged( allow_vendor_change );
-
-    bool clean_deps_on_remove = zypp::getZYpp()->resolver()->cleandepsOnRemove();
-    _cleanDepsOnRemoveAction->setChecked( clean_deps_on_remove );
-    pkgCleanDepsOnRemoveChanged( clean_deps_on_remove );
+    writeResolverSettings();
 }
 
 
 void
-YQPkgSelector::write_etc_sysconfig_yast()
+YQPkgSelector::readResolverSettings()
 {
-    // FIXME: It's not YaST anymore; it shouldn't write this file at all.
-    // Write to the own settings instead.
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
-    if ( ! geteuid() == 0 )
-        return;
+    // Initialize fallbacks for most of the settings from the resolver which
+    // may have read them from /etc/zypp/zypp*.conf
 
-    try
-    {
-        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                               OPTION_AUTO_CHECK,
-                                               ( _autoDependenciesAction->isChecked() ? "yes" : "no" ),
-                                               "Automatic dependency checking");
-#if 0
-        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                               OPTION_VERIFY,
-                                               ( _verifySystemModeAction->isChecked() ? "yes" : "no" ),
-                                               "System verification mode");
-#endif
+    bool autoCheckDependencies = true;
+    bool installRecommended    = ! resolver->onlyRequires();
+    bool allowVendorChange     = resolver->allowVendorChange();
+    bool cleanDepsOnRemove     = resolver->cleandepsOnRemove();
+    bool verifySystem          = resolver->systemVerification();
 
-        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                               OPTION_RECOMMENDED,
-                                               ( _installRecommendedAction->isChecked() ? "yes" : "no" ),
-                                               "Install recommended packages");
-    }
-    catch( const std::exception &e )
-    {
-        logError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << endl;
-    }
+
+    QSettings settings;
+    settings.beginGroup( "DependencyResolver" );
+
+    autoCheckDependencies = settings.value( "autoCheckDependencies", autoCheckDependencies ).toBool();
+    installRecommended    = settings.value( "installRecommended",    installRecommended    ).toBool();
+    allowVendorChange     = settings.value( "allowVendorChange",     allowVendorChange     ).toBool();
+    cleanDepsOnRemove     = settings.value( "cleanDepsOnRemove",     cleanDepsOnRemove     ).toBool();
+    verifySystem          = settings.value( "verifySystem",          verifySystem          ).toBool();
+
+    settings.endGroup();
+
+
+    // This is called in the constructor when the resolver is blocked anyway,
+    // so the signal cascades that setting the actions' status may cause won't
+    // have any effect: They might try to call the resolver, but that won't
+    // happen since it's blocked.
+
+    _autoDependenciesAction->setChecked  ( autoCheckDependencies );
+    _installRecommendedAction->setChecked( installRecommended    );
+    _allowVendorChangeAction->setChecked ( allowVendorChange     );
+    _cleanDepsOnRemoveAction->setChecked ( cleanDepsOnRemove     );
+
+    if ( _verifySystemModeAction )
+        _verifySystemModeAction->setChecked( verifySystem );
+
+    // No resolver call for autoCheckDependencies
+    resolver->setSystemVerification  ( verifySystem         );
+    resolver->setOnlyRequires        ( ! installRecommended );
+    resolver->setAllowVendorChange   ( allowVendorChange    );
+    resolver->dupSetAllowVendorChange( allowVendorChange    );
+    resolver->setCleandepsOnRemove   ( cleanDepsOnRemove    );
 }
+
+
+void
+YQPkgSelector::writeResolverSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "DependencyResolver" );
+
+    settings.setValue( "autoCheckDependencies", _autoDependenciesAction->isChecked()   );
+    settings.setValue( "installRecommended",    _installRecommendedAction->isChecked() );
+    settings.setValue( "allowVendorChange",     _allowVendorChangeAction->isChecked()  );
+    settings.setValue( "cleanDepsOnRemove",     _cleanDepsOnRemoveAction->isChecked()  );
+
+    if ( _verifySystemModeAction )
+        settings.setValue( "verifySystem",      _verifySystemModeAction->isChecked()   );
+
+    settings.endGroup();
+}
+
 
 void YQPkgSelector::busyCursor()
 {
