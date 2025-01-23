@@ -19,13 +19,13 @@
 #define YQPkgFilterTab_h
 
 
+#include <memory>
+
 #include <QAction>
 #include <QHash>
 #include <QKeySequence>
 #include <QWidget>
 #include <QTabWidget>
-
-#include "ImplPtr.h"
 
 class YQPkgFilterTabPrivate;
 class YQPkgFilterPage;
@@ -250,7 +250,7 @@ protected:
 
 private:
 
-    ImplPtr<YQPkgFilterTabPrivate> _priv;
+    const std::unique_ptr<YQPkgFilterTabPrivate> _priv;
 };
 
 

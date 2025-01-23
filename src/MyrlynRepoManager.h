@@ -19,13 +19,14 @@
 #define MyrlynRepoManager_h
 
 #include <list>
+#include <memory>
 
 #include <zypp/ZYpp.h>
 #include <zypp/RepoManager.h>
 #include <zypp/RepoInfo.h>
 
 
-typedef boost::shared_ptr<zypp::RepoManager> RepoManager_Ptr;
+using RepoManager_Ptr = std::shared_ptr<zypp::RepoManager>;
 typedef std::list<zypp::RepoInfo> RepoInfoList;
 typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
