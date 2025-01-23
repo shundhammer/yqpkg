@@ -19,6 +19,7 @@
 #define ZyppLogger_h
 
 
+#include <memory>
 #include <string>
 #include <QMutex>
 
@@ -80,8 +81,8 @@ public:
 
 private:
 
-    boost::shared_ptr<ZyppLogLineWriter>    _lineWriter;
-    boost::shared_ptr<ZyppLogLineFormatter> _lineFormatter;
+    zypp::shared_ptr<ZyppLogLineWriter>    _lineWriter;
+    zypp::shared_ptr<ZyppLogLineFormatter> _lineFormatter;
 
     QMutex _mutex;
     Logger _zyppThreadLogger;
