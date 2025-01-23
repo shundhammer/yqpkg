@@ -38,6 +38,7 @@
 
 #define VERBOSE_PROGRESS        0
 #define VERBOSE_TRANSACT        1
+#define SORT_TO_DO_LIST         0
 
 
 PkgCommitPage * PkgCommitPage::_instance = 0;
@@ -59,8 +60,10 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     // form (an XML file) that was generated with Qt designer, so choose them
     // carefully when using Qt designer.
 
+#if SORT_TO_DO_LIST
     _ui->todoList->setSortByInsertionSequence( false );
     _ui->todoList->setAutoScrollToLast( false );
+#endif
 
     readSettings();
     loadIcons();
@@ -118,6 +121,8 @@ void PkgCommitPage::populateLists()
     _ui->doneList->clear();
 
     _ui->todoList->addTaskItems( pkgTasks()->todo() );
+    _ui->todoList->setAutoScrollToLast( false );
+    _ui->todoList->scrollToTop();
 
     // The other lists are almost certainly empty anyway at this point, but
     // let's make sure, not make assumptions; this will be over very quickly if
@@ -125,6 +130,30 @@ void PkgCommitPage::populateLists()
 
     _ui->doingList->addTaskItems( pkgTasks()->doing() );
     _ui->doneList->addTaskItems ( pkgTasks()->done()  );
+
+    updateListHeaders();
+    processEvents();
+}
+
+
+void PkgCommitPage::updateListHeaders()
+{
+    updateListHeader( _ui->todoHeader,       _( "To Do"     ),  pkgTasks()->todo().size()     );
+    updateListHeader( _ui->downloadsHeader,  _( "Downloads" ),  pkgTasks()->downloads().size() );
+    updateListHeader( _ui->doneHeader,       _( "Done"      ),  pkgTasks()->done().size()      );
+}
+
+
+void PkgCommitPage::updateListHeader( QLabel *        headerLabel,
+                                      const QString & rawMsg,
+                                      int             size )
+{
+    QString msg = rawMsg;
+
+    if ( size > 0 )
+        msg += QString( " (%2)" ).arg( size );
+
+    headerLabel->setText( msg );
 }
 
 
@@ -159,6 +188,7 @@ void PkgCommitPage::fakeCommit()
 
         usleep( 100 * 1000 ); // microseconds
         _ui->totalProgressBar->setValue( i );
+        updateListHeaders();
         processEvents();
     }
 
@@ -228,6 +258,7 @@ void PkgCommitPage::reset()
     _ui->downloadsList->clear();
     _ui->doingList->clear();
     _ui->doneList->clear();
+    updateListHeaders();
 
     _ui->detailsFrame->setVisible( _showingDetails );
     updateDetailsButton();
@@ -547,6 +578,7 @@ void PkgCommitPage::pkgDownloadStart( ZyppRes zyppRes )
     _ui->todoList->removeTaskItem( task );
     PkgTaskListWidgetItem * item = _ui->downloadsList->addTaskItem( task );
     item->setIcon( _downloadOngoingIcon );
+    updateListHeaders();
 
     processEvents(); // Update the UI
 }
@@ -642,6 +674,7 @@ void PkgCommitPage::pkgCachedNotify( ZyppRes zyppRes )
     _ui->todoList->removeTaskItem( task );
     PkgTaskListWidgetItem * item = _ui->downloadsList->addTaskItem( task );
     item->setIcon( _downloadDoneIcon );
+    updateListHeaders();
 
     processEvents(); // Update the UI
 
@@ -766,6 +799,7 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
 
             _ui->downloadsList->removeTaskItem( task );
             _ui->doingList->addTaskItem( task );
+            updateListHeaders();
 
             // Update the bookkeeping sums.
             // We already know that the task was in the downloads list.
@@ -794,6 +828,7 @@ void PkgCommitPage::pkgActionStart( ZyppRes       zyppRes,
 
         _ui->todoList->removeTaskItem( task );
         _ui->doingList->addTaskItem( task );
+        updateListHeaders();
     }
 
 #if VERBOSE_TRANSACT
@@ -892,6 +927,7 @@ void PkgCommitPage::pkgActionEnd( ZyppRes       zyppRes,
 
     _ui->doingList->removeTaskItem( task );
     _ui->doneList->addTaskItem( task );
+    updateListHeaders();
 
 
     // Update the internal bookkeeping sums
@@ -964,6 +1000,8 @@ void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
             if ( task )
                 PkgTasks::moveTask( task, pkgTasks()->doing(), pkgTasks()->failed() );
         }
+
+        updateListHeaders();
 
         if ( ! task )
         {

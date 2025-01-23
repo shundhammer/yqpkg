@@ -108,7 +108,7 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="QLabel" name="todoLabel">
+           <widget class="QLabel" name="todoHeader">
             <property name="text">
              <string>To Do</string>
             </property>
@@ -209,7 +209,7 @@
         <item>
          <layout class="QVBoxLayout" name="doingVBox">
           <item>
-           <widget class="QLabel" name="downloadsLabel">
+           <widget class="QLabel" name="downloadsHeader">
             <property name="text">
              <string>Downloads</string>
             </property>
@@ -253,7 +253,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="doingLabel">
+           <widget class="QLabel" name="doingHeader">
             <property name="text">
              <string>Doing</string>
             </property>
@@ -338,7 +338,7 @@
         <item>
          <layout class="QVBoxLayout" name="doneVBox">
           <item>
-           <widget class="QLabel" name="doneLabel">
+           <widget class="QLabel" name="doneHeader">
             <property name="text">
              <string>Done</string>
             </property>

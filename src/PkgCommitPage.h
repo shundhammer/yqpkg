@@ -235,6 +235,20 @@ protected:
     void populateLists();
 
     /**
+     * Update the header labels of the task list widgets with the number of
+     * items
+     **/
+    void updateListHeaders();
+
+    /**
+     * Update the header label of one task list widget with the number of its
+     * items
+     **/
+    void updateListHeader( QLabel *        header,
+                           const QString & rawMsg,
+                           int             size );
+
+    /**
      * Set up the internal Qt signal / slot connections.
      **/
     void connectWidgets();
