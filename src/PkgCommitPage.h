@@ -134,17 +134,6 @@ public:
      **/
     static PkgCommitPage * instance() { return _instance; }
 
-    /**
-     * Return the UI (the widget tree) of the instance of this class or 0 if
-     * there is none.
-     *
-     * This is mostly intended as a convenience for libzypp callbacks which
-     * need to be static functions, so they don't have direct access to data
-     * members (including widgets) of the instance of this class.
-     **/
-    static Ui::PkgCommitPage * uiInstance()
-        { return _instance ? _instance->ui() : 0; }
-
 
 public slots:
 
