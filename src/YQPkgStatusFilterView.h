@@ -115,7 +115,17 @@ signals:
 
 protected:
 
+    /**
+     * Set up signal / slot connections.
+     **/
     void connectWidgets();
+
+    /**
+     * Replace the icons from the compiled-in Qt resources from the .ui file
+     * with icons from the desktop theme.
+     **/
+    void fixupIcons();
+
 
 
     // Data members

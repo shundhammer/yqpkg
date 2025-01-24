@@ -19,6 +19,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "YQIconPool.h"
 #include "YQPkgStatusFilterView.h"
 
 #ifndef VERBOSE_FILTER_VIEWS
@@ -32,6 +33,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    fixupIcons();
 
     // See ui_status-filter-view.h in the build/ tree for the widget names.
     //
@@ -73,6 +75,25 @@ void YQPkgStatusFilterView::connectWidgets()
 
     connect( _ui->refreshButton, SIGNAL( clicked() ),
              this,               SLOT  ( filter()  ) );
+}
+
+
+void
+YQPkgStatusFilterView::fixupIcons()
+{
+    // Replace the resource icons from the .ui file with dynamically loaded
+    // icons from the desktop theme (issue #63)
+
+    _ui->iconInstall->setPixmap      ( YQIconPool::pkgInstall()       );
+    _ui->iconUpdate->setPixmap       ( YQIconPool::pkgUpdate()        );
+    _ui->iconDel->setPixmap          ( YQIconPool::pkgDel()           );
+    _ui->iconAutoInstall->setPixmap  ( YQIconPool::pkgAutoInstall()   );
+    _ui->iconAutoUpdate->setPixmap   ( YQIconPool::pkgAutoUpdate()    );
+    _ui->iconAutoDel->setPixmap      ( YQIconPool::pkgAutoDel()       );
+    _ui->iconProtected->setPixmap    ( YQIconPool::pkgProtected()     );
+    _ui->iconTaboo->setPixmap        ( YQIconPool::pkgTaboo()         );
+    _ui->iconKeepInstalled->setPixmap( YQIconPool::pkgKeepInstalled() );
+    _ui->iconNoInst->setPixmap       ( YQIconPool::pkgNoInst()        );
 }
 
 

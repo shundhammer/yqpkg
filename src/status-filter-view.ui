@@ -15,13 +15,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
-    <number>25</number>
+    <number>20</number>
    </property>
    <property name="topMargin">
     <number>10</number>
    </property>
    <property name="rightMargin">
-    <number>10</number>
+    <number>20</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
@@ -39,14 +39,14 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="flat">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="labelAlignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
       <property name="horizontalSpacing">
-       <number>30</number>
+       <number>25</number>
       </property>
       <property name="verticalSpacing">
        <number>5</number>
@@ -65,7 +65,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLabel" name="icon_02">
+       <widget class="QLabel" name="iconInstall">
         <property name="text">
          <string/>
         </property>
@@ -85,7 +85,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLabel" name="icon_03">
+       <widget class="QLabel" name="iconUpdate">
         <property name="text">
          <string/>
         </property>
@@ -105,7 +105,7 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QLabel" name="icon_05">
+       <widget class="QLabel" name="iconAutoInstall">
         <property name="text">
          <string/>
         </property>
@@ -125,7 +125,7 @@
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QLabel" name="icon_06">
+       <widget class="QLabel" name="iconAutoUpdate">
         <property name="text">
          <string/>
         </property>
@@ -142,7 +142,7 @@
        </widget>
       </item>
       <item row="10" column="1">
-       <widget class="QLabel" name="icon_07">
+       <widget class="QLabel" name="iconTaboo">
         <property name="text">
          <string/>
         </property>
@@ -159,7 +159,7 @@
        </widget>
       </item>
       <item row="11" column="1">
-       <widget class="QLabel" name="icon_08">
+       <widget class="QLabel" name="iconProtected">
         <property name="text">
          <string/>
         </property>
@@ -192,7 +192,7 @@
        </widget>
       </item>
       <item row="13" column="1">
-       <widget class="QLabel" name="icon_09">
+       <widget class="QLabel" name="iconKeepInstalled">
         <property name="text">
          <string/>
         </property>
@@ -209,7 +209,7 @@
        </widget>
       </item>
       <item row="14" column="1">
-       <widget class="QLabel" name="icon_10">
+       <widget class="QLabel" name="iconNoInst">
         <property name="text">
          <string/>
         </property>
@@ -261,7 +261,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLabel" name="icon_01">
+       <widget class="QLabel" name="iconDel">
         <property name="text">
          <string/>
         </property>
@@ -281,7 +281,7 @@
        </widget>
       </item>
       <item row="8" column="1">
-       <widget class="QLabel" name="icon_04">
+       <widget class="QLabel" name="iconAutoDel">
         <property name="text">
          <string/>
         </property>
