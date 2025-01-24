@@ -141,22 +141,17 @@ It is now well usable and fairly feature complete.
 - Lots of other small fixes everywhere.
 
 
+### Work in Progress
 
-## Limitations
-
-- ~~No GPG key import from repos yet for repos that were just added and never
-  refreshed yet.~~  _This is now implemented_. See
-  [issue #6](https://github.com/shundhammer/myrlyn/issues/6) for details.
-
-- No repo operations like adding, removing, setting priority, enabling,
+- Repo operations like adding, removing, setting priority, enabling,
   disabling.  You get the repo view, though, where you can view and select
   packages by repo.
 
 
-### Work in Progress
+## Limitations
 
-- ~Patches view~ _This is now implemented_.
-See [issue #2](https://github.com/shundhammer/myrlyn/issues/2) for details.
+- No prompt for CD / DVD change supported. Those days are over;
+  for at least two decades.
 
 
 ## Development Progress
