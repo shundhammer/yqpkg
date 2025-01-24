@@ -37,253 +37,261 @@
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <property name="horizontalSpacing">
-      <number>30</number>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="flat">
+      <bool>false</bool>
      </property>
-     <property name="verticalSpacing">
-      <number>6</number>
-     </property>
-     <property name="topMargin">
-      <number>15</number>
-     </property>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="showInstall">
-       <property name="text">
-        <string>Install</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="icon_02">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-install</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="showUpdate">
-       <property name="text">
-        <string>Update</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="icon_03">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-upgrade</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QCheckBox" name="showAutoInstall">
-       <property name="text">
-        <string>Auto-Install</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="icon_05">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-install-auto</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QCheckBox" name="showAutoUpdate">
-       <property name="text">
-        <string>Auto-Update</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLabel" name="icon_06">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-upgrade-auto</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QCheckBox" name="showTaboo">
-       <property name="text">
-        <string>Taboo</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLabel" name="icon_07">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-available-locked</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0">
-      <widget class="QCheckBox" name="showProtected">
-       <property name="text">
-        <string>Protected</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="1">
-      <widget class="QLabel" name="icon_08">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-installed-locked</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>8</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="13" column="0">
-      <widget class="QCheckBox" name="showKeepInstalled">
-       <property name="text">
-        <string>Keep</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="1">
-      <widget class="QLabel" name="icon_09">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-installed-updated</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="0">
-      <widget class="QCheckBox" name="showNoInst">
-       <property name="text">
-        <string>Do Not Install</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="1">
-      <widget class="QLabel" name="icon_10">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-available</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>8</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="4" column="0">
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>8</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="showDel">
-       <property name="text">
-        <string>Delete</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="icon_01">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-remove</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QCheckBox" name="showAutoDel">
-       <property name="text">
-        <string>Auto-Delete</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLabel" name="icon_04">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="icons.qrc">:/package-remove-auto</pixmap>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="labelAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="horizontalSpacing">
+       <number>30</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>15</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="showInstall">
+        <property name="text">
+         <string>Install</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="icon_02">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-install</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="showUpdate">
+        <property name="text">
+         <string>Update</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="icon_03">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-upgrade</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QCheckBox" name="showAutoInstall">
+        <property name="text">
+         <string>Auto-Install</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="icon_05">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-install-auto</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QCheckBox" name="showAutoUpdate">
+        <property name="text">
+         <string>Auto-Update</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLabel" name="icon_06">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-upgrade-auto</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QCheckBox" name="showTaboo">
+        <property name="text">
+         <string>Taboo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLabel" name="icon_07">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-available-locked</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QCheckBox" name="showProtected">
+        <property name="text">
+         <string>Protected</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QLabel" name="icon_08">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-installed-locked</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="13" column="0">
+       <widget class="QCheckBox" name="showKeepInstalled">
+        <property name="text">
+         <string>Keep</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QLabel" name="icon_09">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-installed-updated</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0">
+       <widget class="QCheckBox" name="showNoInst">
+        <property name="text">
+         <string>Do Not Install</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QLabel" name="icon_10">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-available</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="0">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>8</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="showDel">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="icon_01">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-remove</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QCheckBox" name="showAutoDel">
+        <property name="text">
+         <string>Auto-Delete</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="icon_04">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/package-remove-auto</pixmap>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <spacer name="buttonVSpacer">
