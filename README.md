@@ -20,9 +20,9 @@ GPL V2; see file LICENSE.
 
 ## Development Status
 
-Late Alpha.
+Approaching Beta status.
 
-It is now well usable and fairly feature complete.
+It is already well usable and fairly feature complete.
 
 
 ## Screenshots
