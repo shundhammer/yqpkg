@@ -90,8 +90,8 @@ YQPkgStatusFilterView::fixupIcons()
     _ui->iconAutoInstall->setPixmap  ( YQIconPool::pkgAutoInstall()   );
     _ui->iconAutoUpdate->setPixmap   ( YQIconPool::pkgAutoUpdate()    );
     _ui->iconAutoDel->setPixmap      ( YQIconPool::pkgAutoDel()       );
-    _ui->iconProtected->setPixmap    ( YQIconPool::pkgProtected()     );
     _ui->iconTaboo->setPixmap        ( YQIconPool::pkgTaboo()         );
+    _ui->iconProtected->setPixmap    ( YQIconPool::pkgProtected()     );
     _ui->iconKeepInstalled->setPixmap( YQIconPool::pkgKeepInstalled() );
     _ui->iconNoInst->setPixmap       ( YQIconPool::pkgNoInst()        );
 }
