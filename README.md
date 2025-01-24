@@ -158,7 +158,7 @@ It is already well usable and fairly feature complete.
 
 See [issue #1](https://github.com/shundhammer/myrlyn/issues/1).
 
-Scroll down all the way to for the latest news.
+Scroll down all the way for the latest news.
 
 
 ## Stability
