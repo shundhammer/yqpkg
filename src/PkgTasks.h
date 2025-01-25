@@ -121,7 +121,7 @@ public:
      * Return 'true' if this action was requested by the user and not
      * automatically to satisfy dependencies.
      **/
-    bool byUser() const { return _requester | PkgReqUser; }
+    bool byUser() const { return _requester & PkgReqUser; }
 
     /**
      * Return 'true' if this action was requested to satisfy dependencies and
@@ -130,7 +130,7 @@ public:
      * Notice that this can't use a function named 'auto()' since 'auto' is a
      * reserved word in C++. Too bad.
      **/
-    bool byDependency() const { return _requester | PkgReqDep; }
+    bool byDependency() const { return _requester & PkgReqDep; }
 
     /**
      * Return the download size in bytes or -1.0 (< 0.0) if unknown.
