@@ -127,7 +127,7 @@ public slots:
      * Display a one-line message in the list.
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void message( const QString & text );
+    virtual void message( const QString & text ) override;
 
     /**
      * Select the first selectable list entry that is not a pattern category.
@@ -160,7 +160,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QMenu * addAllInListSubMenu( QMenu * menu );
+    virtual QMenu * addAllInListSubMenu( QMenu * menu ) override;
 
     /**
      * Delayed initialization after the dialog is fully created.
@@ -211,14 +211,14 @@ protected:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void createNotInstalledContextMenu();
+    virtual void createNotInstalledContextMenu() override;
 
     /**
      * Create the context menu for installed items.
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void createInstalledContextMenu();
+    virtual void createInstalledContextMenu() override;
 
     /**
      * Event handler for keyboard input.
@@ -226,7 +226,7 @@ protected:
      *
      * Reimplemented from YQPkgObjList / QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * ev );
+    virtual void keyPressEvent( QKeyEvent * ev ) override;
 
 
     // Data members

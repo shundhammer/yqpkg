@@ -115,7 +115,7 @@ public slots:
     virtual void pkgObjClicked( int               button,
                                 QTreeWidgetItem * item,
                                 int               col,
-                                const QPoint &    pos );
+                                const QPoint &    pos ) override;
 
     /**
      * Select the first selectable list entry that is not a pattern category.

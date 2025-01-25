@@ -40,8 +40,9 @@
 #define USE_MYRLYN_LOGO  1
 
 
-struct YQPkgFilterTabPrivate
+class YQPkgFilterTabPrivate
 {
+public:
     YQPkgFilterTabPrivate()
         : baseClassWidgetStack(0)
         , outerSplitter(0)
