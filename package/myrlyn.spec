@@ -22,7 +22,7 @@ Name:           myrlyn
 # To increase only the last number, use  rake version:bump
 Version:        0.8.05
 Release:        0
-Summary:        Myrlyn Linux Package Manager GUI
+Summary:        Myrlyn Package Manager GUI
 License:        GPL-2.0-only
 Group:          System/Packages
 URL:            https://github.com/shundhammer/myrlyn
