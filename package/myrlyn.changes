@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Sun Jan 26 10:42:08 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed "Installation Summary" icons to match desktop theme
+- Fixed ambiguous keyboard shortcuts
+- Added global Ctrl+Shift+?? keyboard shortcuts for the filter view pages
+- 0.8.05
+
+-------------------------------------------------------------------
 Mon Jan 20 10:47:20 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed OBS build for Leap 15.6
