@@ -233,7 +233,7 @@ void YQPkgFilterTab::createActions()
     _priv->actionMovePageLeft  = new QAction( YQIconPool::arrowLeft(), _( "Move page &left"  ), actionParent );
     CHECK_NEW( _priv->actionMovePageLeft );
 
-    QShortcut * shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_Left ), this, SLOT( movePageLeft() ) );
+    QShortcut * shortcut = new QShortcut( QKeySequence( Qt::CTRL | Qt::Key_Left ), this, SLOT( movePageLeft() ) );
     CHECK_NEW( shortcut );
     _priv->actionMovePageLeft->setShortcut( shortcut->key() );
 
@@ -241,7 +241,7 @@ void YQPkgFilterTab::createActions()
     _priv->actionMovePageRight = new QAction( YQIconPool::arrowRight(), _( "Move page &right" ), actionParent );
     CHECK_NEW( _priv->actionMovePageRight );
 
-    shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_Right ), this, SLOT( movePageRight() ) );
+    shortcut = new QShortcut( QKeySequence( Qt::CTRL | Qt::Key_Right ), this, SLOT( movePageRight() ) );
     CHECK_NEW( shortcut );
     _priv->actionMovePageRight->setShortcut( shortcut->key() );
 
@@ -249,7 +249,7 @@ void YQPkgFilterTab::createActions()
     _priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), actionParent );
     CHECK_NEW( _priv->actionClosePage );
 
-    shortcut = new QShortcut( QKeySequence( Qt::CTRL + Qt::Key_W ), this, SLOT( closePage() ) );
+    shortcut = new QShortcut( QKeySequence( Qt::CTRL | Qt::Key_W ), this, SLOT( closePage() ) );
     CHECK_NEW( shortcut );
     _priv->actionClosePage->setShortcut( shortcut->key() );
 
