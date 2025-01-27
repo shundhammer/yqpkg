@@ -96,7 +96,7 @@ FSize::Unit FSize::bestUnit() const
 //
 //	DESCRIPTION :
 //
-std::string FSize::form( const Unit unit_r, unsigned fw, unsigned prec, const bool showunit ) const
+std::string FSize::form( const Unit unit_r, unsigned fw, unsigned prec, bool showunit ) const
 {
   if ( prec == bestPrec ) {
     switch ( unit_r )

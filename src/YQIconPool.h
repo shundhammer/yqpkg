@@ -73,14 +73,14 @@ protected:
      *
      * Return a red square as an error icon if there is no icon by that name.
      **/
-    QPixmap cachedIcon(const QString icon_name, const bool enabled );
+    QPixmap cachedIcon(const QString icon_name, bool enabled );
 
     /**
      * Load the icon for 'icon_name' from the icon theme or, if that fails,
      * from the compiled-in icons (using the Qt resource system). Return a null
      * pixmap if there is no such icon.
      **/
-    QPixmap loadIcon( const QString icon_name, const bool enabled );
+    QPixmap loadIcon( const QString icon_name, bool enabled );
 
 private:
 

@@ -192,12 +192,12 @@ class FSize :
      *
      * If Unit is <b>B</b>yte, precision is set to zero.
      **/
-    std::string form( const Unit unit_r, unsigned fw = 0, unsigned prec = bestPrec, const bool showunit = true ) const;
+    std::string form( const Unit unit_r, unsigned fw = 0, unsigned prec = bestPrec, bool showunit = true ) const;
 
     /**
      * Return string representation in bestUnit.
      **/
-    std::string form( unsigned fw = 0, unsigned prec = bestPrec, const bool showunit = true ) const {
+    std::string form( unsigned fw = 0, unsigned prec = bestPrec, bool showunit = true ) const {
       return form( bestUnit(), fw, prec, showunit );
     }
 

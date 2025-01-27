@@ -82,7 +82,7 @@ YQIconPool::~YQIconPool()
 
 
 QPixmap
-YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
+YQIconPool::cachedIcon( const QString icon_name, bool enabled )
 {
     Q_INIT_RESOURCE( icons );
     QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
@@ -107,7 +107,7 @@ YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
 
 
 QPixmap
-YQIconPool::loadIcon( const QString icon_name, const bool enabled )
+YQIconPool::loadIcon( const QString icon_name, bool enabled )
 {
     QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
 
