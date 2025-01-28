@@ -174,59 +174,28 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList * repoList,
     , _repoList( repoList )
     , _zyppRepo( repo )
 {
+    const zypp::RepoInfo & repoInfo = repo.info();
+
     if ( nameCol() >= 0 )
     {
-        string name = repo.info().name();
+        string name = repoInfo.name();
+
         if ( ! name.empty() )
-        {
-            setText( nameCol(), fromUTF8( name ));
-        }
+            setText( nameCol(), fromUTF8( name ) );
     }
 
     string infoToolTip;
-    infoToolTip += ("<b>" + repo.info().name() + "</b>");
+    infoToolTip += ("<b>" + repoInfo.name() + "</b>");
 
     ZyppProduct product = singleProduct( _zyppRepo );
 
     if ( product )
         infoToolTip += ("<p>" + product->summary() + "</p>");
 
-    if ( ! repo.info().baseUrlsEmpty() )
-    {
-        infoToolTip += "<ul>";
-        zypp::RepoInfo::urls_const_iterator it;
-
-        for ( it = repo.info().baseUrlsBegin();
-              it != repo.info().baseUrlsEnd();
-              ++it )
-        {
-            infoToolTip += ("<li>" + (*it).asString() + "</li>");
-        }
-
-        infoToolTip += "</ul>";
-    }
+    if ( ! repoInfo.baseUrlsEmpty() )
+        infoToolTip += ( "<p>" + repoInfo.url().asString() + "</p>" );
 
     setToolTip( nameCol(), fromUTF8( infoToolTip ) );
-
-    QString iconName = "applications-internet";
-
-    if ( ! repo.info().baseUrlsEmpty() )
-    {
-        zypp::Url zyppRepoUrl = *repo.info().baseUrlsBegin();
-        QString repoUrl       = zyppRepoUrl.asString().c_str();
-
-        if      ( repoUrl.contains( "KDE"    ) )  iconName = "kde";
-        else if ( repoUrl.contains( "GNOME"  ) )  iconName = "gnome";
-        else if ( repoUrl.contains( "update" ) )  iconName = "applications-utilities";
-        else if ( repoUrl.contains( "home:"  ) )  iconName = "preferences-desktop";
-    }
-
-    if ( repo.isSystemRepo() )
-        iconName = "preferences-system";
-
-    // The icon is always in color 0, no matter if that's nameCol() or whatever.
-
-    setIcon( 0, QY2IconLoader::loadIcon( iconName ) );
 }
 
 
