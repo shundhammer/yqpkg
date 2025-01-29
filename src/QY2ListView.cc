@@ -377,7 +377,7 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 
     int column = treeWidget()->sortColumn();
 
-    if (other)
+    if ( other )
     {
         return compare( smartSortKey( column ), other->smartSortKey( column ) );
     }
