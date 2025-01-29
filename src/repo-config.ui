@@ -115,7 +115,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="currentUrl">
+       <widget class="QLabel" name="currentRepoUrl">
         <property name="text">
          <string>https://foo.com/bar/repos/packman</string>
         </property>

@@ -34,7 +34,7 @@
 RepoTable::RepoTable( QWidget * parent )
     : QY2ListView( parent )
 {
-    logDebug() << "Creating RepoTable" << endl;
+    // logDebug() << "Creating RepoTable" << endl;
 
     QStringList headers;
     headers << _( "Name"         )
@@ -56,7 +56,7 @@ RepoTable::RepoTable( QWidget * parent )
 
 RepoTable::~RepoTable()
 {
-    logDebug() << "Destroying RepoTable" << endl;
+    // logDebug() << "Destroying RepoTable" << endl;
 }
 
 

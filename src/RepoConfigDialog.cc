@@ -19,6 +19,7 @@
 #include "Logger.h"
 #include "MainWindow.h"
 #include "WindowSettings.h"
+#include "utf8.h"
 #include "RepoConfigDialog.h"
 
 
@@ -49,42 +50,105 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
 RepoConfigDialog::~RepoConfigDialog()
 {
     WindowSettings::write( this, "RepoConfigDialog" );
-    
+
     delete _ui;
 }
 
 
 void RepoConfigDialog::connectWidgets()
 {
+    connect( _ui->repoTable, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+             this,           SLOT  ( currentChanged() ) );
+
+    connect( _ui->currentRepoPriority,    SIGNAL( valueChanged ( int ) ),
+             this,                        SLOT  ( currentEdited()      ) );
+
+    connect( _ui->currentRepoEnabled,     SIGNAL( stateChanged ( int ) ),
+             this,                        SLOT  ( currentEdited()      ) );
+
+    connect( _ui->currentRepoAutoRefresh, SIGNAL( stateChanged ( int ) ),
+             this,                        SLOT  ( currentEdited()      ) );
+
+#if 0
+
+    connect( _ui->repoTable, SIGNAL( columnDoubleClicked( int button, QTreeWidgetItem * item, int col, const QPoint & ) ),
+             this,           SLOT  ( itemDoubleClicked  ( int button, QTreeWidgetItem * item, int col ) ) );;
+
+    connect( _ui->addButton(),    SIGNAL( clicked() ),
+             this,                SLOT  ( addRepo() ) );
+
+    connect( _ui->editButton(),   SIGNAL( clicked() ),
+             this,                SLOT  ( editRepo() ) );
+
+    connect( _ui->deleteButton(), SIGNAL( clicked() ),
+             this,                SLOT  ( deleteRepo() ) );
+
     // _ui->closeButton() is already connected to QDialog::accept()
     // in the .ui file
+#endif
 }
 
 
 void RepoConfigDialog::currentChanged()
 {
-#if 0
-    RepoTableItem * current = _ui->repoTable->currentRepoItem();
-#endif
+    updateCurrentData();
 }
 
 
 void RepoConfigDialog::updateCurrentData()
 {
+#if 0
+    RepoTableItem * current = _ui->repoTable->currentRepoItem();
+    logDebug() << endl;
+
+    if ( current )
+    {
+        logDebug() << "Have current: " << current->text( RepoTable::NameCol ) << endl;
+        ZyppRepoInfo * repoInfo = current->repoInfo();
+        CHECK_PTR( repoInfo );
+        logDebug() << "Have repoInfo" << endl;
+
+        _ui->currentRepoPriority->setEnabled( true );
+        _ui->currentRepoEnabled->setEnabled( true );
+        _ui->currentRepoAutoRefresh->setEnabled( true );
+
+        logDebug() << "About to set the name" << endl;
+        _ui->currentRepoName->setText( fromUTF8( repoInfo->name() ) );
+        logDebug() << "About to set the URL" << endl;
+        _ui->currentRepoUrl->setText ( fromUTF8( repoInfo->url().asString() ) );
+        _ui->currentRepoPriority->setValue( repoInfo->priority() );
+        _ui->currentRepoEnabled->setChecked( repoInfo->enabled() );
+        _ui->currentRepoAutoRefresh->setChecked( repoInfo->autorefresh());
+    }
+    else // Clear all
+    {
+        _ui->currentRepoName->clear();
+        _ui->currentRepoUrl->clear();
+        _ui->currentRepoPriority->setValue( 99 );
+        _ui->currentRepoEnabled->setChecked( false );
+        _ui->currentRepoAutoRefresh->setChecked( false );
+
+        _ui->currentRepoPriority->setEnabled( false );
+        _ui->currentRepoEnabled->setEnabled( false );
+        _ui->currentRepoAutoRefresh->setEnabled( false );
+    }
+#endif
+}
+
+
+void RepoConfigDialog::currentEdited()
+{
     RepoTableItem * current = _ui->repoTable->currentRepoItem();
 
     if ( current )
     {
-        
-    }
-    else // Clear all
-    {
-        
-    }
-}
+        ZyppRepoInfo * repoInfo = current->repoInfo();
+        CHECK_PTR( repoInfo );
 
+        repoInfo->setPriority( _ui->currentRepoPriority->value() );
+        repoInfo->setEnabled( _ui->currentRepoEnabled->isChecked() );
+        repoInfo->setAutorefresh( _ui->currentRepoAutoRefresh->isChecked() );
 
-void RepoConfigDialog::updateCurrentStatus()
-{
-    
+        emit currentStatusChanged();
+    }
 }

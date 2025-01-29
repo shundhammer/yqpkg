@@ -56,8 +56,8 @@ public:
 signals:
 
     /**
-     * Emitted when any details of the current repo changed like priority,
-     * enabled status, autorefresh status.
+     * Emitted when the user changed any details of the current repo like
+     * priority, enabled status, autorefresh status.
      **/
     void currentStatusChanged();
 
@@ -73,10 +73,13 @@ protected slots:
      * Notification from the "priority" spinbox, the "enabled" checkbox or the
      * "autorefresh" checkbox that one of the details changed.
      **/
-    void updateCurrentStatus();
+    void currentEdited();
 
 protected:
 
+    /**
+     * Set up signal / slot connections.
+     **/
     void connectWidgets();
 
     /**
