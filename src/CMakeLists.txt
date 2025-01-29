@@ -44,6 +44,7 @@ set( SOURCES
   PopupLogo.cc
   ProgressDialog.cc
   RepoGpgKeyImportDialog.cc
+  RepoTable.cc
   SearchFilter.cc
   SummaryPage.cc
   WindowSettings.cc
