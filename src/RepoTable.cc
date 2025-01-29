@@ -107,6 +107,8 @@ RepoTableItem::RepoTableItem( RepoTable *          parentTable,
     , _parentTable( parentTable )
     , _repoInfo( repoInfo )
 {
+    setTextAlignment( RepoTable::PrioCol, Qt::AlignRight );
+
     updateData();
 }
 
@@ -128,9 +130,9 @@ void RepoTableItem::setRepoInfo( const ZyppRepoInfo & newRepoInfo )
 void RepoTableItem::updateData()
 {
     setText( RepoTable::NameCol,    _repoInfo.name() );
+    setText( RepoTable::PrioCol,    std::to_string( _repoInfo.priority() ) + "       " );
     setIcon( RepoTable::EnabledCol, _repoInfo.enabled()     ? checkmarkIcon() : noIcon() );
     setIcon( RepoTable::AutoRefCol, _repoInfo.autorefresh() ? checkmarkIcon() : noIcon() );
-    setText( RepoTable::PrioCol,    std::to_string( _repoInfo.priority() ) );
     setText( RepoTable::ServiceCol, _repoInfo.service() );
     setText( RepoTable::UrlCol,     _repoInfo.url().asString() );
 }
