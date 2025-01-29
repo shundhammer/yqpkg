@@ -624,7 +624,7 @@ protected:
      * Set a column text via STL string.
      * ( QListViewItem::setText() expects a QString! )
      **/
-    void setText( int column, const string text );
+    void setText( int column, const string & text );
 
 public:
     /**

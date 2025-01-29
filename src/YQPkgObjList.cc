@@ -990,7 +990,7 @@ YQPkgObjListItem::updateData()
 
 
 void
-YQPkgObjListItem::setText( int column, const string text )
+YQPkgObjListItem::setText( int column, const string & text )
 {
     QTreeWidgetItem::setText( column, fromUTF8( text.c_str() ) );
 }
