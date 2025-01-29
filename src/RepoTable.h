@@ -20,15 +20,11 @@
 
 #include <string>
 
+#include "MyrlynRepoManager.h"
 #include "YQZypp.h"
 #include "QY2ListView.h"
 
 class RepoTableItem;
-
-namespace zypp
-{
-    class RepoManager;
-};
 
 
 /**
@@ -68,6 +64,11 @@ public:
     virtual ~RepoTable();
 
     /**
+     * Return the zypp repo manager.
+     **/
+    RepoManager_Ptr repoManager() { return _repoManager; }
+
+    /**
      * Populate with the repos from the MyrlynRepoManager.
      **/
     void populate();
@@ -85,6 +86,10 @@ public:
      **/
     void setHeaderItem( QTreeWidgetItem * headerItem );
     void setColumnCount( int ) {};
+
+protected:
+
+    RepoManager_Ptr _repoManager;
 };
 
 
@@ -95,8 +100,8 @@ public:
     /**
      * Constructor
      **/
-    RepoTableItem( RepoTable *    parentTable = 0,
-                   ZyppRepoInfo * repoInfo    = 0 );
+    RepoTableItem( RepoTable *          parentTable,
+                   const ZyppRepoInfo & repoInfo );
 
     /**
      * Destructor
@@ -106,20 +111,18 @@ public:
     /**
      * Return the associated RepoInfo.
      **/
-    ZyppRepoInfo * repoInfo() const { return _repoInfo; }
+    const ZyppRepoInfo & repoInfo() const { return _repoInfo; }
+
+    /**
+     * Update the item from a new RepoInfo.
+     **/
+    void setRepoInfo( const ZyppRepoInfo & newRepoInfo );
 
     /**
      * Comparison function used for sorting the list.
      * Reimplemented from QY2ListViewItem / QTreeWidgetItem.
      **/
     virtual bool operator< ( const QTreeWidgetItem & other ) const override;
-
-    /**
-     * Update the data for this item.
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    virtual void updateData() override;
 
     /**
      * Set a column text
@@ -129,6 +132,13 @@ public:
 
 
 protected:
+
+    /**
+     * Update the data for this item.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void updateData() override;
 
     /**
      * Return a "checkmark" icon.
@@ -143,8 +153,8 @@ protected:
 
     // Data members
 
-    RepoTable *    _parentTable;
-    ZyppRepoInfo * _repoInfo;
+    RepoTable *  _parentTable;
+    ZyppRepoInfo _repoInfo;
 };
 
 

@@ -24,7 +24,6 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MyrlynApp.h"
-#include "MyrlynRepoManager.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -33,6 +32,7 @@
 
 RepoTable::RepoTable( QWidget * parent )
     : QY2ListView( parent )
+    ,_repoManager( MyrlynApp::instance()->repoManager()->repoManager() )
 {
     // logDebug() << "Creating RepoTable" << endl;
 
@@ -46,8 +46,10 @@ RepoTable::RepoTable( QWidget * parent )
 
     setHeaderLabels( headers );
     setIndentation( 0 );
-    header()->setSortIndicatorShown( true );
     header()->setSectionsClickable( true );
+    header()->setSortIndicatorShown( true );
+    setSortingEnabled( true );
+    sortByColumn( PrioCol, Qt::AscendingOrder );
 
     for ( int col=0; col < headers.size(); col++ )
         header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
@@ -76,15 +78,13 @@ void RepoTable::setHeaderItem( QTreeWidgetItem * headerItem )
 
 void RepoTable::populate()
 {
-    RepoManager_Ptr repoManager = MyrlynApp::instance()->repoManager()->repoManager();
-
-    for ( zypp::RepoManager::RepoConstIterator it = repoManager->repoBegin();
-          it != repoManager->repoEnd();
+    for ( zypp::RepoManager::RepoConstIterator it = _repoManager->repoBegin();
+          it != _repoManager->repoEnd();
           ++it )
     {
-        ZyppRepoInfo repoInfo = *it;
+        const ZyppRepoInfo & repoInfo = *it;
 
-        RepoTableItem * item = new RepoTableItem( this, &repoInfo );
+        RepoTableItem * item = new RepoTableItem( this, repoInfo );
         CHECK_NEW( item );
     }
 }
@@ -101,8 +101,8 @@ RepoTable::currentRepoItem()
 
 
 
-RepoTableItem::RepoTableItem( RepoTable *    parentTable,
-                              ZyppRepoInfo * repoInfo    )
+RepoTableItem::RepoTableItem( RepoTable *          parentTable,
+                              const ZyppRepoInfo & repoInfo    )
     : QY2ListViewItem( parentTable )
     , _parentTable( parentTable )
     , _repoInfo( repoInfo )
@@ -117,14 +117,22 @@ RepoTableItem::~RepoTableItem()
 }
 
 
+void RepoTableItem::setRepoInfo( const ZyppRepoInfo & newRepoInfo )
+{
+    _repoInfo = newRepoInfo;
+    _parentTable->repoManager()->modifyRepository( newRepoInfo );
+    updateData();
+}
+
+
 void RepoTableItem::updateData()
 {
-    setText( RepoTable::NameCol,    _repoInfo->name() );
-    setIcon( RepoTable::EnabledCol, _repoInfo->enabled()     ? checkmarkIcon() : noIcon() );
-    setIcon( RepoTable::AutoRefCol, _repoInfo->autorefresh() ? checkmarkIcon() : noIcon() );
-    setText( RepoTable::PrioCol,    std::to_string( _repoInfo->priority() ) );
-    setText( RepoTable::ServiceCol, _repoInfo->service() );
-    setText( RepoTable::UrlCol,     _repoInfo->url().asString() );
+    setText( RepoTable::NameCol,    _repoInfo.name() );
+    setIcon( RepoTable::EnabledCol, _repoInfo.enabled()     ? checkmarkIcon() : noIcon() );
+    setIcon( RepoTable::AutoRefCol, _repoInfo.autorefresh() ? checkmarkIcon() : noIcon() );
+    setText( RepoTable::PrioCol,    std::to_string( _repoInfo.priority() ) );
+    setText( RepoTable::ServiceCol, _repoInfo.service() );
+    setText( RepoTable::UrlCol,     _repoInfo.url().asString() );
 }
 
 
@@ -160,11 +168,19 @@ RepoTableItem::noIcon()
 
 
 bool
-RepoTableItem::operator< ( const QTreeWidgetItem & otherTreeWidgetItem ) const
+RepoTableItem::operator< ( const QTreeWidgetItem & rawOther ) const
 {
-    int sortColumn = _parentTable ? _parentTable->sortColumn() : 0;
+    if ( _parentTable )
+    {
+        const RepoTableItem & other = dynamic_cast<const RepoTableItem &>( rawOther );
 
-    Q_UNUSED( sortColumn );
+        switch ( _parentTable->sortColumn() )
+        {
+            case RepoTable::PrioCol:    return repoInfo().priority()     < other.repoInfo().priority();
+            case RepoTable::EnabledCol: return repoInfo().enabled()      < other.repoInfo().enabled();
+            case RepoTable::AutoRefCol: return repoInfo().autorefresh()  < other.repoInfo().autorefresh();
+        }
+    }
 
-    return QY2ListViewItem::operator<( otherTreeWidgetItem );
+    return QY2ListViewItem::operator<( rawOther );
 }

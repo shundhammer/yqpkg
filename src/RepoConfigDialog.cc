@@ -40,6 +40,7 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     // for the _ui object.
 
     WindowSettings::read( this, "RepoConfigDialog" );
+    _ui->currentRepoName->setTextFormat( Qt::RichText );
     _ui->repoTable->populate();
     _ui->repoTable->selectSomething();
     updateCurrentData();
@@ -97,28 +98,31 @@ void RepoConfigDialog::currentChanged()
 
 void RepoConfigDialog::updateCurrentData()
 {
-#if 0
+    QSignalBlocker blockPrio       ( _ui->currentRepoPriority    );
+    QSignalBlocker blockEnabled    ( _ui->currentRepoEnabled     );
+    QSignalBlocker blockAutoRefresh( _ui->currentRepoAutoRefresh );
+
     RepoTableItem * current = _ui->repoTable->currentRepoItem();
-    logDebug() << endl;
 
     if ( current )
     {
-        logDebug() << "Have current: " << current->text( RepoTable::NameCol ) << endl;
-        ZyppRepoInfo * repoInfo = current->repoInfo();
-        CHECK_PTR( repoInfo );
-        logDebug() << "Have repoInfo" << endl;
+        const ZyppRepoInfo & repoInfo = current->repoInfo();
+
+        logDebug() << "Current: "      << repoInfo.name()
+                   << " Prio: "        << repoInfo.priority()
+                   << " Enabled: "     << repoInfo.enabled()
+                   << " AutoRefresh: " << repoInfo.autorefresh()
+                   << endl;
 
         _ui->currentRepoPriority->setEnabled( true );
         _ui->currentRepoEnabled->setEnabled( true );
         _ui->currentRepoAutoRefresh->setEnabled( true );
 
-        logDebug() << "About to set the name" << endl;
-        _ui->currentRepoName->setText( fromUTF8( repoInfo->name() ) );
-        logDebug() << "About to set the URL" << endl;
-        _ui->currentRepoUrl->setText ( fromUTF8( repoInfo->url().asString() ) );
-        _ui->currentRepoPriority->setValue( repoInfo->priority() );
-        _ui->currentRepoEnabled->setChecked( repoInfo->enabled() );
-        _ui->currentRepoAutoRefresh->setChecked( repoInfo->autorefresh());
+        _ui->currentRepoName->setText( QString( "<b>%1</b>" ).arg( fromUTF8( repoInfo.name() ) ) );
+        _ui->currentRepoUrl->setText ( fromUTF8( repoInfo.url().asString() ) );
+        _ui->currentRepoPriority->setValue( repoInfo.priority() );
+        _ui->currentRepoEnabled->setChecked( repoInfo.enabled() );
+        _ui->currentRepoAutoRefresh->setChecked( repoInfo.autorefresh());
     }
     else // Clear all
     {
@@ -132,22 +136,28 @@ void RepoConfigDialog::updateCurrentData()
         _ui->currentRepoEnabled->setEnabled( false );
         _ui->currentRepoAutoRefresh->setEnabled( false );
     }
-#endif
 }
 
 
 void RepoConfigDialog::currentEdited()
 {
-    RepoTableItem * current = _ui->repoTable->currentRepoItem();
+    RepoTableItem * currentItem = _ui->repoTable->currentRepoItem();
 
-    if ( current )
+    if ( currentItem )
     {
-        ZyppRepoInfo * repoInfo = current->repoInfo();
-        CHECK_PTR( repoInfo );
+        ZyppRepoInfo repoInfo = currentItem->repoInfo();
 
-        repoInfo->setPriority( _ui->currentRepoPriority->value() );
-        repoInfo->setEnabled( _ui->currentRepoEnabled->isChecked() );
-        repoInfo->setAutorefresh( _ui->currentRepoAutoRefresh->isChecked() );
+        repoInfo.setPriority( _ui->currentRepoPriority->value() );
+        repoInfo.setEnabled( _ui->currentRepoEnabled->isChecked() );
+        repoInfo.setAutorefresh( _ui->currentRepoAutoRefresh->isChecked() );
+
+        logDebug() << "Current: "      << repoInfo.name()
+                   << " Prio: "        << repoInfo.priority()
+                   << " Enabled: "     << repoInfo.enabled()
+                   << " AutoRefresh: " << repoInfo.autorefresh()
+                   << endl;
+
+        currentItem->setRepoInfo( repoInfo );
 
         emit currentStatusChanged();
     }
