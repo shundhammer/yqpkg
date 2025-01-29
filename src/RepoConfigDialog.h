@@ -90,11 +90,8 @@ protected:
 
     // Data members
 
-    Ui::RepoConfig * _ui;       // see ui_repo-config.h
+    Ui::RepoConfig * _ui;  // see ui_repo-config.h
 };
 
 
-
 #endif // RepoConfigDialog_h
-
-
