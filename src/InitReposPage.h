@@ -22,7 +22,8 @@
 #include <QPixmap>
 #include <QWidget>
 
-#include <zypp/RepoInfo.h>
+#include "YQZypp.h"
+
 
 class MyrlynRepoManager;
 
@@ -66,17 +67,17 @@ public slots:
     /**
      * Notification that an enabled repo was found.
      **/
-    void foundRepo( const zypp::RepoInfo & repo );
+    void foundRepo( const ZyppRepoInfo & repo );
 
     /**
      * Notification that refreshing a repo starts.
      **/
-    void refreshRepoStart( const zypp::RepoInfo & repo );
+    void refreshRepoStart( const ZyppRepoInfo & repo );
 
     /**
      * Notification that refreshing a repo is done.
      **/
-    void refreshRepoDone ( const zypp::RepoInfo & repo );
+    void refreshRepoDone ( const ZyppRepoInfo & repo );
 
 
 protected:
@@ -95,21 +96,21 @@ protected:
      * Set the icon for the list widget item for 'repo' to 'icon' and return
      * the item (or 0 if not found).
      **/
-    QListWidgetItem * setItemIcon( const zypp::RepoInfo & repo,
-                                   const QPixmap &        icon );
+    QListWidgetItem * setItemIcon( const ZyppRepoInfo & repo,
+                                   const QPixmap &      icon );
 
     /**
      * Return the item for the specified repo in the repos list widget
      * or 0 if there is no such item.
      **/
-    QListWidgetItem * findRepoItem( const zypp::RepoInfo & repo );
+    QListWidgetItem * findRepoItem( const ZyppRepoInfo & repo );
 
 
     //
     // Data members
     //
 
-    MyrlynRepoManager *  _repoManager;
+    MyrlynRepoManager * _repoManager;
     Ui::InitReposPage * _ui;       // See ui_init-repos-page.h
 
     int                 _reposCount;

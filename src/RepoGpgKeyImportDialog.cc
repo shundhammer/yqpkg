@@ -26,7 +26,7 @@
 
 
 RepoGpgKeyImportDialog::RepoGpgKeyImportDialog( const zypp::PublicKey & key,
-                                                const zypp::RepoInfo  & repoInfo,
+                                                const ZyppRepoInfo  &   repoInfo,
                                                 QWidget *               parent   )
     : QDialog( parent ? parent : MainWindow::instance() )
     , _ui( new Ui::RepoGpgKeyImportDialog ) // Use the Qt designer .ui form (XML)

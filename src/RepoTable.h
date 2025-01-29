@@ -19,8 +19,6 @@
 #define RepoTable_h
 
 
-#include <zypp/RepoManager.h>
-
 #include "YQZypp.h"
 #include "QY2ListView.h"
 
@@ -29,7 +27,6 @@ namespace zypp
 {
     class RepoManager;
 };
-
 
 
 /**

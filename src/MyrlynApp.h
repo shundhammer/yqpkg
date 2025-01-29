@@ -20,7 +20,6 @@
 
 #include <QObject>
 #include <QFlags>
-#include <zypp/RepoInfo.h>
 
 
 class MainWindow;
@@ -32,9 +31,6 @@ class Workflow;
 class YQPkgSelector;
 class MyrlynRepoManager;
 class ZyppLogger;
-
-typedef std::list<zypp::RepoInfo> RepoInfoList;
-typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
 
 
 enum MyrlynAppOption

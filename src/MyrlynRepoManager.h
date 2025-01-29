@@ -25,10 +25,11 @@
 #include <zypp/RepoManager.h>
 #include <zypp/RepoInfo.h>
 
+#include "YQZypp.h"
+
 
 using RepoManager_Ptr = std::shared_ptr<zypp::RepoManager>;
-typedef std::list<zypp::RepoInfo> RepoInfoList;
-typedef std::list<zypp::RepoInfo>::iterator RepoInfoIterator;
+typedef std::list<ZyppRepoInfo> RepoInfoList;
 
 
 /**
@@ -94,17 +95,17 @@ signals:
     /**
      * Emitted when an enabled repo was found.
      **/
-    void foundRepo( const zypp::RepoInfo & repo );
+    void foundRepo( const ZyppRepoInfo & repo );
 
     /**
      * Emitted when refreshing a repo starts.
      **/
-    void refreshRepoStart( const zypp::RepoInfo & repo );
+    void refreshRepoStart( const ZyppRepoInfo & repo );
 
     /**
      * Emitted when refreshing a repo is done.
      **/
-    void refreshRepoDone ( const zypp::RepoInfo & repo );
+    void refreshRepoDone ( const ZyppRepoInfo & repo );
 
 
 protected:

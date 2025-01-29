@@ -20,6 +20,7 @@
 
 #include <iostream>        // cerr
 #include <zypp/KeyRing.h>
+#include <zypp/RepoInfo.h>
 
 #include "RepoGpgKeyImportDialog.h"
 

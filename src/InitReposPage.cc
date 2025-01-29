@@ -15,16 +15,19 @@
  */
 
 
+#include <zypp/RepoInfo.h>
+
 #include "Logger.h"
 #include "Exception.h"
 #include "MainWindow.h"
 #include "MyrlynRepoManager.h"
 #include "utf8.h"
+#include "YQZypp.h"
 #include "InitReposPage.h"
 
 
 InitReposPage::InitReposPage( MyrlynRepoManager * repoManager,
-                              QWidget *          parent )
+                              QWidget *           parent )
     : QWidget( parent )
     , _repoManager( repoManager )
     , _ui( new Ui::InitReposPage )  // Use the Qt designer .ui form
@@ -55,14 +58,14 @@ void InitReposPage::connectSignals()
 {
     CHECK_PTR( _repoManager );
 
-    connect( _repoManager, SIGNAL( foundRepo( zypp::RepoInfo ) ),
-             this,         SLOT  ( foundRepo( zypp::RepoInfo ) ) );
+    connect( _repoManager, SIGNAL( foundRepo( ZyppRepoInfo ) ),
+             this,         SLOT  ( foundRepo( ZyppRepoInfo ) ) );
 
-    connect( _repoManager, SIGNAL( refreshRepoStart( zypp::RepoInfo ) ),
-             this,         SLOT  ( refreshRepoStart( zypp::RepoInfo ) ) );
+    connect( _repoManager, SIGNAL( refreshRepoStart( ZyppRepoInfo ) ),
+             this,         SLOT  ( refreshRepoStart( ZyppRepoInfo ) ) );
 
-    connect( _repoManager, SIGNAL( refreshRepoDone ( zypp::RepoInfo ) ),
-             this,         SLOT  ( refreshRepoDone ( zypp::RepoInfo ) ) );
+    connect( _repoManager, SIGNAL( refreshRepoDone ( ZyppRepoInfo ) ),
+             this,         SLOT  ( refreshRepoDone ( ZyppRepoInfo ) ) );
 }
 
 
@@ -96,7 +99,7 @@ void InitReposPage::reset()
 }
 
 
-void InitReposPage::foundRepo( const zypp::RepoInfo & repo )
+void InitReposPage::foundRepo( const ZyppRepoInfo & repo )
 {
     _ui->progressBar->setMaximum( ++_reposCount );
     QListWidgetItem * item = new QListWidgetItem( fromUTF8( repo.name() ) );
@@ -108,7 +111,7 @@ void InitReposPage::foundRepo( const zypp::RepoInfo & repo )
 }
 
 
-void InitReposPage::refreshRepoStart( const zypp::RepoInfo & repo )
+void InitReposPage::refreshRepoStart( const ZyppRepoInfo & repo )
 {
     // logDebug() << "Repo refresh start for " << repo.name() << endl;
 
@@ -124,7 +127,7 @@ void InitReposPage::refreshRepoStart( const zypp::RepoInfo & repo )
 }
 
 
-void InitReposPage::refreshRepoDone ( const zypp::RepoInfo & repo )
+void InitReposPage::refreshRepoDone ( const ZyppRepoInfo & repo )
 {
     // logDebug() << "Repo refresh done for " << repo.name() << endl;
 
@@ -136,7 +139,7 @@ void InitReposPage::refreshRepoDone ( const zypp::RepoInfo & repo )
 
 
 QListWidgetItem *
-InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
+InitReposPage::setItemIcon( const ZyppRepoInfo & repo,
                             const QPixmap &        icon )
 {
     QListWidgetItem * item = findRepoItem( repo );
@@ -151,7 +154,7 @@ InitReposPage::setItemIcon( const zypp::RepoInfo & repo,
 
 
 QListWidgetItem *
-InitReposPage::findRepoItem( const zypp::RepoInfo & repo )
+InitReposPage::findRepoItem( const ZyppRepoInfo & repo )
 {
     QString repoName = fromUTF8( repo.name() );
     QListWidgetItem * item = 0;

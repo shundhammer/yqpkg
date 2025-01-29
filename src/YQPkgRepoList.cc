@@ -177,7 +177,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList * repoList,
     , _repoList( repoList )
     , _zyppRepo( repo )
 {
-    const zypp::RepoInfo & repoInfo = repo.info();
+    const ZyppRepoInfo & repoInfo = repo.info();
 
     if ( nameCol() >= 0 )
     {

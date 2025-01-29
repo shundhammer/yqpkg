@@ -176,7 +176,7 @@ void MyrlynRepoManager::findEnabledRepos()
           it != repoManager()->repoEnd();
           ++it )
     {
-        zypp::RepoInfo repo = *it;
+        ZyppRepoInfo repo = *it;
 
         if ( repo.enabled() )
         {
@@ -211,7 +211,7 @@ void MyrlynRepoManager::refreshRepos()
     KeyRingCallbacks keyRingCallbacks;
     QElapsedTimer    timer;
 
-    for ( zypp::RepoInfo & repo: _repos )
+    for ( ZyppRepoInfo & repo: _repos )
     {
         try
         {
@@ -245,7 +245,7 @@ void MyrlynRepoManager::refreshRepos()
 
 void MyrlynRepoManager::loadRepos()
 {
-    for ( const zypp::RepoInfo & repo: _repos )
+    for ( const ZyppRepoInfo & repo: _repos )
     {
         if ( repo.enabled() )
         {

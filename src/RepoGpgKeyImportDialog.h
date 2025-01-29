@@ -25,6 +25,8 @@
 
 #include <QDialog>
 
+#include "YQZypp.h"
+
 
 // Generated with 'uic' from a Qt designer .ui form: repo-gpg-key-import-dialog.ui
 //
@@ -44,7 +46,7 @@ class RepoGpgKeyImportDialog: public QDialog
 public:
 
     RepoGpgKeyImportDialog( const zypp::PublicKey & key,
-                            const zypp::RepoInfo  & repoInfo,
+                            const ZyppRepoInfo  &   repoInfo,
                             QWidget *               parent = 0 );
 
     virtual ~RepoGpgKeyImportDialog();
@@ -76,7 +78,7 @@ protected:
     // Data members
 
     Ui::RepoGpgKeyImportDialog * _ui; // See ui_repo-gpg-key-import-dialog.ui
-    zypp::RepoInfo               _repoInfo;
+    ZyppRepoInfo                 _repoInfo;
 };
 
 #endif // RepoGpgKeyImportDialog_h
