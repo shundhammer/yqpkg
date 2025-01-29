@@ -59,7 +59,6 @@ public slots:
     virtual void selectSomething();
 
     /**
-     * Reimplemented from Q3ListView:
      * Adjust header sizes after clearing contents.
      **/
     virtual void clear();
@@ -128,6 +127,8 @@ public:
      * Returns 'true' if the sort order should always be the item insertion
      * order, 'false' if the user can change the sort order by clicking on a
      * column header.
+     *
+     * The default is 'false'.
      **/
     bool sortByInsertionSequence() const { return _sortByInsertionSequence; }
 
@@ -147,12 +148,12 @@ public:
      * Returns the minimum size required for this widget.
      * Inherited from QWidget.
      **/
-    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const override;
 
     /**
      * Event filter - inherited from QWidget
      **/
-    virtual bool eventFilter( QObject * obj, QEvent * event );
+    virtual bool eventFilter( QObject * obj, QEvent * event ) override;
 
 
 protected slots:
@@ -181,19 +182,19 @@ protected:
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void mousePressEvent( QMouseEvent * e );
+    virtual void mousePressEvent( QMouseEvent * e ) override;
 
     /**
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void mouseReleaseEvent( QMouseEvent * );
+    virtual void mouseReleaseEvent( QMouseEvent * ) override;
 
     /**
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void mouseDoubleClickEvent( QMouseEvent * );
+    virtual void mouseDoubleClickEvent( QMouseEvent * ) override;
 
 
     //
@@ -260,12 +261,14 @@ public:
      * Comparison function used for sorting the list.
      * Reimplemented from QTreeWidgetItem
      **/
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
     /**
      * Returns 'true' if the sort order should always be the item insertion
      * order, 'false' if the user can change the sort order by clicking on a
      * column header.
+     *
+     * The default is 'false'.
      **/
     bool sortByInsertionSequence() const;
 
@@ -279,12 +282,13 @@ public:
      * Compare two string locate-aware. Strings representing integers
      * have special handling.
      **/
-    bool compare(const QString& text1, const QString& text2) const;
+    bool compare( const QString & text1,
+                  const QString & text2 ) const;
 
     /**
      * The text of the table cell or the sort-key if available.
      **/
-    virtual QString smartSortKey(int column) const;
+    virtual QString smartSortKey( int column ) const;
 
     /**
      * Returns a tool tip text for a specific column of this item.
@@ -297,14 +301,9 @@ public:
 
 protected:
 
-    //
-    // Data members
-    //
-
-    int         _serial;
-
-    QColor      _textColor;
-    QColor      _backgroundColor;
+    int    _serial;
+    QColor _textColor;
+    QColor _backgroundColor;
 };
 
 
@@ -319,15 +318,15 @@ public:
     /**
      * Constructor for toplevel items.
      **/
-    QY2CheckListItem( QY2ListView *             parentListView,
-                      const QString &           text );
+    QY2CheckListItem( QY2ListView *   parentListView,
+                      const QString & text );
 
 
     /**
      * Constructor for deeper level items.
      **/
-    QY2CheckListItem( QTreeWidgetItem *                 parentItem,
-                      const QString &           text );
+    QY2CheckListItem( QTreeWidgetItem * parentItem,
+                      const QString &   text );
 
     /**
      * Destructor
@@ -381,11 +380,7 @@ public:
 
 protected:
 
-    //
-    // Data members
-    //
-
-    int         _serial;
+    int _serial;
 };
 
 

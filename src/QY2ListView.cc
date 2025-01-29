@@ -36,7 +36,6 @@ QY2ListView::QY2ListView( QWidget * parent )
     , _mouseButton1PressedInHeader( false )
     , _finalSizeChangeExpected( false )
 {
-    //FIXME QTreeWidget::setShowToolTips( false );
     setRootIsDecorated(false);
 
     if ( header() )
@@ -170,10 +169,8 @@ QY2ListView::restoreColumnWidths()
 {
     if ( _savedColumnWidth.size() != (unsigned) columnCount() ) // never manually resized
     {
-#if 1
         for ( int i = 0; i < columnCount(); i++ )               // use optimized column width
             resizeColumnToContents(i);
-#endif
     }
     else // stored settings after manual resizing
     {
@@ -200,15 +197,15 @@ QY2ListView::mousePressEvent( QMouseEvent * ev )
 
     if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
-        _mousePressedItem       = item;
-        _mousePressedCol        = header()->logicalIndexAt( ev->pos().x() );
-        _mousePressedButton     = ev->button();
+        _mousePressedItem   = item;
+        _mousePressedCol    = header()->logicalIndexAt( ev->pos().x() );
+        _mousePressedButton = ev->button();
     }
     else        // invalidate last click data
     {
-        _mousePressedItem       = 0;
-        _mousePressedCol        = -1;
-        _mousePressedButton     = Qt::NoButton;
+        _mousePressedItem   = 0;
+        _mousePressedCol    = -1;
+        _mousePressedButton = Qt::NoButton;
     }
 
     // Call base class method
@@ -333,8 +330,8 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView *   parentListView,
 }
 
 
-QY2ListViewItem::QY2ListViewItem( QTreeWidgetItem *     parentItem,
-                                  const QString &       text )
+QY2ListViewItem::QY2ListViewItem( QTreeWidgetItem * parentItem,
+                                  const QString &   text )
     : QTreeWidgetItem( parentItem,
                        QStringList( text ),
                        1 )
@@ -358,7 +355,7 @@ bool
 QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
     const QY2ListViewItem * other =
-        dynamic_cast<const QY2ListViewItem *> (&otherListViewItem);
+        dynamic_cast<const QY2ListViewItem *>( &otherListViewItem );
 
     if ( sortByInsertionSequence() )
     {
@@ -370,7 +367,7 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
         // Still here? Try the other version: QY2CheckListItem.
 
         const QY2CheckListItem * otherCheckListItem =
-            dynamic_cast<const QY2CheckListItem *> (&otherListViewItem);
+            dynamic_cast<const QY2CheckListItem *>( &otherListViewItem );
 
         if ( otherCheckListItem )
         {
@@ -402,12 +399,13 @@ QY2ListViewItem::sortByInsertionSequence() const
 
 
 bool
-QY2ListViewItem::compare(const QString& text1, const QString& text2) const
+QY2ListViewItem::compare( const QString & text1,
+                          const QString & text2 ) const
 {
     // numeric sorting if columns are numbers
 
     bool ok1, ok2; // conversion to int successful
-    bool retval = text1.toLongLong(&ok1) < text2.toLongLong(&ok2);
+    bool retval = text1.toLongLong( &ok1 ) < text2.toLongLong( &ok2 );
 
     if (ok1 && ok2)
         return retval;     // int < int
@@ -432,8 +430,8 @@ QY2CheckListItem::QY2CheckListItem( QY2ListView *   parentListView,
                                     const QString & text )
     : QY2ListViewItem( parentListView, text)
 {
-    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-    setCheckState(0, Qt::Unchecked);
+    setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
+    setCheckState( 0, Qt::Unchecked );
     _serial = parentListView->nextSerial();
 }
 
@@ -445,7 +443,7 @@ QY2CheckListItem::QY2CheckListItem( QTreeWidgetItem * parentItem,
     _serial = 0;
     QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( treeWidget() );
 
-    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
     setCheckState(0, Qt::Unchecked);
 
     if ( parentListView )
@@ -467,11 +465,6 @@ void QY2ListView::treeExpanded( QTreeWidgetItem * listViewItem )
 
 void QY2ListView::treeCollapsed( QTreeWidgetItem * listViewItem )
 {
-    if ( columnCount() == 1  && header() && header()->isHidden())
+    if ( columnCount() == 1  && header() && header()->isHidden() )
         resizeColumnToContents( 0 );
 }
-
-
-
-
-
