@@ -108,11 +108,13 @@ void RepoConfigDialog::updateCurrentData()
     {
         const ZyppRepoInfo & repoInfo = current->repoInfo();
 
+#if 0
         logDebug() << "Current: "      << repoInfo.name()
                    << " Prio: "        << repoInfo.priority()
                    << " Enabled: "     << repoInfo.enabled()
                    << " AutoRefresh: " << repoInfo.autorefresh()
                    << endl;
+#endif
 
         _ui->currentRepoPriority->setEnabled( true );
         _ui->currentRepoEnabled->setEnabled( true );
@@ -151,11 +153,13 @@ void RepoConfigDialog::currentEdited()
         repoInfo.setEnabled( _ui->currentRepoEnabled->isChecked() );
         repoInfo.setAutorefresh( _ui->currentRepoAutoRefresh->isChecked() );
 
+#if 0
         logDebug() << "Current: "      << repoInfo.name()
                    << " Prio: "        << repoInfo.priority()
                    << " Enabled: "     << repoInfo.enabled()
                    << " AutoRefresh: " << repoInfo.autorefresh()
                    << endl;
+#endif
 
         currentItem->setRepoInfo( repoInfo );
 
