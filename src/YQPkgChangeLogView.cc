@@ -18,9 +18,10 @@
 #include <zypp/PoolItem.h>
 #include <zypp/ui/Selectable.h>
 
-#include "YQPkgChangeLogView.h"
+#include "Logger.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include "YQPkgChangeLogView.h"
 
 
 static const int MAX_ENTRIES = 512;

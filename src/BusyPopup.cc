@@ -14,6 +14,7 @@
 #include <QRect>
 #include <QScreen>
 
+#include "Logger.h"
 #include "BusyPopup.h"
 
 

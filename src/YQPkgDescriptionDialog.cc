@@ -29,9 +29,9 @@
 #include "YQPkgList.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include "YQZypp.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
-#include "YQZypp.h"
 
 
 #define SPACING  2      // between subwidgets
