@@ -59,6 +59,7 @@ QPixmap YQIconPool::tabRemove()			{ return iconPool()->cachedIcon( "tab-close", 
 QPixmap YQIconPool::arrowLeft()			{ return iconPool()->cachedIcon( "arrow-left", true );				}
 QPixmap YQIconPool::arrowRight()		{ return iconPool()->cachedIcon( "arrow-right", true );				}
 QPixmap YQIconPool::arrowDown()			{ return iconPool()->cachedIcon( "arrow-down", true );				}
+QPixmap YQIconPool::checkmark()			{ return iconPool()->cachedIcon( "checkmark", true );				}
 
 YQIconPool * YQIconPool::iconPool()
 {
@@ -87,7 +88,7 @@ YQIconPool::cachedIcon( const QString icon_name, bool enabled )
     Q_INIT_RESOURCE( icons );
     QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
 
-    if ( !iconPixmap )
+    if ( ! iconPixmap )
     {
         iconPixmap = loadIcon( icon_name, enabled );
 

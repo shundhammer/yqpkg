@@ -823,7 +823,7 @@ YQPkgSelector::addMenus()
     action->setText(_( "E&xtras" ));
 
 
-#if 0
+#if 1
     extrasMenu->addAction( _( "Configure &Repositories..."  ), this, SLOT( configRepos() ) );
     extrasMenu->addSeparator();
 #endif

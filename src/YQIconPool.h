@@ -59,6 +59,7 @@ public:
     static QPixmap arrowLeft();
     static QPixmap arrowRight();
     static QPixmap arrowDown();
+    static QPixmap checkmark();
 
 protected:
 
@@ -100,8 +101,8 @@ private:
     // Data members
     //
 
-    static YQIconPool * _iconPool;
-    QHash< const QString, QPixmap >	_iconCache;
+    static YQIconPool *             _iconPool;
+    QHash< const QString, QPixmap > _iconCache;
 };
 
 

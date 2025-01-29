@@ -4,6 +4,7 @@
     <file alias="arrow-down">icons/arrow-down.svg</file>
     <file alias="arrow-left">icons/arrow-left.svg</file>
     <file alias="arrow-right">icons/arrow-right.svg</file>
+    <file alias="checkmark">icons/checkmark.svg</file>
     <file alias="download">icons/download.svg</file>
     <file alias="download-done">icons/download-done.svg</file>
     <file alias="download-ongoing">icons/download-ongoing.svg</file>

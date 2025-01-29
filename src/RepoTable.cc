@@ -20,6 +20,8 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "YQIconPool.h"
+#include "utf8.h"
 #include "RepoTable.h"
 
 
@@ -38,7 +40,15 @@ RepoTable::~RepoTable()
 
 void RepoTable::populate( zypp::RepoManager * repoManager )
 {
+    for ( zypp::RepoManager::RepoConstIterator it = repoManager->repoBegin();
+          it != repoManager->repoEnd();
+          ++it )
+    {
+        ZyppRepoInfo repoInfo = *it;
 
+        RepoTableItem * item = new RepoTableItem( this, &repoInfo );
+        CHECK_NEW( item );
+    }
 }
 
 
@@ -50,18 +60,64 @@ RepoTableItem::RepoTableItem( RepoTable *    parentTable,
     , _parentTable( parentTable )
     , _repoInfo( repoInfo )
 {
-
+    updateData();
 }
 
 
 RepoTableItem::~RepoTableItem()
 {
+    // NOP
+}
 
+
+void RepoTableItem::updateData()
+{
+    setText( RepoTable::NameCol,    _repoInfo->name() );
+    setIcon( RepoTable::EnabledCol, _repoInfo->enabled()     ? checkmarkIcon() : noIcon() );
+    setIcon( RepoTable::AutoRefCol, _repoInfo->autorefresh() ? checkmarkIcon() : noIcon() );
+    setText( RepoTable::PrioCol,    std::to_string( _repoInfo->priority() ) );
+    setText( RepoTable::ServiceCol, _repoInfo->service() );
+    setText( RepoTable::UrlCol,     _repoInfo->url().asString() );
+}
+
+
+void RepoTableItem::setText( int col, const std::string & txt )
+{
+    setText( col, fromUTF8( txt ) );
+}
+
+
+void RepoTableItem::setText( int col, const QString & txt )
+{
+    // This really shouldn't be necessary, but gcc already cost me a full hour
+    // of lifetime and screaming at the screen and half a week of life energy
+    // with this bullshit: It just wouldn't let me use the publicly inherited
+    // method directly. So let's call the inherited method explicitly. WTF?!
+
+    QY2ListViewItem::setText( col, txt );
+}
+
+
+QPixmap
+RepoTableItem::checkmarkIcon()
+{
+    return YQIconPool::checkmark();
+}
+
+
+QPixmap
+RepoTableItem::noIcon()
+{
+    return QPixmap();
 }
 
 
 bool
-RepoTableItem::operator< ( const QTreeWidgetItem & other ) const
+RepoTableItem::operator< ( const QTreeWidgetItem & otherTreeWidgetItem ) const
 {
-    return QY2ListViewItem::operator<( other );
+    int sortColumn = _parentTable ? _parentTable->sortColumn() : 0;
+
+    Q_UNUSED( sortColumn );
+
+    return QY2ListViewItem::operator<( otherTreeWidgetItem );
 }

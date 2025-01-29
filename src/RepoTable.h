@@ -18,6 +18,7 @@
 #ifndef RepoTable_h
 #define RepoTable_h
 
+#include <string>
 
 #include "YQZypp.h"
 #include "QY2ListView.h"
@@ -53,7 +54,7 @@ public:
         ServiceCol,
         UrlCol
     };
-    
+
 
     /**
      * Constructor
@@ -98,8 +99,34 @@ public:
      **/
     virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
-    
+    /**
+     * Update the data for this item.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void updateData() override;
+
+    /**
+     * Set a column text
+     **/
+    void setText( int col, const std::string & txt );
+    void setText( int col, const QString & txt );
+
+
 protected:
+
+    /**
+     * Return a "checkmark" icon.
+     **/
+    QPixmap checkmarkIcon();
+
+    /**
+     * Return an empty icon.
+     **/
+    QPixmap noIcon();
+
+
+    // Data members
 
     RepoTable *    _parentTable;
     ZyppRepoInfo * _repoInfo;
