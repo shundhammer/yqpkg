@@ -33,6 +33,9 @@
 using std::string;
 
 
+// This is the simple version used in YQPkgRepoFilterView, not to confuse with
+// the more complex RepoTable in the RepoEditor.
+
 YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     : QY2ListView( parent )
 {

@@ -32,6 +32,9 @@ typedef zypp::Repository ZyppRepo;
 /**
  * Class to show a list of libzypp repositories and let the user select one to
  * fill the package list on the right.
+ *
+ * This is the simple version used in YQPkgRepoFilterView, not to confuse with
+ * the more complex RepoTable in the RepoEditor.
  **/
 class YQPkgRepoList : public QY2ListView
 {
