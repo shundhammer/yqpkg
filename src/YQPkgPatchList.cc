@@ -48,7 +48,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     headers << "";             _statusCol  = numCol++;
     headers << _( "Summary" ); _summaryCol = numCol++;
 
-    setHeaderLabels(headers);
+    setHeaderLabels( headers );
     setIndentation( 0 );
     setAllColumnsShowFocus( true );
     setSortingEnabled( true );

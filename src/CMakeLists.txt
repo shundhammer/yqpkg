@@ -43,6 +43,7 @@ set( SOURCES
   PkgTaskListWidget.cc
   PopupLogo.cc
   ProgressDialog.cc
+  RepoConfigDialog.cc
   RepoGpgKeyImportDialog.cc
   RepoTable.cc
   SearchFilter.cc

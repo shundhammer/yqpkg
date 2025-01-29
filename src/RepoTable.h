@@ -23,6 +23,7 @@
 #include "YQZypp.h"
 #include "QY2ListView.h"
 
+class RepoTableItem;
 
 namespace zypp
 {
@@ -67,9 +68,23 @@ public:
     virtual ~RepoTable();
 
     /**
-     * Populate with the repos from the specified repo manager.
+     * Populate with the repos from the MyrlynRepoManager.
      **/
-    void populate( zypp::RepoManager * repoManager );
+    void populate();
+
+    /**
+     * Return the current repo item or 0 if there is none.
+     **/
+    RepoTableItem * currentRepoItem();
+
+    /**
+     * Don't let Qt designer get in the way of our desired columns.
+     *
+     * Don't override; those methods are not virtual in the base class.
+     * But Qt designer calls the method of this class.
+     **/
+    void setHeaderItem( QTreeWidgetItem * headerItem );
+    void setColumnCount( int ) {};
 };
 
 

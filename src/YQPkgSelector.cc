@@ -51,6 +51,7 @@
 #include "Logger.h"
 #include "QY2CursorHelper.h"
 #include "MyrlynApp.h"
+#include "RepoConfigDialog.h"
 #include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgClassificationFilterView.h"
@@ -843,7 +844,7 @@ YQPkgSelector::addMenus()
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
 
-    extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
+    extrasMenu->addAction( _( "Install All Matching Rec&ommended Packages" ),
                             this, SLOT( installRecommendedPkgs() ) );
 
     extrasMenu->addSeparator();
@@ -1193,7 +1194,10 @@ YQPkgSelector::configRepos()
 {
     logDebug() << endl;
 
-    notImplemented();
+    RepoConfigDialog dialog;
+    dialog.exec();
+
+    // FIXME: Make sure to restart the program after changing anything about repos.
 }
 
 

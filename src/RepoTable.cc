@@ -16,11 +16,17 @@
 
 
 
+#include <QStringList>
+#include <QHeaderView>
+
 #include <zypp/RepoManager.h>
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MyrlynApp.h"
+#include "MyrlynRepoManager.h"
 #include "YQIconPool.h"
+#include "YQi18n.h"
 #include "utf8.h"
 #include "RepoTable.h"
 
@@ -28,18 +34,50 @@
 RepoTable::RepoTable( QWidget * parent )
     : QY2ListView( parent )
 {
+    logDebug() << "Creating RepoTable" << endl;
 
+    QStringList headers;
+    headers << _( "Name"         )
+            << _( "Priority"     )
+            << _( "Enabled"      )
+            << _( "Auto-Refresh" )
+            << _( "Service"      )
+            << _( "URL"          );
+
+    setHeaderLabels( headers );
+    setIndentation( 0 );
+    header()->setSortIndicatorShown( true );
+    header()->setSectionsClickable( true );
+
+    for ( int col=0; col < headers.size(); col++ )
+        header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
 }
 
 
 RepoTable::~RepoTable()
 {
-    // NOP
+    logDebug() << "Destroying RepoTable" << endl;
 }
 
 
-void RepoTable::populate( zypp::RepoManager * repoManager )
+void RepoTable::setHeaderItem( QTreeWidgetItem * headerItem )
 {
+    // Qt designer dumps code for this into the generated .ui file,
+    // and this will generate columns that we don't want here.
+    // Just ignore it and get rid of that thing.
+    //
+    // Since this method is documented to take ownership of the item,
+    // we need to delete it here.
+
+    if ( headerItem )
+        delete headerItem;
+}
+
+
+void RepoTable::populate()
+{
+    RepoManager_Ptr repoManager = MyrlynApp::instance()->repoManager()->repoManager();
+
     for ( zypp::RepoManager::RepoConstIterator it = repoManager->repoBegin();
           it != repoManager->repoEnd();
           ++it )
@@ -49,6 +87,15 @@ void RepoTable::populate( zypp::RepoManager * repoManager )
         RepoTableItem * item = new RepoTableItem( this, &repoInfo );
         CHECK_NEW( item );
     }
+}
+
+
+RepoTableItem *
+RepoTable::currentRepoItem()
+{
+    QTreeWidgetItem * item = currentItem();
+
+    return item ? dynamic_cast<RepoTableItem *>( item ) : 0;
 }
 
 
