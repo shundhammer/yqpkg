@@ -75,6 +75,21 @@ protected slots:
      **/
     void currentEdited();
 
+    /**
+     * Add a new repo.
+     **/
+    void addRepo();
+
+    /**
+     * Edit the current repo.
+     **/
+    void editRepo();
+
+    /**
+     * Delete the current repo.
+     **/
+    void deleteRepo();
+
 protected:
 
     /**

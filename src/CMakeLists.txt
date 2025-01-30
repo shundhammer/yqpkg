@@ -44,6 +44,7 @@ set( SOURCES
   PopupLogo.cc
   ProgressDialog.cc
   RepoConfigDialog.cc
+  RepoEditDialog.cc
   RepoGpgKeyImportDialog.cc
   RepoTable.cc
   SearchFilter.cc
@@ -121,6 +122,8 @@ set( UI_FILES
      init-repos-page.ui
      pkg-commit-page.ui
      progress-dialog.ui
+     repo-config.ui
+     repo-edit-add.ui
      repo-gpg-key-import-dialog.ui
      search-filter-view.ui
      search-filter-view.ui

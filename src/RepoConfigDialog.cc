@@ -20,6 +20,7 @@
 #include "MainWindow.h"
 #include "WindowSettings.h"
 #include "utf8.h"
+#include "RepoEditDialog.h"
 #include "RepoConfigDialog.h"
 
 
@@ -74,19 +75,19 @@ void RepoConfigDialog::connectWidgets()
 
     connect( _ui->repoTable, SIGNAL( columnDoubleClicked( int button, QTreeWidgetItem * item, int col, const QPoint & ) ),
              this,           SLOT  ( itemDoubleClicked  ( int button, QTreeWidgetItem * item, int col ) ) );;
+#endif
 
-    connect( _ui->addButton(),    SIGNAL( clicked() ),
-             this,                SLOT  ( addRepo() ) );
+    connect( _ui->addButton,    SIGNAL( clicked() ),
+             this,              SLOT  ( addRepo() ) );
 
-    connect( _ui->editButton(),   SIGNAL( clicked() ),
-             this,                SLOT  ( editRepo() ) );
+    connect( _ui->editButton,   SIGNAL( clicked() ),
+             this,              SLOT  ( editRepo() ) );
 
-    connect( _ui->deleteButton(), SIGNAL( clicked() ),
-             this,                SLOT  ( deleteRepo() ) );
+    connect( _ui->deleteButton, SIGNAL( clicked() ),
+             this,              SLOT  ( deleteRepo() ) );
 
     // _ui->closeButton() is already connected to QDialog::accept()
     // in the .ui file
-#endif
 }
 
 
@@ -175,4 +176,73 @@ void RepoConfigDialog::currentEdited()
 
         emit currentStatusChanged();
     }
+}
+
+
+void RepoConfigDialog::addRepo()
+{
+    logDebug() << "Adding repo" << endl;
+
+    RepoEditDialog dialog( RepoEditDialog::AddRepo, this );
+    int result = dialog.addRepo();
+
+    if ( result == QDialog::Accepted )
+    {
+        logDebug() << "User closed the repo edit dialog with 'OK'" << endl;
+
+        ZyppRepoInfo repoInfo = dialog.repoInfo();
+#if 1
+        logDebug() << "Result: "       << repoInfo.name()
+                   << " URL: "         << repoInfo.url().asString()
+                   << " Prio: "        << repoInfo.priority()
+                   << " Enabled: "     << repoInfo.enabled()
+                   << " AutoRefresh: " << repoInfo.autorefresh()
+                   << endl;
+#endif
+    }
+    else
+    {
+        logDebug() << "User cancelled the dialog" << endl;
+    }
+}
+
+
+void RepoConfigDialog::editRepo()
+{
+    logDebug() << "Editing repo" << endl;
+
+    RepoTableItem * currentItem = _ui->repoTable->currentRepoItem();
+
+    if ( currentItem )
+    {
+        ZyppRepoInfo repoInfo = currentItem->repoInfo();
+
+        RepoEditDialog dialog( RepoEditDialog::EditRepo, this );
+        int result = dialog.editRepo( repoInfo );
+
+        if ( result == QDialog::Accepted )
+        {
+            logDebug() << "User closed the repo edit dialog with 'OK'" << endl;
+
+            repoInfo = dialog.repoInfo();
+#if 1
+            logDebug() << "Result: "       << repoInfo.name()
+                       << " URL: "         << repoInfo.url().asString()
+                       << " Prio: "        << repoInfo.priority()
+                       << " Enabled: "     << repoInfo.enabled()
+                       << " AutoRefresh: " << repoInfo.autorefresh()
+                       << endl;
+#endif
+        }
+        else
+        {
+            logDebug() << "User cancelled the dialog" << endl;
+        }
+    }
+}
+
+
+void RepoConfigDialog::deleteRepo()
+{
+    logWarning() << "Not implemented yet" << endl;
 }
