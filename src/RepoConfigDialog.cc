@@ -116,12 +116,22 @@ void RepoConfigDialog::updateCurrentData()
                    << endl;
 #endif
 
+        std::string url    = repoInfo.url().asString();
+        std::string rawUrl = repoInfo.rawUrl().asString();
+
+        if ( rawUrl == url )
+            rawUrl = "";
+
+        _ui->currentRepoRawUrl->setEnabled( ! rawUrl.empty() );
+        _ui->rawUrlCaption->setEnabled    ( ! rawUrl.empty() );
+
         _ui->currentRepoPriority->setEnabled( true );
         _ui->currentRepoEnabled->setEnabled( true );
         _ui->currentRepoAutoRefresh->setEnabled( true );
 
         _ui->currentRepoName->setText( QString( "<b>%1</b>" ).arg( fromUTF8( repoInfo.name() ) ) );
-        _ui->currentRepoUrl->setText ( fromUTF8( repoInfo.url().asString() ) );
+        _ui->currentRepoUrl->setText( fromUTF8( url ) );
+        _ui->currentRepoRawUrl->setText( fromUTF8( rawUrl ) );
         _ui->currentRepoPriority->setValue( repoInfo.priority() );
         _ui->currentRepoEnabled->setChecked( repoInfo.enabled() );
         _ui->currentRepoAutoRefresh->setChecked( repoInfo.autorefresh());
