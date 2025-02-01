@@ -150,9 +150,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         // Find installed and available objects (for multiversion view)
         //
         {
-            zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
-
-            while ( it != selectable->picklistEnd() )
+            for ( zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
+                  it != selectable->picklistEnd();
+                  ++it )
             {
                 YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it );
 
@@ -163,10 +163,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
                 connect( this,    SIGNAL( statusChanged() ),
                          version, SLOT  ( update()        ) );
-
-                ++it;
             }
-
         }
     }
     else
@@ -175,9 +172,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         // Fill installed objects
         //
         {
-            zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
-
-            while ( it != selectable->installedEnd() )
+            for ( zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
+                  it != selectable->installedEnd();
+                  ++it )
             {
                 // Cache this, it's somewhat expensive
                 bool retracted = installedIsRetracted( selectable, *it );
@@ -215,8 +212,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
                     setRetractedColor( textLabel );
 
                 _layout->addWidget( installedVersion );
-
-                ++it;
             }
         }
 
@@ -224,11 +219,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         //
         // Fill available objects
         //
-
         {
-            zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
-
-            while ( it != selectable->availableEnd() )
+            for ( zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+                  it != selectable->availableEnd();
+                  ++it)
             {
                 YQPkgVersion *radioButton = new YQPkgVersion( this, selectable, *it );
 
@@ -245,8 +239,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
                 {
                     radioButton->setChecked( true );
                 }
-
-                ++it;
             }
         }
     }
@@ -271,9 +263,9 @@ void YQPkgVersionsView::setRetractedColor( QWidget * widget )
 
 bool YQPkgVersionsView::installedIsRetracted( ZyppSel selectable, ZyppObj installed )
 {
-    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
-
-    while ( it != selectable->availableEnd() )
+    for ( zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+          it != selectable->availableEnd();
+          ++it )
     {
         if ( (*it)->isRetracted() )
         {
@@ -284,8 +276,6 @@ bool YQPkgVersionsView::installedIsRetracted( ZyppSel selectable, ZyppObj instal
                 return true;
             }
         }
-
-        ++it;
     }
 
     return false;
@@ -452,9 +442,9 @@ YQPkgVersionsView::anyMultiVersionToInstall( bool multiversion ) const
     if ( ! _selectable )
         return false;
 
-    zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
-
-    while ( it != _selectable->availableEnd() )
+    for ( zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
+          it != _selectable->availableEnd();
+          ++it )
     {
         if ( it->multiversionInstall() == multiversion )
         {
@@ -470,8 +460,6 @@ YQPkgVersionsView::anyMultiVersionToInstall( bool multiversion ) const
                     break;
             }
         }
-
-        ++it;
     }
 
     logInfo() << "No " << ( multiversion ? "multiversion" : "non-multiversion" )
@@ -486,9 +474,9 @@ YQPkgVersionsView::unselectAllMultiVersion()
     if ( ! _selectable )
         return;
 
-    zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
-
-    while ( it != _selectable->availableEnd() )
+    for ( zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
+          it != _selectable->availableEnd();
+          ++it )
     {
         if ( it->multiversionInstall() )
         {
@@ -503,8 +491,6 @@ YQPkgVersionsView::unselectAllMultiVersion()
                     break;
             }
         }
-
-        ++it;
     }
 }
 
