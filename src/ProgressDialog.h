@@ -49,7 +49,7 @@ public:
      * If 'parent' is 0, it will use MainWindow::instance(), so the dialog is
      * centered above the main window.
      **/
-    ProgressDialog( const QString & text, QWidget * parent = 0 );
+    explicit ProgressDialog( const QString & text, QWidget * parent = 0 );
 
     /**
      * Destructor.

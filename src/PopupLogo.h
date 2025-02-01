@@ -100,8 +100,8 @@ class LogoPopup: public QLabel
 
 public:
 
-    LogoPopup( const QString & logoName,
-               QWidget *       parent = 0 );
+    explicit LogoPopup( const QString & logoName,
+                        QWidget *       parent = 0 );
 
     virtual ~LogoPopup();
 

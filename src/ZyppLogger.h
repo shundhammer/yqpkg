@@ -35,7 +35,7 @@ class ZyppLogger;
  **/
 struct ZyppLogLineWriter: public zypp::base::LogControl::LineWriter
 {
-    ZyppLogLineWriter( ZyppLogger * zyppLogger )
+    explicit ZyppLogLineWriter( ZyppLogger * zyppLogger )
         : _zyppLogger( zyppLogger )
         {}
 

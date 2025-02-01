@@ -59,7 +59,7 @@ public:
      * needed. For each step, WorkflowStep::setWorkflow() is called to set its
      * parent workflow to this one.
      **/
-    Workflow( const WorkflowStepList & steps );
+    explicit Workflow( const WorkflowStepList & steps );
 
     /**
      * Destructor. This will delete all added workflow steps.

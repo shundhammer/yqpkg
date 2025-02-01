@@ -27,7 +27,7 @@ public:
     /**
      * Constructor.
      */
-    Exception( const QString &msg = QString() ):
+    explicit Exception( const QString &msg = QString() ):
 	_what( msg ),
 	_srcLine(0)
 	{}
@@ -173,7 +173,7 @@ private:
 class DynamicCastException: public Exception
 {
 public:
-    DynamicCastException( const QString &expectedType ):
+    explicit DynamicCastException( const QString &expectedType ):
 	Exception( "dynamic_cast failed; expected: " + expectedType )
 	{}
 

@@ -49,9 +49,9 @@ public:
      * - If it starts with "=", it uses "ExactMatch".
      * - If it's empty, it uses "SelectAll".
      **/
-    SearchFilter( const QString & pattern,
-                  FilterMode      filterMode        = Auto,
-                  FilterMode      defaultFilterMode = StartsWith );
+    explicit SearchFilter( const QString & pattern,
+                           FilterMode      filterMode        = Auto,
+                           FilterMode      defaultFilterMode = StartsWith );
 
     /**
      * Check if a string matches this filter.

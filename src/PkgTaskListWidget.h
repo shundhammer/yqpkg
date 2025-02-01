@@ -34,7 +34,7 @@ class PkgTaskListWidget: public QListWidget
 
 public:
 
-    PkgTaskListWidget( QWidget * parent )
+    explicit PkgTaskListWidget( QWidget * parent )
         : QListWidget( parent )
         , _nextSerial( 0 )
         , _sortByInsertionSequence( true )
@@ -108,8 +108,8 @@ class PkgTaskListWidgetItem: public QListWidgetItem
 {
 public:
 
-    PkgTaskListWidgetItem( PkgTask *           task,
-                           PkgTaskListWidget * parent = 0 );
+    explicit PkgTaskListWidgetItem( PkgTask *           task,
+                                    PkgTaskListWidget * parent = 0 );
 
     PkgTask * task() const { return _task; }
 

@@ -45,7 +45,7 @@ public:
     /**
      * Constructor
      **/
-    MainWindow( QWidget * parent = 0 );
+    explicit MainWindow( QWidget * parent = 0 );
 
     /**
      * Destructor

@@ -226,7 +226,7 @@ public:
     /**
      * Constructor.
      **/
-    PkgTaskList( const QString & listName );
+    explicit PkgTaskList( const QString & listName );
 
     /**
      * Destructor.

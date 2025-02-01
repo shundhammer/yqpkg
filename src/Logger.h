@@ -103,7 +103,7 @@ public:
      * The first logger created is also implicitly used as the default
      * logger. This can be changed later with setDefaultLogger().
      */
-    Logger( const QString & filename );
+    explicit Logger( const QString & filename );
 
     /**
      * Constructor: Create a logger that logs to 'filename' in directory
