@@ -37,10 +37,6 @@
 
 
 
-typedef zypp::Patch::Contents                   ZyppPatchContents;
-typedef zypp::Patch::Contents::const_iterator   ZyppPatchContentsIterator;
-
-
 YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     : QWidget( parent )
 {
