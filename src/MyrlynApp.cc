@@ -377,8 +377,6 @@ void MyrlynApp::next()
 
     if ( _workflow->currentStep()->id() == "pkgCommit" )
     {
-        // FIXME: Move this to the summary page once it's no longer a wizard placeholder page.
-
         if ( ! _pkgCommitPage->showSummaryPage() )
         {
             logInfo() << "Skipping summary page -> quitting" << endl;

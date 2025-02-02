@@ -53,9 +53,6 @@ SummaryPage::SummaryPage( QWidget * parent )
     reset();
     connectWidgets();
 
-    // FIXME: TO DO: countdownMenuButton menu and handling
-
-
     // Notice that startCountdown() needs to be called from the outside.
 }
 

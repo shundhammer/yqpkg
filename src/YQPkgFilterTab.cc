@@ -156,7 +156,6 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
         splitter->setStretchFactor( splitter->indexOf( _priv->filtersWidgetStack ), 1 );
         splitter->setStretchFactor( splitter->indexOf( _priv->diskUsageList      ), 1 );
 
-        // FIXME: Don't always hide the disk usage list
         const int diskUsageListHeight = 0;
         QList<int> sizes;
         sizes << _priv->leftPaneSplitter->height();
