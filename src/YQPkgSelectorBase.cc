@@ -54,24 +54,9 @@ YQPkgSelectorBase::YQPkgSelectorBase( QWidget * parent )
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     Q_CHECK_PTR( _pkgConflictDialog );
 
-#if 1
-    // FIXME: Move this out to a separate function
-    // and change those insane variable names to something reasonable.
-    // This code is ugly.
-
-    QString label = _( "Reset &Ignored Dependency Conflicts" );
-    _actionResetIgnoredDependencyProblems = new QAction( label, this);
-    Q_CHECK_PTR( _actionResetIgnoredDependencyProblems );
-
-    _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
-
-    connect( _actionResetIgnoredDependencyProblems, SIGNAL( triggered() ),
-             this,                                  SLOT  ( resetIgnoredDependencyProblems() ) );
-#endif
-
-    zyppPool().saveState<zypp::Package  >();
-    zyppPool().saveState<zypp::Pattern  >();
-    zyppPool().saveState<zypp::Patch    >();
+    zyppPool().saveState<zypp::Package>();
+    zyppPool().saveState<zypp::Pattern>();
+    zyppPool().saveState<zypp::Patch  >();
 
     _blockResolver = false;
     logInfo() << "PackageSelectorBase init done" << endl;
@@ -381,12 +366,6 @@ void YQPkgSelectorBase::notImplemented()
     QMessageBox::information( this, // parent
                               "",   // window title
                               _( "Not implemented yet" ) );
-}
-
-
-void YQPkgSelectorBase::resetIgnoredDependencyProblems()
-{
-    YQPkgConflictDialog::resetIgnoredDependencyProblems();
 }
 
 

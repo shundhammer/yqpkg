@@ -300,13 +300,6 @@ YQPkgConflictDialog::processSolverResult( bool success )
 
 
 void
-YQPkgConflictDialog::resetIgnoredDependencyProblems()
-{
-    zypp::getZYpp()->resolver()->undo();
-}
-
-
-void
 YQPkgConflictDialog::askCreateSolverTestCase()
 {
     QString testCaseDir = "/var/log/YaST2/solverTestcase";

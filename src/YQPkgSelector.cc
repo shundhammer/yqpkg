@@ -856,9 +856,6 @@ YQPkgSelector::addMenus()
         action->setEnabled( MyrlynApp::runningAsRoot() );
     }
 
-    if ( _actionResetIgnoredDependencyProblems )
-        extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
-
 
     //
     // Help menu

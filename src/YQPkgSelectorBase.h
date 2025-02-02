@@ -160,14 +160,6 @@ signals:
     void resetNotify();
 
 
-protected slots:
-
-    /**
-     * Reset all previously ignored dependency problems.
-     **/
-    void resetIgnoredDependencyProblems();
-
-
 protected:
 
     /**
@@ -210,7 +202,6 @@ protected:
     bool                  _showChangesDialog;
     YQPkgConflictDialog * _pkgConflictDialog;
     YQPkgDiskUsageList *  _diskUsageList;
-    QAction *             _actionResetIgnoredDependencyProblems;
 };
 
 
