@@ -15,7 +15,7 @@
  */
 
 
-#include <unistd.h>             // geteuid(), sleep()
+#include <unistd.h>             // sleep()
 #include <iostream>             // cerr
 #include <QElapsedTimer>
 #include <QMessageBox>
@@ -157,7 +157,7 @@ void MyrlynRepoManager::attachRepos()
     {
         logError() << "Caught zypp exception: " << ex.asString() << endl;
 
-        if ( geteuid() != 0 )
+        if ( ! MyrlynApp::runningAsRealRoot() )
         {
             notifyUserToRunZypperDup();
 
@@ -199,7 +199,7 @@ void MyrlynRepoManager::findEnabledRepos()
 
 void MyrlynRepoManager::refreshRepos()
 {
-    if ( geteuid() != 0 )
+    if ( ! MyrlynApp::runningAsRealRoot() )
     {
         logWarning() << "Skipping repos refresh for non-root user" << endl;
         return;

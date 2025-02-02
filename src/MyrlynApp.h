@@ -18,6 +18,8 @@
 #ifndef MyrlynApp_h
 #define MyrlynApp_h
 
+#include <unistd.h>     // geteuid()
+
 #include <QObject>
 #include <QFlags>
 
@@ -93,11 +95,26 @@ public:
 
     /**
      * Return 'true' if this program is running with root privileges
-     * or if OptFakeRoot is set.
+     * or if OptFakeRoot (--fake-root) is set.
      *
-     * To check the real privileges, use "geteuid() == 0" instead.
+     * This should be used for actions that semantically need root privileges,
+     * but that can also be faked to some extent for demonstration or testing
+     * purposes, just at the cost of not actually doing any changes
+     * (i.e. losing changes). Do not use this for actions that will throw an
+     * exception or cause another real error (not just a warning or error in
+     * the log). For those actions, use runningAsRealRoot() instead.
      **/
     static bool runningAsRoot();
+
+    /**
+     * Return 'true' if this program is running with real root privileges.
+     * This ignores OptFakeRoot.
+     *
+     * This should be used for actions that cannot be faked; actions that
+     * really need root privileges and that will cause an exception or another
+     * real error if attempted to do without them.
+     **/
+    static bool runningAsRealRoot() { return geteuid() == 0; }
 
     /**
      * Return 'true' if this program is running in read-only mode.
@@ -244,7 +261,7 @@ protected:
     YQPkgSelector *         _pkgSel;
     PkgCommitPage *         _pkgCommitPage;
     SummaryPage *           _summaryPage;
-    MyrlynRepoManager *      _myrlynRepoManager;
+    MyrlynRepoManager *     _myrlynRepoManager;
     ZyppLogger *            _zyppLogger;
     PkgTasks *              _pkgTasks;
 
