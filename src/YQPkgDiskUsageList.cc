@@ -53,7 +53,6 @@ using std::set;
 
 
 typedef zypp::DiskUsageCounter::MountPointSet           ZyppDuSet;
-typedef zypp::DiskUsageCounter::MountPointSet::iterator ZyppDuSetIterator;
 
 
 
@@ -72,12 +71,8 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent,
     }
 
 
-    for ( ZyppDuSetIterator it = diskUsage.begin();
-          it != diskUsage.end();
-          ++it )
+    for ( const ZyppPartitionDu & partitionDu: diskUsage )
     {
-        const ZyppPartitionDu & partitionDu = *it;
-
         if ( ! partitionDu.readonly )
         {
             YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, partitionDu );
@@ -106,11 +101,8 @@ YQPkgDiskUsageList::updateDiskUsage()
 
     ZyppDuSet diskUsage = zypp::getZYpp()->diskUsage();
 
-    for ( ZyppDuSetIterator it = diskUsage.begin();
-          it != diskUsage.end();
-          ++it )
+    for ( const ZyppPartitionDu & partitionDu: diskUsage )
     {
-        const ZyppPartitionDu & partitionDu = *it;
         YQPkgDiskUsageListItem * item = _items[ QString::fromUtf8(partitionDu.dir.c_str()) ];
 
         if ( item )

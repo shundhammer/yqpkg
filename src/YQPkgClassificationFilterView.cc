@@ -160,12 +160,11 @@ YQPkgClassificationFilterView::filter()
 
 	    if ( ! match )
 	    {
-		zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
-
-		while ( it != selectable->picklistEnd() && ! match )
+                for ( zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
+                      it != selectable->picklistEnd() && ! match;
+                      ++it )
 		{
 		    check( selectable, tryCastToZyppPkg( *it ) );
-		    ++it;
 		}
 	    }
 	}
