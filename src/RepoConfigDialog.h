@@ -52,6 +52,12 @@ public:
      **/
     virtual ~RepoConfigDialog();
 
+    /**
+     * Set this whole dialog to read-only mode.
+     * This is the default if not running as root.
+     **/
+    void setReadOnlyMode( bool readOnly );
+
 
 signals:
 
@@ -90,6 +96,7 @@ protected slots:
      **/
     void deleteRepo();
 
+
 protected:
 
     /**
@@ -106,6 +113,7 @@ protected:
     // Data members
 
     Ui::RepoConfig * _ui;  // see ui_repo-config.h
+    RepoManager_Ptr _repoManager;
 };
 
 

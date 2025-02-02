@@ -122,7 +122,15 @@ RepoTableItem::~RepoTableItem()
 void RepoTableItem::setRepoInfo( const ZyppRepoInfo & newRepoInfo )
 {
     _repoInfo = newRepoInfo;
-    _parentTable->repoManager()->modifyRepository( newRepoInfo );
+
+    if ( MyrlynApp::runningAsRealRoot() )
+        _parentTable->repoManager()->modifyRepository( _repoInfo );
+    else
+    {
+        logWarning() << "Faking setting the repoInfo for "
+                     << _repoInfo.name() << endl;
+    }
+
     updateData();
 }
 

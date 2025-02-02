@@ -18,8 +18,10 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "MyrlynApp.h"
 #include "WindowSettings.h"
 #include "utf8.h"
+#include "YQi18n.h"
 #include "RepoEditDialog.h"
 #include "RepoConfigDialog.h"
 
@@ -27,6 +29,7 @@
 RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     : QDialog( parent ? parent : MainWindow::instance() )
     , _ui( new Ui::RepoConfig )  // Use the Qt designer .ui form (XML)
+    ,_repoManager( MyrlynApp::instance()->repoManager()->repoManager() )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -46,6 +49,15 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     _ui->repoTable->selectSomething();
     updateCurrentData();
     connectWidgets();
+
+    if ( ! MyrlynApp::runningAsRoot() )
+    {
+        setReadOnlyMode( true );
+
+        QString winTitle = windowTitle();
+        winTitle += _( " (read-only)" );
+        setWindowTitle( winTitle );
+    }
 }
 
 
@@ -54,6 +66,18 @@ RepoConfigDialog::~RepoConfigDialog()
     WindowSettings::write( this, "RepoConfigDialog" );
 
     delete _ui;
+}
+
+
+void RepoConfigDialog::setReadOnlyMode( bool readOnly )
+{
+    _ui->currentRepoPriority->setEnabled   ( ! readOnly );
+    _ui->currentRepoEnabled->setEnabled    ( ! readOnly );
+    _ui->currentRepoAutoRefresh->setEnabled( ! readOnly );
+
+    _ui->addButton->setEnabled   ( ! readOnly );
+    _ui->editButton->setEnabled  ( ! readOnly );
+    _ui->deleteButton->setEnabled( ! readOnly );
 }
 
 
@@ -126,9 +150,12 @@ void RepoConfigDialog::updateCurrentData()
         _ui->currentRepoRawUrl->setEnabled( ! rawUrl.empty() );
         _ui->rawUrlCaption->setEnabled    ( ! rawUrl.empty() );
 
-        _ui->currentRepoPriority->setEnabled( true );
-        _ui->currentRepoEnabled->setEnabled( true );
-        _ui->currentRepoAutoRefresh->setEnabled( true );
+        if ( MyrlynApp::runningAsRoot() )
+        {
+            _ui->currentRepoPriority->setEnabled( true );
+            _ui->currentRepoEnabled->setEnabled( true );
+            _ui->currentRepoAutoRefresh->setEnabled( true );
+        }
 
         _ui->currentRepoName->setText( QString( "<b>%1</b>" ).arg( fromUTF8( repoInfo.name() ) ) );
         _ui->currentRepoUrl->setText( fromUTF8( url ) );
@@ -199,6 +226,16 @@ void RepoConfigDialog::addRepo()
                    << " AutoRefresh: " << repoInfo.autorefresh()
                    << endl;
 #endif
+            if ( MyrlynApp::runningAsRealRoot() )
+                _repoManager->addRepository( repoInfo );
+            else
+            {
+                logWarning() << "Faking adding a new repo "
+                             << repoInfo.name() << endl;
+            }
+
+            RepoTableItem * item = new RepoTableItem( _ui->repoTable, repoInfo );
+            CHECK_NEW( item );
     }
     else
     {
@@ -233,6 +270,7 @@ void RepoConfigDialog::editRepo()
                        << " AutoRefresh: " << repoInfo.autorefresh()
                        << endl;
 #endif
+            currentItem->setRepoInfo( repoInfo );
         }
         else
         {
