@@ -825,26 +825,27 @@ YQPkgSelector::addMenus()
 
 
 #if 1
-    extrasMenu->addAction( _( "Configure &Repositories..."  ), this, SLOT( configRepos() ) );
+    extrasMenu->addAction( _( "C&onfigure Repositories..."  ), this, SLOT( configRepos() ),
+                           Qt::CTRL + Qt::SHIFT + Qt::Key_O );
     extrasMenu->addSeparator();
 #endif
 
     extrasMenu->addAction( _( "Show &Products"         ), this, SLOT( showProducts()    ) );
-    extrasMenu->addAction( _( "Show P&ackage Changes"  ), this, SLOT( showAutoPkgList() ) );
+    extrasMenu->addAction( _( "Show Package &Changes"  ), this, SLOT( showAutoPkgList() ) );
     extrasMenu->addAction( _( "Show &History"          ), this, SLOT( showHistory()     ) );
 
     extrasMenu->addSeparator();
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-    extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -debuginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
 
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
-    extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
+    extrasMenu->addAction( _( "Install All Matching -debugsource Packages" ), this, SLOT( installDebugSourcePkgs() ) );
 
-    extrasMenu->addAction( _( "Install All Matching Rec&ommended Packages" ),
+    extrasMenu->addAction( _( "Install All Matching Recommended Packages" ),
                             this, SLOT( installRecommendedPkgs() ) );
 
     extrasMenu->addSeparator();
