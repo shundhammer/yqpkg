@@ -15,6 +15,8 @@
  */
 
 
+#include <zypp/Target.h>
+
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
@@ -22,6 +24,7 @@
 #include "WindowSettings.h"
 #include "utf8.h"
 #include "YQi18n.h"
+#include "YQZypp.h"
 #include "RepoEditDialog.h"
 #include "RepoConfigDialog.h"
 
@@ -49,6 +52,20 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     _ui->repoTable->selectSomething();
     updateCurrentData();
     connectWidgets();
+
+    {
+        zypp::Target_Ptr target = zypp::getZYpp()->target();
+        zypp::Product::constPtr product = target->baseProduct();
+
+        logDebug() << "Product name: " << product->name()
+                   << " summary: "     << product->summary()
+                   << " short name: "  << product->shortName()
+                   << endl;
+
+        // Leap:
+        //   Product name: Leap summary: openSUSE Leap 15.6 short name: openSUSE Leap
+    }
+
 
     if ( ! MyrlynApp::runningAsRoot() )
     {
