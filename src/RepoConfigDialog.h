@@ -59,13 +59,14 @@ public:
     void setReadOnlyMode( bool readOnly );
 
 
-signals:
+public slots:
 
     /**
-     * Emitted when the user changed any details of the current repo like
-     * priority, enabled status, autorefresh status.
+     * Accept the changes. Currently, this is the only way out of this dialog.
+     *
+     * Reimplemented from QDialog.
      **/
-    void currentStatusChanged();
+    void accept() override;
 
 
 protected slots:
@@ -109,11 +110,24 @@ protected:
      **/
     void updateCurrentData();
 
+    /**
+     * Set the _restartNeeded flag and show or hide the corresponding
+     * notification widget accordingly.
+     **/
+    void restartNeeded( bool needed = true );
+
+    /**
+     * Show a message box telling the user that the application
+     * needs to be restarted for the changes to take effect.
+     **/
+    void showRestartNeededPopup();
+
 
     // Data members
 
     Ui::RepoConfig * _ui;  // see ui_repo-config.h
-    RepoManager_Ptr _repoManager;
+    RepoManager_Ptr  _repoManager;
+    bool             _restartNeeded;
 };
 
 

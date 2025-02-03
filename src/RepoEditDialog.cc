@@ -15,10 +15,10 @@
  */
 
 
+#include <QMessageBox>
+
 #include <zypp/repo/RepoVariables.h>    // RepoVariablesStringReplacer
 #include <zypp/RepoManager.h>           // makeStupidAlias()
-
-#include <QMessageBox>
 
 #include "Exception.h"
 #include "Logger.h"

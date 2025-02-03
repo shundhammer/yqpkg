@@ -327,7 +327,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="buttonBox" stretch="0,0,0,0,0">
+    <layout class="QHBoxLayout" name="buttonBox" stretch="0,0,0,0,0,0">
      <item>
       <widget class="QPushButton" name="addButton">
        <property name="text">
@@ -361,6 +361,16 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="restartNeeded">
+       <property name="text">
+        <string>&lt;i&gt;Restart needed!&lt;/i&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="closebutton">

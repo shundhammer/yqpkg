@@ -15,6 +15,8 @@
  */
 
 
+#include <QMessageBox>
+
 #include <zypp/Target.h>
 
 #include "Exception.h"
@@ -32,7 +34,8 @@
 RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     : QDialog( parent ? parent : MainWindow::instance() )
     , _ui( new Ui::RepoConfig )  // Use the Qt designer .ui form (XML)
-    ,_repoManager( MyrlynApp::instance()->repoManager()->repoManager() )
+    , _repoManager( MyrlynApp::instance()->repoManager()->repoManager() )
+    , _restartNeeded( false )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -48,6 +51,7 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
 
     WindowSettings::read( this, "RepoConfigDialog" );
     _ui->currentRepoName->setTextFormat( Qt::RichText );
+    restartNeeded( false );
     _ui->repoTable->populate();
     _ui->repoTable->selectSomething();
     updateCurrentData();
@@ -202,9 +206,8 @@ void RepoConfigDialog::currentEdited()
                    << endl;
 #endif
 
+        restartNeeded();
         currentItem->setRepoInfo( repoInfo );
-
-        emit currentStatusChanged();
     }
 }
 
@@ -229,16 +232,17 @@ void RepoConfigDialog::addRepo()
                    << " AutoRefresh: " << repoInfo.autorefresh()
                    << endl;
 #endif
-            if ( MyrlynApp::runningAsRealRoot() )
-                _repoManager->addRepository( repoInfo );
-            else
-            {
-                logWarning() << "Faking adding a new repo "
-                             << repoInfo.name() << endl;
-            }
+        if ( MyrlynApp::runningAsRealRoot() )
+            _repoManager->addRepository( repoInfo );
+        else
+        {
+            logWarning() << "Faking adding a new repo "
+                         << repoInfo.name() << endl;
+        }
 
-            RepoTableItem * item = new RepoTableItem( _ui->repoTable, repoInfo );
-            CHECK_NEW( item );
+        RepoTableItem * item = new RepoTableItem( _ui->repoTable, repoInfo );
+        CHECK_NEW( item );
+        restartNeeded();
     }
     else
     {
@@ -274,6 +278,7 @@ void RepoConfigDialog::editRepo()
                        << endl;
 #endif
             currentItem->setRepoInfo( repoInfo );
+            restartNeeded();
         }
         else
         {
@@ -283,7 +288,52 @@ void RepoConfigDialog::editRepo()
 }
 
 
+void RepoConfigDialog::restartNeeded( bool needed )
+{
+    _restartNeeded = needed;
+    _ui->restartNeeded->setVisible( needed );
+}
+
+
 void RepoConfigDialog::deleteRepo()
 {
     logWarning() << "Not implemented yet" << endl;
+
+    int result = QDialog::Rejected;
+
+    if ( result == QDialog::Accepted )
+    {
+        // TO DO: actually delete the repo
+        // TO DO: delete the item in the repo table
+        restartNeeded();
+    }
+}
+
+
+void RepoConfigDialog::accept()
+{
+    if ( _restartNeeded )
+    {
+        showRestartNeededPopup();
+        MyrlynApp::instance()->quit();
+    }
+    else
+    {
+        QDialog::accept();
+    }
+}
+
+
+void RepoConfigDialog::showRestartNeededPopup()
+{
+    QMessageBox msgBox( this );
+
+    msgBox.setText( _( "The application needs to be restarted\n"
+                       "for the changes to take effect.\n"
+                       "\n"
+                       "Quitting now. Please restart." ) );
+    msgBox.setIcon( QMessageBox::Information );
+    msgBox.addButton( QMessageBox::Ok );
+
+    msgBox.exec();
 }
