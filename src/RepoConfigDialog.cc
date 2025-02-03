@@ -53,20 +53,6 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
     updateCurrentData();
     connectWidgets();
 
-    {
-        zypp::Target_Ptr target = zypp::getZYpp()->target();
-        zypp::Product::constPtr product = target->baseProduct();
-
-        logDebug() << "Product name: " << product->name()
-                   << " summary: "     << product->summary()
-                   << " short name: "  << product->shortName()
-                   << endl;
-
-        // Leap:
-        //   Product name: Leap summary: openSUSE Leap 15.6 short name: openSUSE Leap
-    }
-
-
     if ( ! MyrlynApp::runningAsRoot() )
     {
         setReadOnlyMode( true );
