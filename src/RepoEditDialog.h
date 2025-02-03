@@ -91,6 +91,19 @@ public:
     ZyppRepoInfo repoInfo() const { return _repoInfo; }
 
 
+public slots:
+
+    /**
+     * Accept the input and verify it. Open a warning dialog if a problem is
+     * detected (i.e. if libzypp threw an exception). Close the dialog with
+     * QDialog::Accepted if there is no problem and keep it open if there is
+     * one.
+     *
+     * Reimplemented from QDialog.
+     **/
+    void accept() override;
+
+
 protected slots:
 
     /**
@@ -109,10 +122,26 @@ protected slots:
 protected:
 
     /**
+     * Update the window title depending on the mode (Add / Edit).
+     **/
+    void updateWindowTitle();
+
+    /**
+     * Show some expanded variables in the dialog like $releasever, $basearch,
+     * $arch.
+     **/
+    void showExpandedVariables();
+
+    /**
      * Set up signal / slot connections between the widgets.
      **/
     void connectWidgets();
 
+    /**
+     * Show a warning popup with a custom message and the text of an exception.
+     **/
+    void showWarningPopup( const QString &         message,
+                           const zypp::Exception & exception );
     /**
      * Get the current values out of the widgets and save them in _repoInfo.
      **/

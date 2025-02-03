@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>508</height>
+    <width>632</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,21 +19,21 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1,0,0,0">
    <property name="spacing">
     <number>12</number>
    </property>
    <property name="leftMargin">
-    <number>20</number>
+    <number>15</number>
    </property>
    <property name="topMargin">
-    <number>20</number>
+    <number>15</number>
    </property>
    <property name="rightMargin">
-    <number>20</number>
+    <number>15</number>
    </property>
    <property name="bottomMargin">
-    <number>20</number>
+    <number>15</number>
    </property>
    <item>
     <widget class="QLabel" name="heading">
@@ -46,7 +46,7 @@
     </widget>
    </item>
    <item>
-    <spacer name="headerVSpacer">
+    <spacer name="headingVSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -110,12 +110,12 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="commReposHBox" stretch="0,1">
+           <layout class="QHBoxLayout" name="communityReposHBox" stretch="0,1">
             <property name="spacing">
              <number>0</number>
             </property>
             <item>
-             <spacer name="commReposLeftSpacer">
+             <spacer name="communityReposLeftSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -177,7 +177,7 @@
            </layout>
           </item>
           <item>
-           <spacer name="commReposHStretcher">
+           <spacer name="communityReposHStretcher">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -203,7 +203,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>10</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>
@@ -227,6 +227,19 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="centerRubberbandVSPacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QHBoxLayout" name="repoNameHBox">
@@ -316,28 +329,12 @@
     </layout>
    </item>
    <item>
-    <spacer name="bottomVSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="bottomHBox">
+    <layout class="QHBoxLayout" name="buttonHBox">
      <property name="spacing">
-      <number>20</number>
+      <number>5</number>
      </property>
      <item>
-      <widget class="QLabel" name="varExplanation">
+      <widget class="QLabel" name="releasever">
        <property name="text">
         <string notr="true">$releasever: 15.6</string>
        </property>
@@ -347,58 +344,31 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="buttonsVBox">
-       <property name="spacing">
-        <number>0</number>
+      <spacer name="buttonHSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="buttonHBox" stretch="1,0,0">
-         <property name="spacing">
-          <number>5</number>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="cancelButton">
-           <property name="text">
-            <string>&amp;Cancel</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="okButton">
-           <property name="text">
-            <string>&amp;OK</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>&amp;OK</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -407,34 +377,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>okButton</sender>
-   <signal>clicked()</signal>
-   <receiver>RepoEdit</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>687</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>375</x>
-     <y>267</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
    <receiver>RepoEdit</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>602</x>
-     <y>499</y>
+     <x>516</x>
+     <y>474</y>
     </hint>
     <hint type="destinationlabel">
-     <x>375</x>
-     <y>267</y>
+     <x>331</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>RepoEdit</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>601</x>
+     <y>474</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>331</x>
+     <y>253</y>
     </hint>
    </hints>
   </connection>

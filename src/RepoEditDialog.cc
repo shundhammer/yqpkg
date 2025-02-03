@@ -15,7 +15,10 @@
  */
 
 
-#include <zypp/repo/RepoVariables.h> // RepoVariablesStringReplacer
+#include <zypp/repo/RepoVariables.h>    // RepoVariablesStringReplacer
+#include <zypp/RepoManager.h>           // makeStupidAlias()
+
+#include <QMessageBox>
 
 #include "Exception.h"
 #include "Logger.h"
@@ -44,15 +47,9 @@ RepoEditDialog::RepoEditDialog( Mode      mode,
     // widget tree at the top right: They are also the member variable names
     // for the _ui object.
 
+    showExpandedVariables();
+    updateWindowTitle();
     _ui->repoTypeContainer->setVisible( _mode == AddRepo );
-
-    QString title = ( _mode == AddRepo ) ?
-        _( "Add Repository" ) : _( "Edit Repository" );
-
-    setWindowTitle( title );
-    _ui->heading->setTextFormat( Qt::RichText );
-    _ui->heading->setText( QString( "<b>%1</b>" ).arg( title ) );
-
     resize( sizeHint() ); // Fallback initial size if there is none in the settings
     connectWidgets();
 
@@ -65,6 +62,45 @@ RepoEditDialog::~RepoEditDialog()
     WindowSettings::write( this, _mode == AddRepo ? "RepoAddDialog" : "RepoEditDialog" );
 
     delete _ui;
+}
+
+
+void RepoEditDialog::showExpandedVariables()
+{
+    // Expand some variables that can be used in a repo URL
+
+    zypp::repo::RepoVariablesStringReplacer replacer;
+    std::string releasever = replacer( "$releasever" );
+    std::string basearch   = replacer( "$basearch"   );
+    std::string arch       = replacer( "$arch"       );
+
+    QString text( "$releasever: " );  // No translation!
+    text += fromUTF8( releasever );
+    _ui->releasever->setText( text ); // Only one variable directly in the dialog
+
+    // ...some more as tooltip on that variable to avoid overcrowding the dialog.
+    // Could this be more discoverable? Maybe, but this is for total nerds anyway.
+    // They can be expected to have some more explorer spirit.
+
+    QString tooltip = QString( "$basearch:  %1\n"
+                               "$arch:  %2\n"
+                               "\n"
+                               "%3" )
+        .arg( fromUTF8( basearch ) )
+        .arg( fromUTF8( arch     ) )
+        .arg( _( "See also  'man zypper'" ) );
+    _ui->releasever->setToolTip( tooltip );
+}
+
+
+void RepoEditDialog::updateWindowTitle()
+{
+    QString title = ( _mode == AddRepo ) ?
+        _( "Add Repository" ) : _( "Edit Repository" );
+
+    setWindowTitle( title );
+    _ui->heading->setTextFormat( Qt::RichText );
+    _ui->heading->setText( QString( "<b>%1</b>" ).arg( title ) );
 }
 
 
@@ -93,7 +129,6 @@ int RepoEditDialog::addRepo()
     _ui->expandedUrl->clear();
 
     int result = exec();
-    saveRepoInfo();
 
     return result;
 }
@@ -108,7 +143,6 @@ int RepoEditDialog::editRepo( const ZyppRepoInfo & repoInfo )
     _ui->repoRawUrl->setText( fromUTF8( _repoInfo.rawUrl().asString() ) );
 
     int result = exec();
-    saveRepoInfo();
 
     return result;
 }
@@ -130,10 +164,69 @@ void RepoEditDialog::updateExpandedUrl()
 }
 
 
+void RepoEditDialog::accept()
+{
+    try
+    {
+        saveRepoInfo();
+        QDialog::accept();
+    }
+    catch ( const zypp::url::UrlException & exception )
+    {
+        logError() << "Caught zypp UrlException: " << exception.asString() << endl;
+        showWarningPopup( _( "Invalid URL: " ), exception );
+    }
+    catch ( const zypp::Exception & exception )
+    {
+        logError() << "Caught zypp Exception: " << exception.asString() << endl;
+        showWarningPopup( _( "Invalid input: " ), exception );
+    }
+}
+
+
 void RepoEditDialog::saveRepoInfo()
 {
-    zypp::Url url( toUTF8( _ui->repoRawUrl->text() ) );
-
+    std::string oldRepoName = _repoInfo.name();
     _repoInfo.setName( toUTF8( _ui->repoName->text() ) );
+
+    // This may throw an exception. Let it escalate to the caller.
+
+    QString urlText = _ui->repoRawUrl->text();
+    zypp::Url url( toUTF8( urlText ) );
     _repoInfo.setBaseUrl( url );
+
+
+    // Make sure we have a unique alias
+
+    if ( _repoInfo.alias().empty() || _repoInfo.name() != oldRepoName  )
+    {
+        std::string alias = zypp::RepoManager::makeStupidAlias( url );
+        _repoInfo.setAlias( alias );
+
+        logDebug() << "New alias for "
+                   << _repoInfo.name() << ": "
+                   << alias
+                   << endl;
+    }
+    else
+    {
+        logDebug() << "Leaving old alias for "
+                   << _repoInfo.name() << ": "
+                   << _repoInfo.alias()
+                   << endl;
+    }
 }
+
+
+void RepoEditDialog::showWarningPopup( const QString &         message,
+                                       const zypp::Exception & exception )
+{
+    QMessageBox msgBox( this );
+
+    msgBox.setText( message + "\n" + fromUTF8( exception.asString() ) );
+    msgBox.setIcon( QMessageBox::Warning );
+    msgBox.addButton( QMessageBox::Ok );
+
+    msgBox.exec();
+}
+
