@@ -254,10 +254,7 @@
           </size>
          </property>
          <property name="placeholderText">
-          <string notr="true">Repository Name</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
+          <string>Repository Name</string>
          </property>
         </widget>
        </item>
@@ -307,9 +304,6 @@
        <property name="placeholderText">
         <string notr="true">https://download.opensuse.org/distribution/leap/${releasever}/repo/oss/</string>
        </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>
@@ -345,12 +339,10 @@
      <item>
       <widget class="QLabel" name="varExplanation">
        <property name="text">
-        <string>Variables: `${releasever}` -&gt; &quot;15.6&quot;, `${basearch}` -&gt; &quot;x86_64&quot;
-
-See also `man zypper`</string>
+        <string notr="true">$releasever: 15.6</string>
        </property>
        <property name="textFormat">
-        <enum>Qt::MarkdownText</enum>
+        <enum>Qt::AutoText</enum>
        </property>
       </widget>
      </item>
