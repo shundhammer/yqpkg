@@ -38,7 +38,7 @@
 
 #define VERBOSE_PROGRESS        0
 #define VERBOSE_TRANSACT        1
-#define SORT_TO_DO_LIST         0
+#define SORT_TO_DO_LIST         1
 
 
 PkgCommitPage * PkgCommitPage::_instance = 0;
