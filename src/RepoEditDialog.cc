@@ -160,7 +160,8 @@ void RepoEditDialog::updateExpandedUrl()
     zypp::repo::RepoVariablesStringReplacer replacer;
     std::string expandedUrl = replacer( rawUrl );
 
-    _ui->expandedUrl->setText( fromUTF8( expandedUrl ) );
+    _ui->expandedUrl->setText( rawUrl != expandedUrl ?
+                               fromUTF8( expandedUrl ) : " " );
 }
 
 
