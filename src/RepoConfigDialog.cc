@@ -102,11 +102,8 @@ void RepoConfigDialog::connectWidgets()
     connect( _ui->currentRepoAutoRefresh, SIGNAL( stateChanged ( int ) ),
              this,                        SLOT  ( currentEdited()      ) );
 
-#if 0
-
-    connect( _ui->repoTable, SIGNAL( columnDoubleClicked( int button, QTreeWidgetItem * item, int col, const QPoint & ) ),
-             this,           SLOT  ( itemDoubleClicked  ( int button, QTreeWidgetItem * item, int col ) ) );;
-#endif
+    connect( _ui->repoTable, SIGNAL( columnDoubleClicked( int, QTreeWidgetItem *, int, const QPoint & ) ),
+             this,           SLOT  ( itemDoubleClicked  ( int, QTreeWidgetItem *, int                 ) ) );;
 
     connect( _ui->addButton,    SIGNAL( clicked() ),
              this,              SLOT  ( addRepo() ) );
@@ -242,6 +239,7 @@ void RepoConfigDialog::addRepo()
 
         RepoTableItem * item = new RepoTableItem( _ui->repoTable, repoInfo );
         CHECK_NEW( item );
+        _ui->repoTable->setCurrentItem( item );
         restartNeeded();
     }
     else
@@ -388,3 +386,44 @@ void RepoConfigDialog::closeEvent( QCloseEvent * event )
     reject();
 }
 
+
+void RepoConfigDialog::itemDoubleClicked( int               button,
+                                          QTreeWidgetItem * rawItem,
+                                          int               column )
+{
+    RepoTableItem * item = dynamic_cast<RepoTableItem *>( rawItem );
+
+    if ( ! item || button != 1 || ! MyrlynApp::runningAsRoot() )
+        return;
+
+    // The first click of this double click already made this item the current
+    // item and set the "Enabled" and "Auto Refresh" check boxes with the values
+    // for the current item.
+
+    ZyppRepoInfo repoInfo = item->repoInfo();
+
+    switch ( column )
+    {
+        case RepoTable::EnabledCol:
+            _ui->currentRepoEnabled->toggle();
+            // This will also set the value in the table.
+            break;
+
+        case RepoTable::AutoRefCol:
+            _ui->currentRepoAutoRefresh->toggle();
+            // This will also set the value in the table.
+            break;
+
+        case RepoTable::PrioCol:
+            _ui->currentRepoPriority->setFocus();
+            break;
+
+        case RepoTable::NameCol:
+        case RepoTable::UrlCol:
+            editRepo();
+            break;
+
+        default:
+            break;
+    }
+}

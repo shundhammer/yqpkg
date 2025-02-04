@@ -83,6 +83,16 @@ protected slots:
     void currentEdited();
 
     /**
+     * Notification about a double click on a repo table item in column 'col'.
+     *
+     * Notice that the first click (with button #1, the left mouse button)
+     * already makes that item the current item.
+     **/
+    void itemDoubleClicked( int               button,
+                            QTreeWidgetItem * item,
+                            int               col );
+
+    /**
      * Add a new repo.
      **/
     void addRepo();
