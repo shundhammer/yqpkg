@@ -288,39 +288,66 @@ void RepoConfigDialog::editRepo()
 }
 
 
+void RepoConfigDialog::deleteRepo()
+{
+    logDebug() << "Deleting repo" << endl;
+
+    RepoTableItem * currentItem = _ui->repoTable->currentRepoItem();
+
+    if ( currentItem )
+    {
+        ZyppRepoInfo repoInfo = currentItem->repoInfo();
+
+        if ( confirmDeleteRepo( repoInfo ) )
+        {
+            logInfo() << "User confirmed deleting repo " << repoInfo.name() << endl;
+
+            // Delete the item for this repo from the repo table.
+            // This is safe as documented at QTreeWidgetItem.
+            delete currentItem;
+
+            if ( MyrlynApp::runningAsRealRoot() )
+                _repoManager->removeRepository( repoInfo );
+            else
+            {
+                logWarning() << "Faking deleting repo "
+                             << repoInfo.name() << endl;
+            }
+
+            _ui->repoTable->selectSomething();
+            restartNeeded();
+        }
+        else
+        {
+            logDebug() << "User cancelled the confirmation dialog" << endl;
+        }
+    }
+}
+
+
+bool RepoConfigDialog::confirmDeleteRepo( const ZyppRepoInfo & repoInfo )
+{
+    QMessageBox msgBox( this );
+
+    msgBox.setText( _( "Really delete repository \"%1\"?\n"
+                       "\n"
+                       "URL: %2" )
+                    .arg( fromUTF8( repoInfo.name() ) )
+                    .arg( fromUTF8( repoInfo.url().asString() ) )
+                    );
+    msgBox.setIcon( QMessageBox::Question );
+    msgBox.addButton( QMessageBox::Yes );
+    msgBox.addButton( QMessageBox::No  );
+    msgBox.setDefaultButton( QMessageBox::No  );
+
+    return msgBox.exec() == QMessageBox::Yes;
+}
+
+
 void RepoConfigDialog::restartNeeded( bool needed )
 {
     _restartNeeded = needed;
     _ui->restartNeeded->setVisible( needed );
-}
-
-
-void RepoConfigDialog::deleteRepo()
-{
-    logWarning() << "Not implemented yet" << endl;
-
-    int result = QDialog::Rejected;
-
-    if ( result == QDialog::Accepted )
-    {
-        // TO DO: actually delete the repo
-        // TO DO: delete the item in the repo table
-        restartNeeded();
-    }
-}
-
-
-void RepoConfigDialog::accept()
-{
-    if ( _restartNeeded )
-    {
-        showRestartNeededPopup();
-        MyrlynApp::instance()->quit();
-    }
-    else
-    {
-        QDialog::accept();
-    }
 }
 
 
@@ -336,6 +363,20 @@ void RepoConfigDialog::showRestartNeededPopup()
     msgBox.addButton( QMessageBox::Ok );
 
     msgBox.exec();
+}
+
+
+void RepoConfigDialog::accept()
+{
+    if ( _restartNeeded )
+    {
+        showRestartNeededPopup();
+        MyrlynApp::instance()->quit();
+    }
+    else
+    {
+        QDialog::accept();
+    }
 }
 
 

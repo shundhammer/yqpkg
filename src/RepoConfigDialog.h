@@ -123,6 +123,12 @@ protected:
     void showRestartNeededPopup();
 
     /**
+     * Post a confirmation pop-up dialog to ask the user if the specified repo
+     * should really be deleted. Return 'true' if yes, 'false' if no.
+     **/
+    bool confirmDeleteRepo( const ZyppRepoInfo & repoInfo );
+
+    /**
      * Event handler for WM_CLOSE (Alt-F4).
      *
      * Reimplemented from QWidget.
