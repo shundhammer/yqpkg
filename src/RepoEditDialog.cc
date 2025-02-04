@@ -231,3 +231,12 @@ void RepoEditDialog::showWarningPopup( const QString &         message,
     msgBox.exec();
 }
 
+
+void RepoEditDialog::closeEvent( QCloseEvent * event )
+{
+    Q_UNUSED( event );
+
+    logInfo() << "Caught WM_CLOSE -> reject" << endl;
+    reject();
+}
+

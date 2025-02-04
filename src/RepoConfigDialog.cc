@@ -337,3 +337,13 @@ void RepoConfigDialog::showRestartNeededPopup()
 
     msgBox.exec();
 }
+
+
+void RepoConfigDialog::closeEvent( QCloseEvent * event )
+{
+    Q_UNUSED( event );
+
+    logInfo() << "Caught WM_CLOSE -> reject" << endl;
+    reject();
+}
+

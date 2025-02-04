@@ -147,6 +147,13 @@ protected:
      **/
     void saveRepoInfo();
 
+    /**
+     * Event handler for WM_CLOSE (Alt-F4).
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void closeEvent( QCloseEvent * event ) override;
+
 
     //
     // Data members
