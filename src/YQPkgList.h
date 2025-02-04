@@ -230,7 +230,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void updateData();
+    virtual void updateData() override;
 
     /**
      * Returns a tool tip text for a specific column of this item.
@@ -238,7 +238,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QString toolTip( int column );
+    virtual QString toolTip( int column ) override;
 
     /**
      * Returns true if this package is to be displayed dimmed,

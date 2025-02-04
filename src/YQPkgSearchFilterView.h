@@ -152,7 +152,7 @@ protected:
      * Key press event: Execute search upon 'Return'
      * Reimplemented from QVBox / QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * event );
+    virtual void keyPressEvent( QKeyEvent * event ) override;
 
     /**
      * Read settings from the config file.

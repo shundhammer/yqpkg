@@ -71,7 +71,7 @@ public:
      * Reimplemented from QWidget:
      * Reserve a reasonable amount of space.
      **/
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
     /**
      * Show a text and wait until the user confirmed with 'OK'.

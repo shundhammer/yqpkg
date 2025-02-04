@@ -55,7 +55,7 @@ public:
      *
      * Reimplemented from QWidget to limit the dialog to the screen dimensions.
      **/
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
 
 protected:

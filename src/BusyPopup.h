@@ -69,7 +69,7 @@ public:
      *
      * Reimplemented from QLabel / QWidget.
      **/
-    virtual void showEvent( QShowEvent * event ) Q_DECL_OVERRIDE;
+    virtual void showEvent( QShowEvent * event ) override;
 
 
 protected:

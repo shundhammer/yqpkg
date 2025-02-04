@@ -51,9 +51,10 @@ public:
     /**
      * Show details for the specified package:
      * In this case the package description.
+     *
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( ZyppSel selectable );
+    virtual void showDetails( ZyppSel selectable ) override;
 
     /**
      * Get the document pointed to by a hyperlink.
@@ -61,7 +62,7 @@ public:
      * Reimplemented from QTextBrowser to avoid having an empty text each time
      * the user clicks on a hyperlink.
      **/
-    virtual void setSource( const QUrl & name );
+    virtual void setSource( const QUrl & name ) override;
 
 protected:
 

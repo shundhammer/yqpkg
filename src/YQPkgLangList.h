@@ -176,7 +176,7 @@ protected:
      *
      * Reimplemented from YQPkgObjListItem.
      **/
-    virtual void applyChanges();
+    virtual void applyChanges() override;
 
 
     // Data members

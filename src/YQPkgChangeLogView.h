@@ -52,7 +52,7 @@ public:
      *
      * Reimplemented from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( ZyppSel selectable );
+    virtual void showDetails( ZyppSel selectable ) override;
 
 protected:
 

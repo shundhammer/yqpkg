@@ -150,7 +150,7 @@ public:
      *
      * Reimplemented from QListView.
      **/
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
     /**
      * Warning range notifier about running out of disk space warning.
@@ -185,7 +185,7 @@ protected:
      *
      * Reimplemented from QListView / QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * ev );
+    virtual void keyPressEvent( QKeyEvent * ev ) override;
 
 
     // Data members
@@ -227,28 +227,28 @@ public:
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual FSize usedSize() const;
+    virtual FSize usedSize() const override;
 
     /**
      * The total size of this partition.
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual FSize totalSize() const;
+    virtual FSize totalSize() const override;
 
     /**
      * The name to display for this partition ( the mount point ).
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual QString name() const;
+    virtual QString name() const override;
 
     /**
      * The device name of this partition.
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual QString deviceName() const { return ""; }
+    virtual QString deviceName() const  override { return ""; }
 
     /**
      * Check the remaining disk space of this partition based on percentage and

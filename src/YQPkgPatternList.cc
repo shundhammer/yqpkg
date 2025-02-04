@@ -566,14 +566,6 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 
 
 void
-YQPkgPatternCategoryItem::setExpanded( bool open )
-{
-    QTreeWidgetItem::setExpanded( open );
-    setTreeIcon();
-}
-
-
-void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
     setIcon( 0,

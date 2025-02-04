@@ -157,7 +157,7 @@ public:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual void updateStatus();
+    virtual void updateStatus() override;
 
     /**
      * Update this item's data completely.
@@ -165,7 +165,7 @@ public:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual void updateData();
+    virtual void updateData() override;
 
     /**
      * Re-declare ordinary setText() method so the compiler doesn't get
@@ -183,7 +183,7 @@ public:
      * Comparison function used for sorting the list.
      * Reimplemented from QTreeWidgetItem.
      **/
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
     // Columns
 

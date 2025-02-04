@@ -198,7 +198,7 @@ public slots:
      * Reimplemented from QY2ListView:
      * Emit currentItemChanged() signal after clearing the list.
      **/
-    virtual void clear();
+    virtual void clear() override;
 
     /**
      * Reset all content: Update the status and content for each item
@@ -310,7 +310,7 @@ protected:
      *
      * Reimplemented from QListView / QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * ev );
+    virtual void keyPressEvent( QKeyEvent * ev ) override;
 
     /**
      * Returns the context menu for items that are not installed.
@@ -562,7 +562,7 @@ public:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual void updateData();
+    virtual void updateData() override;
 
     /**
      * Returns a tool tip text for a specific column of this item.
@@ -570,7 +570,7 @@ public:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual QString toolTip( int column );
+    virtual QString toolTip( int column ) override;
 
     /**
      * Returns 'true' if this item is excluded.

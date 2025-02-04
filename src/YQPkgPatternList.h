@@ -207,7 +207,7 @@ public:
      * Cycle the package status to the next valid value.
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void cycleStatus();
+    virtual void cycleStatus() override;
 
     /**
      * sorting function
@@ -244,7 +244,7 @@ protected:
      *
      * Reimplemented from YQPkgObjListItem.
      **/
-    virtual void applyChanges();
+    virtual void applyChanges() override;
 
 
     // Data members
@@ -290,13 +290,6 @@ public:
      * sorting function
      */
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
-
-    /*
-     * Open or close this subtree
-     *
-     * Reimplemented from QListViewItem to force categories open at all times
-     **/
-    virtual void setExpanded( bool open );
 
 
 protected:

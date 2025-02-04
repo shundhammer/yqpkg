@@ -180,18 +180,21 @@ protected:
 
     /**
      * Handle mouse clicks.
+     *
      * Reimplemented from QScrollView.
      **/
     virtual void mousePressEvent( QMouseEvent * e ) override;
 
     /**
      * Handle mouse clicks.
+     *
      * Reimplemented from QScrollView.
      **/
     virtual void mouseReleaseEvent( QMouseEvent * ) override;
 
     /**
      * Handle mouse clicks.
+     *
      * Reimplemented from QScrollView.
      **/
     virtual void mouseDoubleClickEvent( QMouseEvent * ) override;
@@ -259,7 +262,8 @@ public:
 
     /**
      * Comparison function used for sorting the list.
-     * Reimplemented from QTreeWidgetItem
+     *
+     * Reimplemented from QTreeWidgetItem.
      **/
     virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
