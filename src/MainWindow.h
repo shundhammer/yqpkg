@@ -150,7 +150,7 @@ protected:
      *
      * Reimplemented from QWidget.
      **/
-    virtual void closeEvent( QCloseEvent * event );
+    virtual void closeEvent( QCloseEvent * event ) override;
 
 
     //

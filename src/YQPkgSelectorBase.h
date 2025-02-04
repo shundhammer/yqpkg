@@ -186,14 +186,14 @@ protected:
      *
      * Reimplemented from QWidget.
      **/
-    virtual void keyPressEvent( QKeyEvent * event );
+    virtual void keyPressEvent( QKeyEvent * event ) override;
 
     /**
      * Event handler for WM_CLOSE (Alt-F4).
      *
      * Reimplemented from QWidget.
      **/
-    virtual void closeEvent( QCloseEvent * event );
+    virtual void closeEvent( QCloseEvent * event ) override;
 
 
     // Data members
