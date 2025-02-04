@@ -50,9 +50,10 @@ protected:
     /**
      * Show details for the specified zypp::ResObject:
      * In this case technical data, very much like "rpm -qi".
-     * Overwritten from YQPkgGenericDetailsView.
+     *
+     * Reimplemented from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( ZyppSel selectable );
+    virtual void showDetails( ZyppSel selectable ) override;
 
     /**
      * Returns a string containing a HTML table for technical details for one

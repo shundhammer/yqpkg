@@ -52,7 +52,7 @@ public:
      * Show details for the specified package:
      * In this case the package description.
      *
-     * Overwritten from YQPkgGenericDetailsView.
+     * Reimplemented from YQPkgGenericDetailsView.
      **/
     virtual void showDetails( ZyppSel selectable ) override;
 

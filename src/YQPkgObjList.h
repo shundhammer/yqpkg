@@ -498,9 +498,10 @@ public:
     /**
      * Update this item's status.
      * Triggered by QY2ListView::updateAllItemStates().
-     * Overwritten from QY2ListViewItem.
+     *
+     * Reimplemented from QY2ListViewItem.
      **/
-    virtual void updateStatus();
+    virtual void updateStatus() override;
 
     /**
      * Cycle the package status to the next valid value.
