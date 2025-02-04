@@ -109,19 +109,6 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
 }
 
 
-void
-YQPkgProductDialog::polish()
-{
-    // Delayed initialization after widget is fully created etc.
-
-    // Only now send currentItemChanged() signal so the details views display
-    // something (showDetailsIfVisible() shows only something if the widget is
-    // visible, as the method name implies)
-
-    _productList->selectSomething();
-}
-
-
 QSize
 YQPkgProductDialog::sizeHint() const
 {

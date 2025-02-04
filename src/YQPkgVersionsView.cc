@@ -581,18 +581,6 @@ YQPkgVersion::~YQPkgVersion()
 }
 
 
-QString
-YQPkgVersion::toolTip(int)
-{
-    QString tip;
-
-    if ( *zyppObj() == selectable()->installedObj() )
-        tip = _( "This version is installed in your system." );
-
-    return tip;
-}
-
-
 
 
 YQPkgMultiVersion::YQPkgMultiVersion( YQPkgVersionsView * parent,

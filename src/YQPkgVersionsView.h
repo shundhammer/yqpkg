@@ -199,14 +199,6 @@ public:
      **/
     ZyppSel selectable() const { return _selectable; }
 
-    /**
-     * Returns a tool tip text for a specific column of this item.
-     * 'column' is -1 if the mouse pointer is in the tree indentation area.
-     *
-     * Reimplemented from QY2CheckListItem.
-     **/
-    virtual QString toolTip( int column );
-
 
 protected:
 

@@ -162,13 +162,6 @@ public:
      **/
     virtual QMenu * addAllInListSubMenu( QMenu * menu ) override;
 
-    /**
-     * Delayed initialization after the dialog is fully created.
-     *
-     * Reimplemented from QWidget.
-     **/
-    virtual void polish();
-
 
 signals:
 
@@ -273,7 +266,7 @@ public:
      * Cycle the package status to the next valid value.
      * Reimplemented from YQPkgObjList.
      **/
-    virtual void cycleStatus();
+    virtual void cycleStatus() override;
 
     /**
      * Returns a tool tip text for a specific column of this item.
@@ -281,7 +274,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QString toolTip( int column );
+    virtual QString toolTip( int column ) override;
 
     /**
      * sorting function
@@ -306,7 +299,7 @@ protected:
      *
      * Reimplemented from YQPkgObjListItem.
      **/
-    virtual void applyChanges();
+    virtual void applyChanges() override;
 
 
     // Data members
@@ -348,18 +341,12 @@ public:
      */
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
-    /*
-     * Open or close this subtree
-     *
-     * Reimplemented from QListViewItem to force categories open at all times.
-     **/
-    virtual void setExpanded( bool open );
-
     /**
      * Maps a string patch category to the corresponding enum.
      **/
     static YQPkgPatchCategory patchCategory( const QString      & category );
     static YQPkgPatchCategory patchCategory( const std::string  & category );
+
     /**
      * Converts a patch category to a user-readable (translated) string.
      **/
@@ -384,6 +371,8 @@ protected:
      * close icons.
      **/
     void setTreeIcon( void );
+
+
     //
     // Data members
     //

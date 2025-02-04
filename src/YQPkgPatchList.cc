@@ -56,11 +56,9 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     header()->setSectionResizeMode( _statusCol,  QHeaderView::ResizeToContents );
     header()->setSectionResizeMode( _summaryCol, QHeaderView::Stretch          );
 
-
     connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *,
                                                QTreeWidgetItem* ) ),
              this, SLOT  ( filter() ) );
-
 
     fillList();
 
@@ -71,19 +69,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 YQPkgPatchList::~YQPkgPatchList()
 {
     // NOP
-}
-
-
-void
-YQPkgPatchList::polish()
-{
-    // Delayed initialization after widget is fully created etc.
-
-    // Only now send currentItemChanged() signal so attached details views also
-    // display something if their showDetailsIfVisible() slot is connected to
-    // currentItemChanged() signals.
-
-    selectSomething();
 }
 
 
@@ -631,14 +616,6 @@ YQPkgPatchCategoryItem::addPatch( ZyppPatch patch )
 {
     if ( ! _firstPatch )
         _firstPatch = patch;
-}
-
-
-void
-YQPkgPatchCategoryItem::setExpanded( bool open )
-{
-    QTreeWidgetItem::setExpanded( open );
-    setTreeIcon();
 }
 
 
