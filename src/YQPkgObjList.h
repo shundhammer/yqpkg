@@ -50,6 +50,7 @@ class YQPkgObjList : public QY2ListView
     Q_OBJECT
 
 protected:
+
     /**
      * Constructor. Does not add any QListView columns!
      **/
@@ -62,6 +63,7 @@ protected:
 
     // avoiding warning about virtuals
     using QTreeWidget::currentItemChanged;
+
 
 public:
 
@@ -282,7 +284,6 @@ protected slots:
 
 
 signals:
-
 
     /**
      * Emitted when a zypp::ui::Selectable is selected.
@@ -542,9 +543,11 @@ public:
     bool showLicenseAgreement();
 
     /**
-     * sorting function
+     * Comparison operator for sorting.
+     *
+     * Reimplemented from QY2ListViewItem.
      */
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
     /**
      * Calculate a numerical value to compare versions, based on version

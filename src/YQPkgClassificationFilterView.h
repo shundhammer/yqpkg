@@ -32,7 +32,8 @@ typedef enum
     YQPkgClassMultiversion,
     YQPkgClassRetracted,
     YQPkgClassRetractedInstalled,
-    YQPkgClassAll,
+    YQPkgClassAll
+
 } YQPkgClass;
 
 
@@ -140,7 +141,7 @@ public:
 
     YQPkgClass pkgClass() const { return _pkgClass; }
 
-    virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
+    virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const override;
 
 private:
 

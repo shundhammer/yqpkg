@@ -126,9 +126,6 @@ protected slots:
 
 private:
 
-    //
-    // Data members
-    //
 
     int _nameCol;
 };
@@ -165,16 +162,20 @@ public:
      **/
     static ZyppProduct singleProduct( ZyppRepo repo );
 
+    /**
+     * Comparison operator for sorting.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual bool operator<( const QTreeWidgetItem & other ) const override;
 
-    // Columns
-
+    /**
+     * Return the column for the name.
+     **/
     int nameCol() const { return _repoList->nameCol(); }
 
-    virtual bool operator<( const QTreeWidgetItem & other ) const;
 
 protected:
-
-    // Data members
 
     YQPkgRepoList * _repoList;
     ZyppRepo        _zyppRepo;
