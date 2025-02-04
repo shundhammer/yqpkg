@@ -245,7 +245,7 @@ QY2ListView::mouseReleaseEvent( QMouseEvent * ev )
 void
 QY2ListView::mouseDoubleClickEvent( QMouseEvent * ev )
 {
-    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
+    QTreeWidgetItem * item = itemAt( ev->pos() );
 
     if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
