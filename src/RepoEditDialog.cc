@@ -123,7 +123,8 @@ void RepoEditDialog::connectWidgets()
     connect( _ui->communityRepoRadioButton, SIGNAL( toggled( bool )   ),
              this,                          SLOT  ( repoTypeChanged() ) );
 
-    connect( _ui->communityReposList, SIGNAL( itemClicked          ( QListWidgetItem * ) ),
+    connect( _ui->communityReposList, SIGNAL( currentItemChanged   ( QListWidgetItem *,
+                                                                     QListWidgetItem * ) ),
              this,                    SLOT  ( communityRepoSelected( QListWidgetItem * ) ) );
 
     connect( _ui->repoRawUrl, SIGNAL( textChanged      ( QString ) ),
