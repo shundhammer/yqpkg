@@ -19,6 +19,7 @@
 
 #include <zypp/Target.h>
 
+#include "BaseProduct.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
@@ -65,6 +66,8 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
         winTitle += _( " (read-only)" );
         setWindowTitle( winTitle );
     }
+
+    BaseProduct::log();
 }
 
 
@@ -114,8 +117,7 @@ void RepoConfigDialog::connectWidgets()
     connect( _ui->deleteButton, SIGNAL( clicked() ),
              this,              SLOT  ( deleteRepo() ) );
 
-    // _ui->closeButton() is already connected to QDialog::accept()
-    // in the .ui file
+    // _ui->closeButton() is already connected to accept() in the .ui file
 }
 
 
