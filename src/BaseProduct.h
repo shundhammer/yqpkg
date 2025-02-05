@@ -15,11 +15,10 @@
  */
 
 
-#include <QString>
-
-
 #ifndef BaseProduct_h
 #define BaseProduct_h
+
+#include <QString>
 
 
 /**

@@ -30,6 +30,8 @@
 
 #include "ui_repo-edit-add.h"
 
+class CommunityRepos;
+
 
 /**
  * Dialog class to edit and add a repo.
@@ -113,6 +115,12 @@ protected slots:
     void repoTypeChanged();
 
     /**
+     * Fill the input fields with the content of the community repo name in
+     * 'item' that the user selected.
+     **/
+    void communityRepoSelected( QListWidgetItem * item );
+    
+    /**
      * Update the expandedUrl label below the repoRawUrl lineedit with the URL
      * with variables like $releasever expanded.
      **/
@@ -120,6 +128,7 @@ protected slots:
 
 
 protected:
+
 
     /**
      * Update the window title depending on the mode (Add / Edit).
@@ -148,6 +157,11 @@ protected:
     void saveRepoInfo();
 
     /**
+     * Return the CommunityRepos manager. Create it if it doesn't exist yet.
+     **/
+    CommunityRepos * communityRepos();
+
+    /**
      * Event handler for WM_CLOSE (Alt-F4).
      *
      * Reimplemented from QWidget.
@@ -159,12 +173,13 @@ protected:
     // Data members
     //
 
-    Mode           _mode;
-    Ui::RepoEdit * _ui;
-    ZyppRepoInfo   _repoInfo;
+    Mode             _mode;
+    Ui::RepoEdit *   _ui;
+    ZyppRepoInfo     _repoInfo;
+    CommunityRepos * _communityRepos;
 
-    QString        _oldRepoName;
-    QString        _oldRawUrl;
+    QString          _oldRepoName;
+    QString          _oldRawUrl;
 };
 
 #endif // RepoEditDialog_h

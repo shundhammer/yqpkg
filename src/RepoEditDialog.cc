@@ -20,6 +20,7 @@
 #include <zypp/repo/RepoVariables.h>    // RepoVariablesStringReplacer
 #include <zypp/RepoManager.h>           // makeStupidAlias()
 
+#include "CommunityRepos.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
@@ -34,6 +35,7 @@ RepoEditDialog::RepoEditDialog( Mode      mode,
     : QDialog( parent ? parent : MainWindow::instance() )
     , _mode( mode )
     , _ui( new Ui::RepoEdit )  // Use the Qt designer .ui form (XML)
+    , _communityRepos( 0 )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
@@ -50,6 +52,14 @@ RepoEditDialog::RepoEditDialog( Mode      mode,
     showExpandedVariables();
     updateWindowTitle();
     _ui->repoTypeContainer->setVisible( _mode == AddRepo );
+    _ui->communityReposList->clear();
+
+    if ( _mode == AddRepo )
+    {
+        _ui->communityReposList->addItems( communityRepos()->repoNames() );
+        _ui->communityReposList->setCurrentItem( 0 );
+    }
+
     resize( sizeHint() ); // Fallback initial size if there is none in the settings
     connectWidgets();
 
@@ -61,6 +71,7 @@ RepoEditDialog::~RepoEditDialog()
 {
     WindowSettings::write( this, _mode == AddRepo ? "RepoAddDialog" : "RepoEditDialog" );
 
+    delete _communityRepos;
     delete _ui;
 }
 
@@ -112,6 +123,9 @@ void RepoEditDialog::connectWidgets()
     connect( _ui->communityRepoRadioButton, SIGNAL( toggled( bool )   ),
              this,                          SLOT  ( repoTypeChanged() ) );
 
+    connect( _ui->communityReposList, SIGNAL( itemClicked          ( QListWidgetItem * ) ),
+             this,                    SLOT  ( communityRepoSelected( QListWidgetItem * ) ) );
+
     connect( _ui->repoRawUrl, SIGNAL( textChanged      ( QString ) ),
              this,            SLOT  ( updateExpandedUrl()          ) );
 }
@@ -150,7 +164,56 @@ int RepoEditDialog::editRepo( const ZyppRepoInfo & repoInfo )
 
 void RepoEditDialog::repoTypeChanged()
 {
-    _ui->communityReposList->setEnabled( _ui->communityRepoRadioButton->isChecked() );
+    bool selectCommunityRepo = _ui->communityRepoRadioButton->isChecked();
+    _ui->communityReposList->setEnabled( selectCommunityRepo );
+
+    if ( selectCommunityRepo )
+    {
+        // Save the current content of the input fields because a click into
+        // the community repos list will change them.
+
+        _oldRepoName = _ui->repoName->text();
+        _oldRawUrl   = _ui->repoRawUrl->text();
+    }
+    else // Switched back to custom repo
+    {
+        // Restore the saved content of the input fields
+
+        _ui->repoName->setText( _oldRepoName );
+        _ui->repoRawUrl->setText( _oldRawUrl );
+
+        QSignalBlocker sigBlocker( _ui->communityReposList );
+        _ui->communityReposList->setCurrentItem( 0 );
+    }
+}
+
+
+void RepoEditDialog::communityRepoSelected( QListWidgetItem * item )
+{
+    if ( ! item )
+        return;
+
+    QString      repoName = item->text();
+    ZyppRepoInfo repoInfo = communityRepos()->repoInfo( repoName );
+
+    if ( repoInfo != ZyppRepoInfo::noRepo )
+    {
+        logDebug() << repoName << " alias " << repoInfo.alias() << endl;
+        
+        _repoInfo = repoInfo;
+        _ui->repoName->setText( fromUTF8( _repoInfo.name() ) );
+        _ui->repoRawUrl->setText( fromUTF8( _repoInfo.rawUrl().asString() ) );
+    }
+}
+
+
+CommunityRepos *
+RepoEditDialog::communityRepos()
+{
+    if ( ! _communityRepos )
+        _communityRepos = new CommunityRepos();
+
+    return _communityRepos;
 }
 
 

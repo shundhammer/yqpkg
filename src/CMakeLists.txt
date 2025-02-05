@@ -27,6 +27,7 @@ set( SOURCES
 
   main.cc
   BaseProduct.cc
+  CommunityRepos.cc
   MyrlynApp.cc
   MyrlynWorkflowSteps.cc
   MyrlynRepoManager.cc
