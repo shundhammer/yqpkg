@@ -1192,10 +1192,29 @@ YQPkgSelector::configRepos()
 {
     logDebug() << endl;
 
+    if ( pendingChanges() && MyrlynApp::runningAsRoot() )
+    {
+        QMessageBox msgBox( this );
+
+        msgBox.setText( _( "There are pending changes.\n"
+                           "\n"
+                           "If you continue to the repository configuration\n"
+                           "and change anything there, you will have to\n"
+                           "restart the program, and all package changes\n"
+                           "will be lost.\n"
+                           ) );
+        msgBox.setIcon( QMessageBox::Question );
+        QPushButton * continueButton = msgBox.addButton( _( "C&ontinue" ), QMessageBox::AcceptRole );
+        QPushButton * cancelButton   = msgBox.addButton( _( "&Cancel"   ), QMessageBox::RejectRole );
+        msgBox.setDefaultButton( cancelButton );
+        msgBox.exec();
+
+        if ( msgBox.clickedButton() != continueButton )
+            return;
+    }
+
     RepoConfigDialog dialog;
     dialog.exec();
-
-    // FIXME: Make sure to restart the program after changing anything about repos.
 }
 
 
