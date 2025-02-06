@@ -171,11 +171,11 @@ int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
     prepareSolving();
-    logInfo() << "Resolving dependencies..." << endl;
+    // logInfo() << "Resolving dependencies..." << endl;
 
     bool success = zypp::getZYpp()->resolver()->resolvePool();
 
-    logDebug() << "Resolving dependencies done." << endl;
+    // logDebug() << "Resolving dependencies done." << endl;
 
     return processSolverResult( success );
 }
