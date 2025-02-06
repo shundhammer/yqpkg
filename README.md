@@ -76,6 +76,33 @@ It is already well usable and fairly feature complete.
   - All packages
 
 
+### Reimplmented Features that YaST also has
+
+- Repo configuration:
+
+  - List the repos with names, priority, enabled status, auto-refresh status,
+    software service (if configured), URL
+
+  - Change priority, enabled status, auto-refresh status of the selected table
+    item directly below the table
+
+  - Show the URL with and without libzypp variables of the selected table item
+    like $releasever, $arch, $basearch below the table
+
+  - Add a repo with any custom name and URL
+
+  - Add a community repo like Packman, Open H.264, LibDvdCss, nVidia with
+    well-known URLs, using the specific URL for the currently installed
+    distribution / product (Leap 15.x, Tumbleweed, Slowroll, SLE-15 SPx)
+
+  - Edit name and URL of a repo
+
+  - Delete a repo
+
+  - Read-only mode for viewing the repos as a non-root user (not available in
+    YaST)
+
+
 ### New Features in Myrlyn (No YaST Counterpart)
 
 - "Updates" view that shows packages that could be updated (where a newer
@@ -139,13 +166,6 @@ It is already well usable and fairly feature complete.
 - Streamlined keyboard shortcuts for most filter views and the tabs.
 
 - Lots of other small fixes everywhere.
-
-
-### Work in Progress
-
-- Repo operations like adding, removing, setting priority, enabling,
-  disabling.  You get the repo view, though, where you can view and select
-  packages by repo.
 
 
 ## Limitations
