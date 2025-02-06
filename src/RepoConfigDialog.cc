@@ -19,7 +19,6 @@
 
 #include <zypp/Target.h>
 
-#include "BaseProduct.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
@@ -66,8 +65,6 @@ RepoConfigDialog::RepoConfigDialog( QWidget * parent )
         winTitle += _( " (read-only)" );
         setWindowTitle( winTitle );
     }
-
-    BaseProduct::log();
 }
 
 
@@ -213,7 +210,7 @@ void RepoConfigDialog::currentEdited()
 
 void RepoConfigDialog::addRepo()
 {
-    logDebug() << "Adding repo" << endl;
+    // logDebug() << "Adding repo" << endl;
 
     RepoEditDialog dialog( RepoEditDialog::AddRepo, this );
     int result = dialog.addRepo();
@@ -224,9 +221,9 @@ void RepoConfigDialog::addRepo()
 
         ZyppRepoInfo repoInfo = dialog.repoInfo();
 #if 1
-        logDebug() << "Result: "       << repoInfo.name()
-                   << " URL: "         << repoInfo.url().asString()
-                   << " Prio: "        << repoInfo.priority()
+        logDebug() << "Adding repo "   << repoInfo.name() << endl;
+        logDebug() << "  URL: "        << repoInfo.url().asString() << endl;
+        logDebug() << "  Prio: "       << repoInfo.priority()
                    << " Enabled: "     << repoInfo.enabled()
                    << " AutoRefresh: " << repoInfo.autorefresh()
                    << endl;
@@ -253,7 +250,7 @@ void RepoConfigDialog::addRepo()
 
 void RepoConfigDialog::editRepo()
 {
-    logDebug() << "Editing repo" << endl;
+    // logDebug() << "Editing repo" << endl;
 
     RepoTableItem * currentItem = _ui->repoTable->currentRepoItem();
 
@@ -270,12 +267,8 @@ void RepoConfigDialog::editRepo()
 
             repoInfo = dialog.repoInfo();
 #if 1
-            logDebug() << "Result: "       << repoInfo.name()
-                       << " URL: "         << repoInfo.url().asString()
-                       << " Prio: "        << repoInfo.priority()
-                       << " Enabled: "     << repoInfo.enabled()
-                       << " AutoRefresh: " << repoInfo.autorefresh()
-                       << endl;
+        logDebug() << "Edited repo "   << repoInfo.name() << endl;
+        logDebug() << "  URL: "        << repoInfo.url().asString() << endl;
 #endif
             currentItem->setRepoInfo( repoInfo );
             restartNeeded();
@@ -290,7 +283,7 @@ void RepoConfigDialog::editRepo()
 
 void RepoConfigDialog::deleteRepo()
 {
-    logDebug() << "Deleting repo" << endl;
+    // logDebug() << "Deleting repo" << endl;
 
     RepoTableItem * currentItem = _ui->repoTable->currentRepoItem();
 
@@ -384,8 +377,8 @@ void RepoConfigDialog::closeEvent( QCloseEvent * event )
 {
     Q_UNUSED( event );
 
-    logInfo() << "Caught WM_CLOSE -> reject" << endl;
-    reject();
+    logInfo() << "Caught WM_CLOSE" << endl;
+    accept();
 }
 
 
