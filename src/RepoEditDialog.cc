@@ -15,15 +15,18 @@
  */
 
 
+#include <stdlib.h>                     // rand(), srand()
 #include <QMessageBox>
 
 #include <zypp/repo/RepoVariables.h>    // RepoVariablesStringReplacer
-#include <zypp/RepoManager.h>           // makeStupidAlias()
+#include <zypp/RepoManager.h>
 
 #include "CommunityRepos.h"
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "MyrlynApp.h"
+#include "MyrlynRepoManager.h"
 #include "WindowSettings.h"
 #include "utf8.h"
 #include "YQi18n.h"
@@ -134,6 +137,7 @@ void RepoEditDialog::connectWidgets()
 
 int RepoEditDialog::addRepo()
 {
+    _oldAlias.clear();
     _repoInfo = ZyppRepoInfo();
     _repoInfo.setEnabled( true );
     _repoInfo.setAutorefresh( true );
@@ -152,6 +156,7 @@ int RepoEditDialog::addRepo()
 int RepoEditDialog::editRepo( const ZyppRepoInfo & repoInfo )
 {
     _repoInfo = repoInfo;
+    _oldAlias = fromUTF8( _repoInfo.alias() );
 
     _ui->repoTypeContainer->hide();
     _ui->repoName->setText( fromUTF8( _repoInfo.name() ) );
@@ -200,7 +205,7 @@ void RepoEditDialog::communityRepoSelected( QListWidgetItem * item )
     if ( repoInfo != ZyppRepoInfo::noRepo )
     {
         logDebug() << repoName << " alias " << repoInfo.alias() << endl;
-        
+
         _repoInfo = repoInfo;
         _ui->repoName->setText( fromUTF8( _repoInfo.name() ) );
         _ui->repoRawUrl->setText( fromUTF8( _repoInfo.rawUrl().asString() ) );
@@ -259,27 +264,73 @@ void RepoEditDialog::saveRepoInfo()
     QString urlText = _ui->repoRawUrl->text();
     zypp::Url url( toUTF8( urlText ) );
     _repoInfo.setBaseUrl( url );
+    ensureUniqueAlias( _repoInfo );
+}
 
 
-    // Make sure we have a unique alias
+void RepoEditDialog::ensureUniqueAlias( ZyppRepoInfo & repoInfo )
+{
+    // Collect the existing repo aliases
 
-    if ( _repoInfo.alias().empty() || _repoInfo.name() != oldRepoName  )
+    RepoManager_Ptr repoManager( MyrlynApp::instance()->repoManager()->repoManager() );
+    QStringList     existingAliases;
+
+    for ( zypp::RepoManager::RepoConstIterator it = repoManager->repoBegin();
+          it != repoManager->repoEnd();
+          ++it )
     {
-        std::string alias = zypp::RepoManager::makeStupidAlias( url );
-        _repoInfo.setAlias( alias );
+        const ZyppRepoInfo & repo = *it;
+        QString repoAlias = fromUTF8( repo.alias() );
 
-        logDebug() << "New alias for "
-                   << _repoInfo.name() << ": "
-                   << alias
-                   << endl;
+        if ( repoAlias != _oldAlias ) // we might have found the previous alias of this repo
+            existingAliases << repoAlias;
     }
-    else
+
+
+    // Start with the existing alias (if the repo has any)
+
+    QString alias = fromUTF8( repoInfo.alias() );
+
+    if ( alias.isEmpty() )
     {
-        logDebug() << "Leaving old alias for "
-                   << _repoInfo.name() << ": "
-                   << _repoInfo.alias()
-                   << endl;
+        // Generate a simple alias from the repo name: "Foo Bar   Repo" -> "foo-bar-repo"
+
+        alias = fromUTF8( repoInfo.name() );    // Start with the repo name
+        alias = alias.toLower().simplified();   // Lower-case and normalized whitespace
+        alias.replace( ' ', '-' );              // "my foo repo" -> "my-foo-repo"
     }
+
+    srand( (unsigned) time( 0 ) ); // Initialize random generator
+    int remainingAttempts = 10;
+    QString baseAlias = alias;
+
+
+    // Ensure the alias is unique
+
+    while ( existingAliases.contains( alias ) && --remainingAttempts > 0 )
+    {
+        // Add a (somewhat) random hex suffix like "-a73b".
+        //
+        // No, it doesn't matter at all how super-random and thus super-secure
+        // the randomness is. We are not doing encryption here; all we need is
+        // a string that is different from the (few) existing ones. And we are
+        // checking and trying again anyway if it didn't succeed on the first
+        // try.
+
+        alias = baseAlias + QString( "-%1" ).arg( rand() & 0xFFFF,
+                                                  4,              // fieldWidth
+                                                  16,             // base
+                                                  QChar( '0' ) ); // fillChar
+    }
+
+    if ( remainingAttempts == 0 )
+    {
+        alias = fromUTF8( zypp::RepoManager::makeStupidAlias( repoInfo.url() ) );
+        logWarning() << "Falling back to ugly, but reliable zypp::RepoManager::makeStupidAlias()" << endl;
+    }
+
+    logInfo() << "Alias for repo \"" << repoInfo.name() << "\": " << alias << endl;
+    repoInfo.setAlias( toUTF8( alias ) );
 }
 
 

@@ -176,7 +176,7 @@ void MyrlynRepoManager::findEnabledRepos()
           it != repoManager()->repoEnd();
           ++it )
     {
-        ZyppRepoInfo repo = *it;
+        const ZyppRepoInfo & repo = *it;
 
         if ( repo.enabled() )
         {

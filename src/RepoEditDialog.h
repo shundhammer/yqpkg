@@ -119,7 +119,7 @@ protected slots:
      * 'item' that the user selected.
      **/
     void communityRepoSelected( QListWidgetItem * item );
-    
+
     /**
      * Update the expandedUrl label below the repoRawUrl lineedit with the URL
      * with variables like $releasever expanded.
@@ -157,6 +157,11 @@ protected:
     void saveRepoInfo();
 
     /**
+     * Set an alias that is not already in use by another repo.
+     **/
+    void ensureUniqueAlias( ZyppRepoInfo & _repoInfo );
+
+    /**
      * Return the CommunityRepos manager. Create it if it doesn't exist yet.
      **/
     CommunityRepos * communityRepos();
@@ -180,6 +185,7 @@ protected:
 
     QString          _oldRepoName;
     QString          _oldRawUrl;
+    QString          _oldAlias;
 };
 
 #endif // RepoEditDialog_h
