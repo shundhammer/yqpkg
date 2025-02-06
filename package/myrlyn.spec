@@ -20,7 +20,7 @@
 Name:           myrlyn
 # If you change the version here, don't forget ../VERSION.cmake !
 # To increase only the last number, use  rake version:bump
-Version:        0.8.05
+Version:        0.9.1
 Release:        0
 Summary:        Myrlyn Package Manager GUI
 License:        GPL-2.0-only
