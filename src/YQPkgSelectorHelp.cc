@@ -30,6 +30,12 @@ void YQPkgSelector::help()
 }
 
 
+void YQPkgSelector::helpRepoConfig()
+{
+    openInBrowser( "https://github.com/shundhammer/myrlyn/issues/69" );
+}
+
+
 void YQPkgSelector::about()
 {
     QDialog aboutDialog( this );
@@ -42,31 +48,6 @@ void YQPkgSelector::about()
 
     aboutDialog.exec();
     delete ui;
-}
-
-
-void YQPkgSelector::openActionUrl()
-{
-    // Donated by the QDirStat project:
-    //
-    // Use a QAction that was set up in Qt Designer to just open an URL in an
-    // external web browser.
-    //
-    // This misappropriates the action's statusTip property to store the URL in
-    // a field that is easily accessible in Qt Designer, yet doesn't get in the
-    // way: It's not displayed automatically unlike the toolTip property.
-
-    QAction * action = qobject_cast<QAction *>( sender() );
-
-    if ( action )
-    {
-        QString url = action->statusTip();
-
-        if ( url.isEmpty() )
-            logError() << "No URL in statusTip() for action " << action->objectName();
-        else
-            openInBrowser( url );
-    }
 }
 
 

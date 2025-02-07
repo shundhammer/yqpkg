@@ -873,8 +873,11 @@ YQPkgSelector::addMenus()
 
     // Menu entry for help overview
     helpMenu->addAction( _( "&Overview"    ), this, SLOT( help()    ) );
-    helpMenu->addAction( _( "About Myrlyn" ), this, SLOT( about()   ) );
-    helpMenu->addAction( _( "About Qt"     ), qApp, SLOT( aboutQt() ) );
+    helpMenu->addAction( _( "About &Myrlyn" ), this, SLOT( about()   ) );
+    helpMenu->addAction( _( "About &Qt"     ), qApp, SLOT( aboutQt() ) );
+    helpMenu->addSeparator();
+    helpMenu->addAction( _( "Rep&ository Configuration" ), this, SLOT( helpRepoConfig() ) );
+
 
 
     //

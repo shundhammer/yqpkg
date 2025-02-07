@@ -165,6 +165,12 @@ public slots:
     void help();
 
     /**
+     * Help about repository configuration
+     * (opens in external web browser)
+     **/
+    void helpRepoConfig();
+
+    /**
      * Display an about page.
      **/
     void about();
@@ -231,11 +237,6 @@ protected slots:
      */
     void normalCursor();
 
-    /**
-     * Open the URL stored in an action's statusTip property with an external
-     * browser.
-     **/
-    void openActionUrl();
 
 public:
 
