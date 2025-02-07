@@ -38,6 +38,9 @@ It is already well usable and fairly feature complete.
 [<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-22-pkg-commit-details-2.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-22-pkg-commit-details-2.png)
 [<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-30-summary.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-30-summary.png)
 
+[<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-40-repo-config.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-40-repo-config.png)
+[<img width="250" src="https://github.com/shundhammer/myrlyn/blob/master/screenshots/Myrlyn-41-add-community-repo.png">](https://raw.githubusercontent.com/shundhammer/myrlyn/refs/heads/master/screenshots/Myrlyn-41-add-community-repo.png)
+
 
 
 ## Features
