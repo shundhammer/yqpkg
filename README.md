@@ -82,6 +82,8 @@ It is already well usable and fairly feature complete.
 ### Reimplmented Features that YaST also has
 
 - Repo configuration:
+  _(See [issue #69](https://github.com/shundhammer/myrlyn/issues/69) for screenshots and more details)_
+
 
   - List the repos with names, priority, enabled status, auto-refresh status,
     software service (if configured), URL
