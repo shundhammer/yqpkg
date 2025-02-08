@@ -1,6 +1,6 @@
 /*
  *   File name: Logger.cc
- *   Summary:	Logger class for yqpkg
+ *   Summary:	Logger class for Myrlyn
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>

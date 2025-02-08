@@ -83,7 +83,7 @@ public:
      * confuse the application initialization: The first step might be an
      * initialization step that might need to automatically call
      * workflow->next() before the constructor is even done, so that variable
-     * might not have a value yet. This is what happened in YQPkg.
+     * might not have a value yet. This is what happened in Myrlyn.
      **/
     void start();
 

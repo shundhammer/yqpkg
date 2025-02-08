@@ -58,8 +58,9 @@ enum MyrlynAppOption
 Q_DECLARE_FLAGS( MyrlynAppOptions, MyrlynAppOption )
 Q_DECLARE_OPERATORS_FOR_FLAGS( MyrlynAppOptions )
 
+
 /**
- * Application class for yqpkg.
+ * Application class for Myrlyn.
  **/
 class MyrlynApp: public QObject
 {
