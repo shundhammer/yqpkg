@@ -204,7 +204,7 @@ updated or removed.
 
 ## Ready-Made Packages
 
-The latest version from Git: [myrlyn-git](https://software.opensuse.org/download/package?package=myrlyn&project=home%3Ashundhammer%3Amyrlyn-git)
+The latest version from Git: [myrlyn-git](https://download.opensuse.org/repositories/home:/shundhammer:/myrlyn-git/openSUSE_Leap_15.6_Update_standard/x86_64/)
 
 
 ## Motivation: Why?
