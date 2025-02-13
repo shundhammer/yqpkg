@@ -79,7 +79,7 @@ It is already well usable and fairly feature complete.
   - All packages
 
 
-### Reimplmented Features that YaST also has
+### Reimplemented Features that YaST also has
 
 - Repo configuration:
   _(See [issue #69](https://github.com/shundhammer/myrlyn/issues/69) for screenshots and more details)_
