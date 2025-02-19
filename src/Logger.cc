@@ -8,39 +8,39 @@
  */
 
 
-#define DONT_DEPRECATE_STRERROR
-#include "Logger.h"
-
 #include <QFile>
 #include <QDir>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
 
-#include <stdio.h>      // stderr, fprintf()
+#include <string.h>     // strlen()
 #include <stdlib.h>     // abort(), mkdtemp()
 #include <unistd.h>     // getpid()
 #include <errno.h>
 #include <pwd.h>        // getpwuid()
 #include <sys/types.h>  // pid_t, getpwuid()
 
+#include "Logger.h"
+
 
 #define VERBOSE_ROTATE  0
 
+using std::endl;
+using std::cerr;
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
 
-static void qt_logger( QtMsgType msgType,
+static void qt_logger( QtMsgType                  msgType,
                        const QMessageLogContext & context,
-                       const QString & msg );
+                       const QString &            msg );
+
 
 Logger * Logger::_defaultLogger = 0;
 QString  Logger::_lastLogDir;
 
 
-Logger::Logger( const QString &filename ):
-    _logStream( stderr, QIODevice::WriteOnly ),
-    _nullStream( stderr, QIODevice::WriteOnly )
+Logger::Logger( const QString & filename )
 {
     init();
     createNullStream();
@@ -51,9 +51,7 @@ Logger::Logger( const QString &filename ):
 Logger::Logger( const QString & rawLogDir,
                 const QString & rawFilename,
                 bool            doRotate,
-                int             logRotateCount ):
-    _logStream( stderr, QIODevice::WriteOnly ),
-    _nullStream( stderr, QIODevice::WriteOnly )
+                int             logRotateCount )
 {
     init();
     createNullStream();
@@ -73,10 +71,10 @@ Logger::Logger( const QString & rawLogDir,
 
 Logger::~Logger()
 {
-    if ( _logFile.isOpen() )
+    if ( _logStream.is_open() )
     {
         // logInfo() << "-- Log End --\n" << endl;
-        _logFile.close();
+        _logStream.close();
     }
 
     if ( this == _defaultLogger )
@@ -90,52 +88,45 @@ Logger::~Logger()
 void Logger::init()
 {
     _logLevel = LogSeverityVerbose;
-    _nullDevice.setFileName( "/dev/null" );
 }
 
 
 void Logger::createNullStream()
 {
     // Open the null device to suppress output below the log level: This is
-    // necessary because each call to operator<<() for QTextStream returns the
-    // QTextStream, so we really need to return _nullStream (connected with
+    // necessary because each call to operator<<() for LogStream returns the
+    // LogStream, so we really need to return _nullStream (connected with
     // /dev/null) to actually suppress anything; otherwise, it's just the
     // logger time stamp etc. that gets suppressed, not the real logging
     // output.
 
-    if ( _nullDevice.open( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        _nullStream.setDevice( &_nullDevice );
-    }
-    else
-    {
-        fprintf( stderr, "ERROR: Can't open /dev/null to suppress log output\n" );
-    }
+    _nullStream.open( "/dev/null" );
+
+    if ( _nullStream.fail() )
+        cerr << "ERROR: Can't open /dev/null to suppress log output" << endl;
 }
 
 
 void Logger::openLogFile( const QString & filename )
 {
-    if ( ! _logFile.isOpen() || _logFile.fileName() != filename )
+    if ( ! _logStream.is_open() || _logFilename != filename )
     {
-        _logFile.setFileName( filename );
+        _logFilename = filename;
+        _logStream.open( filename.toUtf8(), std::ofstream::out | std::ofstream::app );
 
-        if ( _logFile.open( QIODevice::WriteOnly |
-                            QIODevice::Text      |
-                            QIODevice::Append      ) )
+        if ( _logStream.good() )
         {
             if ( ! _defaultLogger )
                 setDefaultLogger();
 
-            fprintf( stderr, "Logging to %s\n", qPrintable( filename ) );
-            _logStream.setDevice( &_logFile );
+            cerr << "Logging to " << qPrintable( filename ) << endl;
             _logStream << "\n\n";
             log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
                 << "-- Log Start --" << endl;
         }
         else
         {
-            fprintf( stderr, "ERROR: Can't open log file %s\n", qPrintable( filename ) );
+            cerr << "ERROR: Can't open log file " << qPrintable( filename ) << endl;
         }
     }
 }
@@ -148,13 +139,13 @@ void Logger::setDefaultLogger()
 }
 
 
-QTextStream & Logger::log( Logger *       logger,
-                           const QString &srcFile,
-                           int            srcLine,
-                           const QString &srcFunction,
-                           LogSeverity    severity )
+LogStream & Logger::log( Logger *        logger,
+                         const QString & srcFile,
+                         int             srcLine,
+                         const QString & srcFunction,
+                         LogSeverity     severity )
 {
-    static QTextStream stderrStream( stderr, QIODevice::WriteOnly );
+    static LogStream stderrStream;
 
     if ( ! logger )
         logger = Logger::defaultLogger();
@@ -162,19 +153,24 @@ QTextStream & Logger::log( Logger *       logger,
     if ( logger )
         return logger->log( srcFile, srcLine, srcFunction, severity );
     else
+    {
+        if ( ! stderrStream.is_open() )
+            stderrStream.open( "/dev/stderr" );
+
         return stderrStream;
+    }
 }
 
 
-QTextStream & Logger::log( const QString &srcFile,
-                           int            srcLine,
-                           const QString &srcFunction,
-                           LogSeverity    severity )
+LogStream & Logger::log( const QString & srcFile,
+                         int             srcLine,
+                         const QString & srcFunction,
+                         LogSeverity     severity )
 {
     if ( severity < _logLevel )
         return _nullStream;
 
-    QString sev;
+    std::string sev;
 
     switch ( severity )
     {
@@ -217,7 +213,7 @@ QTextStream & Logger::log( const QString &srcFile,
         _logStream << " ";
 
         if ( ! srcFunction.isEmpty() )
-        _logStream << srcFunction << "():  ";
+            _logStream << srcFunction << "():  ";
     }
 
     return _logStream;
@@ -268,8 +264,8 @@ QString Logger::timeStamp()
 }
 
 
-QString Logger::prefixLines( const QString &prefix,
-                             const QString &multiLineText )
+QString Logger::prefixLines( const QString & prefix,
+                             const QString & multiLineText )
 {
     QStringList lines = multiLineText.split( "\n" );
     QString result = lines.isEmpty() ? QString() : prefix;
@@ -279,8 +275,8 @@ QString Logger::prefixLines( const QString &prefix,
 }
 
 
-QString Logger::indentLines( int indentWidth,
-                             const QString &multiLineText )
+QString Logger::indentLines( int             indentWidth,
+                             const QString & multiLineText )
 {
     QString prefix( indentWidth, ' ' );
 
@@ -306,9 +302,9 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
 }
 
 
-static void qt_logger( QtMsgType msgType,
+static void qt_logger( QtMsgType                  msgType,
                        const QMessageLogContext & context,
-                       const QString & msg )
+                       const QString &            msg )
 {
     const QStringList & lines = msg.split( "\n" );
 
@@ -367,7 +363,7 @@ static void qt_logger( QtMsgType msgType,
                 // non-information about the various plug-ins? This is a
                 // perfect example of completely overengineered bullshit.
                 //
-                // I with my 25+ years as a Unix/Linux/X11 software developer
+                // I with my 35+ years as a Unix/Linux/X11 software developer
                 // have no clue what to do when they dump this message on
                 // me. WTF do they expect from a normal user?
                 //
@@ -376,13 +372,13 @@ static void qt_logger( QtMsgType msgType,
                 // designed by a committee of clueless product managers and
                 // marketing people.
 
-                QString text = "FATAL: Could not connect to the display.";
-                fprintf( stderr, "\n%s\n", qPrintable( text ) );
+                std::string text = "FATAL: Could not connect to the display.";
+                cerr << "\n" << text << endl;
                 logError() << text << endl;
             }
             else
             {
-                fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+                cerr << "FATAL: " << qPrintable( msg ) << endl;
             }
 
             logInfo() << "-- Exiting --\n" << endl;
@@ -390,7 +386,7 @@ static void qt_logger( QtMsgType msgType,
         }
         else
         {
-            fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+            cerr << "FATAL: " << qPrintable( msg ) << endl;
             logInfo() << "-- Aborting with core dump --\n" << endl;
             abort(); // Exit with core dump (it might contain a useful backtrace)
         }
@@ -401,7 +397,7 @@ static void qt_logger( QtMsgType msgType,
            msg.contains( "QObject::disconnect" )    ) )
     {
         // Duplicate this on stderr
-        fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
+        cerr << "Qt Warning: " << qPrintable( msg ) << endl;
     }
 }
 
@@ -453,7 +449,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
         }
         else
         {
-            logError() << "Could not create log dir " << nameTemplate
+            logError() << "Could not create log dir " << QString( nameTemplate )
                        << ": " << formatErrno() << endl;
 
             logDir = "/";
@@ -539,7 +535,7 @@ void Logger::logRotate( const QString & logDir,
     }
 
     const QStringList & matches = dir.entryList( QStringList() << oldNamePattern( filename ),
-                                               QDir::Files );
+                                                 QDir::Files );
 
     for ( const QString & match: matches )
     {
@@ -568,23 +564,26 @@ QString Logger::expandVariables( const QString & unexpanded )
 
 
 
-QTextStream & operator<<( QTextStream & str, bool val )
+LogStream & operator<<( LogStream & str, const char * text )
 {
-    str << ( val ? "true" : "false" );
+    // Need to resort to ugly low-level ostream::write()
+    // to prevent an endless recursion
+    str.write( text, strlen( text ) );
+
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QStringList & stringList )
+LogStream & operator<<( LogStream & str, const QString & text )
+{
+    str << text.toUtf8().constData();
+    return str;
+}
+
+
+LogStream & operator<<( LogStream & str, const QStringList & stringList )
 {
     str << stringList.join( ", " );
-    return str;
-}
-
-
-QTextStream & operator<<( QTextStream & str, const std::string & text )
-{
-    str << QString::fromUtf8( text.c_str() );
     return str;
 }
 

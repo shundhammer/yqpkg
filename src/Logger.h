@@ -12,10 +12,23 @@
 #define Logger_h
 
 #include <string>
+#include <iostream>
+#include <fstream>
+
 #include <QString>
 #include <QStringList>
-#include <QFile>
-#include <QTextStream>
+
+
+typedef std::ofstream LogStream;
+
+
+// Define NO_USING_STD_ENDL before including this header (or on the compiler
+// command line) if you are anal about this in your own code, but do not remove
+// it here.
+
+#ifndef NO_USING_STD_ENDL
+  using std::endl;
+#endif
 
 
 // Intentionally not using LogDebug, LogMilestone etc. to avoid confusion
@@ -35,7 +48,7 @@ enum LogSeverity
 };
 
 
-// Log macros for stream (QTextStream) output.
+// Log macros for stream (LogStream) output.
 //
 // Unlike qDebug() etc., they also record the location in the source code that
 // wrote the log entry.
@@ -66,18 +79,18 @@ enum LogSeverity
  * The do..while() loop is used because it syntactically allows to put a
  * semicolon (without nasty side effects) after the macro when it is used.
  **/
-#define logSender()                                                      \
-    do                                                                   \
-    {                                                                    \
-        QObject * obj = sender();                                        \
-                                                                         \
-        if ( obj )                                                       \
+#define logSender()                                                     \
+    do                                                                  \
+    {                                                                   \
+        QObject * obj = sender();                                       \
+                                                                        \
+        if ( obj )                                                      \
             logDebug() << "sender(): " << obj->metaObject()->className() \
-                       << " " << obj->objectName()                       \
-                       << endl;                                          \
-        else                                                             \
-            logDebug() << "No sender" << endl;                           \
-                                                                         \
+                       << " " << obj->objectName()                      \
+                       << std::endl;                                    \
+        else                                                            \
+            logDebug() << "No sender" << std::endl;                     \
+                                                                        \
     } while( 0 )
 
 
@@ -132,10 +145,10 @@ public:
      * Internal logging function. In most cases, better use the logDebug(),
      * logWarning() etc. macros instead.
      */
-    QTextStream & log( const QString & srcFile,
-                       int             srcLine,
-                       const QString & srcFunction,
-                       LogSeverity     severity );
+    LogStream & log( const QString & srcFile,
+                     int             srcLine,
+                     const QString & srcFunction,
+                     LogSeverity     severity );
 
     /**
      * Static version of the internal logging function.
@@ -143,11 +156,11 @@ public:
      *
      * If 'logger' is 0, the default logger is used.
      */
-    static QTextStream & log( Logger        * logger,
-                              const QString & srcFile,
-                              int             srcLine,
-                              const QString & srcFunction,
-                              LogSeverity     severity );
+    static LogStream & log( Logger        * logger,
+                            const QString & srcFile,
+                            int             srcLine,
+                            const QString & srcFunction,
+                            LogSeverity     severity );
 
     /**
      * Log a plain newline without any prefix (timestamp, source file name,
@@ -192,9 +205,9 @@ public:
     static Logger * defaultLogger() { return _defaultLogger; }
 
     /**
-     * Return the QTextStream associated with this logger. Not for general use.
+     * Return the LogStream associated with this logger. Not for general use.
      */
-    QTextStream & logStream() { return _logStream; }
+    LogStream & logStream() { return _logStream; }
 
     /**
      * Return the current log level, i.e. the severity that will actually be
@@ -305,17 +318,17 @@ private:
     static Logger * _defaultLogger;
     static QString  _lastLogDir;
 
-    QFile           _logFile;
-    QTextStream     _logStream;
-    QFile           _nullDevice;
-    QTextStream     _nullStream;
+    LogStream       _logStream;
+    QString         _logFilename;
+    LogStream       _nullStream;
     LogSeverity     _logLevel;
 };
 
 
-QTextStream & operator<<( QTextStream & str, bool val );
-QTextStream & operator<<( QTextStream & str, const QStringList & stringList );
-QTextStream & operator<<( QTextStream & str, const std::string & text );
+LogStream & operator<<( LogStream & str, const QString & text );
+LogStream & operator<<( LogStream & str, const char *    text );
+LogStream & operator<<( LogStream & str, const QStringList & stringList );
+
 
 
 /**
