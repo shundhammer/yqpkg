@@ -145,13 +145,6 @@ add_executable( ${TARGETBIN}
 # Compile options and definitions
 #
 
-# Fix things that were introduced with Qt 5.15 for Qt 6.x compatibility,
-# but that completely disregard that this introduces incompatibilities
-# with older code.
-
-target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated" )
-target_compile_options( ${TARGETBIN} PUBLIC "-Wno-deprecated-declarations" )
-
 # Make the version from ../../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETBIN} PUBLIC VERSION="${VERSION}" )
 
