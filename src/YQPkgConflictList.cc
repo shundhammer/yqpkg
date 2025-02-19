@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QVariant>
 
 #include "Logger.h"
 #include "YQIconPool.h"

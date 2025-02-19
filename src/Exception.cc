@@ -8,9 +8,10 @@
  */
 
 
-#include "Exception.h"
-
 #include <errno.h>
+#include <QObject>      // QObject::tr()
+
+#include "Exception.h"
 
 
 void Exception::setSrcLocation( const QString &srcFile,

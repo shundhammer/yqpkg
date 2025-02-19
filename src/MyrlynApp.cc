@@ -63,7 +63,7 @@ MyrlynApp::MyrlynApp( MyrlynAppOptions optFlags )
         _optFlags |= OptReadOnly;
     }
 
-    logDebug() << "_optFlags: 0x" << Qt::hex << _optFlags << Qt::dec << endl;
+    logDebug() << "_optFlags: 0x" << std::hex << _optFlags << std::dec << endl;
 
     createMainWin(); // Create this early to get early visual feedback
     logDebug() << "Creating MyrlynApp done" << endl;

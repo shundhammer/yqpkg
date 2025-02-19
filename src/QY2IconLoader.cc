@@ -16,6 +16,7 @@
 
 
 #include <unistd.h>     // access() / R_OK
+#include <QFile>
 
 #include "Logger.h"
 #include "QY2IconLoader.h"
