@@ -107,7 +107,7 @@ YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
 #if VERBOSE_DETAILS_VIEWS
 
             logVerbose() << metaObject()->className() << ": Showing "
-                         << ( selectable ? fromUTF8( selectable->name() ) : "NULL" )
+                         << ( selectable ? selectable->name() : "NULL" )
                          << endl;
 #endif
             showDetails( selectable );

@@ -79,7 +79,7 @@ QString PkgTask::actionToString( PkgTaskAction action )
 //----------------------------------------------------------------------
 
 
-QTextStream & operator<<( QTextStream & str, const PkgTask & task )
+LogStream & operator<<( LogStream & str, const PkgTask & task )
 {
     str << "<" << task.actionToString()
         << " " << task.name()
@@ -89,7 +89,7 @@ QTextStream & operator<<( QTextStream & str, const PkgTask & task )
 }
 
 
-QTextStream & operator<<( QTextStream & str, PkgTask * task )
+LogStream & operator<<( LogStream & str, PkgTask * task )
 {
     if ( task )
     {

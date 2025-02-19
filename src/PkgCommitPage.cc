@@ -1088,10 +1088,10 @@ void PkgCommitPage::fileConflictsCheckResult( const QStringList & conflicts )
 //----------------------------------------------------------------------
 
 
-QTextStream & operator<<( QTextStream & str, ZyppRes zyppRes )
+LogStream & operator<<( LogStream & str, ZyppRes zyppRes )
 {
     if ( zyppRes )
-        str << fromUTF8( zyppRes->name() );
+        str << zyppRes->name();
     else
         str << "<NULL ZyppRes>";
 

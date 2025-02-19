@@ -57,7 +57,7 @@ void ZyppLogger::logLine( const std::string & message )
 {
     QMutexLocker locker( &_mutex );
 
-    _zyppThreadLogger.logStream() << fromUTF8( message ) << endl;
+    _zyppThreadLogger.logStream() << message << endl;
 }
 
 
