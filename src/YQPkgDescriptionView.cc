@@ -170,6 +170,10 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
 }
 
 
+#if 0
+// FIXME: Check if 'pkg:' URLs are still a thing in any SUSE distro.
+// Probably not.
+
 void
 YQPkgDescriptionView::showLink( const QUrl & url )
 {
@@ -192,6 +196,7 @@ YQPkgDescriptionView::setSource( const QUrl & url )
 {
     showLink( url );
 }
+#endif
 
 
 QString

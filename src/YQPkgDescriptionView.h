@@ -56,6 +56,7 @@ public:
      **/
     virtual void showDetails( ZyppSel selectable ) override;
 
+#if 0
     /**
      * Get the document pointed to by a hyperlink.
      *
@@ -64,18 +65,20 @@ public:
      **/
     virtual void setSource( const QUrl & name ) override;
 
+    /**
+     * Show information for a hyperlinked object,
+     * e.g., a "pkg:somepkg" link to another package.
+     **/
+    void showLink( const QUrl & url );
+#endif
+
+
 protected:
 
     /**
      * Format a multi-line text into paragraphs
      **/
     QString simpleHtmlParagraphs( QString text );
-
-    /**
-     * Show information for a hyperlinked object,
-     * e.g., a "pkg:somepkg" link to another package.
-     **/
-    void showLink( const QUrl & url );
 
     /**
      * Return html text that contains a list of application icons.
