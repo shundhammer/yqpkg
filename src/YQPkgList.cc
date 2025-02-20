@@ -83,10 +83,6 @@ YQPkgList::YQPkgList( QWidget * parent )
     header()->setSectionResizeMode( QHeaderView::Interactive );
 
     /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
-
-    connect ( header(), SIGNAL( sectionClicked (int) ),
-              this,     SLOT( sortByColumn (int) ) );
-
 }
 
 
