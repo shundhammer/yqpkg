@@ -590,5 +590,5 @@ LogStream & operator<<( LogStream & str, const QStringList & stringList )
 
 QString formatErrno()
 {
-    return QString( errno );
+    return QString::number( errno );
 }

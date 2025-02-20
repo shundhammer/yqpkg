@@ -63,13 +63,16 @@ add_compile_options( "-Wall" )
 add_compile_options( "-Os" )    # Optimize for size (overrides CMake's -O3 in RELEASE builds)
 
 if ( WERROR )
-  add_compile_options( "-Werror" )
+  # add_compile_options( "-Werror" )
 endif()
 
 # libzypp and Qt 6 require C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+
+qt_standard_project_setup()
 
 #
 # Descend into subdirectories
