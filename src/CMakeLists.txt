@@ -5,6 +5,7 @@
 include( ../VERSION.cmake )
 include( GNUInstallDirs )
 
+set( CMAKE_AUTORCC ON )
 
 set( TARGETBIN myrlyn )
 
@@ -94,7 +95,7 @@ set( QRC_FILES
      artwork.qrc ) # Compiled-in resources: artwork
 
 #
-# .ui widget forms generated with Qt designer (designer-qt5) or Qt Creator
+# .ui widget forms generated with Qt designer (designer-qt6) or Qt Creator
 #
 # For each one, the Qt uic (User Interface Compiler) generates a file
 # ui_formname.h at build time to include in a .cc file.
@@ -118,12 +119,14 @@ set( UI_FILES
      updates-filter-view.ui
    )
 
+
 # Putting it all together
-qt_add_executable(${TARGETBIN}
+
+qt_add_executable( ${TARGETBIN}
   ${SOURCES}
   ${UI_FILES}
+  ${QRC_FILES}
 )
-qt_add_resources(${TARGETBIN} "icons" FILES icons.qrc)
 
 
 #
