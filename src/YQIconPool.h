@@ -66,22 +66,23 @@ protected:
     /**
      * Return the global icon pool.
      **/
-    static YQIconPool * iconPool();
+    static YQIconPool * instance();
 
     /**
-     * Return the cached icon for 'icon_name'. If the icon isn't in the cache
+     * Return the cached icon for 'iconName'. If the icon isn't in the cache
      * yet, load it and store it in the cache.
      *
      * Return a red square as an error icon if there is no icon by that name.
      **/
-    QPixmap cachedIcon(const QString icon_name, bool enabled );
+    QPixmap cachedIcon( const QString & iconName, bool enabled );
 
     /**
-     * Load the icon for 'icon_name' from the icon theme or, if that fails,
+     * Load the icon for 'iconName' from the icon theme or, if that fails,
      * from the compiled-in icons (using the Qt resource system). Return a null
      * pixmap if there is no such icon.
      **/
-    QPixmap loadIcon( const QString icon_name, bool enabled );
+    QPixmap loadIcon( const QString & iconName, bool enabled );
+
 
 private:
 
@@ -101,7 +102,7 @@ private:
     // Data members
     //
 
-    static YQIconPool *             _iconPool;
+    static YQIconPool *             _instance;
     QHash< const QString, QPixmap > _iconCache;
 };
 
