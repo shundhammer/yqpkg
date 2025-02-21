@@ -36,6 +36,10 @@ MainWindow::MainWindow( QWidget * parent )
     _instance = this;
     basicLayout();
 
+    logDebug() << "Device pixel ratio: " << screen()->devicePixelRatio() << endl;
+    logDebug() << "Logical  dpi: " << screen()->logicalDotsPerInch()  << endl;
+    logDebug() << "Physical dpi: " << screen()->physicalDotsPerInch() << endl;
+
      // Set a reasonable initial size if there is nothing in the settings
 
     QSize size = screen()->availableSize();
