@@ -53,7 +53,7 @@ QPixmap YQIconPool::disabledPkgInstall()        { return instance()->cachedIcon(
 QPixmap YQIconPool::disabledPkgAutoInstall()    { return instance()->cachedIcon( "package-install-auto",      false ); }
 QPixmap YQIconPool::disabledPkgAutoUpdate()     { return instance()->cachedIcon( "package-upgrade-auto",      false ); }
 QPixmap YQIconPool::disabledPkgAutoDel()        { return instance()->cachedIcon( "package-remove-auto",       false ); }
-QPixmap YQIconPool::disabledPkgKeepInstalled()  { return instance()->cachedIcon( "package-installed-",        false ); }
+QPixmap YQIconPool::disabledPkgKeepInstalled()  { return instance()->cachedIcon( "package-installed",         false ); }
 QPixmap YQIconPool::disabledPkgNoInst()         { return instance()->cachedIcon( "package-available",         false ); }
 QPixmap YQIconPool::disabledPkgProtected()      { return instance()->cachedIcon( "package-installed-locked",  false ); }
 
