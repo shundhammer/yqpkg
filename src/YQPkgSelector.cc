@@ -665,9 +665,9 @@ YQPkgSelector::addMenus()
     action->setText( _( "&File" ));
     fileMenu->addSeparator();
 
-    action = fileMenu->addAction( _( "&Accept Changes" ), this, SLOT( accept() ), Qt::CTRL | Qt::Key_A );
+    action = fileMenu->addAction( _( "&Accept Changes" ), Qt::CTRL | Qt::Key_A, this, SLOT( accept() ) );
     action->setEnabled( ! MyrlynApp::readOnlyMode() );
-    fileMenu->addAction( _( "&Quit - Discard Changes" ),  this, SLOT( reject() ), Qt::CTRL | Qt::Key_Q );
+    fileMenu->addAction( _( "&Quit - Discard Changes" ), Qt::CTRL | Qt::Key_Q, this, SLOT( reject() ) );
 
 
     if ( _pkgList )
@@ -779,7 +779,8 @@ YQPkgSelector::addMenus()
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _showDevelAction = optionsMenu->addAction( _( "Show -de&vel Packages" ),
-                                                this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
+                                                Qt::Key_F7,
+                                                this, SLOT( pkgExcludeDevelChanged( bool ) ) );
     _showDevelAction->setCheckable( true );
 
     _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
@@ -788,7 +789,8 @@ YQPkgSelector::addMenus()
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _showDebugAction = optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
-                                                this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
+                                                Qt::Key_F8,
+                                                this, SLOT( pkgExcludeDebugChanged( bool ) ) );
     _showDebugAction->setCheckable(true);
     _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
     CHECK_NEW( _excludeDebugInfoPkgs );
@@ -825,8 +827,9 @@ YQPkgSelector::addMenus()
 
 
 #if 1
-    extrasMenu->addAction( _( "C&onfigure Repositories..."  ), this, SLOT( configRepos() ),
-                           Qt::CTRL | Qt::SHIFT | Qt::Key_O );
+    extrasMenu->addAction( _( "C&onfigure Repositories..."  ),
+                           Qt::CTRL | Qt::SHIFT | Qt::Key_O ,
+                            this, SLOT( configRepos() ) );
     extrasMenu->addSeparator();
 #endif
 

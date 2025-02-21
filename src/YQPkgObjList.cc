@@ -1449,7 +1449,7 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
     return _regexp.match( text,
                           0,  // offset
                           QRegularExpression::NormalMatch,
-                          QRegularExpression::AnchoredMatchOption ).hasMatch();
+                          QRegularExpression::AnchorAtOffsetMatchOption ).hasMatch();
 }
 
 

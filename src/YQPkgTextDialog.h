@@ -166,7 +166,7 @@ protected:
      * Grab [Return] press events and close dialog.
      * Inherited from QObject.
      **/
-    bool eventFilter( QObject * obj, QEvent * ev );
+    bool eventFilter( QObject * obj, QEvent * ev ) override;
 
 
     // Data members

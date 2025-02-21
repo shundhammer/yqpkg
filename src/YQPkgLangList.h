@@ -141,31 +141,31 @@ public:
      * override this as we don't have a real selectable and
      * the status depends on the language.
      **/
-    virtual ZyppStatus status() const;
+    virtual ZyppStatus status() const override;
 
     /**
      * Set the status of this item.
      **/
     virtual void setStatus( ZyppStatus newStatus,
-                            bool       sendSignals = true );
+                            bool       sendSignals = true ) override;
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
      * (rather than by the user or by the dependency solver).
      **/
-    virtual bool bySelection() const;
+    virtual bool bySelection() const override;
 
     /**
      * Cycle the package status to the next valid value.
      **/
-    virtual void cycleStatus();
+    virtual void cycleStatus() override;
 
     /**
      * Sorting function. Redefined here (bnc#428355) as the one from
      * parent YQPkgObjList can't be used - it refers to zyppObj's which
      * are NULL here as zypp::Locale is not zypp::ResObject anymore
      **/
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
 protected:
 

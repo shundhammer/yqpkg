@@ -212,7 +212,7 @@ public:
     /**
      * sorting function
      */
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const override;
 
     // Columns
 
