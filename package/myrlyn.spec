@@ -38,8 +38,10 @@ BuildRequires:  gcc-fortran
 BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
-BuildRequires:  pkgconfig(Qt6Svg)
 BuildRequires:  pkgconfig(Qt6Widgets)
+# Not needed:   pkgconfig(Qt6Svg)
+# We only need the image format plugin for SVG:
+Requires:       libQt6Svg6
 
 %if 0%{?suse_version} < 1600
 BuildRequires:  gcc13
