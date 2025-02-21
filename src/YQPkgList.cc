@@ -78,11 +78,8 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
-    setIconSize( QSize( STATUS_ICON_SIZE, STATUS_ICON_SIZE ) );
 
     header()->setSectionResizeMode( QHeaderView::Interactive );
-
-    /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
 }
 
 

@@ -56,7 +56,6 @@ YQPkgServiceList::YQPkgServiceList( QWidget * parent )
     connect( this, SIGNAL( itemSelectionChanged() ),
              this, SLOT  ( filter()               ) );
 
-    setIconSize( QSize( 32, 32) );
     fillList();
     setSortingEnabled( true );
     sortByColumn( nameCol(), Qt::AscendingOrder );

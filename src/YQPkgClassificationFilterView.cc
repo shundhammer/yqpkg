@@ -80,7 +80,6 @@ pkgClassIcon( YQPkgClass pkgClass )
 YQPkgClassificationFilterView::YQPkgClassificationFilterView( QWidget * parent )
     : QTreeWidget( parent )
 {
-    setIconSize( QSize( 32, 32 ) );
     setHeaderLabels( QStringList( _( "Package Classification" ) ) );
     setRootIsDecorated( false );
     setSortingEnabled( true );

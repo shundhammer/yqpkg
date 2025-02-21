@@ -97,7 +97,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent,
                  this, SLOT  ( filter()                                ) );
     }
 
-    setIconSize(QSize(32,32));
+    setIconSize( QSize( 16, 16 ) );
     header()->resizeSection( iconCol(), 34 );
 
     if ( autoFill )

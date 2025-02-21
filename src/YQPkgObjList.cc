@@ -91,7 +91,6 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     connect( this,      SIGNAL(customContextMenuRequested ( const QPoint & ) ),
              this,      SLOT  (slotCustomContextMenu      ( const QPoint & ) ) );
 
-    setIconSize( QSize( 16, 16 ) );
     setContextMenuPolicy( Qt::CustomContextMenu );
 }
 
