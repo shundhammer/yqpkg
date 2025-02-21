@@ -36,10 +36,10 @@ BuildRequires:  hicolor-icon-theme
 # FIXME: Is this still needed (gcc-fortran)?
 BuildRequires:  gcc-fortran
 BuildRequires:  pkgconfig
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(Qt6Svg)
+BuildRequires:  pkgconfig(Qt6Widgets)
 
 %if 0%{?suse_version} < 1600
 BuildRequires:  gcc13
