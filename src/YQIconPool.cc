@@ -42,7 +42,7 @@ QPixmap YQIconPool::pkgInstall()                { return instance()->cachedIcon(
 QPixmap YQIconPool::pkgAutoInstall()            { return instance()->cachedIcon( "package-install-auto",      true  ); }
 QPixmap YQIconPool::pkgAutoUpdate()             { return instance()->cachedIcon( "package-upgrade-auto",      true  ); }
 QPixmap YQIconPool::pkgAutoDel()                { return instance()->cachedIcon( "package-remove-auto",       true  ); }
-QPixmap YQIconPool::pkgKeepInstalled()          { return instance()->cachedIcon( "package-installed-updated", true  ); }
+QPixmap YQIconPool::pkgKeepInstalled()          { return instance()->cachedIcon( "package-installed",         true  ); }
 QPixmap YQIconPool::pkgNoInst()                 { return instance()->cachedIcon( "package-available",         true  ); }
 QPixmap YQIconPool::pkgProtected()              { return instance()->cachedIcon( "package-installed-locked",  true  ); }
 
@@ -53,7 +53,7 @@ QPixmap YQIconPool::disabledPkgInstall()        { return instance()->cachedIcon(
 QPixmap YQIconPool::disabledPkgAutoInstall()    { return instance()->cachedIcon( "package-install-auto",      false ); }
 QPixmap YQIconPool::disabledPkgAutoUpdate()     { return instance()->cachedIcon( "package-upgrade-auto",      false ); }
 QPixmap YQIconPool::disabledPkgAutoDel()        { return instance()->cachedIcon( "package-remove-auto",       false ); }
-QPixmap YQIconPool::disabledPkgKeepInstalled()  { return instance()->cachedIcon( "package-installed-updated", false ); }
+QPixmap YQIconPool::disabledPkgKeepInstalled()  { return instance()->cachedIcon( "package-installed-",        false ); }
 QPixmap YQIconPool::disabledPkgNoInst()         { return instance()->cachedIcon( "package-available",         false ); }
 QPixmap YQIconPool::disabledPkgProtected()      { return instance()->cachedIcon( "package-installed-locked",  false ); }
 

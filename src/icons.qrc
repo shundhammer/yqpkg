@@ -19,7 +19,7 @@
     <file alias="package-install">icons/package-install.svg</file>
     <file alias="package-install-auto">icons/package-install-auto.svg</file>
     <file alias="package-installed-locked">icons/package-installed-locked.svg</file>
-    <file alias="package-installed-updated">icons/package-installed-updated.svg</file>
+    <file alias="package-installed">icons/package-installed.svg</file>
     <file alias="package-remove">icons/package-remove.svg</file>
     <file alias="package-remove-auto">icons/package-remove-auto.svg</file>
     <file alias="package-supported">icons/package-supported.svg</file>
