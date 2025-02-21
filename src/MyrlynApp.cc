@@ -37,8 +37,8 @@
 #include "MyrlynApp.h"
 
 
-MyrlynApp * MyrlynApp::_instance = 0;
-MyrlynAppOptions    MyrlynApp::_optFlags( OptNone );
+MyrlynApp *      MyrlynApp::_instance = 0;
+MyrlynAppOptions MyrlynApp::_optFlags( OptNone );
 
 
 MyrlynApp::MyrlynApp( MyrlynAppOptions optFlags )
