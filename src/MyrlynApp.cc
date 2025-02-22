@@ -345,6 +345,7 @@ bool MyrlynApp::eventFilter( QObject * watchedObj, QEvent * event )
         if ( currentPage == _pkgSel )
         {
             logInfo() << "Caught WM_CLOSE for YQPkgSelector" << endl;
+            event->ignore();
             _pkgSel->wmClose();  // _pkgSel handles asking for confirmation etc.
 
             return true;        // Event processing finished for this one
@@ -352,6 +353,7 @@ bool MyrlynApp::eventFilter( QObject * watchedObj, QEvent * event )
         else if ( currentPage == _pkgCommitPage )
         {
             logInfo() << "Caught WM_CLOSE for PkgCommitPage" << endl;
+            event->ignore();
             _pkgCommitPage->wmClose();
 
             return true;        // Event processing finished for this one
