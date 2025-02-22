@@ -75,6 +75,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     header()->setSortIndicatorShown( true );
     header()->setSectionsClickable( true );
+    setSortingEnabled( true );
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
