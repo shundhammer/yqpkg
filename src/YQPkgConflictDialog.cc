@@ -311,14 +311,6 @@ YQPkgConflictDialog::askCreateSolverTestCase()
         _( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver. "
            "The logs will be stored in directory <br><tt>%1</tt></p>" ).arg( testCaseDir );
 
-#if 0
-    int button_no = QMessageBox::information( 0,                        // parent
-                                              _( "Solver Test Case" ),  // caption
-                                              heading + msg,
-                                              _( "C&ontinue" ),         // button #0
-                                              _( "&Cancel" ) );         // button #1
-#endif
-
     QMessageBox msgBox( window() );
     msgBox.setText( msg );
     msgBox.setWindowTitle( heading );
