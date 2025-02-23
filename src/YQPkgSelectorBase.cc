@@ -208,14 +208,15 @@ void YQPkgSelectorBase::reject()
 
     if ( changes )
     {
-        int result =
-            QMessageBox::warning( this, "",
-                                  _( "Really abandon all changes and exit?" ),
-                                  _( "&Yes" ), _( "&No" ), "",
-                                  1,   // defaultButtonNumber (from 0)
-                                  1 ); // escapeButtonNumber
+        QMessageBox msgBox( window() );
+        msgBox.setText( _( "Really abandon all changes and exit?" ) );
+        msgBox.setIcon( QMessageBox::Warning );
+        msgBox.addButton( QMessageBox::Yes );
+        msgBox.addButton( QMessageBox::No  );
+        msgBox.setDefaultButton( QMessageBox::No );
+        msgBox.exec();
 
-        confirm = ( result == 0 );
+        confirm = ( msgBox.result() == QMessageBox::Yes );
     }
 
     if ( ! changes || confirm )

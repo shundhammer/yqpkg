@@ -336,16 +336,15 @@ bool PkgCommitPage::askForCancelCommitConfirmation()
     // Not all users might know what "package transactions" means,
     // so let's be a bit clearer (albeit less precise)
 
-    QString msg = _( "Really cancel the current package actions?" );
+    QMessageBox msgBox( this );
+    msgBox.setText( _( "Really cancel the current package actions?" ) );
+    msgBox.setIcon( QMessageBox::Warning );
+    msgBox.addButton( QMessageBox::Yes );
+    msgBox.addButton( QMessageBox::No  );
+    msgBox.setDefaultButton( QMessageBox::No );
+    msgBox.exec();
 
-    int result = QMessageBox::warning( this, // parent widget
-                                       "",   // Window title
-                                       msg,
-                                       _( "&Yes" ), _( "&No" ), "",
-                                       0,   // defaultButtonNumber (from 0)
-                                       1 ); // escapeButtonNumber
-
-    return result == 0;  // button #0 (Yes)
+    return msgBox.result() == QMessageBox::Yes;
 }
 
 
@@ -968,11 +967,19 @@ void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
     msgBox.setText( msg );
     msgBox.setDetailedText( zyppErrorMsg );
     msgBox.setIcon( QMessageBox::Warning );
-    msgBox.addButton( _( "&Abort"  ), QMessageBox::ActionRole );
-    msgBox.addButton( _( "&Retry"  ), QMessageBox::ActionRole );
-    msgBox.addButton( _( "&Ignore" ), QMessageBox::ActionRole );
+    msgBox.addButton( QMessageBox::Abort  );
+    msgBox.addButton( QMessageBox::Retry  );
+    msgBox.addButton( QMessageBox::Ignore );
+    msgBox.exec();
 
-    int buttonNo = msgBox.exec();
+    ErrorReply reply = AbortReply;
+
+    switch ( msgBox.result() )
+    {
+        case QMessageBox::Abort:  reply = AbortReply;  break;
+        case QMessageBox::Retry:  reply = RetryReply;  break;
+        case QMessageBox::Ignore: reply = IgnoreReply; break;
+    }
 
     // Using the PkgCommitSignalForwarder::setReply() kludge since we can't
     // simply return a value from a Qt slot. But this only works with direct Qt
@@ -984,10 +991,10 @@ void PkgCommitPage::pkgActionError( ZyppRes         zyppRes,
     // user clicks on an answer button, and to set the reply before we return
     // here. None of this would work with multiple Qt threads.
 
-    PkgCommitSignalForwarder::instance()->setReply( (ErrorReply) buttonNo);
+    PkgCommitSignalForwarder::instance()->setReply( reply );
 
 
-    if ( buttonNo != 1 ) // Retry
+    if ( reply != RetryReply )
     {
         PkgTask * task = pkgTasks()->downloads().find( zyppRes );
 

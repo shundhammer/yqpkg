@@ -421,17 +421,21 @@ YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
                "\"Cancel\" to unselect this version and keep the other ones." );
     }
 
-    // Dialog heading
-    QString heading = _( "Incompatible Package Versions" );
+    QMessageBox msgBox( window() );
+    msgBox.setText( msg );
+    msgBox.setWindowTitle( _( "Incompatible Package Versions" ) );
+    msgBox.setIcon( QMessageBox::Question );
+    msgBox.addButton( _( "C&ontinue" ), QMessageBox::AcceptRole );
+    msgBox.addButton( QMessageBox::Cancel );
+    msgBox.setDefaultButton( QMessageBox::Cancel );
+    msgBox.exec();
 
-    int buttonNo = QMessageBox::question( 0, // parent
-                                          heading,
-                                          msg,
-                                          _( "C&ontinue" ),     // button #0
-                                          _( "&Cancel" ) );     // button #1
-    logInfo() << "User hit " << (buttonNo == 0 ? "[Continue]" : "[Cancel]" ) << endl;
+    logInfo() << "User hit "
+              <<  ( msgBox.result() == QMessageBox::Cancel ?
+                    "[Cancel]" : "[Continue]" )
+              << endl;
 
-    return buttonNo == 0;
+    return msgBox.result() != QMessageBox::Cancel;
 }
 
 

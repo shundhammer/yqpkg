@@ -1259,16 +1259,15 @@ YQPkgSelector::globalUpdatePkg( bool force )
 
     if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
     {
-        if ( QMessageBox::question( this, "",   // caption
-                                    // Translators: %1 is the number of affected packages
-                                    _( "%1 packages will be updated" ).arg( count ),
-                                    _( "&Continue" ), _( "C&ancel" ),
-                                    0,          // defaultButtonNumber (from 0)
-                                    1 )         // escapeButtonNumber
-             == 1 )     // "Cancel"?
-        {
+        QMessageBox msgBox( window() );
+        msgBox.setText( _( "%1 packages will be updated" ).arg( count ) );
+        msgBox.setIcon( QMessageBox::Question );
+        msgBox.addButton( _( "C&ontinue" ), QMessageBox::AcceptRole );
+        msgBox.addButton( QMessageBox::Cancel );
+        msgBox.setDefaultButton( QMessageBox::Cancel );
+
+        if ( msgBox.exec() == QMessageBox::Cancel )
             return;
-        }
     }
 
     (void) _pkgList->globalSetPkgStatus( S_Update, force,

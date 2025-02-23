@@ -453,13 +453,14 @@ void MyrlynApp::quit( bool askForConfirmation )
 
     if ( askForConfirmation )
     {
-	int result = QMessageBox::warning( _mainWin,
-                                           "",  // Window title
-                                           _( "Really quit?" ),
-                                           _( "&Yes" ), _( "&No" ), "",
-                                           0,   // defaultButtonNumber (from 0)
-                                           1 ); // escapeButtonNumber
-        if ( result != 0 ) // button #0 (Yes)
+        QMessageBox msgBox( _mainWin );
+        msgBox.setText( _( "Really quit?" ) );
+        msgBox.setIcon( QMessageBox::Question );
+        msgBox.addButton( QMessageBox::Yes );
+        msgBox.addButton( QMessageBox::No  );
+        msgBox.setDefaultButton( QMessageBox::No );
+
+        if ( msgBox.exec() == QMessageBox::No )
             return;
     }
 

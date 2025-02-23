@@ -92,7 +92,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
              this,      SLOT  (slotCustomContextMenu      ( const QPoint & ) ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
-    setSorting( true );
+    setSortingEnabled( true );
 }
 
 

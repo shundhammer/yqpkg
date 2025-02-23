@@ -158,7 +158,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
             QMessageBox::warning( window(),         // parent
                                   _( "Error" ), // caption
-                                  _( "Cannot open file %1" ).arg( filename ) );
+                                  _( "Can't open file %1" ).arg( filename ) );
         }
 
         return;
