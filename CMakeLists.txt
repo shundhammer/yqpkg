@@ -19,7 +19,10 @@
 #
 
 cmake_minimum_required( VERSION 3.17 )
+include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
+include( CheckIncludeFileCXX )  # check_include_file_cxx
 project( myrlyn LANGUAGES CXX )
+
 
 # Options usage:
 #
@@ -53,8 +56,6 @@ endif()
 
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
 
-include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
-
 set( CMAKE_INSTALL_MESSAGE LAZY ) # Suppress "up-to-date" messages during "make install"
 
 
@@ -69,6 +70,18 @@ endif()
 # libzypp and Qt 6 require C++17
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
+check_include_file_cxx( filesystem HAVE_FILESYSTEM REQUIRED )  # Needed for Qt6 QFile
+
+if ( NOT HAVE_FILESYSTEM )
+  message( FATAL_ERROR
+           "FATAL: Required header file 'filesytem' not found!\n"
+           "Use g++ version 10 or higher.\n"
+           "Invoke cmake with\n"
+           "  mkdir build\n"
+           "  cd build\n"
+           "  cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 .." )
+endif()
 
 find_package( Qt6
               COMPONENTS
