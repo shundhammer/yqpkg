@@ -137,7 +137,7 @@ protected slots:
      * Sort the packages by the specified column.
      *
      * This is a successor to the old 'sortByColumn( int )' slot
-     * (Qt 3.x, 4.x, 5.x) that received an additional paramter in Qt 6.x.
+     * (Qt 3.x, 4.x, 5.x) that received an additional parameter in Qt 6.x.
      **/
     void sortPackages( int column );
 
