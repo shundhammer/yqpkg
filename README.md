@@ -249,22 +249,43 @@ Hopefully SUSE will recognize the importance of this and keep sponsoring it.
 
 ## Build Requirements
 
-You need at least a C++ and Qt5 development environment plus CMake and
+You need at least a C++ and Qt6 development environment plus CMake and
 libzypp-devel.
 
 ```
-sudo zypper install -t pattern devel_C_C++ devel_qt5
+sudo zypper install -t pattern devel_C_C++ devel_qt6
 sudo zypper install cmake libzypp-devel
 ```
 
+For Leap 15.x / SLE-15-SPx also:
+
+```
+sudo zypper in gcc10-c++
+```
+
+(or a higher version; Qt6 now requires GCC / G++ 10 or later.)
+
 
 ## Building
+
+### Tumbleweed, Slowroll, SUSE 16.x
+
+(and all other distros with GCC 10 or later)
 
 ```
 make -f Makefile.repo
 cd build
 make
 ```
+
+### Leap 15.x / SLE-15 SPx
+
+```
+make -f Makefile.repo leap-15
+cd build
+make
+```
+
 
 ### Installing
 
