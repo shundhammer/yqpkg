@@ -72,13 +72,14 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 # Qt6 QFile requires the 'filesystem' header (g++-10 or later)
-check_include_file_cxx( filesystem HAVE_FILESYSTEM )  # Needed for Qt6 QFile
+check_include_file_cxx( filesystem HAVE_FILESYSTEM )
 
 if ( NOT HAVE_FILESYSTEM )
   message( FATAL_ERROR
            "FATAL: Required header file 'filesystem' not found!\n"
            "Use g++ version 10 or higher.\n"
            "Invoke cmake with\n"
+           "  rm -rf build\n"
            "  mkdir build\n"
            "  cd build\n"
            "  cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 .." )
