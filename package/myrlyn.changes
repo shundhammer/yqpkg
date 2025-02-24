@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 24 23:03:21 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Migration to Qt 6
+- 0.9.2
+
+-------------------------------------------------------------------
 Thu Feb  6 15:04:24 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added repo configuration including adding community repos
