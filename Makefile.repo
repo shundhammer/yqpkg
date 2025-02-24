@@ -22,9 +22,22 @@ configure:
 	cd build; \
 	cmake ..
 
+configure-leap-15:
+	mkdir build; \
+	cd build; \
+	cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 ..
+
+
 build: clean configure
 	cd build; \
 	make -j $$(nproc)
+
+build-leap-15: clean configure-leap-15
+	cd build; \
+	make -j $$(nproc)
+
+leap-15: build-leap-15
+
 
 # This needs root privileges, of course
 install: configure
