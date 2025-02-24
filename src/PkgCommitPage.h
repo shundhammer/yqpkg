@@ -267,7 +267,7 @@ protected:
     /**
      * Return 'true' if details are currently shown, 'false' if not.
      **/
-    bool showingDetails() const { return _showingDetails; }
+    bool showDetails() const { return _showDetails; }
 
     /**
      * Update the label of the details button between "Show Details" and "Hide
@@ -351,7 +351,7 @@ protected:
 
     Ui::PkgCommitPage * _ui;
     PkgTasks *          _pkgTasks;
-    bool                _showingDetails;
+    bool                _showDetails;
     bool                _startedInstallingPkg;
     ProgressDialog *    _fileConflictsProgressDialog;
 

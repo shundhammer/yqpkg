@@ -48,7 +48,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
     : QWidget( parent )
     , _ui( new Ui::PkgCommitPage ) // Use the Qt designer .ui form (XML)
     , _pkgTasks( 0 )
-    , _showingDetails( false )
+    , _showDetails( false )
     , _startedInstallingPkg( false )
     , _fileConflictsProgressDialog( 0 )
 {
@@ -260,7 +260,7 @@ void PkgCommitPage::reset()
     _ui->doneList->clear();
     updateListHeaders();
 
-    _ui->detailsFrame->setVisible( _showingDetails );
+    _ui->detailsFrame->setVisible( _showDetails );
     updateDetailsButton();
 }
 
@@ -283,15 +283,15 @@ void PkgCommitPage::loadIcons()
 
 void PkgCommitPage::toggleDetails()
 {
-    _showingDetails = ! _showingDetails;
-    _ui->detailsFrame->setVisible( _showingDetails );
+    _showDetails = ! _showDetails;
+    _ui->detailsFrame->setVisible( _showDetails );
     updateDetailsButton();
 }
 
 
 void PkgCommitPage::updateDetailsButton()
 {
-    QString text = showingDetails() ?
+    QString text = showDetails() ?
         _( "Hide &Details" ) : _( "Show &Details" );
 
     _ui->detailsButton->setText( text );
@@ -353,7 +353,7 @@ void PkgCommitPage::readSettings()
     QSettings settings;
     settings.beginGroup( "PkgCommitPage" );
 
-    _showingDetails      = settings.value( "showingDetails",  false ).toBool();
+    _showDetails         = settings.value( "showDetails",  true ).toBool();
     bool showSummaryPage = settings.value( "showSummaryPage", true ).toBool();
 
     settings.endGroup();
@@ -367,7 +367,7 @@ void PkgCommitPage::writeSettings()
     QSettings settings;
     settings.beginGroup( "PkgCommitPage" );
 
-    settings.setValue( "showingDetails",  _showingDetails );
+    settings.setValue( "showDetails",    _showDetails );
     settings.setValue( "showSummaryPage", showSummaryPage() );
 
     settings.endGroup();
