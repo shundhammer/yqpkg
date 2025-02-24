@@ -75,7 +75,9 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     header()->setSortIndicatorShown( true );
     header()->setSectionsClickable( true );
-    setSortingEnabled( true );
+
+    connect( header(), SIGNAL( sectionClicked( int ) ),
+             this,     SLOT  ( sortPackages  ( int ) ) );
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
@@ -359,6 +361,14 @@ void
 YQPkgList::resort()
 {
     int col             = sortColumn();
+    Qt::SortOrder order = header()->sortIndicatorOrder();
+    sortByColumn( col, order );
+}
+
+
+void
+YQPkgList::sortPackages( int col )
+{
     Qt::SortOrder order = header()->sortIndicatorOrder();
     sortByColumn( col, order );
 }

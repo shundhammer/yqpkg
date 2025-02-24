@@ -112,14 +112,6 @@ public slots:
                      ZyppPkg zyppPkg,
                      bool    dimmed );
 
-#if 0
-    /**
-     * Ask for a file name and save the current pkg list to file.
-     **/
-    void askExportList() const;
-#endif
-
-
     // No separate currentItemChanged( ZyppPkg ) signal:
     //
     // Use YQPkgObjList::currentItemChanged( ZyppObj ) instead and dynamic_cast
@@ -137,6 +129,17 @@ public slots:
      * its current sort order.
      **/
     void resort();
+
+
+protected slots:
+
+    /**
+     * Sort the packages by the specified column.
+     *
+     * This is a successor to the old 'sortByColumn( int )' slot
+     * (Qt 3.x, 4.x, 5.x) that received an additional paramter in Qt 6.x.
+     **/
+    void sortPackages( int column );
 
 
 protected:
