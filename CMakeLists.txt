@@ -19,9 +19,9 @@
 #
 
 cmake_minimum_required( VERSION 3.17 )
+project( myrlyn LANGUAGES CXX )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 include( CheckIncludeFileCXX )  # check_include_file_cxx
-project( myrlyn LANGUAGES CXX )
 
 
 # Options usage:
@@ -71,11 +71,12 @@ endif()
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
-check_include_file_cxx( filesystem HAVE_FILESYSTEM REQUIRED )  # Needed for Qt6 QFile
+# Qt6 QFile requires the 'filesystem' header (g++-10 or later)
+check_include_file_cxx( filesystem HAVE_FILESYSTEM )  # Needed for Qt6 QFile
 
 if ( NOT HAVE_FILESYSTEM )
   message( FATAL_ERROR
-           "FATAL: Required header file 'filesytem' not found!\n"
+           "FATAL: Required header file 'filesystem' not found!\n"
            "Use g++ version 10 or higher.\n"
            "Invoke cmake with\n"
            "  mkdir build\n"
