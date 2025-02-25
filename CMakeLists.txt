@@ -94,6 +94,15 @@ find_package( Qt6
 
 qt_standard_project_setup()
 
+
+# Avoid RUNPATH (https://github.com/shundhammer/myrlyn/issues/80)
+
+set( CMAKE_SKIP_RPATH TRUE )
+set( CMAKE_BUILD_WITH_INSTALL_RPATH FALSE )
+set( CMAKE_INSTALL_RPATH "" )
+set( CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE )
+
+
 #
 # Descend into subdirectories
 #
