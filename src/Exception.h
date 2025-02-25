@@ -99,8 +99,8 @@ public:
 	Exception( "Null pointer" )
 	{}
 
-    virtual ~NullPointerException() throw()
-	{}
+    virtual ~NullPointerException() throw() override
+    {}
 };
 
 
@@ -115,8 +115,8 @@ public:
 	Exception( "Null pointer" )
 	{}
 
-    virtual ~OutOfMemoryException() throw()
-	{}
+    virtual ~OutOfMemoryException() throw() override
+    {}
 };
 
 
@@ -128,8 +128,8 @@ public:
 	_filename( filename )
 	{}
 
-    virtual ~FileException() throw()
-	{}
+    virtual ~FileException() throw() override
+    {}
 
     QString filename() const { return _filename; }
 
@@ -148,8 +148,8 @@ public:
 	_resourceName( resourceName )
 	{}
 
-    virtual ~SysCallFailedException() throw()
-	{}
+    virtual ~SysCallFailedException() throw() override
+    {}
 
     /**
      * Return the resource for which this syscall failed. This is typically a
@@ -177,8 +177,8 @@ public:
 	Exception( "dynamic_cast failed; expected: " + expectedType )
 	{}
 
-    virtual ~DynamicCastException() throw()
-	{}
+    virtual ~DynamicCastException() throw() override
+    {}
 };
 
 
@@ -206,8 +206,8 @@ public:
 	, _validMax( validMax )
 	{}
 
-    virtual ~IndexOutOfRangeException() throw()
-	{}
+    virtual ~IndexOutOfRangeException() throw() override
+    {}
 
     /**
      * Return the offending index value.
