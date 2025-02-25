@@ -364,6 +364,7 @@ void RepoConfigDialog::accept()
     if ( _restartNeeded )
     {
         showRestartNeededPopup();
+        hide(); // Instant feedback
         MyrlynApp::instance()->quit();
     }
     else
