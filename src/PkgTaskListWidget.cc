@@ -110,10 +110,7 @@ bool PkgTaskListWidgetItem::operator<( const QListWidgetItem & otherListWidgetIt
     {
         return ( this->serial() < other->serial() );
     }
-    else
-    {
-        return QListWidgetItem::operator<( otherListWidgetItem );
-    }
+    return QListWidgetItem::operator<( otherListWidgetItem );
 }
 
 
@@ -127,8 +124,9 @@ bool PkgTaskListWidgetItem::sortByInsertionSequence() const
         dynamic_cast<PkgTaskListWidget *> ( listWidget() );
 
     if ( parentPkgTaskListWidget )
-	return parentPkgTaskListWidget->sortByInsertionSequence();
-    else
-        return false;
+    {
+        return parentPkgTaskListWidget->sortByInsertionSequence();
+    }
+    return false;
 }
 

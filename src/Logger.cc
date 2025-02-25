@@ -237,8 +237,8 @@ LogSeverity Logger::logLevel( Logger *logger )
 
     if ( logger )
         return logger->logLevel();
-    else
-        return LogSeverityVerbose;
+
+    return LogSeverityVerbose;
 }
 
 
@@ -415,8 +415,8 @@ QString Logger::userName()
 
     if ( pw )
         return pw->pw_name;
-    else
-        return QString::number( getuid() );
+
+    return QString::number( getuid() );
 }
 
 
