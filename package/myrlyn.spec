@@ -51,6 +51,8 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 %endif
 Requires:	xdg-utils
+# Obsolete accidential release because of a wrong tag on GitHub (9.0.1 instead of 0.9.1)
+Obsoletes:      myrlyn = 9.0.1
 
 %description
 Myrlyn is a graphical package manager to select software packages and patterns for installation, update and removal. It uses libzypp as its backend and Qt as its GUI toolkit.
