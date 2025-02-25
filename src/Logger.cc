@@ -511,23 +511,19 @@ void Logger::logRotate( const QString & logDir,
 
         if ( dir.exists( newName ) )
         {
-            bool success = dir.remove( newName );
+            [[maybe_unused]] bool success = dir.remove( newName );
 #if VERBOSE_ROTATE
             logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << endl;
-#else
-            Q_UNUSED( success );
 #endif
         }
 
         if ( dir.exists( currentName ) )
         {
-            bool success = dir.rename( currentName, newName );
+            [[maybe_unused]] bool success = dir.rename( currentName, newName );
 #if VERBOSE_ROTATE
             logDebug() << "Renaming " << currentName << " to " << newName
                        << ( success ? "" : " FAILED" )
                        << endl;
-#else
-            Q_UNUSED( success );
 #endif
 
             keepers << newName;
@@ -541,11 +537,9 @@ void Logger::logRotate( const QString & logDir,
     {
         if ( ! keepers.contains( match ) )
         {
-            bool success = dir.remove( match );
+            [[maybe_unused]] bool success = dir.remove( match );
 #if VERBOSE_ROTATE
             logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << endl;
-#else
-            Q_UNUSED( success );
 #endif
         }
     }
