@@ -54,6 +54,7 @@ PkgCommitPage::PkgCommitPage( QWidget * parent )
 {
     CHECK_PTR( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    MyrlynApp::setHeadingFont( _ui->headingLabel );
 
     // See ui_pkg-commit-page.h in ../build/yqkg_autogen/include for the
     // widgets' variable names. They are taken from the widget names in the .ui

@@ -39,6 +39,8 @@
 
 MyrlynApp *      MyrlynApp::_instance = 0;
 MyrlynAppOptions MyrlynApp::_optFlags( OptNone );
+QFont            MyrlynApp::_headingFont;
+bool             MyrlynApp::_headingFontInitialized = false;
 
 
 MyrlynApp::MyrlynApp( MyrlynAppOptions optFlags )
@@ -468,4 +470,36 @@ void MyrlynApp::quit( bool askForConfirmation )
         _mainWin->hide();  // For instant user feedback
 
     qApp->quit();
+}
+
+
+QFont
+MyrlynApp::headingFont()
+{
+    if ( ! _headingFontInitialized )
+    {
+        _headingFont = qApp->font();
+        _headingFont.setBold( true );
+        _headingFontInitialized = true;
+        int size = _headingFont.pointSize();
+
+        if ( size > 0 )
+            _headingFont.setPointSize( size * 1.10 );
+        else
+        {
+            size = _headingFont.pixelSize();
+
+            if ( size > 0 )
+                _headingFont.setPixelSize( size * 1.10 );
+        }
+    }
+
+    return _headingFont;
+}
+
+
+void MyrlynApp::setHeadingFont( QWidget * widget )
+{
+    if ( widget )
+        widget->setFont( headingFont() );
 }

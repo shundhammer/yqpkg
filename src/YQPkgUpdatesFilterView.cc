@@ -17,6 +17,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MyrlynApp.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgUpdatesFilterView.h"
 
@@ -31,6 +32,7 @@ YQPkgUpdatesFilterView::YQPkgUpdatesFilterView( QWidget * parent )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    MyrlynApp::setHeadingFont( _ui->headingLabel );
 
     // See ui_updates-filter-view.h  in the build/ tree for the widget names.
     //

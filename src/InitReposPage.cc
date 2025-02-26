@@ -20,6 +20,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "MainWindow.h"
+#include "MyrlynApp.h"
 #include "MyrlynRepoManager.h"
 #include "utf8.h"
 #include "YQZypp.h"
@@ -36,6 +37,7 @@ InitReposPage::InitReposPage( MyrlynRepoManager * repoManager,
 
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    MyrlynApp::setHeadingFont( _ui->headingLabel );
     _ui->reposList->setSortingEnabled( false );
 
     reset();

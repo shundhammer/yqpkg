@@ -30,9 +30,9 @@
     <number>10</number>
    </property>
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="headingLabel">
      <property name="text">
-      <string>### Updates</string>
+      <string>Updates</string>
      </property>
      <property name="textFormat">
       <enum>Qt::MarkdownText</enum>

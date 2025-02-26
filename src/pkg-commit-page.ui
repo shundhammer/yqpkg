@@ -38,7 +38,7 @@
      <item>
       <widget class="QLabel" name="headingLabel">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Installing / Removing Packages&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Installing / Removing Packages</string>
        </property>
       </widget>
      </item>

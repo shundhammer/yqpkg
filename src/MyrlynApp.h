@@ -21,6 +21,7 @@
 #include <unistd.h>     // geteuid()
 
 #include <QObject>
+#include <QFont>
 #include <QFlags>
 
 
@@ -186,6 +187,17 @@ public:
      **/
     void createZyppLogger();
 
+    /**
+     * Return a font that is suitable for headings:
+     * A little big larger than the default font, and bold.
+     **/
+    static QFont headingFont();
+
+    /**
+     * Set the heading font as the font for 'widget'.
+     **/
+    static void setHeadingFont( QWidget * widget );
+
 
 public slots:
 
@@ -268,6 +280,8 @@ protected:
 
     static MyrlynApp *      _instance;
     static MyrlynAppOptions _optFlags;
+    static QFont            _headingFont;
+    static bool             _headingFontInitialized;
 };
 
 #endif // MyrlynApp_h

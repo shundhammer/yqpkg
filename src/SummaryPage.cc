@@ -23,6 +23,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "MainWindow.h"
+#include "MyrlynApp.h"
 #include "PkgTasks.h"
 #include "MyrlynApp.h"
 #include "YQi18n.h"
@@ -38,6 +39,7 @@ SummaryPage::SummaryPage( QWidget * parent )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this ); // Actually create the widgets from the .ui form
+    MyrlynApp::setHeadingFont( _ui->headingLabel );
 
     // See ui_summary-page.h for the widget names.
     //
