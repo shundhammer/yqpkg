@@ -15,6 +15,7 @@
  */
 
 
+#include <QApplication>
 #include <QCloseEvent>
 #include <QEventLoop>
 #include <QScreen>
@@ -22,6 +23,7 @@
 
 #include "Exception.h"
 #include "Logger.h"
+#include "MyrlynApp.h"
 #include "WindowSettings.h"
 #include "MainWindow.h"
 
@@ -39,6 +41,8 @@ MainWindow::MainWindow( QWidget * parent )
     logDebug() << "Device pixel ratio: " << screen()->devicePixelRatio() << endl;
     logDebug() << "Logical  dpi: " << screen()->logicalDotsPerInch()  << endl;
     logDebug() << "Physical dpi: " << screen()->physicalDotsPerInch() << endl;
+    logDebug() << "Default font: " << qApp->font().key() << endl;
+    logDebug() << "Heading font: " << MyrlynApp::headingFont().key() << endl;
 
      // Set a reasonable initial size if there is nothing in the settings
 
