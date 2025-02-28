@@ -73,6 +73,12 @@ public:
      **/
     static YQPkgSelector * instance() { return _instance; }
 
+    /**
+     * Return the package list of this istance or 0 if it hasn't been created
+     * yet.
+     **/
+    YQPkgList * pkgList() const { return _pkgList; }
+
 
 public slots:
 

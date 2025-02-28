@@ -443,7 +443,6 @@ YQPkgObjList::createAction( const QString & text,
     if ( ! key.isEmpty() )
         label += "\t" + key;
 
-
     QIcon iconSet ( icon );
 
     if ( ! insensitiveIcon.isNull() )

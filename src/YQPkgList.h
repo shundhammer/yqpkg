@@ -51,7 +51,6 @@ public:
      **/
     virtual ~YQPkgList();
 
-
     /**
      * Add a submenu "All in this list..." to 'menu'.
      * Returns the newly created submenu.

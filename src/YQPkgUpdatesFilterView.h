@@ -20,6 +20,7 @@
 
 
 #include <QWidget>
+#include <QIcon>
 #include "YQZypp.h"
 
 
@@ -138,10 +139,20 @@ protected:
 
     void connectWidgets();
 
+    /**
+     * Mark all packages in the package list as "left over" (with a sad smiley
+     * icon) that is not marked as "update" after a "package update" or "dist
+     * upgrade".
+     **/
+    void markLeftovers();
+
+
 
     // Data members
 
     Ui::UpdatesFilterView * _ui;
+    QIcon                   _leftoverPkgIcon;
+    QIcon                   _updateOkIcon;
 };
 
 
