@@ -9,6 +9,8 @@
     <file alias="download-done">icons/download-done.svg</file>
     <file alias="download-ongoing">icons/download-ongoing.svg</file>
     <file alias="emblem-warning">icons/emblem-warning.svg</file>
+    <file alias="emoji-sad">icons/emoji-sad.svg</file>
+    <file alias="emoji-sick">icons/emoji-sick.svg</file>
     <file alias="empty-40x22">icons/empty-40x22.png</file>
     <file alias="hamburger">icons/hamburger.svg</file>
     <file alias="list-add">icons/list-add.svg</file>
